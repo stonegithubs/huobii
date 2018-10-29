@@ -5,106 +5,110 @@
         <el-tab-pane name="xj">
           <template slot="label">限价交易</template>
           <div class="buy">
-            <div class="balance"><span>可用 0.0000000 BTC</span><a href="">充币</a>s</div>
+            <div class="balance"><span> 可用 {{this.getCoinBalanceByName(this.getMainCoin).coinBalance }} {{ this.getMainCoin.toUpperCase() }}</span><a href="">充币</a></div>
             <div class="trade-from">
               <span> 买入价</span>
-              <el-input v-model="current_symbol.price">
-                <span class="coin-name" slot="suffix">USTD</span>
+              <el-input v-model.number="xj_buyForm.price">
+                <span class="coin-name" slot="suffix">{{ this.getMainCoin.toUpperCase() }}</span>
               </el-input>
-              <div class="math-price">
-                <span>≈ 27.40 CNY</span>
-              </div>
               <span> 买入量</span>
-              <el-input v-model="target_symbol.number">
-                <span class="coin-name" slot="suffix">HPT</span>
+              <el-input v-model.number="xj_buyForm.amount" v-on:mouseenter.native="xj_buy_max = 999999">
+                <span class="coin-name" slot="suffix">{{ this.getTargetCoin.toUpperCase() }}</span>
               </el-input>
               <el-slider
-                v-model="value7"
-                :step="10"
-                show-stops>
+                v-on:mouseenter.native="xj_buy_max = xj_buyForm.amount"
+                v-model.number="xj_buyForm.amount"
+                :step="0.00001"
+                :max="xj_buy_max"
+                  >
               </el-slider>
               <div class="total">
-                <p>交易额 <span>0.00000000 USDT</span></p>
+                <p>交易额 <span>{{(this.xj_buyForm.amount*this.xj_buyForm.price).toFixed(5)}} {{ this.getMainCoin.toUpperCase()  }}</span></p>
               </div>
-              <a>买入 <span>HTP</span></a>
+              <a @click="handle_xj_buy">买入 <span>{{ this.getTargetCoin.toUpperCase()  }}</span></a>
             </div>
           </div>
           <div class="sell">
-            <div class="balance"><span>可用 0.0000000 BTC</span><a href="">充币</a>s</div>
+            <div class="balance">
+              <span>{{this.getCoinBalanceByName(this.getTargetCoin).coinBalance }} {{ this.getTargetCoin.toUpperCase() }}</span>
+              <a href="">充币</a>
+            </div>
             <div class="trade-from">
               <span> 卖出价</span>
-              <el-input v-model="current_symbol.price">
-                <span class="coin-name" slot="suffix">USTD</span>
+              <el-input v-model.number="xj_sellForm.price">
+                <span class="coin-name" slot="suffix">{{ this.getMainCoin.toUpperCase() }}</span>
               </el-input>
-              <div class="math-price">
-                <span>≈ 27.40 CNY</span>
-              </div>
+
               <span> 卖出量</span>
-              <el-input v-model="target_symbol.number">
-                <span class="coin-name" slot="suffix">HPT</span>
+              <el-input v-model.number="xj_sellForm.amount"  v-on:mouseenter.native="xj_sell_max = 999999">
+                <span class="coin-name" slot="suffix">{{ this.getTargetCoin.toUpperCase()  }}</span>
               </el-input>
               <el-slider
-                v-model="value7"
-                :step="10"
-                show-stops>
+                v-on:mouseenter.native="xj_sell_max = xj_sellForm.amount"
+                v-model.number="xj_sellForm.amount"
+                :step="0.00001"
+                :max="xj_sell_max"
+              >
               </el-slider>
               <div class="total">
-                <p>交易额 <span>0.00000000 USDT</span></p>
+                <p>交易额 <span>{{(this.xj_sellForm.amount*this.xj_sellForm.price).toFixed(5)}} {{ this.getMainCoin.toUpperCase()  }}</span></p>
               </div>
-              <a class="sell-button">卖出 <span>HTP</span></a>
+              <a class="sell-button" @click="handle_xj_sell">卖出 <span>{{ this.getTargetCoin.toUpperCase() }}</span></a>
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane  name="sj">
+        <el-tab-pane name="sj">
           <template slot="label">市价交易</template>
           <div class="buy">
-            <div class="balance"><span>可用 0.0000000 BTC</span><a href="">充币</a>s</div>
+            <div class="balance"><span> 可用 {{this.getCoinBalanceByName(this.getMainCoin).coinBalance }} {{ this.getMainCoin.toUpperCase() }}</span><a href="">充币</a></div>
             <div class="trade-from">
               <span> 买入价</span>
-              <el-input v-model="current_symbol.price">
-                <span class="coin-name" slot="suffix">USTD</span>
+              <el-input v-model.number="sj_buyForm.price">
+                <span class="coin-name" slot="suffix">{{ this.getMainCoin.toUpperCase() }}</span>
               </el-input>
-              <div class="math-price">
-                <span>≈ 27.40 CNY</span>
-              </div>
               <span> 买入量</span>
-              <el-input v-model="target_symbol.number">
-                <span class="coin-name" slot="suffix">HPT</span>
+              <el-input v-model.number="sj_buyForm.amount" v-on:mouseenter.native="xj_buy_max = 999999">
+                <span class="coin-name" slot="suffix">{{ this.getTargetCoin.toUpperCase() }}</span>
               </el-input>
               <el-slider
-                v-model="value7"
-                :step="10"
-                show-stops>
+                v-on:mouseenter.native="sj_buy_max = sj_buyForm.amount"
+                v-model.number="sj_buyForm.amount"
+                :step="0.00001"
+                :max="sj_buy_max"
+                  >
               </el-slider>
               <div class="total">
-                <p>交易额 <span>0.00000000 USDT</span></p>
+                <p>交易额 <span>{{(this.sj_buyForm.amount*this.sj_buyForm.price).toFixed(5)}} {{ this.getMainCoin.toUpperCase()  }}</span></p>
               </div>
-              <a>买入 <span>HTP</span></a>
+              <a @click="handle_xj_buy">买入 <span>{{ this.getTargetCoin.toUpperCase()  }}</span></a>
             </div>
           </div>
           <div class="sell">
-            <div class="balance"><span>可用 0.0000000 BTC</span><a href="">充币</a>s</div>
+            <div class="balance">
+              <span>{{this.getCoinBalanceByName(this.getTargetCoin).coinBalance }} {{ this.getTargetCoin.toUpperCase() }}</span>
+              <a href="">充币</a>
+            </div>
             <div class="trade-from">
               <span> 卖出价</span>
-              <el-input v-model="current_symbol.price">
-                <span class="coin-name" slot="suffix">USTD</span>
+              <el-input v-model.number="sj_sellForm.price">
+                <span class="coin-name" slot="suffix">{{ this.getMainCoin.toUpperCase() }}</span>
               </el-input>
-              <div class="math-price">
-                <span>≈ 27.40 CNY</span>
-              </div>
+
               <span> 卖出量</span>
-              <el-input v-model="target_symbol.number">
-                <span class="coin-name" slot="suffix">HPT</span>
+              <el-input v-model.number="sj_sellForm.amount"  v-on:mouseenter.native="sj_sell_max = 999999">
+                <span class="coin-name" slot="suffix">{{ this.getTargetCoin.toUpperCase()  }}</span>
               </el-input>
               <el-slider
-                v-model="value7"
-                :step="10"
-                show-stops>
+                v-on:mouseenter.native="sj_sell_max = sj_sellForm.amount"
+                v-model.number="sj_sellForm.amount"
+                :step="0.00001"
+                :max="sj_sell_max"
+              >
               </el-slider>
               <div class="total">
-                <p>交易额 <span>0.00000000 USDT</span></p>
+                <p>交易额 <span>{{(this.sj_sellForm.amount*this.sj_sellForm.price).toFixed(5)}} {{ this.getMainCoin.toUpperCase()  }}</span></p>
               </div>
-              <a class="sell-button">卖出 <span>HTP</span></a>
+              <a class="sell-button" @click="handle_xj_sell">卖出 <span>{{ this.getTargetCoin.toUpperCase() }}</span></a>
             </div>
           </div>
         </el-tab-pane>
@@ -113,25 +117,81 @@
 </template>
 
 <script>
-export default {
-  // props:['coinName'],
+  import { mapState, mapGetters } from 'vuex'
+  import { submitTrade } from '../../../api/coin_trade'
+  export default {
   name: "trade-panel",
   computed:{
-    // 'coinName':'BTC'
+    ...mapGetters([
+      'getCoinBalanceByName',
+      'getMainCoin',
+      'getTargetCoin',
+      'getCoinIdByName'
+    ]),
   },
+
   data(){
     return {
       activeName:'xj',
-      current_symbol:{
-        name:'USTD',
-        price: 12.99211
+      xj_sell_max: 999999,
+      xj_buy_max: 999999,
+      //限价买入
+      xj_buyForm: {
+        direction: 0,    //0买入 1卖出
+        amount: 0,        //交易总数
+        price: 0,         //交易单价
+        localId: this.$store.getters.getCoinIdByName(this.getMainCoin),      //本币id
+        foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin),    //外币id
+        type: ''
       },
-      target_symbol: {
-        name: 'HTP',
-        number:0
-      }
+      //限价卖出
+      xj_sellForm: {
+        direction: 1,    //0买入 1卖出
+        amount: 0,        //交易总数
+        price: 0,         //交易单价
+        localId: this.$store.getters.getCoinIdByName(this.getMainCoin),      //本币id
+        foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin),    //外币id
+        type: ''
+      },
+      //市价买入 //todo:市价交易未写
+      sj_buyForm: {
+        direction: 0,    //0买入 1卖出
+        amount: 0,        //交易总数
+        price: 0,         //交易单价
+        localId: this.$store.getters.getCoinIdByName(this.getMainCoin),      //本币id
+        foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin),    //外币id
+        type: ''
+      },
+      //市价卖出
+      sj_sellForm: {
+        direction: 1,    //0买入 1卖出
+        amount: 0,        //交易总数
+        price: 0,         //交易单价
+        localId: this.$store.getters.getCoinIdByName(this.getMainCoin),      //本币id
+        foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin),    //外币id
+        type: ''
+      },
+
     }
-  }
+  },
+    methods: {
+      handle_xj_buy(){
+        let formData = new FormData()
+        formData.append('direction',this.xj_buyForm.direction)
+        formData.append('amount',this.xj_buyForm.amount)
+        formData.append('price',this.xj_buyForm.price)
+        formData.append('localId',this.xj_buyForm.localId)
+        formData.append('foreignId',this.xj_buyForm.foreignId)
+        formData.append('type',this.xj_buyForm.type)
+        submitTrade(formData).then(response=>{
+          console.log(response)
+        })
+      },
+      handle_xj_sell(){
+        console.log(this.xj_buyForm)
+      }
+    },
+
 }
 </script>
 

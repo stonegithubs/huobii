@@ -1,7 +1,7 @@
 <template>
   <div class="cc-exchange">
     <div class="sidebar">
-      <sidebar-img></sidebar-img>
+      <!--<sidebar-img></sidebar-img>-->
       <sidebar-chart></sidebar-chart>
       <sidebar-notice></sidebar-notice>
     </div>

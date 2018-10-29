@@ -9,7 +9,7 @@
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <router-link :to="{ name: 'trade', params:{ option: 'buy', coin: 'btc' } }"><b-nav-item>法币交易</b-nav-item></router-link>
+          <b-nav-item><router-link :to="{ path: '/trade' }">法币交易</router-link></b-nav-item>
           <b-nav-item><router-link :to="{ name: 'ccExchange'}">币币交易</router-link></b-nav-item>
           <b-nav-item><router-link :to="{ name: 'ccMargin'}">C2C交易</router-link></b-nav-item>
           <b-nav-item> <router-link :to="{ name: 'welfare'}">糖果活动</router-link></b-nav-item>

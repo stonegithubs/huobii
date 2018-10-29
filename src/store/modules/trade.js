@@ -1,27 +1,43 @@
+import { trade_pwd_exist } from "../../api/trade";
 
-const trade  = {
+
+const trade = {
   state: {
-    supportedPayment:{            //支持的支付方式  暂时写死 后台有数据再更新
+    supportedPayment: { //支持的支付方式  暂时写死 后台有数据再更新
       "alipay": require('../../assets/coinIcons/alipay.svg'),
       "wechat": require('../../assets/coinIcons/wechat.svg'),
       "bank": require('../../assets/coinIcons/bank.svg'),
     },
-    currencyType: "CNY",          //支持的法币
+    currencyType: "CNY", //支持的法币
+    hasTradePwd: false
   },
   mutations: {
-
+    SET_HASTRADEPWD:(state, content) => {
+      state.hasTradePwd = content
+    },
   },
   actions: {
-
+    GetTradePwd({ commit }) {
+      return new Promise((resolve, reject) => {
+        trade_pwd_exist().then(response => {
+          commit('SET_HASTRADEPWD',response.content)
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    }
   },
   getters: {
-    getPaymentIcon: (state)=> (iconName) =>{
+    getPaymentIcon: (state) => (iconName) => {
       return state.supportedPayment[iconName]
     },
-    getCurrencyType: (state) =>{
+    getCurrencyType: (state) => {
       return state.currencyType
+    },
+    getTradePwdStatus: (state) => {
+      return state.hasTradePwd
     }
-
   }
 }
 

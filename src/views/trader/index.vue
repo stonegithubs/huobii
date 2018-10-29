@@ -158,7 +158,6 @@
           </el-table>
         </div>
       </div>
-
     </div>
    <div class="m-wrapper hidden-sm-and-up">
      <div class="base-info">

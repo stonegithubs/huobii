@@ -1,31 +1,32 @@
 import request from '@/utils/request'
 
-export function loginByUsername(username, password) {
-  const data = {
-    username,
-    password
-  }
+//登录 ~~~
+export function loginByUsername(data) {
   return request({
-    url: '/user/login',
+    url: '/api/v1/token/login',
     method: 'post',
     data
   })
 }
 
-export function getUserInfo() {
+//注销  ~~~
+export function logout(token) {
+  let form = new FormData()
+  form.append('token',token)
   return request({
-    url: '/api/v1/security/account',
-    method: 'post'
+    url: '/api/v1/token/update',
+    method: 'post',
+    data:form
   })
 }
 
+
+
+
 // 手机号注册
-export  function registerByPhone(phone, password, confirm, captcha) {
-  const data = {
-    phone,password,confirm,captcha
-  }
+export  function registerByPhone(data) {
   return request({
-    url: '/api/v1/user/registry',
+    url: '/api/v1/public/user/registry',
     method: 'post',
     data
   })
@@ -38,5 +39,14 @@ export function set_rec_code(code) {
     url: '/api/v1/user/registry',
     method: 'post',
     data
+  })
+}
+
+// 获取邀请码
+// 
+ export function get_rec_code(code) {
+  return request({
+    url: '/api/v1/user/get_recommend_code',
+    method: 'post',
   })
 }

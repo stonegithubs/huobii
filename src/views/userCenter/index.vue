@@ -4,7 +4,7 @@
         <span>账号安全</span>
       </div>
       <base-info></base-info>
-      <advanced-verify></advanced-verify>
+      <!-- <advanced-verify></advanced-verify> -->
       <user-history></user-history>
     </div>
 </template>
@@ -24,22 +24,22 @@ export default {
     if(this.$store.state.user.token === null){
       this.$router.push('/login')
     }else {
-      this.$store.dispatch('GetUserInfo').then( msg => {
-          this.$message.success(msg)
-        }).catch( err => {
-          this.$message(err)
-        })
-      this.$store.dispatch('GetVerifyInfo').then( msg => {
-          this.$message.success(msg)
-        }).catch( err => {
-          this.$message(err)
-        })
+      // this.$store.dispatch('GetUserInfo').then( msg => {
+      //     this.$message.success(msg)
+      //   }).catch( err => {
+      //     this.$message(err)
+      //   })
+      // this.$store.dispatch('GetVerifyInfo').then( msg => {
+      //     this.$message.success(msg)
+      //   }).catch( err => {
+      //     this.$message(err)
+      //   })
     }
   }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .user-center {
     width: 1200px;
     margin: auto;

@@ -28,18 +28,18 @@ export const constantRouterMap = [
     ]
 
   },
-  {
-    path: '/invite',
-    component: layout,
-    children: [
-      {
-        path: '',
-        name: 'invite',
-        component: () => import('@/views/invite/index')
-      }
-    ]
-
-  },
+  // 邀请模块暂时不开启
+  // {
+  //   path: '/invite',
+  //   component: layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'invite',
+  //       component: () => import('@/views/invite/index')
+  //     }
+  //   ]
+  // },
   {
     path: '/coin_coin/margin',
     component: layout,
@@ -53,7 +53,7 @@ export const constantRouterMap = [
 
   },
   {
-    path: '/trade/:option/:coin',
+    path: '/trade',
     component: tradeLayout,
     children: [
       {
@@ -100,7 +100,6 @@ export const constantRouterMap = [
 
   },
 
-
   {
     path: '/order',
     component: layout,
@@ -137,18 +136,18 @@ export const constantRouterMap = [
     ]
 
   },
-  {
-    path: '/verify',
-    component: layout,
-    children: [
-      {
-        path: '',
-        name: 'verify',
-        component: () => import('@/views/verify/index')
-      }
-    ]
+  // {
+  //   path: '/verify',
+  //   component: layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'verify',
+  //       component: () => import('@/views/verify/index')
+  //     }
+  //   ]
 
-  },
+  // },
   {
     path: '/user_center',
     component: layout,
@@ -162,41 +161,64 @@ export const constantRouterMap = [
 
   },
   {
-    path: '/change_password',
+    path: '/userOptions',
     component: layout,
     children: [
       {
-        path: '',
+        path: '/userOptions/change_password',
         name: 'change_password',
         component: () => import('@/views/changePassword/index')
-      }
-    ]
-
-  },
-  {
-    path: '/bind_email',
-    component: layout,
-    children: [
+      },
       {
-        path: '',
-        name: 'bind_email',
-        component: () => import('@/views/bindEmail/index')
-      }
-    ]
-
-  },
-  {
-    path: '/change_phone',
-    component: layout,
-    children: [
+        path: '/userOptions/change_trade_password',
+        name: 'change_trade_password',
+        component: () => import('@/views/changePassword/index')
+      },
       {
-        path: '',
+        path: '/userOptions/change_phone',
         name: 'change_phone',
-        component: () => import('@/views/changePhone/index')
+        component: () => import('@/views/changePassword/index')
+
+      },
+      {
+        path: '/userOptions/bind_email',
+        name: 'bind_email',
+        component: () => import('@/views/changePassword/index')
+
+      },
+      {
+        path: '/userOptions/verify',
+        name: 'verify',
+        component: () => import('@/views/changePassword/index')
+
       }
     ]
 
   },
+  // {
+  //   path: '/bind_email',
+  //   component: layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'bind_email',
+  //       component: () => import('@/views/bindEmail/index')
+  //     }
+  //   ]
+
+  // },
+  // {
+  //   path: '/change_phone',
+  //   component: layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'change_phone',
+  //       component: () => import('@/views/changePhone/index')
+  //     }
+  //   ]
+
+  // },
   {
     path: '/order_detail/:id',
     component: tradeLayout,
@@ -207,7 +229,8 @@ export const constantRouterMap = [
         component: () => import('@/views/orderDetail/index')
       }
     ]
-  },    //订单详情
+  },
+  // 订单详情
   {
     path: '/trader/:id',
     component: tradeLayout,
@@ -218,7 +241,8 @@ export const constantRouterMap = [
         component: () => import('@/views/trader/index')
       }
     ]
-  },          //用户信息
+  },
+  // 用户信息
   {
     path: '/trade_user_center',
     component: tradeLayout,
@@ -229,7 +253,8 @@ export const constantRouterMap = [
         component: () => import('@/views/tradeUserCenter/index')
       }
     ]
-  },//法币交易个人中心
+  },
+  // 法币交易个人中心
   {
     path: '/trade_order',
     component: tradeLayout,
@@ -240,7 +265,8 @@ export const constantRouterMap = [
         component: () => import('@/views/tradeOrder/index')
       }
     ]
-  },      //法币交易订单列表
+  },
+  // 法币交易订单列表
   {
     path: '/trade_finance',
     component: tradeLayout,
@@ -251,10 +277,8 @@ export const constantRouterMap = [
         component: () => import('@/views/tradeFinance/index')
       }
     ]
-  },    //法币交易个人资产
-
-
-
+  },
+  // 法币交易个人资产
   {
     path: '/404',
     component: layout,

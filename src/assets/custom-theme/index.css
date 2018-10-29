@@ -144,3 +144,42 @@ div:focus {
 .ten{
   background-color:#a16c92
 }
+.font12 {
+  font-size:12px
+}
+.font14 {
+  font-size:14px!important
+}
+.font16 {
+  font-size:16px
+}
+.font18 {
+  font-size:18px
+}
+.font24 {
+  font-size:24px
+}
+.font32 {
+  font-size:32px
+}
+.font-blue {
+  color:#638bd4
+}
+.font-hover {
+  color:#f5a305
+}
+.font-gray {
+  color:#999
+}
+.font-base {
+  color:#333
+}
+.font-weight {
+  font-weight:600
+}
+.font-price {
+  color:#489972
+}
+.font-tips {
+  color:red
+}

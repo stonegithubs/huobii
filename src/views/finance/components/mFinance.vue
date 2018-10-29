@@ -20,7 +20,7 @@
     </div>
   </div>
 </template>
-
+  
 <script>
   export default {
     name: "mFinance",
@@ -39,8 +39,24 @@
           {id: '9',date:'2018-10-05 02:13:30', type: '卖出', 	market: 'BTC_USDT', price:'10069.47300000', number:'0.10000000', total:	'1006.24243689',	deal:'0.00000000',	average:'0.00000000', status: '交易中'},
         ]
       }
-    }
+    },
+    created(){
+      this.$store.dispatch('GetCoinBalanceBoth').then(response => {
+        console.log(response)
+
+      }).catch(err => {
+        this.$notify.error(err.message)
+      })
+    if(this.$store.getters.getSupportCoin.length === 0) {
+      this.$store.dispatch('getSupportCoin').then(response => {
+        console.log(response)
+
+      }).catch(err => {
+        this.$notify.error(err.message)
+      })
+      }
   }
+}
 </script>
 
 <style lang="scss">
