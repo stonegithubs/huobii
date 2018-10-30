@@ -323,7 +323,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "../../assets/coinIcons/tradeIcons";
   .trader{
     margin: auto;
     @media (min-width: 768px) {

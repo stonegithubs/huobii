@@ -4,9 +4,9 @@ import { trade_pwd_exist } from "../../api/trade";
 const trade = {
   state: {
     supportedPayment: { //支持的支付方式  暂时写死 后台有数据再更新
-      "alipay": require('../../assets/coinIcons/alipay.svg'),
-      "wechat": require('../../assets/coinIcons/wechat.svg'),
-      "bank": require('../../assets/coinIcons/bank.svg'),
+      // "alipay": require('../../assets/SVG/alipay.svg'),
+      // "wechat": require('../../assets/SVG/wechat.svg'),
+      // "bank": require('../../assets/SVG/bank.svg'),
     },
     currencyType: "CNY", //支持的法币
     hasTradePwd: false

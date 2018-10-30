@@ -9,14 +9,12 @@ const service = axios.create({
   timeout: 5000 // request timeout
 })
 
-
-
 // request interceptor
 service.interceptors.request.use(
   config => {
     // Do something before request is sent
     config.headers = {
-      'Authorization': 'Bearer '+sessionStorage.Authorization || '',
+      'Authorization': 'Bearer ' + sessionStorage.Authorization || ''
       // 'Content-Type': 'application/json',
       // 'Content-type': 'application/x-www-form-urlencoded'
     }
@@ -66,19 +64,19 @@ service.interceptors.response.use(
         })
       })
     }
-    if (res.code === "429") {
-      Message({ message: res.message, type: 'error', duration: 5 * 1000 })
+    if (response.code === "429") {
+      Message({ message: response.message, type: 'error', duration: 5 * 1000 })
     }
     return res
   },
   error => {
     console.log('err' + error) // for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
-    });
-     return Promise.reject(error)
+    // Message({
+    //   message: error.message,
+    //   type: 'error',
+    //   duration: 5 * 1000
+    // });
+    return Promise.reject(error)
   }
 )
 

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-//登录 ~~~
+// 登录 ~~~
 export function loginByUsername(data) {
   return request({
     url: '/api/v1/token/login',
@@ -9,22 +9,19 @@ export function loginByUsername(data) {
   })
 }
 
-//注销  ~~~
+// 注销  ~~~
 export function logout(token) {
-  let form = new FormData()
-  form.append('token',token)
+  const form = new FormData()
+  form.append('token', token)
   return request({
     url: '/api/v1/token/update',
     method: 'post',
-    data:form
+    data: form
   })
 }
 
-
-
-
 // 手机号注册
-export  function registerByPhone(data) {
+export function registerByPhone(data) {
   return request({
     url: '/api/v1/public/user/registry',
     method: 'post',
@@ -34,7 +31,7 @@ export  function registerByPhone(data) {
 
 // 填写邀请码
 export function set_rec_code(code) {
-  const data={code}
+  const data = { code }
   return request({
     url: '/api/v1/user/registry',
     method: 'post',
@@ -43,10 +40,9 @@ export function set_rec_code(code) {
 }
 
 // 获取邀请码
-// 
- export function get_rec_code(code) {
+export function get_rec_code(code) {
   return request({
     url: '/api/v1/user/get_recommend_code',
-    method: 'post',
+    method: 'post'
   })
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="trade-show">
     <el-tabs class="trade-bar" v-model="activeName" type="border-card" @tab-click="handleClick">
-      <el-tab-pane class="trade-show-panel" v-for="symbol in symbols" :name="symbol">
+      <el-tab-pane class="trade-show-panel" v-for="symbol in symbols" :name='symbol'  v-bind:key="symbol.id">
         <span slot="label">
         <i :class="'iconfont icon-'+symbol.toUpperCase()" style="font-size: 18px"></i> &nbsp;{{ symbol.toUpperCase() }}</span>
         <el-table @row-click="chooseCoin" v-loading="mainTradeLoading" :data="symbolList" :default-sort="{prop: 'close', order: 'descending'}" height="600" style="width: 100%">
@@ -63,11 +63,11 @@ export default {
       this.$store.dispatch('getSymbols').then(() => {
         this.$store.getters.getUniqueSymbol()
       }).catch(err => {
-        this.$message.error(err.message)
+        // this.$message.error(err.message)
       })
     }
     this.$store.dispatch('getSymbolList').catch(() => {
-      this.$message.error("can't get coin information")
+      // this.$message.error("can't get coin information")
     })
     this.$nextTick(() => {
       this.mainTradeLoading = false
@@ -85,7 +85,6 @@ export default {
 
 </script>
 <style lang="scss">
-@import "../../../assets/coinIcons/tradeIcons";
 
 .el-table td div {
   text-transform: uppercase;

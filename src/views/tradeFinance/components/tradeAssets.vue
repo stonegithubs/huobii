@@ -193,7 +193,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "../../../assets/coinIcons/tradeIcons";
   .trade-assets {
     .list-wrapper {
       border-bottom: 1px solid hsla(0,0%,85%,.5);

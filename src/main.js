@@ -11,16 +11,17 @@ import { Navbar } from 'bootstrap-vue/es/components'
 import './permission' // permission control
 // import i18n from './lang' // Internationalization
 import '@/style/index.scss'
+import '@/views/icon'
 
-const errorHandler = (error, vm) => {
-  console.error('抛出全局异常')
-  console.error(vm)
-  console.error(error)
-  alert('异常')
-}
+// const errorHandler = (error, vm) => {
+//   console.error('抛出全局异常')
+//   console.error(vm)
+//   console.error(error)
+//   alert('异常')
+// }
 
-Vue.config.errorHandler = errorHandler
-Vue.prototype.$throw = (error) => errorHandler(error, this)
+// Vue.config.errorHandler = errorHandler
+// Vue.prototype.$throw = (error) => errorHandler(error, this)
 
 Vue.use(Navbar)
 Vue.use(Element)
