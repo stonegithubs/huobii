@@ -7,7 +7,7 @@
     </div>
     <div class="inner">
       <el-table :data="buyDepthList" style="width: 100%" v-loading="this.buyDepthList.length == 0" element-loading-background="#181b2a"
-      height="218" :cell-class-name="cellClassName"
+      height="204" :cell-class-name="cellClassName"
       class="topTable"
           :default-sort = "{prop: 'accumulative'}"
 >
@@ -23,11 +23,11 @@
         <el-table-column prop="accumulative" :label="'累计 '+this.$store.state.coinData.targetCoin.toUpperCase()">
         </el-table-column>
       </el-table>
-      <div style="height:5px;padding:0 20px">
+      <div style="height:3px;padding:0 14px">
         <div style="background-color:#262a42;height:5px"></div>
       </div>
       <el-table
-        height="218"
+        height="235"
         :data="sellDepthList" 
         style="width: 100%" 
         v-loading="this.sellDepthList.length == 0" 
@@ -76,7 +76,7 @@ export default {
     }
   },
   methods: {
-    rowClassName(row,rowIndex){
+    cellClassName(row,rowIndex){
       return 'my-cell'
     }
 

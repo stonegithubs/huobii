@@ -12,16 +12,16 @@
           </el-table-column>
           <el-table-column
             prop="price"
-            label="价格(BTC)">
+            :label="'价格'+'('+this.$store.state.coinData.mainCoin.toUpperCase()+')'">
           </el-table-column>
           <el-table-column
             prop="number"
-            label="数量(ETH)"
+            :label="'数量'+'('+this.$store.state.coinData.targetCoin.toUpperCase()+')'"
           >
           </el-table-column>
           <el-table-column
             prop="total"
-            label="累计(ETH)">
+            :label="'累计'+'('+this.$store.state.coinData.mainCoin.toUpperCase()+')'">
           </el-table-column>
         </el-table>
       </div>

@@ -18,9 +18,9 @@
       </div>
 
       <!--正在委托-->
-      <open-orders></open-orders>
+      <open-orders  v-if="this.$store.state.user.token"></open-orders>
       <!--历史委托-->
-      <order-history></order-history>
+      <order-history  v-if="this.$store.state.user.token"></order-history>
 
       <div class="market-wrap">
         <!--深度图-->

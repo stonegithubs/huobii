@@ -2,7 +2,7 @@
   <div class="order-history">
     <div class="title">
       <div class="mod-name">
-        <span>当前委托</span>
+        <span>历史委托</span>
       </div>
       <!--<div class="mod-btn">-->
       <!--<a>买入</a>-->
