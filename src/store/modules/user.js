@@ -4,7 +4,7 @@ import { getVerifyInfo, getUserInfo } from "../../api/user";
 const user = {
   state: {
     userInfo: null || JSON.parse(sessionStorage.getItem('userInfo')),
-    token: null || sessionStorage.getItem('Authorization'),
+    token: "asasassa" || sessionStorage.getItem('Authorization'),
     verifyInfo: null || JSON.parse(sessionStorage.getItem('verify')),
   },
   mutations: {

@@ -28,6 +28,7 @@ export default {
       activeName: "usdt",
       currentSymbol: 'usdt',
       symbols: ['usdt', 'husd', 'btc', 'eth', 'ht'],
+      mainInterval: {}
     };
   },
   computed: {
@@ -70,13 +71,15 @@ export default {
     })
     this.$nextTick(() => {
       this.mainTradeLoading = false
-      clearInterval( sidebarInterval )
-      let mainInterval = setInterval(()=>{
+      this.mainInterval = setInterval(()=>{
             this.$store.dispatch('getSymbolList')
           },15000)
     })
 
 
+  },
+  beforeDestroy(){
+    clearInterval(this.mainInterval)
   }
 }
 

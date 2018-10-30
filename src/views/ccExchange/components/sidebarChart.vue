@@ -97,8 +97,7 @@ export default {
       this.sidebarLoading = false
       this.balanceInfoLoading = false
 
-      clearInterval( mainInterval )
-      let mainInterval = setInterval(()=>{
+      this.sidebarInterval = setInterval(()=>{
             this.$store.dispatch('getSymbolList')
           },15000)
     })
@@ -108,8 +107,12 @@ export default {
     return {
       activeName: "0",
       currentSymbol: 'usdt',
+      sidebarInterval: {},
     }
-  }
+  },
+  beforeDestroy() {
+    clearInterval(this.sidebarInterval)
+  },
 }
 
 </script>

@@ -132,6 +132,7 @@
 
       <el-table-column prop="payment_list" label="支付方式">
         <template slot-scope="scope">
+          <paymentIcon :paymentList></paymentIcon> 
         <span v-for="icon in scope.row.payment_list">
         <el-tooltip  v-if="icon === '支付宝'" class="item" effect="dark" content="alipay" placement="bottom">
               <img :src="getIcon('alipay')">
@@ -204,8 +205,10 @@
 
 <script>
   import { getAvatarColor } from '../../../utils/index'
+  import paymentIcon from './paymentIcon'
 export default {
   name: "trade-content",
+  components:{ paymentIcon },
   data(){
     let validatePass2 = (rule, value, callback) => {
       if (value === '') {
