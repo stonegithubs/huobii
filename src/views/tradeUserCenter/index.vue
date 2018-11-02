@@ -31,22 +31,22 @@
                             <p class="list-label"><i class="iconfont  icon-email"></i></p>
                             <div class="info-wrapper">
                                 <p class="list-desc">
-                                    <span class="desc-name m-desc-name">邮箱</span> 
-                                        <span v-if="hasEmail" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">已绑定</span>
-                                        <router-link v-if="hasEmail"  :to="{ name: 'change_email'}">更换</router-link>
-                                        <span v-if="!hasEmail" class="auth-info m-auth-info">未绑定</span>
-                                        <router-link v-if="!hasEmail" :to="{ name: 'bind_email'}">绑定</router-link>
+                                    <span class="desc-name m-desc-name">邮箱</span>
+                                    <span v-if="hasEmail" class="auth-info m-auth-info" style="color:black">已绑定</span>
+                                    <a v-if="hasEmail" @click="unbindButton">解绑</a>
+                                    <span v-if="!hasEmail" class="auth-info m-auth-info">未绑定</span>
+                                    <router-link v-if="!hasEmail" :to="{ name: 'bind_email'}">绑定</router-link>
                                 </p>
                             </div>
                         </div>
                         <div class="user-info-list">
                             <p class="list-label"><i class="iconfont  icon-phone"></i> </p>
                             <div class="info-wrapper">
-                                <p class="list-desc"><span class="desc-name m-desc-name">手机</span> <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未绑定</span>
-                                    <a target="_blank" rel="noopener noreferrer" href="https://www.huobi.br.com/zh-cn/user_center/uc_bind_email/?action=bindmail&amp;backurl=https%3A%2F%2Fotc.huobi.br.comzh-cn%2fUser%3ftype%3d1" class="isActive m-button">绑定</a>
+                                <p class="list-desc"><span class="desc-name m-desc-name">手机</span> <span class="auth-info m-auth-info" style="color:black">已绑定</span>
                                 </p>
                             </div>
                         </div>
+                        <!-- todo:谷歌验证器未完成 -->
                         <div class="user-info-list">
                             <p class="list-label"><i class="iconfont  icon-GA"></i> </p>
                             <div class="info-wrapper">
@@ -58,16 +58,21 @@
                         <div class="user-info-list">
                             <p class="list-label"><i class="iconfont  icon-login_password"></i> </p>
                             <div class="info-wrapper">
-                                <p class="list-desc"><span class="desc-name m-desc-name">登陆密码</span> <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未绑定</span>
-                                    <a target="_blank" rel="noopener noreferrer" href="https://www.huobi.br.com/zh-cn/user_center/uc_bind_email/?action=bindmail&amp;backurl=https%3A%2F%2Fotc.huobi.br.comzh-cn%2fUser%3ftype%3d1" class="isActive m-button">绑定</a>
+                                <p class="list-desc"><span class="desc-name m-desc-name">登陆密码</span>
+                                 <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">******</span>
+                                    <router-link :to="{name: 'change_password'}" class="isActive m-button">修改</router-link>
                                 </p>
                             </div>
                         </div>
                         <div class="user-info-list">
                             <p class="list-label"><i class="iconfont  icon-password-lock"></i></p>
                             <div class="info-wrapper">
-                                <p class="list-desc"><span class="desc-name m-desc-name">资金密码</span> <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未绑定</span>
-                                    <a target="_blank" rel="noopener noreferrer" href="https://www.huobi.br.com/zh-cn/user_center/uc_bind_email/?action=bindmail&amp;backurl=https%3A%2F%2Fotc.huobi.br.comzh-cn%2fUser%3ftype%3d1" class="isActive m-button">绑定</a>
+                                <p class="list-desc"><span class="desc-name m-desc-name">资金密码</span> 
+                                <span v-if="hasTradePwd" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">******</span>
+                                <router-link v-if="hasTradePwd" :to="{ name: 'change_trade_password'}" class="isActive m-button">更改</router-link>
+
+                                <span v-if="!hasTradePwd" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未设置</span>
+                                <router-link v-if="!hasTradePwd" :to="{ name: 'change_trade_password'}" class="isActive m-button">设置</router-link>
                                 </p>
                             </div>
                         </div>
@@ -80,8 +85,13 @@
                         <div class="user-info-list">
                             <p class="list-label"><i class="iconfont  icon-name_certification"></i></p>
                             <div class="info-wrapper">
-                                <p class="list-desc"><span class="desc-name m-desc-name">实名认证</span> <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未绑定</span>
-                                    <a target="_blank" rel="noopener noreferrer" href="https://www.huobi.br.com/zh-cn/user_center/uc_bind_email/?action=bindmail&amp;backurl=https%3A%2F%2Fotc.huobi.br.comzh-cn%2fUser%3ftype%3d1" class="isActive m-button">绑定</a>
+                                <p class="list-desc"><span class="desc-name m-desc-name">实名认证</span>
+                                <span v-if="this.$store.state.user.verifyInfo.auditFlag ==='2'" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未通过</span>
+                                <span v-if="this.$store.state.user.verifyInfo===null" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未认证</span>
+                                <router-link :to="{ name: 'verify' }" v-if="this.$store.state.user.verifyInfo===null||this.$store.state.user.verifyInfo.auditFlag ==='2'"  class="isActive m-button">认证</router-link>
+
+                                <span v-if="this.$store.state.user.verifyInfo.auditFlag " class="auth-info m-auth-info" style="color:black">{{this.$store.state.user.verifyInfo.surName}} {{this.$store.state.user.verifyInfo.cardNo.slice(0,-4)}}****</span>
+                                <a v-if="hasVerify" class="isActive m-button">已认证</a>
                                 </p>
                             </div>
                         </div>
@@ -107,9 +117,9 @@
                                         <p class="list-desc"><span class="desc-name m-desc-name">{{getPaywayByID(item.paywayId || '-1').payName}}</span>
                                             <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">{{item.pram1 === "null"? '':item.pram1}} {{item.pram2 === "null"? '':item.pram2}} {{item.pram3=== "null"? '':item.pram3}} {{item.pram4 === "null"? '':item.pram4}}</span>
                                             <span class="isActive m-button">
-                                                    <el-switch active-text='on' inactive-text='off'	 :id="item.paywayId"  @click.native="init(item.paywayId)" v-model="getUserPaywayByID(item.paywayId).statusFlag" active-value="1" inactive-value="0" @change="handleChangePayStatus">
-                                                    </el-switch>
-                                                </span>
+                                                <el-switch active-text='on' inactive-text='off'	 :id="item.paywayId"  @click.native="init(item.paywayId)" v-model="getUserPaywayByID(item.paywayId).statusFlag" active-value="1" inactive-value="0" @change="handleChangePayStatus">
+                                                </el-switch>
+                                            </span>
                                         </p>
                                     </div>
                             </div>
@@ -130,9 +140,8 @@
 
 <script>
     import addPaymentForm from "./components/addPaymentForm";
-    import {
-        changePaymentStatus
-    } from '../../api/user'
+    import { changePaymentStatus } from '../../api/user'
+    import { unBindEmail } from '../../api/verify_code';
     export default {
         name: "tradeUserCenter",
         components: {
@@ -169,9 +178,19 @@
             userPayment() {
                 return this.$store.state.user.payway
             },
-            hasEmail(){
+            hasEmail() {
                 return !!this.$store.state.user.userInfo.email
                 // return true
+            },
+            hasTradePwd(){
+                return this.$store.state.trade.hasTradePwd
+            },
+            hasVerify(){
+                let flag = this.$store.state.user.verifyInfo.auditFlag
+                if( flag === '0' || flag === '2'){
+                    return false
+                }
+                return true
             }
         },
         methods: {
@@ -206,15 +225,26 @@
                         this.$store.dispatch("GetUserPayway");
                     })
                 })
+            },
+            unbindButton() {
+                this.$alert('确定解绑邮箱？', '解绑邮箱', {
+                        confirmButtonText: '确定',
+                        callback: action => {
+                            unBindEmail().then(response => {
+                                this.$notify.success("邮件已发送，请注意查收")
+                            }).catch(_=>{console.log(_)})
+                            }
+                })
             }
         },
-        created() {
-            this.$store.dispatch("GetUserPayway");
-            this.$store.dispatch("GetUserInfo");
-            this.$store.dispatch("GetVerifyInfo");
-            // console.log(this.getUserPaywayByID('2').paywayId)
-        }
-    };
+            created() {
+                this.$store.dispatch("GetUserPayway");
+                this.$store.dispatch("GetUserInfo");
+                this.$store.dispatch("GetVerifyInfo");
+                this.$store.dispatch("GetTradePwd");
+                // console.log(this.getUserPaywayByID('2').paywayId)
+            }
+        };
 </script>
 
 <style lang='scss' scoped>

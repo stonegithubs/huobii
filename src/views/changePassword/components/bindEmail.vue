@@ -33,7 +33,7 @@
             console.log(bindEmail)
             bindEmail(formData).then(response => {
               if (response.content) {
-                this.$notify.success(response.message)
+                this.$notify.success('邮件已发送，请注意查收')
                 this.$router.goBack()
               } else {
                 alert(response.message)

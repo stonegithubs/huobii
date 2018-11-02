@@ -17,3 +17,12 @@ export function bindEmail(data) {
     data
   })
 }
+
+// 发送解绑邮件
+export function unBindEmail(data) {
+  return request({
+    url: '/api/v1/verify_code/unbind_mail',
+    method: 'post',
+    data
+  })
+}

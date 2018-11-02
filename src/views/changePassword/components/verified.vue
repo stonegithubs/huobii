@@ -1,13 +1,13 @@
 <template>
   <div class="vd">
-    <h3 v-if="getStatus === 'success'"><i style="color: #55a532" class="el-icon-success"></i> 您已经通过了实名认证</h3>
-    <h3 v-else-if="getStatus === 'pending'"><i style="color: dodgerblue" class="el-icon-info"></i> 您提交的信息正在审核中</h3>
-    <h3 v-else><i style="color: red" class="el-icon-warning"></i> 审核未通过</h3>
+    <h3 v-if=" auditFlag === 1|| auditFlag >2"><i style="color: #55a532" class="el-icon-success"></i> 您已经通过了实名认证</h3>
+    <h3 v-if=" auditFlag === 0"><i style="color: dodgerblue" class="el-icon-info"></i> 您提交的信息正在审核中</h3>
+    <h3 v-if=" auditFlag === 2"><i style="color: red" class="el-icon-warning"></i> 审核未通过</h3>
     <div class="vd-inner">
       <p><span>name</span><span>{{ this.$store.state.user.verifyInfo.name }}</span></p>
       <p><span>surname</span><span>{{ this.$store.state.user.verifyInfo.surName }}</span></p>
       <p><span>idNo</span><span>{{ this.$store.state.user.verifyInfo.cardNo }}</span></p>
-      <el-button v-if="getStatus === 'failed'" @click="verifiedDiaVible = true" type="primary" style="width: 250px;margin-top: 30px">重新提交</el-button>
+      <el-button v-if="auditFlag === 2" @click="verifiedDiaVible = true" type="primary" style="width: 250px;margin-top: 30px">重新提交</el-button>
     </div>
     <el-dialog :modal="true" style="width:70%;margin:auto" title="实名认证" :visible.sync="verifiedDiaVible" :lock-scroll="true" center :modal-append-to-body="false">
       <div style="text-align: center;">
@@ -43,7 +43,7 @@ export default {
   name: "verified",
   data() {
     return {
-      status: 'failed', //todo:状态写死 应该再create中拉取信息 存入vuex
+      auditFlag: Number(this.$store.state.user.verifyInfo.auditFlag),
       verifiedDiaVible: false,
       verifyForm: {
         familyName: '',
@@ -65,8 +65,9 @@ export default {
           formData.append('type',this.verifyForm.type ),
           formData.append('captcha',this.verifyForm.captcha ),
           normalVerify(formData).then(responese=>{
+            if(responese.code == 200){
               this.$notify.success(responese.message)
-              alert(responese.message)
+            }
           }).catch(err=>{
             this.$notify.error(err.message)
             alert(err.messages)
@@ -79,21 +80,28 @@ export default {
   },
   created() {
     if (this.$store.state.verifyInfo === null) {
-      this.$store.dispatch('GetVerifyInfo').then(_ => {}).catch(_ => {
+      this.$store.dispatch('GetVerifyInfo').then(responese => {
+        if(responese.content === null){
+          this.auditFlag = -1
+          this.verifiedDiaVible = true
+        }else{
+          this.auditFlag = Number(responese.content.auditFlag)
+        }
+      }).catch(_ => {
         this.$notify.error(_.message)
       })
     }
   },
   computed: {
-    getStatus() {
-      if (this.status === 'pending') {
-        return 'pending'
-      } else if (this.status === 'success') {
-        return 'success'
-      } else {
-        return 'failed'
-      }
-    },
+    // getStatus() {
+    //   if (this.status === 'pending') {
+    //     return 'pending'
+    //   } else if (this.status === 'success') {
+    //     return 'success'
+    //   } else {
+    //     return 'failed'
+    //   }
+    // },
   }
 }
 
