@@ -1,11 +1,12 @@
 import { loginByUsername, registerByPhone, logout } from '../../api/login'
-import { getVerifyInfo, getUserInfo } from "../../api/user";
+import { getVerifyInfo, getUserInfo, getPayway } from "../../api/user";
 
 const user = {
   state: {
     userInfo: null || JSON.parse(sessionStorage.getItem('userInfo')),
     token: "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhNzU0MzI4My03ZWMyLTQ4YTMtOGU0ZS1lZDcxMmM5YTRlMzUiLCJpc3MiOiJoamJRZjNCMFdyNE5uaTZsYmx0NGlXbmJBTHI0Wkp6TiIsIm5iZiI6MTU0MDkwMDQzNSwiaWF0IjoxNTQwOTAwNDM1LCJleHAiOjE1NDE1MDUyMzUsImp0aSI6ImYwYzA4YWU5M2NmMjRlOGI4MWI0M2NjMWVkMjg3OTIwIiwidXNlciI6eyJ0aWQiOiIyZWYyMGUwY2FkOTM0OTA2OWU0OWI5OWNiNjJmMGQzNSIsInVpZCI6IjdiOTQ1MjcxODI5OTQxZmJiNDI0ZWQyODYxNzZjMWRkIiwicm9sZSI6ImZyb250X3JvbGVfYmFzZSwifX0.j42NoKmntmujucNREuM2S05rcNf20XT1z90DpzO-qcw2VXLGHFPQOHl_90N1dSdaZFyR0d9Zw33D9qx2B9Jim5vRklMFlcJBO6mMjQ-ErpdkJT4NUy6L_-YCkAXl_3J0h1TDk3xzYRFGtA0XizXwvPCugIHAl7hMvEtrAVFoMvM5JxbFORPhn4QcQjDl1fhVDChwhI0XNkHkgr43klbFVGYQ0xrWjWPJrVXKHFYm966F1LY_ZfLK1uxVBLHsV7SbutYRoOb96ZNsoti-bDHfTO28t8PFqDcr8icwB5d-aO-Pd0f9wA3-Kstr_DtbZMtUk6aCb3p-MSlrVF4-_F3-k6boS13Ez7ybUh-jK72knKrfp1Aa2KyarPW5W5TjLxVUd6KDXf7-k2tZCiDdzWyTkDw1pjNCg3sZPsV2u6WquGYQq5LqHj6nUOu-omtFjIkLxCD2SVnLmr3xVMIguci_gsCN3_HwHOBIExPnHMGjbHYw36MDQ4YAEIjKFvTTrj7D0dP_dVJ9QGQBobYMJtDVvH-35ibN8T2lO6gQDryx9a-w-jLaqCzYh_JPlCjBR1czr7EsMT_Lc1su8yITanUWD5Ej0EOJ1J8jyKDB4kFSsN2E6zzgUXKEO8MeOnt9AqbZaSoXcIRS-koWacUV8z1DbvRF3A0WoOMLN8cJ3lQkJtc" || sessionStorage.getItem('Authorization'),
     verifyInfo: null || JSON.parse(sessionStorage.getItem('verify')),
+    payway: []
   },
   mutations: {
     SET_USERINFO: (state, content) => {
@@ -19,6 +20,9 @@ const user = {
     SET_VERIFYINFO: (state, content) => {
       state.verifyInfo = content
       sessionStorage.setItem('verify', JSON.stringify(content))
+    },
+    SET_USER_PAYWAY: (state, paylist) => {
+      state.payway = paylist
     },
   },
   actions: {
@@ -61,7 +65,20 @@ const user = {
       })
     },
 
-
+    // 拉取用户的支付方式
+    GetUserPayway({ commit }) {
+      return new Promise((resolve, reject) => {
+        const formData = new FormData()
+        formData.append('page', 1)
+        formData.append('size', 200)
+        getPayway(formData).then(response => {
+          commit('SET_USER_PAYWAY', response.content.records)
+          resolve(response)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
 
     // 登出
     LogOut({ commit }) {
@@ -78,7 +95,7 @@ const user = {
       })
     },
 
-    //拉取实名认证信息
+    // 拉取实名认证信息
     GetVerifyInfo({ commit }) {
       return new Promise((resolve, reject) => {
         getVerifyInfo().then(response => {

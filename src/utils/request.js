@@ -44,13 +44,13 @@ service.interceptors.response.use(
     }
 
     if (res.code === "401") {
-      Message({ message: res.message, type: 'error', duration: 5 * 1000 })
+      Message({ message: (res.message + '401'), type: 'error', duration: 5 * 1000 })
       this.$router.push({ name: 'login' })
     }
 
     if (res.code === "500") {
-      Message({ message: res.message, type: 'error', duration: 5 * 1000 })
-      location.reload()
+      Message({ message: res.message + 500, type: 'error', duration: 5 * 1000 })
+      // location.reload()
     }
 
     if (res.code === "403") {
@@ -65,7 +65,7 @@ service.interceptors.response.use(
       })
     }
     if (response.code === "429") {
-      Message({ message: response.message, type: 'error', duration: 5 * 1000 })
+      Message({ message: response.message + 429, type: 'error', duration: 5 * 1000 })
     }
     return res
   },
