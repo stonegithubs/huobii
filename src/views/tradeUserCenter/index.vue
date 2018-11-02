@@ -30,8 +30,12 @@
                         <div class="user-info-list">
                             <p class="list-label"><i class="iconfont  icon-email"></i></p>
                             <div class="info-wrapper">
-                                <p class="list-desc"><span class="desc-name m-desc-name">邮箱</span> <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未绑定</span>
-                                    <a target="_blank" rel="noopener noreferrer" href="https://www.huobi.br.com/zh-cn/user_center/uc_bind_email/?action=bindmail&amp;backurl=https%3A%2F%2Fotc.huobi.br.comzh-cn%2fUser%3ftype%3d1" class="isActive m-button">绑定</a>
+                                <p class="list-desc">
+                                    <span class="desc-name m-desc-name">邮箱</span> 
+                                        <span v-if="hasEmail" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">已绑定</span>
+                                        <router-link v-if="hasEmail"  :to="{ name: 'change_email'}">更换</router-link>
+                                        <span v-if="!hasEmail" class="auth-info m-auth-info">未绑定</span>
+                                        <router-link v-if="!hasEmail" :to="{ name: 'bind_email'}">绑定</router-link>
                                 </p>
                             </div>
                         </div>
@@ -165,6 +169,10 @@
             userPayment() {
                 return this.$store.state.user.payway
             },
+            hasEmail(){
+                return !!this.$store.state.user.userInfo.email
+                // return true
+            }
         },
         methods: {
             getPaywayByID(id) {
@@ -202,6 +210,8 @@
         },
         created() {
             this.$store.dispatch("GetUserPayway");
+            this.$store.dispatch("GetUserInfo");
+            this.$store.dispatch("GetVerifyInfo");
             // console.log(this.getUserPaywayByID('2').paywayId)
         }
     };
