@@ -1,15 +1,15 @@
 // 网站通用信息接口
-import { getPayway } from "../../api/common";
+import { getPayway } from '../../api/common'
 
 const Common = {
   state: {
-    supportPayway: [],
+    supportPayway: []
 
   },
   mutations: {
     SET_PAYWAY: (state, paywayList) => {
       state.supportPayway = paywayList
-    },
+    }
   },
   actions: {
     // 支持的支付方式

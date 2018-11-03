@@ -51,3 +51,12 @@ export function changePaymentStatus(data) {
     data
   })
 }
+
+// 提交高级认证
+export function submitAdvanceVerify(data) {
+  return request({
+    url: 'api/v1/user/verify_advanced',
+    method: 'post',
+    data
+  })
+}

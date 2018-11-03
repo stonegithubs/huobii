@@ -59,7 +59,7 @@
                             <p class="list-label"><i class="iconfont  icon-login_password"></i> </p>
                             <div class="info-wrapper">
                                 <p class="list-desc"><span class="desc-name m-desc-name">登陆密码</span>
-                                 <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">******</span>
+                                    <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">******</span>
                                     <router-link :to="{name: 'change_password'}" class="isActive m-button">修改</router-link>
                                 </p>
                             </div>
@@ -67,12 +67,11 @@
                         <div class="user-info-list">
                             <p class="list-label"><i class="iconfont  icon-password-lock"></i></p>
                             <div class="info-wrapper">
-                                <p class="list-desc"><span class="desc-name m-desc-name">资金密码</span> 
-                                <span v-if="hasTradePwd" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">******</span>
-                                <router-link v-if="hasTradePwd" :to="{ name: 'change_trade_password'}" class="isActive m-button">更改</router-link>
-
-                                <span v-if="!hasTradePwd" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未设置</span>
-                                <router-link v-if="!hasTradePwd" :to="{ name: 'change_trade_password'}" class="isActive m-button">设置</router-link>
+                                <p class="list-desc"><span class="desc-name m-desc-name">资金密码</span>
+                                    <span v-if="hasTradePwd" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">******</span>
+                                    <router-link v-if="hasTradePwd" :to="{ name: 'change_trade_password'}" class="isActive m-button">更改</router-link>
+                                    <span v-if="!hasTradePwd" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未设置</span>
+                                    <router-link v-if="!hasTradePwd" :to="{ name: 'change_trade_password'}" class="isActive m-button">设置</router-link>
                                 </p>
                             </div>
                         </div>
@@ -86,21 +85,36 @@
                             <p class="list-label"><i class="iconfont  icon-name_certification"></i></p>
                             <div class="info-wrapper">
                                 <p class="list-desc"><span class="desc-name m-desc-name">实名认证</span>
-                                <span v-if="this.$store.state.user.verifyInfo.auditFlag ==='2'" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未通过</span>
-                                <span v-if="this.$store.state.user.verifyInfo===null" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未认证</span>
-                                <router-link :to="{ name: 'verify' }" v-if="this.$store.state.user.verifyInfo===null||this.$store.state.user.verifyInfo.auditFlag ==='2'"  class="isActive m-button">认证</router-link>
-
-                                <span v-if="this.$store.state.user.verifyInfo.auditFlag " class="auth-info m-auth-info" style="color:black">{{this.$store.state.user.verifyInfo.surName}} {{this.$store.state.user.verifyInfo.cardNo.slice(0,-4)}}****</span>
-                                <a v-if="hasVerify" class="isActive m-button">已认证</a>
+                                    <span v-if="this.$store.state.user.verifyInfo.auditFlag ==='2'" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未通过</span>
+                                    <span v-if="this.$store.state.user.verifyInfo===null" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未认证</span>
+                                    <router-link :to="{ name: 'verify' }" v-if="this.$store.state.user.verifyInfo===null||this.$store.state.user.verifyInfo.auditFlag ==='2'" class="isActive m-button">认证</router-link>
+                                    <span v-if="this.$store.state.user.verifyInfo.auditFlag " class="auth-info m-auth-info" style="color:black">{{this.$store.state.user.verifyInfo.surName}} {{this.$store.state.user.verifyInfo.cardNo.slice(0,-4)}}****</span>
+                                    <span v-if="hasVerify" class="isActive m-button">已认证</span>
                                 </p>
                             </div>
                         </div>
                         <div class="user-info-list">
                             <p class="list-label"><i class="iconfont  icon-certification"></i> </p>
                             <div class="info-wrapper">
-                                <p class="list-desc"><span class="desc-name m-desc-name">高级认证</span> <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未绑定</span>
-                                    <a target="_blank" rel="noopener noreferrer" href="https://www.huobi.br.com/zh-cn/user_center/uc_bind_email/?action=bindmail&amp;backurl=https%3A%2F%2Fotc.huobi.br.comzh-cn%2fUser%3ftype%3d1" class="isActive m-button">绑定</a>
+                                <p class="list-desc"><span class="desc-name m-desc-name">高级认证</span>
+                                    <span v-if=" auditFlag === '0' || auditFlag === '1' ||auditFlag === '2'" class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未认证</span>
+                                    <span v-if="auditFlag === '4'" class="auth-info m-auth-info" style="color:black">已认证</span>
+                                    <span v-if="auditFlag === '3'" class="auth-info m-auth-info" style="color:black">审核中</span>
+                                    <a v-if="auditFlag !== '4'" class="isActive m-button" @click="adv_verifyDialogVisible = true">认证</a>
+                                    <!-- <span v-if="hasAdvVerify" class="isActive m-button">已认证</span> -->
                                 </p>
+                                <el-dialog :modal="true" title="高级认证" :visible.sync="adv_verifyDialogVisible" :lock-scroll="true" center :modal-append-to-body="false">
+                                    <div style="text-align: center;">
+                                        <div class="dialog-info">
+                                            <!-- <div style="margin: 20px 0;font-weight: 700;"><span>交易额超过单笔 {{ normalUserMax }}{{ this.currencyType }} 或累计 {{ normalUserTotal }}{{this.currencyType}} 需进行高级认证！</span></div> -->
+                                            <el-upload :file-list="adv_fileList" :on-change="handleChange" :on-remove="handleRemove" ref="upload" action="" list-type="picture" :limit="3" :auto-upload="false">
+                                                <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                                                <el-button size="small" type="primary" @click="handleAdvancedVerify">点击上传</el-button>
+                                                <div slot="tip" class="el-upload__tip">请上传身份证正反面照片和手持身份证的一段视频</div>
+                                            </el-upload>
+                                        </div>
+                                    </div>
+                                </el-dialog>
                             </div>
                         </div>
                     </el-card>
@@ -117,9 +131,9 @@
                                         <p class="list-desc"><span class="desc-name m-desc-name">{{getPaywayByID(item.paywayId || '-1').payName}}</span>
                                             <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">{{item.pram1 === "null"? '':item.pram1}} {{item.pram2 === "null"? '':item.pram2}} {{item.pram3=== "null"? '':item.pram3}} {{item.pram4 === "null"? '':item.pram4}}</span>
                                             <span class="isActive m-button">
-                                                <el-switch active-text='on' inactive-text='off'	 :id="item.paywayId"  @click.native="init(item.paywayId)" v-model="getUserPaywayByID(item.paywayId).statusFlag" active-value="1" inactive-value="0" @change="handleChangePayStatus">
-                                                </el-switch>
-                                            </span>
+                                                                        <el-switch active-text='on' inactive-text='off'	 :id="item.paywayId"  @click.native="init(item.paywayId)" v-model="getUserPaywayByID(item.paywayId).statusFlag" active-value="1" inactive-value="0" @change="handleChangePayStatus">
+                                                                        </el-switch>
+                                                                    </span>
                                         </p>
                                     </div>
                             </div>
@@ -140,8 +154,13 @@
 
 <script>
     import addPaymentForm from "./components/addPaymentForm";
-    import { changePaymentStatus } from '../../api/user'
-    import { unBindEmail } from '../../api/verify_code';
+    import {
+        changePaymentStatus,
+        submitAdvanceVerify
+    } from '../../api/user'
+    import {
+        unBindEmail
+    } from '../../api/verify_code';
     export default {
         name: "tradeUserCenter",
         components: {
@@ -160,8 +179,11 @@
                 firstTradeDate: "2018-10-17 20:00:00",
                 //   userPayment: [],
                 AddPaymentdialogVisible: false,
+                adv_verifyDialogVisible: false,
                 isActive: {},
-                targetPaywayID: ''
+                targetPaywayID: '',
+                auditFlag: this.$store.state.user.verifyInfo.auditFlag,
+                adv_fileList: [],
             };
         },
         computed: {
@@ -182,15 +204,20 @@
                 return !!this.$store.state.user.userInfo.email
                 // return true
             },
-            hasTradePwd(){
+            hasTradePwd() {
                 return this.$store.state.trade.hasTradePwd
             },
-            hasVerify(){
+            hasVerify() {
                 let flag = this.$store.state.user.verifyInfo.auditFlag
-                if( flag === '0' || flag === '2'){
+                if (flag === '0' || flag === '2') {
                     return false
                 }
                 return true
+            },
+            hasAdvVerify() {
+                if (this.$store.state.user.verifyInfo.auditFlag === '4') {
+                    return true
+                }
             }
         },
         methods: {
@@ -228,23 +255,55 @@
             },
             unbindButton() {
                 this.$alert('确定解绑邮箱？', '解绑邮箱', {
-                        confirmButtonText: '确定',
-                        callback: action => {
-                            unBindEmail().then(response => {
-                                this.$notify.success("邮件已发送，请注意查收")
-                            }).catch(_=>{console.log(_)})
-                            }
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        unBindEmail().then(response => {
+                            this.$notify.success("邮件已发送，请注意查收")
+                        }).catch(_ => {
+                            console.log(_)
+                        })
+                    }
                 })
+            },
+            handleChange(file) {
+                this.adv_fileList.push(file)
+            },
+            handleRemove(file, fileList) {
+                fileList.pop(file)
+            },
+            handleAdvancedVerify() {
+                if(this.adv_fileList.length==3){
+                let reader1 = new FileReader()
+                reader1.readAsDataURL(this.adv_fileList[0].raw)
+                let reader2 = new FileReader()
+                reader2.readAsDataURL(this.adv_fileList[1].raw)
+                let reader3 = new FileReader()
+                reader3.readAsDataURL(this.adv_fileList[2].raw)
+                const formData = new FormData()
+                formData.append('img1', reader1.result)
+                formData.append('img2', reader2.result)
+                formData.append('video', reader3.result)
+                submitAdvanceVerify(formData).then(response => {
+                    if(response.code === '200'){
+                        this.$notify.success(response.message)
+                    }else{
+                        this.$notify.error(response.message)
+                    }
+                }).catch(_=>{})
+                }else{
+                    this.$notify.error('请上传两张身份证照片和一段手持身份证的视频')
+                }
+
             }
         },
-            created() {
-                this.$store.dispatch("GetUserPayway");
-                this.$store.dispatch("GetUserInfo");
-                this.$store.dispatch("GetVerifyInfo");
-                this.$store.dispatch("GetTradePwd");
-                // console.log(this.getUserPaywayByID('2').paywayId)
-            }
-        };
+        created() {
+            this.$store.dispatch("GetUserPayway");
+            this.$store.dispatch("GetUserInfo");
+            this.$store.dispatch("GetVerifyInfo");
+            this.$store.dispatch("GetTradePwd");
+            // console.log(this.getUserPaywayByID('2').paywayId)
+        }
+    };
 </script>
 
 <style lang='scss' scoped>
