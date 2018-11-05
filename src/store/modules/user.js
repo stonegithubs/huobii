@@ -4,7 +4,8 @@ import { getVerifyInfo, getUserInfo, getPayway } from "../../api/user";
 const user = {
   state: {
     userInfo: null || JSON.parse(sessionStorage.getItem('userInfo')),
-    token: "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhNzU0MzI4My03ZWMyLTQ4YTMtOGU0ZS1lZDcxMmM5YTRlMzUiLCJpc3MiOiJoamJRZjNCMFdyNE5uaTZsYmx0NGlXbmJBTHI0Wkp6TiIsIm5iZiI6MTU0MDkwMDQzNSwiaWF0IjoxNTQwOTAwNDM1LCJleHAiOjE1NDE1MDUyMzUsImp0aSI6ImYwYzA4YWU5M2NmMjRlOGI4MWI0M2NjMWVkMjg3OTIwIiwidXNlciI6eyJ0aWQiOiIyZWYyMGUwY2FkOTM0OTA2OWU0OWI5OWNiNjJmMGQzNSIsInVpZCI6IjdiOTQ1MjcxODI5OTQxZmJiNDI0ZWQyODYxNzZjMWRkIiwicm9sZSI6ImZyb250X3JvbGVfYmFzZSwifX0.j42NoKmntmujucNREuM2S05rcNf20XT1z90DpzO-qcw2VXLGHFPQOHl_90N1dSdaZFyR0d9Zw33D9qx2B9Jim5vRklMFlcJBO6mMjQ-ErpdkJT4NUy6L_-YCkAXl_3J0h1TDk3xzYRFGtA0XizXwvPCugIHAl7hMvEtrAVFoMvM5JxbFORPhn4QcQjDl1fhVDChwhI0XNkHkgr43klbFVGYQ0xrWjWPJrVXKHFYm966F1LY_ZfLK1uxVBLHsV7SbutYRoOb96ZNsoti-bDHfTO28t8PFqDcr8icwB5d-aO-Pd0f9wA3-Kstr_DtbZMtUk6aCb3p-MSlrVF4-_F3-k6boS13Ez7ybUh-jK72knKrfp1Aa2KyarPW5W5TjLxVUd6KDXf7-k2tZCiDdzWyTkDw1pjNCg3sZPsV2u6WquGYQq5LqHj6nUOu-omtFjIkLxCD2SVnLmr3xVMIguci_gsCN3_HwHOBIExPnHMGjbHYw36MDQ4YAEIjKFvTTrj7D0dP_dVJ9QGQBobYMJtDVvH-35ibN8T2lO6gQDryx9a-w-jLaqCzYh_JPlCjBR1czr7EsMT_Lc1su8yITanUWD5Ej0EOJ1J8jyKDB4kFSsN2E6zzgUXKEO8MeOnt9AqbZaSoXcIRS-koWacUV8z1DbvRF3A0WoOMLN8cJ3lQkJtc" || sessionStorage.getItem('Authorization'),
+    // token: "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJhNzU0MzI4My03ZWMyLTQ4YTMtOGU0ZS1lZDcxMmM5YTRlMzUiLCJpc3MiOiJoamJRZjNCMFdyNE5uaTZsYmx0NGlXbmJBTHI0Wkp6TiIsIm5iZiI6MTU0MDkwMDQzNSwiaWF0IjoxNTQwOTAwNDM1LCJleHAiOjE1NDE1MDUyMzUsImp0aSI6ImYwYzA4YWU5M2NmMjRlOGI4MWI0M2NjMWVkMjg3OTIwIiwidXNlciI6eyJ0aWQiOiIyZWYyMGUwY2FkOTM0OTA2OWU0OWI5OWNiNjJmMGQzNSIsInVpZCI6IjdiOTQ1MjcxODI5OTQxZmJiNDI0ZWQyODYxNzZjMWRkIiwicm9sZSI6ImZyb250X3JvbGVfYmFzZSwifX0.j42NoKmntmujucNREuM2S05rcNf20XT1z90DpzO-qcw2VXLGHFPQOHl_90N1dSdaZFyR0d9Zw33D9qx2B9Jim5vRklMFlcJBO6mMjQ-ErpdkJT4NUy6L_-YCkAXl_3J0h1TDk3xzYRFGtA0XizXwvPCugIHAl7hMvEtrAVFoMvM5JxbFORPhn4QcQjDl1fhVDChwhI0XNkHkgr43klbFVGYQ0xrWjWPJrVXKHFYm966F1LY_ZfLK1uxVBLHsV7SbutYRoOb96ZNsoti-bDHfTO28t8PFqDcr8icwB5d-aO-Pd0f9wA3-Kstr_DtbZMtUk6aCb3p-MSlrVF4-_F3-k6boS13Ez7ybUh-jK72knKrfp1Aa2KyarPW5W5TjLxVUd6KDXf7-k2tZCiDdzWyTkDw1pjNCg3sZPsV2u6WquGYQq5LqHj6nUOu-omtFjIkLxCD2SVnLmr3xVMIguci_gsCN3_HwHOBIExPnHMGjbHYw36MDQ4YAEIjKFvTTrj7D0dP_dVJ9QGQBobYMJtDVvH-35ibN8T2lO6gQDryx9a-w-jLaqCzYh_JPlCjBR1czr7EsMT_Lc1su8yITanUWD5Ej0EOJ1J8jyKDB4kFSsN2E6zzgUXKEO8MeOnt9AqbZaSoXcIRS-koWacUV8z1DbvRF3A0WoOMLN8cJ3lQkJtc" || sessionStorage.getItem('Authorization'),
+    token: null,
     verifyInfo: null || JSON.parse(sessionStorage.getItem('verify')),
     payway: []
   },
@@ -15,7 +16,6 @@ const user = {
     },
     SET_TOKEN: (state, token) => {
       state.token = token
-      sessionStorage.setItem('Authorization', token)
     },
     SET_VERIFYINFO: (state, content) => {
       state.verifyInfo = content
@@ -30,13 +30,9 @@ const user = {
     LoginByUsername({ commit }, formData) {
       return new Promise((resolve, reject) => {
         loginByUsername(formData).then(response => {
-          if (response.code === "401") {
-            reject(response.message)
-          }
-          if (response.code === "200") {
-            commit('SET_TOKEN', response.content)
-            resolve(response.message)
-          }
+          commit('SET_TOKEN', response.content)
+          sessionStorage.setItem('Authorization', response.content)
+          resolve(response.message)
         }).catch(error => {
           reject(error)
         })

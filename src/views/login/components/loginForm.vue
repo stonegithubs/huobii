@@ -32,7 +32,7 @@ export default {
     }
   },
   created() {
-    if (this.$store.state.user.token) {
+    if (sessionStorage.getItem('Authorization') !==null) {
       this.$router.back()
     }
   },
