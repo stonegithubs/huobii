@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 重置登陆密码
 export  function forget(data) {
   return request({
-    url: '/api/v1/security/forget',
+    url: '/api/v1/public/user/forget',
     method: 'post',
     data
   })
@@ -36,4 +36,7 @@ export  function freeze(data) {
     data
   })
 }
+
+
+
 

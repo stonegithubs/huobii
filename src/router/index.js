@@ -191,6 +191,12 @@ export const constantRouterMap = [
         name: 'verify',
         component: () => import('@/views/changePassword/index')
 
+      },
+      {
+        path: '/userOptions/forget',
+        name: 'forget_password',
+        component: () => import('@/views/changePassword/index')
+
       }
     ]
 

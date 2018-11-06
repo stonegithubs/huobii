@@ -60,3 +60,22 @@ export function submitAdvanceVerify(data) {
     data
   })
 }
+
+// 发送验证码
+export function sendCaptcha(data) {
+  return request({
+    url: '/api/v1/public/user/captcha',
+    method: 'post',
+    data
+  })
+}
+
+// todo:测试收到验证码 需要删除
+export function getCaptcha(phoneNumber) {
+  return request({
+    url: '/api/v1/public/user/captcha',
+    method: 'get',
+    params: { phone: phoneNumber }
+  })
+}
+

@@ -9,3 +9,11 @@ export function getPayway(data) {
     data
   })
 }
+
+// 获取国家信息
+export function getCountry() {
+  return request({
+    url: 'api/v1/public/common/country',
+    method: 'post'
+  })
+}

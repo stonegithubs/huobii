@@ -1,6 +1,6 @@
 // 网站货币信息
 
-import { getRemoteSymbols, getRemoteSymbolList,getSupportedCoin,getMarketDetail,getMarketDepth } from "../../api/coins";
+import { getRemoteSymbols, getRemoteSymbolList, getSupportedCoin, getMarketDetail, getMarketDepth } from "../../api/coins";
 import store from "../index";
 
 const coinData = {
@@ -26,12 +26,12 @@ const coinData = {
     supportedCoin: [],
 
     //出售币种深度列表
-    sellDepth:[],
+    sellDepth: [],
 
     //购买币种深度列表
-    buyDepth:[],
+    buyDepth: [],
 
-  
+
 
   },
   mutations: {
@@ -48,10 +48,10 @@ const coinData = {
     SET_TARGETCOIN_ID: (state, content) => {
       state.symbolList = content
     },
-    SET_MAINCOIN:(state,coinName) => {
+    SET_MAINCOIN: (state, coinName) => {
       state.mainCoin = coinName
     },
-    SET_TARGETCOIN:(state,coinName) => {
+    SET_TARGETCOIN: (state, coinName) => {
       state.targetCoin = coinName
     },
     SET_SYMBOL_SHOW: (state, symbolName) => {
@@ -60,10 +60,10 @@ const coinData = {
     SET_SUPPORTED_COIN: (state, list) => {
       state.supportedCoin = list
     },
-    SET_SELL_DEPTH:(state, list) => {
+    SET_SELL_DEPTH: (state, list) => {
       state.sellDepth = list
     },
-    SET_BUY_DEPTH:(state, list) => {
+    SET_BUY_DEPTH: (state, list) => {
       state.buyDepth = list
     }
   },
@@ -100,11 +100,11 @@ const coinData = {
         })
       })
     },
-    MarketDepth({commit},form){
+    MarketDepth({ commit }, form) {
       return new Promise((resolve, reject) => {
-        getMarketDepth(form).then(response=>{
-        commit('SET_SELL_DEPTH', response.content.tick.bids)
-        commit('SET_BUY_DEPTH', response.content.tick.asks)
+        getMarketDepth(form).then(response => {
+          commit('SET_SELL_DEPTH', response.content.tick.bids)
+          commit('SET_BUY_DEPTH', response.content.tick.asks)
           resolve(response)
         }).catch(err => {
           reject(err)
@@ -148,7 +148,7 @@ const coinData = {
     },
     getSupportCoinByName: (state) => (coinName) => {
       for (let item of state.supportedCoin) {
-        if(item.__ = coinName){ //todo:支持的币种未完成
+        if (item.__ = coinName) { //todo:支持的币种未完成
           return item
         }
       }
@@ -156,26 +156,26 @@ const coinData = {
     getMainCoin: (state) => {
       return state.mainCoin
     },
-    getTargetCoin: (state)=> {
+    getTargetCoin: (state) => {
       return state.targetCoin
     },
     getCoinIdByName: (state) => (coinName) => {
       for (let item of state.supportedCoin) {
-        if(item.name == coinName) {
+        if (item.name == coinName) {
           return item.id
         }
       }
-      }
-    },
-    getBuyDepth:(state) => {
-      let addUp = 0,buyDepthList = []
-      for(item of state.buyDepth){
-        addUp += item[1]
-        listItem = {'price':item[0],amount:item[1],'accumulative':addUp}
-        buyDepthList.push(listItem)
-      }
-      return buyDepthList
     }
+  },
+  getBuyDepth: (state) => {
+    let addUp = 0, buyDepthList = []
+    for (item of state.buyDepth) {
+      addUp += item[1]
+      listItem = { 'price': item[0], amount: item[1], 'accumulative': addUp }
+      buyDepthList.push(listItem)
+    }
+    return buyDepthList
+  }
 }
 
 export default coinData;

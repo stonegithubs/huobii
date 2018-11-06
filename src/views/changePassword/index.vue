@@ -6,6 +6,8 @@
       <span v-if="this.$route.name=='change_phone'">修改手机号</span>
       <span v-if="this.$route.name=='bind_email'">绑定邮箱</span>
       <span v-if="this.$route.name=='verify'">实名认证</span>
+      <span v-if="this.$route.name=='forget_password'">忘记密码</span>
+    
     </div>
     <div class="cp-body">
       <div class="cb-title">
@@ -19,6 +21,7 @@
         <changePhone v-if="this.$route.name=='change_phone'"></changePhone>
         <bindEmail v-if="this.$route.name=='bind_email'"></bindEmail>
         <verified  v-if="this.$route.name=='verify'"></verified>
+        <forgetPassword v-if="this.$route.name=='forget_password'"> </forgetPassword>
       </div>
     </div>
   </div>
@@ -29,7 +32,7 @@ import changeTradePwd from "./components/changeTradePwd";
 import changePhone from "./components/changePhone";
 import bindEmail from "./components/bindEmail";
 import verified from "./components/verified";
-
+import forgetPassword from "./components/forgetPassword";
 export default {
   name: "user-options",
   components: {
@@ -37,7 +40,8 @@ export default {
     changeTradePwd,
     bindEmail,
     changePhone,
-    verified
+    verified,
+    forgetPassword
   },
   data() {
     return {};

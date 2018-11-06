@@ -51,7 +51,7 @@ service.interceptors.response.use(
 
     // return res
     if (res.data && res.data.code !== '200') {
-      console.log(res)
+      // console.log(res)
       Message({
         showClose: true,
         message: res.data.message,
@@ -63,7 +63,7 @@ service.interceptors.response.use(
   },
   error => {
     // 没有token去登陆页面
-    if (!sessionStorage.getItem('Authorization') || error.response.data.code === '401') {
+    if (error.response.data.code === '401') {
       sessionStorage.removeItem('Authorization')
       store.commit('SET_USERINFO', null)
       store.commit('SET_TOKEN', null)
