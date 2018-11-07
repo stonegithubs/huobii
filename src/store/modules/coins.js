@@ -1,7 +1,7 @@
 // 网站货币信息
 
-import { getRemoteSymbols, getRemoteSymbolList, getSupportedCoin, getMarketDetail, getMarketDepth } from "../../api/coins";
-import store from "../index";
+import { getRemoteSymbols, getRemoteSymbolList, getSupportedCoin, getMarketDetail, getMarketDepth, okcoinTicket } from "../../api/coins";
+// import store from "../index";
 
 const coinData = {
   state: {
@@ -11,6 +11,9 @@ const coinData = {
     // 各个symbol的报价数据
     symbolList: [],
 
+    // 从okcoin获取的包含涨跌幅数据的列表
+    rateList: [],
+
     // 网站显示的交易对 ???
     symbolName: 'btc/usdt',
 
@@ -18,23 +21,23 @@ const coinData = {
     mainCoin: 'usdt',
     // mainCoinID: '1234567890',
 
-    //当前目标币种
+    // 当前目标币种
     targetCoin: 'btc',
     // targetCoinID: '098765432',
 
-    //支持的币种
+    // 支持的币种
     supportedCoin: [],
 
-    //出售币种深度列表
+    // 出售币种深度列表
     sellDepth: [],
 
-    //购买币种深度列表
-    buyDepth: [],
-
-
-
+    // 购买币种深度列表
+    buyDepth: []
   },
   mutations: {
+    SET_RATELIST: (state, list) => {
+      state.rateList = list
+    },
     SET_SYMBOLS: (state, content) => {
       state.symbols = content
       localStorage.setItem('symbols', JSON.stringify(content))
@@ -78,7 +81,7 @@ const coinData = {
         })
       })
     },
-    //获取货币信息 
+    // 获取货币信息 
     getSymbolList({ commit }) {
       return new Promise((resolve, reject) => {
         getRemoteSymbolList().then(response => {
@@ -89,7 +92,7 @@ const coinData = {
         })
       })
     },
-    //获取支持的币种
+    // 获取支持的币种
     getSupportCoin({ commit }) {
       return new Promise((resolve, reject) => {
         getSupportedCoin().then(response => {
@@ -110,12 +113,22 @@ const coinData = {
           reject(err)
         })
       });
+    },
+    SymbolRate({ commit }) {
+      return new Promise((resolve, reject) => {
+        okcoinTicket().then(response => {
+          commit('SET_RATELIST', response.content.data)
+          resolve(response)
+        }).catch(err => {
+          reject(err)
+        })
+      });
     }
 
   },
   getters: {
     getUniqueSymbol: (state) => () => {
-      let res = [];
+      let res = []
       for (let item of state.symbols) {
         if (!res.includes(item['quote-currency'])) {
           res.push(item['quote-currency'])

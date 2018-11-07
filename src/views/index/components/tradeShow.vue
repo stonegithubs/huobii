@@ -9,6 +9,12 @@
           </el-table-column>
           <el-table-column prop="close" label="最新价" sortable :formatter="priceFormatter" min-width="170">
           </el-table-column>
+          <el-table-column label="涨幅">
+            <template slot-scope="scope">
+              <!-- {{ scope.row}} -->
+              woshirate
+            </template>
+          </el-table-column>
           <el-table-column prop="high" label="最高价" :formatter="priceFormatter" width="170">
           </el-table-column>
           <el-table-column prop="low" label="最低价" :formatter="priceFormatter" min-width="170">
@@ -27,7 +33,8 @@ export default {
     return {
       activeName: "usdt",
       currentSymbol: 'usdt',
-      symbols: ['usdt', 'husd', 'btc', 'eth', 'ht'],
+      //这里可以进行热插拔，选择需要显示的symbol名字
+      symbols: ['usdt', 'btc','eth', 'tc'],
       mainInterval: {}
     };
   },
@@ -69,10 +76,12 @@ export default {
     this.$store.dispatch('getSymbolList').catch(() => {
       // this.$message.error("can't get coin information")
     })
+    this.$store.dispatch('SymbolRate').catch(_=>{})
     this.$nextTick(() => {
       this.mainTradeLoading = false
       this.mainInterval = setInterval(()=>{
             this.$store.dispatch('getSymbolList')
+            this.$store.dispatch('SymbolRate')
           },15000)
     })
 

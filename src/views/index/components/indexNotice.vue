@@ -1,8 +1,8 @@
 <template>
   <div class="index-notice el-row--flex">
-    <span class="notice-item" v-for="(item,index) in notice">
+    <span class="notice-item" v-for="(item,index) in notice" v-bind:key='index'>
       <a :href="item.link">{{item.description}}</a>
-      <span class="notice-slicer"  v-if="index!==2"></span>
+      <span class="notice-slicer" v-if="index != notice.length-1"></span>
     </span>
   </div>
 </template>
@@ -11,17 +11,13 @@
 export default {
   name: "index-notice",
   created() {
-    if(this.$store.state.siteCMS.notice.length === 0){
-      this.$store.dispatch('getNoticeRemote').then(() => {
-        this.notice =  this.$store.getters.getMyNotice(3);
+      this.$store.dispatch('getNoticeRemote').then(response => {
+        // console.log(response)
+        if(response.code){
+          this.notice =  response.content.records.slice(0,3);
+        }
       })
-    }
-    else {
-      this.notice =  this.$store.getters.getMyNotice(3);
-    }
-
-
-  },
+      },
   mounted() {
 
   },

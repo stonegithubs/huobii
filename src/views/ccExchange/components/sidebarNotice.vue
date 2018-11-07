@@ -5,9 +5,9 @@
     </div>
     <div class="in">
       <ul id="notice_list">
-        <li v-for="item in notice">
-          <router-link :to="{path:'/'}">{{ item.description }} </router-link>
-          <div>{{ item.date }}</div>
+        <li v-for="(item, index) in notice" v-bind:key="index">
+          <router-link class="notice-inner" :to="{ name: 'index'}">{{ item.description }} </router-link>
+          <div class="notice-time">{{ parseTime(item.updateDate,'{y}-{m}-{d} {h}:{i}:{s}') }}</div>
         </li>
       </ul>
     </div>
@@ -15,29 +15,35 @@
 </template>
 
 <script>
-export default {
-  name: "sidebar-notice",
-  created(){
-    if(this.$store.state.siteCMS.notice.length === 0){
-      this.$store.dispatch('getNoticeRemote').then(() => {
+  import {
+    parseTime
+  } from '../../../utils/index'
+  export default {
+    name: "sidebar-notice",
+    created() {
+      if (this.$store.state.siteCMS.notice.length === 0) {
+        this.$store.dispatch('getNoticeRemote').then(() => {
+          this.notice = this.$store.state.siteCMS.notice;
+        })
+      } else {
         this.notice = this.$store.state.siteCMS.notice;
-      })
-    }
-    else {
-      this.notice = this.$store.state.siteCMS.notice;
-    }
-  },
-  data() {
-    return {
-      notice: [],
+      }
+    },
+    data() {
+      return {
+        notice: [],
+      }
+    },
+    methods: {
+      parseTime(time, cFormat) {
+        return parseTime(time, cFormat)
+      }
     }
   }
-}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import "../../../assets/custom-theme/theme";
-
   .sidebar-notice {
     .title {
       height: 48px;
@@ -45,7 +51,7 @@ export default {
       font-size: 16px;
       padding: 0 20px;
       background-color: rgb(27, 30, 46);
-      margin-top: 10px;
+      margin-top: 20px;
       a {
         color: #c7cce6;
       }
@@ -59,23 +65,23 @@ export default {
           padding-top: 10px;
           min-height: 70px;
           text-align: right;
-          div {
-            font-size: 11px;
-            opacity: 0.5;
-          }
-          a {
+          border-bottom: 1px solid #1f2943;
+          .notice-inner {
             display: block;
             height: 36px;
-            margin-bottom: 10px;
             line-height: 18px;
             text-align: left;
             overflow: hidden;
             color: #c7cce6;
-            font-size: 12px;
+            font-size: 14px;
+          }
+          .notice-time {
+            font-size: 11px; // opacity: 0.5;
+            color: #61688a;
+            height: 30px;
           }
         }
       }
     }
   }
-
 </style>

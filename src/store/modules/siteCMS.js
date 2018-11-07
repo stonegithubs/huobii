@@ -18,9 +18,9 @@ const siteCMS = {
       return new Promise((resolve, reject) => {
         getNotice().then(response => {
           commit('SET_NOTICE', response.content.records)
-          resolve()
-        }).catch(() => {
-          reject('get notice err')
+          resolve(response)
+        }).catch(err => {
+          reject(err)
         })
       })
     }
