@@ -106,9 +106,13 @@ const coinData = {
     MarketDepth({ commit }, form) {
       return new Promise((resolve, reject) => {
         getMarketDepth(form).then(response => {
-          commit('SET_SELL_DEPTH', response.content.tick.bids)
-          commit('SET_BUY_DEPTH', response.content.tick.asks)
-          resolve(response)
+          if (response && response.code == '200') {
+            commit('SET_SELL_DEPTH', response.content.tick.bids)
+            commit('SET_BUY_DEPTH', response.content.tick.asks)
+            resolve(response)
+          } else {
+            new Error(response)
+          }
         }).catch(err => {
           reject(err)
         })

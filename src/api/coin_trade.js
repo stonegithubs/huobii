@@ -17,3 +17,12 @@ export function getOrder(form) {
     data: form
   })
 }
+
+// 获取实施成交记录
+export function getHistoryTrade(form) {
+  return request({
+    url: '/api/v1/public/market/history_trade',
+    method: 'post',
+    data: form
+  })
+}

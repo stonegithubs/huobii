@@ -51,7 +51,7 @@ export default {
     handleClick(tab) {
       this.currentSymbol = this.symbols[tab.index]
       this.$store.commit('SET_MAINCOIN', this.currentSymbol)
-      console.log(this.currentSymbol)
+      // console.log(this.currentSymbol)
     },
     amountFormatter(row) {
       return row.amount.toFixed(row['amount-precision'])

@@ -4,9 +4,9 @@
       <el-tab-pane label="交易账户" name="first">
         <m-finance></m-finance>
       </el-tab-pane>
-      <el-tab-pane label="杠杆账户" name="second">
+      <!-- <el-tab-pane label="杠杆账户" name="second">
         <margin></margin>
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
     <div class="add-info">
       <router-link :to="{ name: 'withdrawLog' }" style="margin-right: 20px">财务记录</router-link>

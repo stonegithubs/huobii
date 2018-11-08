@@ -11,7 +11,8 @@ export const constantRouterMap = [
     component: layout,
     children: [
       {
-        path: '',
+        path: '/',
+        name: 'index',
         component: () => import('@/views/index/index')
       }
     ]
@@ -112,18 +113,18 @@ export const constantRouterMap = [
     ]
 
   },
-  {
-    path: '/finance',
-    component: layout,
-    children: [
-      {
-        path: '',
-        name: 'finance',
-        component: () => import('@/views/finance/index')
-      }
-    ]
+  // {
+  //   path: '/finance',
+  //   component: layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'finance',
+  //       component: () => import('@/views/finance/index')
+  //     }
+  //   ]
 
-  },
+  // },
   {
     path: '/agreement',
     component: layout,

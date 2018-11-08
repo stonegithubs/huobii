@@ -1,11 +1,12 @@
 <template>
-    <div class="trade-panel">
-      <el-tabs v-model="activeName">
-        <!--<div>费率</div>-->
-        <el-tab-pane name="xj">
-          <template slot="label">限价交易</template>
+  <div class="trade-panel">
+    <el-tabs v-model="activeName">
+      <!--<div>费率</div>-->
+      <el-tab-pane name="xj">
+        <template slot="label">限价交易
+</template>
           <div class="buy">
-            <div class="balance"><span> 可用 {{this.getCoinBalanceByName(this.getMainCoin).coinBalance }} {{ this.getMainCoin.toUpperCase() }}</span><a href="">充币</a></div>
+            <div class="balance"><span> 可用 {{this.getCoinBalanceByName(this.getMainCoin).coinBalance }} {{ this.getMainCoin.toUpperCase() }}</span><router-link :to="{ name: 'tradeFinance'}">充币</router-link></div>
             <div class="trade-from">
               <span> 买入价</span>
               <el-input v-model.number="xj_buyForm.price">
@@ -31,7 +32,7 @@
           <div class="sell">
             <div class="balance">
               <span>{{this.getCoinBalanceByName(this.getTargetCoin).coinBalance }} {{ this.getTargetCoin.toUpperCase() }}</span>
-              <a href="">充币</a>
+              <router-link :to="{ name: 'tradeFinance'}">充币</router-link>
             </div>
             <div class="trade-from">
               <span> 卖出价</span>
@@ -58,9 +59,11 @@
           </div>
         </el-tab-pane>
         <el-tab-pane name="sj">
-          <template slot="label">市价交易</template>
+<template slot="label">
+   市价交易
+</template>
           <div class="buy">
-            <div class="balance"><span> 可用 {{this.getCoinBalanceByName(this.getMainCoin).coinBalance }} {{ this.getMainCoin.toUpperCase() }}</span><a href="">充币</a></div>
+            <div class="balance"><span> 可用 {{this.getCoinBalanceByName(this.getMainCoin).coinBalance }} {{ this.getMainCoin.toUpperCase() }}</span><router-link :to="{ name: 'tradeFinance'}">充币</router-link></div>
             <div class="trade-from">
               <span> 买入价</span>
               <el-input v-model.number="sj_buyForm.price">
@@ -86,7 +89,7 @@
           <div class="sell">
             <div class="balance">
               <span>{{this.getCoinBalanceByName(this.getTargetCoin).coinBalance }} {{ this.getTargetCoin.toUpperCase() }}</span>
-              <a href="">充币</a>
+              <router-link :to="{ name: 'tradeFinance'}">充币</router-link>
             </div>
             <div class="trade-from">
               <span> 卖出价</span>
@@ -117,88 +120,128 @@
 </template>
 
 <script>
-  import { mapState, mapGetters } from 'vuex'
-  import { submitTrade } from '../../../api/coin_trade'
+  import {
+    mapState,
+    mapGetters
+  } from 'vuex'
+  import {
+    submitTrade
+  } from '../../../api/coin_trade'
   export default {
-  name: "trade-panel",
-  computed:{
-    ...mapGetters([
-      'getCoinBalanceByName',
-      'getMainCoin',
-      'getTargetCoin',
-      'getCoinIdByName'
-    ]),
-  },
-
-  data(){
-    return {
-      activeName:'xj',
-      xj_sell_max: 999999,
-      xj_buy_max: 999999,
-      //限价买入
-      xj_buyForm: {
-        direction: 0,    //0买入 1卖出
-        amount: 0,        //交易总数
-        price: 0,         //交易单价
-        localId: this.$store.getters.getCoinIdByName(this.getMainCoin),      //本币id
-        foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin),    //外币id
-        type: ''
-      },
-      //限价卖出
-      xj_sellForm: {
-        direction: 1,    //0买入 1卖出
-        amount: 0,        //交易总数
-        price: 0,         //交易单价
-        localId: this.$store.getters.getCoinIdByName(this.getMainCoin),      //本币id
-        foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin),    //外币id
-        type: ''
-      },
-      //市价买入 //todo:市价交易未写
-      sj_buyForm: {
-        direction: 0,    //0买入 1卖出
-        amount: 0,        //交易总数
-        price: 0,         //交易单价
-        localId: this.$store.getters.getCoinIdByName(this.getMainCoin),      //本币id
-        foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin),    //外币id
-        type: ''
-      },
-      //市价卖出
-      sj_sellForm: {
-        direction: 1,    //0买入 1卖出
-        amount: 0,        //交易总数
-        price: 0,         //交易单价
-        localId: this.$store.getters.getCoinIdByName(this.getMainCoin),      //本币id
-        foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin),    //外币id
-        type: ''
-      },
-
-    }
-  },
+    name: "trade-panel",
+    computed: {
+      ...mapGetters([
+        'getCoinBalanceByName',
+        'getMainCoin',
+        'getTargetCoin',
+        'getCoinIdByName'
+      ]),
+    },
+    data() {
+      return {
+        activeName: 'xj',
+        xj_sell_max: 999999,
+        xj_buy_max: 999999,
+        sj_sell_max: 999999,
+        sj_buy_max: 999999,
+        //限价买入
+        xj_buyForm: {
+          direction: 0, //0买入 1卖出
+          amount: 0, //交易总数
+          price: 0, //交易单价
+          localId: this.$store.getters.getCoinIdByName(this.getMainCoin), //本币id
+          foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin), //外币id
+          type: ''
+        },
+        //限价卖出
+        xj_sellForm: {
+          direction: 1, //0买入 1卖出
+          amount: 0, //交易总数
+          price: 0, //交易单价
+          localId: this.$store.getters.getCoinIdByName(this.getMainCoin), //本币id
+          foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin), //外币id
+          type: ''
+        },
+        //市价买入 //todo:市价交易未写
+        sj_buyForm: {
+          direction: 0, //0买入 1卖出
+          amount: 0, //交易总数
+          price: 0, //交易单价
+          localId: this.$store.getters.getCoinIdByName(this.getMainCoin), //本币id
+          foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin), //外币id
+          type: ''
+        },
+        //市价卖出
+        sj_sellForm: {
+          direction: 1, //0买入 1卖出
+          amount: 0, //交易总数
+          price: 0, //交易单价
+          localId: this.$store.getters.getCoinIdByName(this.getMainCoin), //本币id
+          foreignId: this.$store.getters.getCoinIdByName(this.getTargetCoin), //外币id
+          type: ''
+        },
+      }
+    },
     methods: {
-      handle_xj_buy(){
+      handle_xj_buy() {
         let formData = new FormData()
-        formData.append('direction',this.xj_buyForm.direction)
-        formData.append('amount',this.xj_buyForm.amount)
-        formData.append('price',this.xj_buyForm.price)
-        formData.append('localId',this.xj_buyForm.localId)
-        formData.append('foreignId',this.xj_buyForm.foreignId)
-        formData.append('type',this.xj_buyForm.type)
-        submitTrade(formData).then(response=>{
+        formData.append('direction', this.xj_buyForm.direction)
+        formData.append('amount', this.xj_buyForm.amount)
+        formData.append('price', this.xj_buyForm.price)
+        formData.append('localId', this.xj_buyForm.localId)
+        formData.append('foreignId', this.xj_buyForm.foreignId)
+        formData.append('type', this.xj_buyForm.type)
+        this.$notify.error('等待币种信息完善此模块')
+        submitTrade(formData).then(response => {
           console.log(response)
         })
       },
-      handle_xj_sell(){
-        console.log(this.xj_buyForm)
+      handle_xj_sell() {
+        let formData = new FormData()
+        formData.append('direction', this.xj_sellForm.direction)
+        formData.append('amount', this.xj_sellForm.amount)
+        formData.append('price', this.xj_sellForm.price)
+        formData.append('localId', this.xj_sellForm.localId)
+        formData.append('foreignId', this.xj_sellForm.foreignId)
+        formData.append('type', this.xj_sellForm.type)
+        this.$notify.error('等待币种信息完善此模块')
+        submitTrade(formData).then(response => {
+          console.log(response)
+        })
+      },
+      handle_sj_buy() {
+        let formData = new FormData()
+        formData.append('direction', this.sj_buyForm.direction)
+        formData.append('amount', this.sj_buyForm.amount)
+        formData.append('price', this.sj_buyForm.price)
+        formData.append('localId', this.sj_buyForm.localId)
+        formData.append('foreignId', this.sj_buyForm.foreignId)
+        formData.append('type', this.sj_buyForm.type)
+        this.$notify.error('等待币种信息完善此模块')
+        submitTrade(formData).then(response => {
+          console.log(response)
+        })
+      },
+      handle_sj_sell() {
+        let formData = new FormData()
+        formData.append('direction', this.sj_sellForm.direction)
+        formData.append('amount', this.sj_sellForm.amount)
+        formData.append('price', this.sj_sellForm.price)
+        formData.append('localId', this.sj_sellForm.localId)
+        formData.append('foreignId', this.sj_sellForm.foreignId)
+        formData.append('type', this.sj_sellForm.type)
+        this.$notify.error('等待币种信息完善此模块')
+        submitTrade(formData).then(response => {
+          console.log(response)
+        })
       }
     },
-
-}
+  }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import "../../../assets/custom-theme/theme";
-
-  .trade-panel {
+  .trade-panel /deep/ {
     width: 763px;
     height: 490px;
     background-color: $innerColor;
@@ -213,7 +256,7 @@
       color: $hbHoverColor;
     }
     .el-tabs__header {
-      box-shadow: 0 3px 6px rgba(0,0,0,.1);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
     }
     .el-tabs__nav-wrap::after {
       display: none
@@ -224,7 +267,9 @@
       line-height: 48px;
       font-size: 16px;
     }
-    .buy, .sell {
+    
+    .buy,
+    .sell {
       width: 350px;
       height: 400px;
       float: left;
@@ -254,8 +299,8 @@
           margin-top: 20px;
         }
         .coin-name {
-          line-height:40px ;
-          height:40px;
+          line-height: 40px;
+          height: 40px;
           margin-right: 40px;
           color: $lightColor;
           font-weight: 600;
@@ -277,7 +322,6 @@
           &:hover {
             opacity: .9;
           }
-
         }
       }
       .el-input__inner {
@@ -289,7 +333,7 @@
       .math-price {
         width: 90%;
         height: 24px;
-        background: rgba(78,91,133,.4);
+        background: rgba(78, 91, 133, .4);
         border-bottom-right-radius: 5px;
         border-bottom-left-radius: 5px;
         span {
@@ -304,7 +348,7 @@
         font-size: 16px;
       }
     }
-    .sell-button{
+    .sell-button {
       background-color: #ae4e54 !important;
     }
   }

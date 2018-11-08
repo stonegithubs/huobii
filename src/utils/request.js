@@ -62,16 +62,16 @@ service.interceptors.response.use(
     return res.data
   },
   error => {
-    // 没有token去登陆页面
-    if (error.response.data.code === '401') {
-      sessionStorage.removeItem('Authorization')
-      store.commit('SET_USERINFO', null)
-      store.commit('SET_TOKEN', null)
-      store.commit('SET_VERIFYINFO', null)
-      sessionStorage.clear()
-      router.push('/login')
-      return Promise.reject(error)
-    }
+    // 没有token去登陆页面 todo这边验证码解决后需要去掉
+    // if (error.response.data.code === '401') {
+    //   sessionStorage.removeItem('Authorization')
+    //   store.commit('SET_USERINFO', null)
+    //   store.commit('SET_TOKEN', null)
+    //   store.commit('SET_VERIFYINFO', null)
+    //   sessionStorage.clear()
+    //   router.push('/login')
+    //   return Promise.reject(error)
+    // }
 
     // 有token
     const res = error.response
