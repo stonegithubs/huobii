@@ -17,8 +17,12 @@ const trade = {
     GetTradePwd({ commit }) {
       return new Promise((resolve, reject) => {
         trade_pwd_exist().then(response => {
-          commit('SET_HASTRADEPWD', response.content)
-          resolve(response)
+          if (response && response.code === '200') {
+            commit('SET_HASTRADEPWD', response.content)
+            resolve(response)
+          } else {
+            reject(response)
+          }
         }).catch(error => {
           reject(error)
         })

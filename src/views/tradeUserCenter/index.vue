@@ -51,9 +51,16 @@
                             <p class="list-label"><i class="iconfont  icon-GA"></i> </p>
                             <div class="info-wrapper">
                                 <p class="list-desc"><span class="desc-name m-desc-name">谷歌验证码</span> <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">未绑定</span>
-                                    <a target="_blank" rel="noopener noreferrer" href="https://www.huobi.br.com/zh-cn/user_center/uc_bind_email/?action=bindmail&amp;backurl=https%3A%2F%2Fotc.huobi.br.comzh-cn%2fUser%3ftype%3d1" class="isActive m-button">绑定</a>
+                                    <a @click="googleVisiable = true" rel="noopener noreferrer" class="isActive m-button">绑定</a>
                                 </p>
                             </div>
+                            <el-dialog title="提示" :visible.sync="googleVisiable" width="30%" :before-close="handleClose">
+                                 <vue-recaptcha sitekey="Your key here"></vue-recaptcha>
+                                <span slot="footer" class="dialog-footer">
+                                <el-button @click="googleVisiable = false">取消</el-button>
+                                <el-button type="primary" @click="googleVisiable = false">确 定</el-button>
+                                </span>
+                            </el-dialog>
                         </div>
                         <div class="user-info-list">
                             <p class="list-label"><i class="iconfont  icon-login_password"></i> </p>
@@ -131,9 +138,9 @@
                                         <p class="list-desc"><span class="desc-name m-desc-name">{{getPaywayByID(item.paywayId || '-1').payName}}</span>
                                             <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">{{item.pram1 === "null"? '':item.pram1}} {{item.pram2 === "null"? '':item.pram2}} {{item.pram3=== "null"? '':item.pram3}} {{item.pram4 === "null"? '':item.pram4}}</span>
                                             <span class="isActive m-button">
-                                                                        <el-switch active-text='on' inactive-text='off'	 :id="item.paywayId"  @click.native="init(item.paywayId)" v-model="getUserPaywayByID(item.paywayId).statusFlag" active-value="1" inactive-value="0" @change="handleChangePayStatus">
-                                                                        </el-switch>
-                                                                    </span>
+                                                                            <el-switch active-text='on' inactive-text='off'	 :id="item.paywayId"  @click.native="init(item.paywayId)" v-model="getUserPaywayByID(item.paywayId).statusFlag" active-value="1" inactive-value="0" @change="handleChangePayStatus">
+                                                                            </el-switch>
+                                                                        </span>
                                         </p>
                                     </div>
                             </div>
@@ -154,6 +161,7 @@
 
 <script>
     import addPaymentForm from "./components/addPaymentForm";
+    import VueRecaptcha from 'vue-recaptcha';
     import {
         changePaymentStatus,
         submitAdvanceVerify
@@ -164,7 +172,7 @@
     export default {
         name: "tradeUserCenter",
         components: {
-            addPaymentForm
+            addPaymentForm,VueRecaptcha
         },
         data() {
             return {
@@ -184,6 +192,7 @@
                 targetPaywayID: '',
                 auditFlag: this.$store.state.user.verifyInfo.auditFlag,
                 adv_fileList: [],
+                googleVisiable: false,
             };
         },
         computed: {
@@ -272,28 +281,27 @@
                 fileList.pop(file)
             },
             handleAdvancedVerify() {
-                if(this.adv_fileList.length==3){
-                let reader1 = new FileReader()
-                reader1.readAsDataURL(this.adv_fileList[0].raw)
-                let reader2 = new FileReader()
-                reader2.readAsDataURL(this.adv_fileList[1].raw)
-                let reader3 = new FileReader()
-                reader3.readAsDataURL(this.adv_fileList[2].raw)
-                const formData = new FormData()
-                formData.append('img1', reader1.result)
-                formData.append('img2', reader2.result)
-                formData.append('video', reader3.result)
-                submitAdvanceVerify(formData).then(response => {
-                    if(response.code === '200'){
-                        this.$notify.success(response.message)
-                    }else{
-                        this.$notify.error(response.message)
-                    }
-                }).catch(_=>{})
-                }else{
+                if (this.adv_fileList.length == 3) {
+                    let reader1 = new FileReader()
+                    reader1.readAsDataURL(this.adv_fileList[0].raw)
+                    let reader2 = new FileReader()
+                    reader2.readAsDataURL(this.adv_fileList[1].raw)
+                    let reader3 = new FileReader()
+                    reader3.readAsDataURL(this.adv_fileList[2].raw)
+                    const formData = new FormData()
+                    formData.append('img1', reader1.result)
+                    formData.append('img2', reader2.result)
+                    formData.append('video', reader3.result)
+                    submitAdvanceVerify(formData).then(response => {
+                        if (response.code === '200') {
+                            this.$notify.success(response.message)
+                        } else {
+                            this.$notify.error(response.message)
+                        }
+                    }).catch(_ => {})
+                } else {
                     this.$notify.error('请上传两张身份证照片和一段手持身份证的视频')
                 }
-
             }
         },
         created() {
