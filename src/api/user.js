@@ -64,7 +64,7 @@ export function submitAdvanceVerify(data) {
 // 发送验证码
 export function sendCaptcha(data) {
   return request({
-    url: '/api/v1/public/user/captcha',
+    url: '/api/v1/public/user/captcha_t',
     method: 'post',
     data
   })
@@ -73,7 +73,7 @@ export function sendCaptcha(data) {
 // todo:测试收到验证码 需要删除
 export function getCaptcha(phoneNumber) {
   return request({
-    url: '/api/v1/public/user/captcha',
+    url: '/api/v1/public/user/captcha_t',
     method: 'get',
     params: { phone: phoneNumber }
   })

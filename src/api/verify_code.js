@@ -26,3 +26,12 @@ export function unBindEmail(data) {
     data
   })
 }
+
+// // 谷歌验证码v2接口
+// export function getGoogleVerify(data) {
+//   return request({
+//     url: '/api/v1/verify_code/unbind_mail',
+//     method: 'post',
+//     data
+//   })
+// }

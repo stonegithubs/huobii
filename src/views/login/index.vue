@@ -93,7 +93,7 @@
       margin-top: 15px;
       h1 {
         margin-top: 100px;
-        margin-bottom: 50px; // margin-left: 100px;
+        margin-bottom: 50px; 
         font-size: 40px;
       }
     }

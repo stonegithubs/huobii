@@ -2,13 +2,13 @@
   <el-form class="registry-form" ref="registryForm" :model="registryForm" :rules="rules" status-icon label-width="100px">
     <el-form-item label="国籍">
       <el-select v-model="registryForm.region" placeholder="请选择您的国籍">
-        <el-option v-for="item in countryList" :label="item.enName+'    '+ item.name" :value="item.abbr" v-bind:key="item.id"></el-option>
+        <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" v-bind:key="item.id"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="手机号" prop="phone">
       <el-input v-model="registryForm.phone" type="text" placeholder="手机号" autocomplete="off">
         <template slot="suffix">
-              <el-button class="send-code" :class="buttonColor" @click="sendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
+            <el-button class="send-code" :class="buttonColor" @click="sendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
 </template>
       </el-input>
     </el-form-item>
@@ -18,8 +18,8 @@
     <el-form-item label="确认密码" prop="confirm">
       <el-input v-model="registryForm.confirm" type="password" placeholder="再次输入登录密码" autocomplete="off" />
     </el-form-item>
-    <el-form-item label="验证码" prop="captcha">
-      <el-input v-model="registryForm.captcha" type="text" placeholder="请输入验证码" autocomplete="off" @keyup.enter.native ="sendCode">
+    <el-form-item label="验证码" prop="code">
+      <el-input v-model="registryForm.code" type="text" placeholder="请输入验证码" autocomplete="off" @keyup.enter.native ="sendCode">
        
       </el-input>
     </el-form-item>
@@ -37,9 +37,6 @@
 </template>
 <script>
   import {
-    set_rec_code
-  } from "../../../api/login";
-  import {
     sendCaptcha,
     getCaptcha
   } from "../../../api/user";
@@ -52,6 +49,9 @@
     clearInterval,
     clearTimeout
   } from "timers";
+  import {
+    mapGetters
+  } from 'vuex'
   export default {
     name: "registry-form",
     data() {
@@ -87,13 +87,12 @@
         isDisable: false,
         counter: {},
         checked: false,
-        countryList: [],
         registryForm: {
           phone: "",
           password: "",
           confirm: "",
           region: "",
-          captcha: ""
+          code: ""
           // inviteCode: ''
         },
         rules: {
@@ -140,16 +139,26 @@
           return "ok-color";
         }
       },
-       ...mapGetters([
-        'getCountry'
+      ...mapGetters([
+        'getCountry',
+        'getCountryCodeByAbbr'
       ])
     },
     methods: {
       sendCode() {
         // console.log('已经发送')
+        if (this.registryForm.region === '') {
+          this.$notify.error('请选择国籍')
+          return false
+        }
+        if (this.registryForm.phone === '') {
+          this.$notify.error('请输入您的手机号')
+          return false
+        }
         let phone = new FormData();
-        let regionPhone = this.handleRegionPhone(this.registryForm.phone)
+        let regionPhone = this.getCountryCodeByAbbr(this.registryForm.region) + this.registryForm.phone
         phone.append("phone", regionPhone);
+        phone.append("country", this.registryForm.region);
         sendCaptcha(phone).then(responese => {
           setTimeout(() => {
             getCaptcha(regionPhone).then(responese1 => {
@@ -177,23 +186,15 @@
           }
         }, 1000);
       },
-      handleRegionPhone(phone) {
-        for (let item of this.countryList) {
-          if (item.abbr === this.registryForm.region) {
-            phone = '+' + item.code + phone
-            // phone = '+'+phone
-          }
-        }
-        return phone
-      },
+    
       doSubmit() {
-        let regionPhone = this.handleRegionPhone(this.registryForm.phone)
+        let regionPhone = this.getCountryCodeByAbbr(this.registryForm.region) + this.registryForm.phone
         let form = new FormData();
         form.append("phone", regionPhone);
         form.append("password", this.registryForm.password);
         form.append("confirm", this.registryForm.confirm);
-        form.append("captcha", this.registryForm.captcha);
-        form.append("region", this.registryForm.region);
+        form.append("code", this.registryForm.code);
+        form.append("country", this.registryForm.region);
         this.$store
           .dispatch("Register", form)
           .then(response => {
@@ -227,7 +228,7 @@
       clearInterval(this.counter);
     },
     created() {
-       if(getCountry.length === 0){
+      if (getCountry.length === 0) {
         this.$store.dispatch('getCountryList')
       }
     }

@@ -5,7 +5,7 @@
       <registry-form></registry-form>
     </div>
     <div class="lg-text">
-      <p v-for="item in registryTip">{{ item.message }}</p>
+      <p v-for="(item,index) in registryTip" v-bind:key="index">{{ item.message }}</p>
     </div>
   </div>
 </template>
@@ -33,7 +33,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import "../../assets/custom-theme/theme.scss";
   .login {
     width: 1200px !important;

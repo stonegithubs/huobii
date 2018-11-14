@@ -122,7 +122,7 @@
                     this.$notify.error('请输入您的手机号')
                     return false
                 }
-                console.log('已经发送')
+                // console.log('已经发送')
                 let phone = new FormData();
                 let regionPhone = this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.phone
                 phone.append("phone", regionPhone);

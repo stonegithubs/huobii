@@ -61,6 +61,7 @@
     },
     methods: { 
       getVerify(verifyCode) {
+        this.dialogTableVisible = false
           this.$refs['loginForm'].validate(valid => {
             if (valid) {
               let formData = new FormData()
