@@ -1,18 +1,18 @@
 <template>
   <el-form label-position='top' ref="loginForm" :model="loginForm" status-icon label-width="100px" class="login-form">
-    <el-form-item label="国籍" prop="username" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]"> 
+    <el-form-item label="国籍" prop="region" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]"> 
       <el-select v-model="loginForm.region" placeholder="请选择您的国籍"  >
         <el-option  v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" v-bind:key="item.id"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="账号" prop="username" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]">
-      <el-input v-model="loginForm.username" type="text" placeholder="手机号/邮箱" autocomplete="off" />
+      <el-input v-model="loginForm.username" type="text" placeholder="手机号" autocomplete="off" />
     </el-form-item>
     <el-form-item label="密码" prop="password" :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }]">
       <el-input v-model="loginForm.password" type="password" placeholder="请输入登录密码" autocomplete="off" />
     </el-form-item>
     <el-form-item>
-      <el-dialog :visible.sync="dialogTableVisible" width='302px'>
+      <el-dialog title='are you robot?' :visible.sync="dialogTableVisible" width='302px'>
         <vue-recaptcha ref="invisibleRecaptcha" size='Invisible' :sitekey="getSiteKey" @verify="getVerify"></vue-recaptcha>
       </el-dialog>
     </el-form-item>

@@ -4,7 +4,7 @@
   <div class="login" :style="{ background: 'url('+ BackgroundURL +') center no-repeat'}">
     <div class="lg-form">
       <h1>数字资产交易平台</h1>
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName" >
         <el-tab-pane label="密码登陆" name="normal_login">
           <loginForm></loginForm>
         </el-tab-pane>
