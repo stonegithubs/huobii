@@ -4,7 +4,7 @@
       <el-tab-pane class="trade-show-panel" v-for="symbol in symbols" :name='symbol'  v-bind:key="symbol.id">
         <span slot="label">
         <i :class="'iconfont icon-'+symbol.toUpperCase()" style="font-size: 18px"></i> &nbsp;{{ symbol.toUpperCase() }}</span>
-        <el-table @row-click="chooseCoin" v-loading="mainTradeLoading" :data="symbolList" :default-sort="{prop: 'close', order: 'descending'}" height="600" style="width: 100%">
+        <el-table @row-click="chooseCoin" v-loading="mainTradeLoading" :data="okCoinList" :default-sort="{prop: 'close', order: 'descending'}" height="600" style="width: 100%">
           <el-table-column prop="symbolName" label="交易对" sortable min-width="160">
           </el-table-column>
           <el-table-column prop="close" label="最新价" sortable :formatter="priceFormatter" min-width="170">
@@ -34,7 +34,7 @@ export default {
       activeName: "usdt",
       currentSymbol: 'usdt',
       //这里可以进行热插拔，选择需要显示的symbol名字
-      symbols: ['usdt', 'btc','eth', 'tc'],
+      symbols: ['usdt'],
       mainInterval: {}
     };
   },
@@ -44,6 +44,9 @@ export default {
     // },
     symbolList() {
       return this.$store.getters.getSymbolData(this.currentSymbol);
+    },
+    okCoinList(){
+      return this.$store.getters.getCoinList(this.currentSymbol)
     }
   },
   methods: {

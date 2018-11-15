@@ -25,8 +25,10 @@ const coinData = {
     targetCoin: 'btc',
     // targetCoinID: '098765432',
 
-    // 支持的币种
-    supportedCoin: [],
+    // 支持的稳定币币种 todo:写死了
+    supportedCoin: ['usdt'],
+    // 支持的交易货币 
+    supportedTargetCoin: ['btc', 'eth', 'tc'],
 
     // 出售币种深度列表
     sellDepth: [],
@@ -131,6 +133,23 @@ const coinData = {
 
   },
   getters: {
+    getCoinList: (state) => (symbolName) => {
+      let symbolList = []
+      for (let mainCoin of state.supportedCoin) {
+        if (mainCoin === symbolName) {
+          for (let targetCoin of state.supportedTargetCoin) {
+            const symbol = targetCoin + '_' + mainCoin
+            console.log(symbol)
+            for (let item of state.rateList) {
+              if (item.symbol === symbol) {
+                symbolList.push(item)
+              }
+            }
+          }
+        }
+      }
+      return symbolList
+    },
     getUniqueSymbol: (state) => () => {
       let res = []
       for (let item of state.symbols) {
@@ -175,6 +194,9 @@ const coinData = {
     },
     getTargetCoin: (state) => {
       return state.targetCoin
+    },
+    getOkCoin: (state) => (coinName) => {
+      return state.rateList
     },
     getCoinIdByName: (state) => (coinName) => {
       for (let item of state.supportedCoin) {

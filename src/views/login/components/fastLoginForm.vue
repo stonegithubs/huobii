@@ -8,7 +8,7 @@
         <el-form-item label="手机号" prop="phone" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]">
             <el-input v-model="loginForm.phone" type="text" placeholder="手机号" autocomplete="off">
                 <template slot="suffix">
-                <el-button class="send-code" :class="buttonColor" @click="sendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
+                <el-button class="send-code" :class="buttonColor" @click="msendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
 </template>
       </el-input>
     </el-form-item>
@@ -34,8 +34,8 @@
         mapGetters
     } from 'vuex'
     import {
-        sendCaptcha,
-        getCaptcha
+        sendCode,
+        getCode
     } from "../../../api/user";
     import {
         setTimeout,
@@ -53,7 +53,7 @@
                 loginForm: {
                     region: '',
                     phone: '',
-                    captcha: ''
+                    code: ''
                 },
                 timeRest: 60,
                 counter: {},
@@ -93,18 +93,18 @@
                 this.$refs['loginForm'].validate(valid => {
                     if (valid) {
                         let formData = new FormData()
-                        formData.append('phone', this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.username)
-                        formData.append('password', this.loginForm.password)
+                        formData.append('phone', this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.phone)
                         formData.append('country', this.loginForm.region)
                         formData.append('captcha', verifyCode)
-                        this.$store.dispatch('LoginByUsername', formData).then(responese => {
+                        formData.append('code', this.loginForm.code)
+                        this.$store.dispatch('FastLogin', formData).then(responese => {
                             if (responese && responese.code === '200') {
                                 this.$router.push({
                                     name: 'index'
                                 })
                                 this.$message.success(responese.message)
                             } else {
-                                location.reload()
+                                window.location.reload()
                                 this.$notify.error(responese.message)
                             }
                         }).catch(err => {
@@ -113,7 +113,7 @@
                     }
                 })
             },
-            sendCode() {
+            msendCode() {
                 if(this.loginForm.region === ''){
                     this.$notify.error('请选择国籍')
                     return false
@@ -126,10 +126,10 @@
                 let phone = new FormData();
                 let regionPhone = this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.phone
                 phone.append("phone", regionPhone);
-                //todo: 快速登陆验证码接口待定 暂时搁置
-                sendCaptcha(phone).then(responese => {
+                phone.append("country", this.loginForm.region)
+                sendCode(phone).then(responese => {
                   setTimeout(() => {
-                    getCaptcha(regionPhone).then(responese1 => {
+                    getCode(this.loginForm.region, regionPhone).then(responese1 => {
                       if (responese1 && responese1.code == '200') {
                         this.$notify({
                           title: "验证码",

@@ -29,7 +29,7 @@
            <!--  <router-link :to="{ name: 'invite'}">
               <el-menu-item index="5-1">我的邀请码</el-menu-item>
             </router-link> -->
-            <router-link :to="{ name: 'user_center'}">
+            <router-link :to="{ name: 'tradeUserCenter'}">
               <el-menu-item index="5-2">个人中心</el-menu-item>
             </router-link>
             <router-link :to="{ name: 'verify'}">

@@ -8,6 +8,14 @@ export function loginByUsername(data) {
     data
   })
 }
+// 快速登录 ~~~
+export function fastLogin(data) {
+  return request({
+    url: '/api/v1/token/fast_login_t',
+    method: 'post',
+    data
+  })
+}
 
 // 注销  ~~~
 export function logout(token) {

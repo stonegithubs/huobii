@@ -1,4 +1,4 @@
-import { loginByUsername, registerByPhone, logout } from '../../api/login'
+import { loginByUsername, registerByPhone, logout, fastLogin } from '../../api/login'
 import { getVerifyInfo, getUserInfo, getPayway } from "../../api/user";
 
 const user = {
@@ -38,6 +38,18 @@ const user = {
         })
       })
     },
+      // 快速登录
+      FastLogin({ commit }, formData) {
+        return new Promise((resolve, reject) => {
+          fastLogin(formData).then(response => {
+            commit('SET_TOKEN', response.content)
+            sessionStorage.setItem('Authorization', response.content)
+            resolve(response.message)
+          }).catch(error => {
+            reject(error)
+          })
+        })
+      },
     // 用户注册
     Register({ commit }, form) {
       return new Promise((resolve, reject) => {
