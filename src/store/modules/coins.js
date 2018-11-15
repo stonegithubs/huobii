@@ -1,6 +1,7 @@
 // 网站货币信息
 
 import { getRemoteSymbols, getRemoteSymbolList, getSupportedCoin, getMarketDetail, getMarketDepth, okcoinTicket } from "../../api/coins";
+import { stat } from "fs";
 // import store from "../index";
 
 const coinData = {
@@ -25,10 +26,16 @@ const coinData = {
     targetCoin: 'btc',
     // targetCoinID: '098765432',
 
-    // 支持的稳定币币种 todo:写死了
-    supportedCoin: ['usdt'],
-    // 支持的交易货币 
-    supportedTargetCoin: ['btc', 'eth', 'tc'],
+    // 汇率
+    usd_usdt:1,
+
+   // 支持的交易对关系
+    symbol:{
+      'usdt':['btc','eth','tc'],
+      'eth':['btc','usdt','tc'],
+      'tc':['btc','usdt','eth'],
+      'btc':['tc','usdt','eth'],
+    },
 
     // 出售币种深度列表
     sellDepth: [],
@@ -135,16 +142,40 @@ const coinData = {
   getters: {
     getCoinList: (state) => (symbolName) => {
       let symbolList = []
-      for (let mainCoin of state.supportedCoin) {
-        if (mainCoin === symbolName) {
-          for (let targetCoin of state.supportedTargetCoin) {
-            const symbol = targetCoin + '_' + mainCoin
-            console.log(symbol)
-            for (let item of state.rateList) {
-              if (item.symbol === symbol) {
-                symbolList.push(item)
+      let targetCoinList = state.symbol[symbolName]
+      for(let item of state.symbolList){
+        for(let target of targetCoinList){
+          if(item.symbol === target+symbolName){
+            //usd
+            for(let shit of state.rateList){
+              if(shit.symbol === 'usdt_usd'){
+                state.usd_usdt = shit.close
               }
+              if(symbolName === 'usdt' && target +'_'+'usd' === shit.symbol){
+                item.rate = Number.parseFloat(shit.changePercentage)*state.usd_usdt
+                item.target = target
+                item.symbolName = symbolName
+                symbolList.push(item)
+
+              }
+              if(target === 'usdt' && 'usd'+'_'+symbolName === shit.symbol){
+                item.rate = Number.parseFloat(shit.changePercentage)/state.usd_usdt
+                item.target = target
+                item.symbolName = symbolName
+                symbolList.push(item)
+
+              }
+              if(target+'_'+symbolName === shit.symbol){
+                item.rate = Number.parseFloat(shit.changePercentage)
+                item.target = target
+                item.symbolName = symbolName
+                symbolList.push(item)
+
+              }
+              
+              //其他
             }
+           
           }
         }
       }
@@ -159,36 +190,42 @@ const coinData = {
       }
       return res;
     },
-    getSymbolData: (state) => (symbolName) => {
-      let res = []
-      for (let item of state.symbols) {
-        if (item['quote-currency'] === symbolName) {
-          let target = item['symbol']
-          for (let symbol of state.symbolList) {
-            if (symbol['symbol'] === target) {
-              symbol['amount-precision'] = item['amount-precision']
-              symbol['price-precision'] = item['price-precision']
-              symbol['quote-currency'] = item['quote-currency']
-              symbol['base-currency'] = item['base-currency']
-              symbol['symbol-partition'] = item['symbol-partition']
-              symbol['symbolName'] = item['base-currency'] + '/' + item['quote-currency']
-              res.push(symbol)
-            }
-          }
-        }
-      }
-      return res;
-    },
+    // getSymbolData: (state) => (symbolName) => {
+    //   let res = []
+    //   for (let item of state.symbols) {
+    //     if (item['quote-currency'] === symbolName) {
+    //       let target = item['symbol']
+    //       for (let symbol of state.symbolList) {
+    //         if (symbol['symbol'] === target) {
+    //           symbol['amount-precision'] = item['amount-precision']
+    //           symbol['price-precision'] = item['price-precision']
+    //           symbol['quote-currency'] = item['quote-currency']
+    //           symbol['base-currency'] = item['base-currency']
+    //           symbol['symbol-partition'] = item['symbol-partition']
+    //           symbol['symbolName'] = item['base-currency'] + '/' + item['quote-currency']
+    //           for(let fuck of state.rateList){
+    //             let mmp = item['quote-currency']+'_'+item['base-currency']
+    //             if(mmp = fuck.symbol){
+    //               symbol.rate = mmp.changePercentage
+    //               res.push(symbol)
+    //             }
+    //           }
+    //         }
+    //       }
+    //     }
+    //   }
+    //   return res;
+    // },
     getSupportCoin: (state) => {
       return state.supportedCoin
     },
-    getSupportCoinByName: (state) => (coinName) => {
-      for (let item of state.supportedCoin) {
-        if (item.__ = coinName) { //todo:支持的币种未完成
-          return item
-        }
-      }
-    },
+    // getSupportCoinByName: (state) => (coinName) => {
+    //   for (let item of state.supportedCoin) {
+    //     if (item.__ = coinName) { //todo:支持的币种未完成
+    //       return item
+    //     }
+    //   }
+    // },
     getMainCoin: (state) => {
       return state.mainCoin
     },

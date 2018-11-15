@@ -4,20 +4,26 @@
       <el-tab-pane class="trade-show-panel" v-for="symbol in symbols" :name='symbol'  v-bind:key="symbol.id">
         <span slot="label">
         <i :class="'iconfont icon-'+symbol.toUpperCase()" style="font-size: 18px"></i> &nbsp;{{ symbol.toUpperCase() }}</span>
-        <el-table @row-click="chooseCoin" v-loading="mainTradeLoading" :data="okCoinList" :default-sort="{prop: 'close', order: 'descending'}" height="600" style="width: 100%">
+        <el-table @row-click="chooseCoin" v-loading="mainTradeLoading" :data="symbolList" :default-sort="{prop: 'close', order: 'descending'}" height="600" style="width: 100%">
           <el-table-column prop="symbolName" label="交易对" sortable min-width="160">
+            <template slot-scope="scope">
+              {{ scope.row.target}} / <span style="color:#61688a">{{ scope.row.symbolName}}</span>
+            </template>
           </el-table-column>
-          <el-table-column prop="close" label="最新价" sortable :formatter="priceFormatter" min-width="170">
+          <el-table-column prop="close" label="最新价" sortable   min-width="170">
+            <template slot-scope="scope">
+               {{ scope.row.close}}
+            </template>
           </el-table-column>
           <el-table-column label="涨幅">
             <template slot-scope="scope">
-              <!-- {{ scope.row}} -->
-              woshirate
+             <span v-if="scope.row.rate>0" style='color:#589065'> +{{ scope.row.rate.toFixed(2)}}% </span>
+            <span v-if="scope.row.rate<0" style='color:#ae4e54'> {{ scope.row.rate.toFixed(2)}}% </span>
             </template>
           </el-table-column>
-          <el-table-column prop="high" label="最高价" :formatter="priceFormatter" width="170">
+          <el-table-column prop="high" label="最高价" width="170">
           </el-table-column>
-          <el-table-column prop="low" label="最低价" :formatter="priceFormatter" min-width="170">
+          <el-table-column prop="low" label="最低价"  min-width="170">
           </el-table-column>
           <el-table-column prop="amount" label="24H量" min-width="135" :formatter="amountFormatter">
           </el-table-column>
@@ -34,7 +40,7 @@ export default {
       activeName: "usdt",
       currentSymbol: 'usdt',
       //这里可以进行热插拔，选择需要显示的symbol名字
-      symbols: ['usdt'],
+      symbols: ['usdt','btc','eth','tc'],
       mainInterval: {}
     };
   },
@@ -43,26 +49,26 @@ export default {
     //   return this.$store.getters.getUniqueSymbol();
     // },
     symbolList() {
-      return this.$store.getters.getSymbolData(this.currentSymbol);
+      return this.$store.getters.getCoinList(this.currentSymbol);
     },
-    okCoinList(){
-      return this.$store.getters.getCoinList(this.currentSymbol)
-    }
+    // okCoinList(){
+    //   return this.$store.getters.getCoinList(this.currentSymbol)
+    // }
   },
   methods: {
     handleClick(tab) {
       this.currentSymbol = this.symbols[tab.index]
     },
-    amountFormatter(row) {
-      return row.amount.toFixed(row['amount-precision'])
-    },
-    priceFormatter(row) {
-      return row.amount.toFixed(row['price-precision'])
-    },
+    // amountFormatter(row) {
+    //   return row.amount.toFixed(row['amount-precision'])
+    // },
+    // priceFormatter(row) {
+    //   return row.amount.toFixed(row['price-precision'])
+    // },
     chooseCoin(row, event, column) {
       this.$store.commit('SET_SYMBOL_SHOW', row.symbolName)
-      this.$store.commit('SET_MAINCOIN', row['quote-currency'])
-      this.$store.commit('SET_TARGETCOIN', row['base-currency'])
+      this.$store.commit('SET_MAINCOIN', row.symbolName)
+      this.$store.commit('SET_TARGETCOIN', row.target)
       this.$router.push('/coin_coin/exchange')
 
     }
