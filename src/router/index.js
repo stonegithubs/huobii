@@ -285,6 +285,17 @@ export const constantRouterMap = [
       }
     ]
   },
+  {
+    path: '/withdraw_address',
+    component: tradeLayout,
+    children: [
+      {
+        path: '',
+        name: 'withdraw_address',
+        component: () => import('@/views/withdrawAddress/index')
+      }
+    ]
+  },
   // 法币交易个人资产
   {
     path: '/404',

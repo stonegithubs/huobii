@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://150.109.180.66:8000',
+        target: 'https://api.hextec.cn:8443/',
         changeOrigin: true,
       }
     },
@@ -57,8 +57,8 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
     proxyTable: {
-      '*': {
-        target: 'http://150.109.180.66:8000',
+      '/api': {
+        target: 'https://api.hextec.cn:8443',
         changeOrigin: true,
       }
     },

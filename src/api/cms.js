@@ -30,3 +30,21 @@ export function getAgreement() {
     method: 'post'
   })
 }
+
+// 获取页脚分类
+export function linkCategory() {
+  return request({
+    url: '/api/v1/public/cms/link/category',
+    method: 'post',
+    params: { page: 0, size: 4 }
+  })
+}
+
+// 获取对应友情链接
+export function cmsLink(category_id) {
+  return request({
+    url: '/api/v1/public/cms/link',
+    method: 'post',
+    params: { category: category_id, page: 0, size: 5 }
+  })
+}

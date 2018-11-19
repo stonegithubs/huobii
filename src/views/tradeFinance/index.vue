@@ -2,10 +2,11 @@
   <div class="trade-finance">
     <div class="top-info">
       <div>
-        <h2>我的资产</h2>
+        <h2 class="font18">我的资产</h2>
       </div>
       <div class="value-show">
         <p class="font14">
+
           <span class="font-gray">总资产折合: </span>
           {{ estimatedValue }} {{ valueType }}
           ≈ {{ estimatedCurrency }}  <span class="font-blue font-weight">{{ $store.getters.getCurrencyType}}</span>
@@ -57,6 +58,7 @@ export default {
       width: 90%;
     }
     margin: auto;
+    
     .top-info {
       display: flex;
       justify-content: space-between;

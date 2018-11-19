@@ -3,13 +3,13 @@
         <div class="trade-user-center ">
             <div class="user-left">
                 <div class="avatar-box">
-                    <div class="avatar-container four"><em class="name">{{t_name}}</em>
+                    <div class="avatar-container four"><em class="name">{{userInfo.name}}</em>
                         <div class="online-icon">
                             <p class=""></p>
                         </div>
                     </div>
-                    <div class="avatar-desc"><span class="font16">{{name}}</span>
-                        <p class="font-gray">UID：{{uid}}</p>
+                    <div class="avatar-desc"><span class="font16">{{userInfo.name.substring(0,1)}}</span>
+                        <p class="font-gray">UID：{{userInfo.id}}</p>
                     </div>
                 </div>
                 <div class="trade-times">
@@ -54,13 +54,12 @@
                                     <a @click="googleVisiable = true" rel="noopener noreferrer" class="isActive m-button">绑定</a>
                                 </p>
                             </div>
-                            <el-dialog title="提示" :visible.sync="googleVisiable" width="30%" :before-close="handleClose">
-                                 <vue-recaptcha sitekey="Your key here"></vue-recaptcha>
+                            <el-dialog :modal-append-to-body="false"  title="绑定谷歌验证器" :visible.sync="googleVisiable" width="650px" :before-close="handleClose">
+                                <google-code></google-code>
                                 <span slot="footer" class="dialog-footer">
-                                <el-button @click="googleVisiable = false">取消</el-button>
-                                <el-button type="primary" @click="googleVisiable = false">确 定</el-button>
                                 </span>
                             </el-dialog>
+                            
                         </div>
                         <div class="user-info-list">
                             <p class="list-label"><i class="iconfont  icon-login_password"></i> </p>
@@ -146,9 +145,9 @@
                             </div>
                         </div>
                         <div v-else>
-                            <div class="has-no-payment">
-                                <p class="font-gray">您暂时没有添加任何收款方式</p>
-                                <p> <a @click="AddPaymentdialogVisible=true">点击添加收款方式</a></p>
+                            <div class="has-no-payment font14">
+                                <p class="font-gray" style="margin-top:20px">您暂时没有添加任何收款方式</p>
+                                <p> <a @click="AddPaymentdialogVisible=true" style="color:#638bd4;">点击添加收款方式</a></p>
                             </div>
                         </div>
                         <addPaymentForm :isShown="AddPaymentdialogVisible"></addPaymentForm>
@@ -161,6 +160,7 @@
 
 <script>
     import addPaymentForm from "./components/addPaymentForm";
+    import googleCode from "./components/googleCode";
     import VueRecaptcha from 'vue-recaptcha';
     import {
         changePaymentStatus,
@@ -172,13 +172,10 @@
     export default {
         name: "tradeUserCenter",
         components: {
-            addPaymentForm,VueRecaptcha
+            addPaymentForm,googleCode
         },
         data() {
             return {
-                name: "TrumanGu",
-                t_name: "T",
-                uid: "12345678910",
                 totalOrder: 19,
                 monthDeal: 2,
                 average_pass: 15,
@@ -199,12 +196,11 @@
             safeLevel() {
                 return "低";
             },
+            userInfo(){
+                return this.$store.state.user.userInfo
+            },
             hasPayment() {
-                if (this.$store.state.user.payway.length === 0) {
-                    return false
-                } else {
-                    return true
-                }
+                return this.$store.state.user.payway.length === 0 || this.$store.state.user.payway==={}
             },
             userPayment() {
                 return this.$store.state.user.payway
@@ -280,6 +276,13 @@
             handleRemove(file, fileList) {
                 fileList.pop(file)
             },
+            handleClose(done) {
+        this.$confirm('确认关闭？')
+          .then(_ => {
+            done();
+          })
+          .catch(_ => {});
+      },
             handleAdvancedVerify() {
                 if (this.adv_fileList.length == 3) {
                     let reader1 = new FileReader()
@@ -344,6 +347,7 @@
                     width: 40px;
                     height: 40px;
                     display: flex;
+                     flex-shrink:0;
                     flex-direction: row;
                     justify-content: center;
                     align-items: center;
@@ -382,10 +386,12 @@
                         color: #999;
                         .list-label {
                             margin-right: 10px;
+                                margin-bottom: 8px;
                         }
                         .info-wrapper {
                             border-bottom: 1px solid hsla(0, 0%, 85%, 0.5);
                             width: 100%;
+                            padding-bottom: 12px;
                             .list-desc {
                                 display: flex;
                                 flex-grow: 2;

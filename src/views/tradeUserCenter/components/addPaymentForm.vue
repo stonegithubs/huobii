@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="添加收款方式" :visible.sync="hhshown" width="472px" :before-close="handleClose" :modal-append-to-body="false">
+  <el-dialog title="添加收款方式" :visible.sync="isShown" width="472px" :before-close="handleClose" :modal-append-to-body="false">
     <div class="add-payment-form">
       <div class="payment-params">
         <el-form label-position="top" label-width="80px" :model="addPaymenForm" style="width:100%">

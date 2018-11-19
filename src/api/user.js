@@ -83,10 +83,9 @@ export function getCode(country, phone) {
   return request({
     url: '/api/v1/token/code_t',
     method: 'get',
-    params: { country: country, phone:phone}
+    params: { country: country, phone: phone }
   })
 }
-
 
 // todo:测试收到验证码 需要删除
 export function getCaptcha(phoneNumber) {
@@ -97,3 +96,28 @@ export function getCaptcha(phoneNumber) {
   })
 }
 
+// TODO:测试验证谷歌验证器 需要删除
+export function GoogleAuth(code) {
+  return request({
+    url: '/api/v1/user/google_auth/auth',
+    method: 'get',
+    params: { code: code }
+  })
+}
+
+// 拉取谷歌验证码密钥
+export function getGoogleSecret() {
+  return request({
+    url: '/api/v1/user/google_auth/secret',
+    method: 'post'
+  })
+}
+
+// 绑定谷歌验证码密钥
+export function bindGoogleAuth(code) {
+  return request({
+    url: '/api/v1/user/google_auth/bind',
+    method: 'post',
+    params: { code: code }
+  })
+}
