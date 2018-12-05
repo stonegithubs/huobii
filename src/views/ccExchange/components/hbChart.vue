@@ -1,7 +1,13 @@
 <template>
   <div class="hb-chart">
     <div class="hc-title">
-      <span>BTC/USTD 6602</span>
+      <span style="font-size: 20px;font-weight: 700;">BTC/USTD 6602</span>
+      <div style="float:right">
+      <span class="dis-item">涨幅 -96.20%</span>
+      <span class="dis-item">高 102240.26400000</span>
+      <span class="dis-item">低 3887.14500000</span>
+      <span class="dis-item">24H量 13289</span>
+      </div>
     </div>
     <div class="hc-inner" id="chart"></div>
   </div>
@@ -67,7 +73,7 @@ export default {
     },
 
     initChart() {
-        var echarts = require('echarts');
+      var echarts = require("echarts");
 
       let dom = document.getElementById("chart");
       let myChart = this.$echarts.init(dom);
@@ -299,7 +305,7 @@ export default {
             }),
             true
           );
-          console.log(myChart)
+          console.log(myChart);
           if (option && typeof option === "object") {
             myChart.setOption(option, true);
           }
@@ -307,14 +313,12 @@ export default {
         .catch(err => {
           console.log(err);
         });
-              console.log(dom)
-
+      console.log(dom);
     }
   },
   mounted() {
     this.initChart();
     // var echarts = require('echarts');
-
   }
 };
 </script>
@@ -332,11 +336,14 @@ export default {
     font-size: 16px;
     line-height: 48px;
     padding-left: 20px;
+    .dis-item{
+        margin: 0 10px;
+    }
   }
   .hc-inner {
     // background-color: #181b2a;
     // div{
-        height: 480px;
+    height: 480px;
     // }
   }
 }

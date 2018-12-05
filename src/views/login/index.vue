@@ -67,6 +67,7 @@
     width: 1200px !important;
     margin: auto;
     height: 800px;
+    // background-color: #fcfdfd!important;
     .el-tabs__item {
       color: #c7cce6;
     }

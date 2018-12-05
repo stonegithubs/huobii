@@ -5,27 +5,27 @@
         <span slot="label">
         <i :class="'iconfont icon-'+symbol.toUpperCase()" style="font-size: 18px"></i> &nbsp;{{ symbol.toUpperCase() }}</span>
         <el-table @row-click="chooseCoin" v-loading="mainTradeLoading" :data="symbolList" :default-sort="{prop: 'close', order: 'descending'}" height="600" style="width: 100%">
-          <el-table-column prop="symbolName" label="交易对" sortable min-width="160">
+          <el-table-column prop="symbolName" :label="$t('index.tradeShow.pair')" sortable min-width="160">
             <template slot-scope="scope">
               {{ scope.row.target}} / <span style="color:#61688a">{{ scope.row.symbolName}}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="close" label="最新价" sortable   min-width="170">
+          <el-table-column prop="close" :label="$t('index.tradeShow.lastPrice')" sortable   min-width="170">
             <template slot-scope="scope">
                {{ scope.row.close}}
             </template>
           </el-table-column>
-          <el-table-column label="涨幅">
+          <el-table-column :label="$t('index.tradeShow.change')">
             <template slot-scope="scope">
-             <span v-if="scope.row.rate>0" style='color:#589065'> +{{ scope.row.rate.toFixed(2)}}% </span>
-            <span v-if="scope.row.rate<0" style='color:#ae4e54'> {{ scope.row.rate.toFixed(2)}}% </span>
+             <span v-if="scope.row.rate>0" class="green-rate" > +{{ scope.row.rate.toFixed(2)}}% </span>
+            <span v-if="scope.row.rate<0" class="red-rate"> {{ scope.row.rate.toFixed(2)}}% </span>
             </template>
           </el-table-column>
-          <el-table-column prop="high" label="最高价" width="170">
+          <el-table-column prop="high" :label="$t('index.tradeShow.high')" width="170">
           </el-table-column>
-          <el-table-column prop="low" label="最低价"  min-width="170">
+          <el-table-column prop="low" :label="$t('index.tradeShow.low')"  min-width="170">
           </el-table-column>
-          <el-table-column prop="amount" label="24H量" min-width="135" :formatter="amountFormatter">
+          <el-table-column prop="amount" :label="$t('index.tradeShow.vol24h')" min-width="135" :formatter="amountFormatter">
           </el-table-column>
         </el-table>
       </el-tab-pane>
@@ -45,26 +45,17 @@ export default {
     };
   },
   computed: {
-    // symbols() {
-    //   return this.$store.getters.getUniqueSymbol();
-    // },
+ 
     symbolList() {
       return this.$store.getters.getCoinList(this.currentSymbol);
     },
-    // okCoinList(){
-    //   return this.$store.getters.getCoinList(this.currentSymbol)
-    // }
+    
   },
   methods: {
     handleClick(tab) {
       this.currentSymbol = this.symbols[tab.index]
     },
-    // amountFormatter(row) {
-    //   return row.amount.toFixed(row['amount-precision'])
-    // },
-    // priceFormatter(row) {
-    //   return row.amount.toFixed(row['price-precision'])
-    // },
+   
     chooseCoin(row, event, column) {
       this.$store.commit('SET_SYMBOL_SHOW', row.symbolName)
       this.$store.commit('SET_MAINCOIN', row.symbolName)
@@ -103,6 +94,7 @@ export default {
 
 </script>
 <style lang="scss">
+@import '../../../assets/custom-theme/theme';
 
 .el-table td div {
   text-transform: uppercase;
@@ -113,13 +105,7 @@ export default {
   position: relative;
   margin-top: 60px;
 
-  .el-loading-mask {
-    background-color: #202437
-  }
-
-  .el-table {
-    background-color: #202437;
-  }
+ 
 
   .el-table--border::after,
   .el-table--group::after,
@@ -129,35 +115,48 @@ export default {
 
   .trade-show-panel {
     padding: 0 30px;
-    background-color: #202437;
+  }
+  .green-rate, .red-rate {
+    color: rgb(174, 78, 84);
+    // background-color: rgba(239, 86, 86, 0.1);
+    display: inline-block;
+    line-height: 1;
+    min-width: 80px;
+    padding: 2px 14px;
+    min-width: 70px;
+    line-height: 26px;
+    border-radius: 5px;
+    text-align: center
+  }
+  .green-rate {
+    color: #0da88b;
+    background-color: rgba(13,168,139,.1);
+  }
+  .red-rate {
+    color: #ef5656;
+    background-color: rgba(239,86,86,.1);
   }
 
-  .trade-bar {
-    border: 1px solid #61688a;
-    background-color: #262a42;
-    color: #c7cce6;
-  }
+
 
   .el-tabs--border-card {
     &>.el-tabs__header {
-      background-color: #262a42;
-      border-bottom: 1px solid #61688a;
+      background-color: #f2f6fa;
+
 
       .el-tabs__item {
-        color: #c7cce6;
+        color: $hbColor;
         width: 180px;
         text-align: center;
         height: 45px;
 
         &:not(.is-disabled):hover {
-          color: #c7cce6;
+          color:$hbColor;
         }
 
         &.is-active {
-          background-color: #262a42;
-          border-left-color: #61688a;
-          border-right-color: #61688a;
-          color: #c7cce6;
+         border-bottom:1px solid #357ce1;
+         background-color: #fff;
         }
       }
     }
@@ -173,17 +172,6 @@ export default {
     vertical-align: middle;
   }
 
-  .el-table--enable-row-hover {
-    .el-table__body {
-      tr {
-        &:hover {
-          &>td {
-            background-color: #1b1e2e !important;
-          }
-        }
-      }
-    }
-  }
 
   .el-table td,
   .el-table th.is-leaf {
@@ -195,10 +183,6 @@ export default {
     padding: 0;
   }
 
-  .el-tabs--border-card {
-    border: 1px solid #61688a;
-  }
-
   .el-table th,
   .el-table tr {
     height: 40px;
@@ -206,8 +190,8 @@ export default {
     position: relative;
     box-shadow: 0 0 1px hsla(231, 9%, 54%, .2);
     cursor: pointer;
-    background-color: #202437;
-    color: #c7cce6;
+    // background-color: #202437;
+    // color: #c7cce6;
   }
 
   ::-webkit-scrollbar {
@@ -219,21 +203,15 @@ export default {
 
   /*滚动条的轨道*/
   ::-webkit-scrollbar-track {
-    background-color: #181b2a;
+    // background-color: #181b2a;
   }
 
   /*滚动条的滑块按钮*/
   ::-webkit-scrollbar-thumb {
-    background-color: rgba(97, 104, 138, .15);
+    // background-color:#fcfdfd;
     border-radius: 10px;
 
   }
-
-  /*滚动条的上下两端的按钮*/
-  ::-webkit-scrollbar-button {
-    /*display: none;*/
-  }
-
 }
 
 </style>

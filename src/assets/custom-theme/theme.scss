@@ -1,5 +1,5 @@
 // 网站背景色
-$hbBackgroundColor:#262a42;
+$hbBackgroundColor: #fcfdfd;
 
 // 网站tab色
 $tabColor:#1b1e2e;
@@ -11,7 +11,29 @@ $lightColor:#61688a;
 $innerColor:#1b1e2a;
 
 //网站文字色
-$hbColor:#c7cce6;
+$hbColor:#232a4a;
+
+//footer
+$hbFooterColor:#0a151e;
 
 //hover色
-$hbHoverColor:#7a98f7;
+$hbHoverColor:#357ce1;
+
+
+
+//按钮 涨跌幅红色
+$hbRed:#f55858;
+
+//navbar
+$navbarColor:#243445;
+$navbarFontColor: #adc1d5!important;
+
+// 蓝色
+$hbBlue: #f55858;
+
+.hb-tab{
+    z-index: 4;
+    box-shadow: 0 2px 6px rgba(0,0,0,.1);
+    padding: 0 30px;    
+    background-color: #fff;
+}

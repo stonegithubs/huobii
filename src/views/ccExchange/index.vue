@@ -65,6 +65,9 @@ export default {
     'coin-detail':coinDetail,
     'market-trades':marketTrades
   },
+  created(){
+     this.$store.dispatch('getSupportCoin')
+  }
 
 
 }

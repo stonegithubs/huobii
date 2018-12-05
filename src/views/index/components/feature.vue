@@ -3,29 +3,24 @@
     <div class="section">
         <div class="feature">
           <div class="text-wrap fl">
-            <h5>全球化的数字资产配置及交易服务</h5>
-            <pre>遍布全球的项目拓展及运营管理体系
-在多个国家和地区设有本地交易服务中心
-服务超过130个国家的数百万用户</pre>
+            <h5> {{$t('index.feature.first.title')}}</h5>
+            <pre>
+              {{$t('index.feature.first.dsc')}}
+            </pre>
           </div>
           <div class="img-wrap fr "><img :src="require('../../../assets/imgs/feature_1.png')" ></div>
         </div >
         <div class="feature">
           <div class="img-wrap fl"><img :src="require('../../../assets/imgs/feature_2.png')" alt=""></div>
           <div class="text-wrap fr">
-            <h5>SMART-Chain资产评估模型</h5>
-            <pre>独立专业的区块链资产研究评估体系
-长期跟踪产业链并提供最权威中立的资产分析
-一站式的项目进度跟踪及信息披露系统</pre>
+            <h5> {{$t('index.feature.second.title')}}</h5>
+            <pre> {{$t('index.feature.second.dsc')}}</pre>
           </div>
         </div>
         <div class="feature">
           <div class="text-wrap fl">
-            <h5>依托4年的数字资产安全风控经验</h5>
-            <pre>安全稳定运营数字资产交易所超过四年
-管理资产规模超过10亿美金，服务数百万用户
-专业分布式架构和防DDOS攻击系统
-98% 数字资产存储多重签名冷钱包</pre>
+            <h5>{{$t('index.feature.thrid.title')}}</h5>
+            <pre>{{$t('index.feature.thrid.dsc')}}</pre>
           </div>
           <div class="img-wrap fr "><img :src="require('../../../assets/imgs/feature_3.png')" alt=""></div>
         </div>
@@ -65,12 +60,13 @@
         font-size: 34px;
         font-weight: 400;
         text-align: left;
+        color: #263241;
       }
       pre {
         line-height: 32px;
         font-size: 18px;
         text-align: left;
-        color:#c7cce6
+        color:#7f8fa4
       }
       }
       .text-wrap {

@@ -1,8 +1,8 @@
 <template>
   <div class="client" :style="{ background: 'url('+ require('../../../assets/imgs/wrap_download.png') +') center no-repeat' }">
     <div class="wrap-in">
-      <h3>多平台终端接入</h3>
-      <p>覆盖iOS、Android、Windows、Mac多个平台，支持全业务功能</p>
+      <h3>{{$t('index.client.title')}}</h3>
+      <p>{{$t('index.client.dsc')}}</p>
       <div class="wrap-bg">
         <div class="download-app">
           <i class="iconfont icon-shouji-copy type"> </i>
@@ -33,6 +33,8 @@ export default {
   @import "../../../assets/icons/iconfont.css";
   .client {
     height: 636px;
+    background-color: #152940!important;
+    padding-top: 80px;
     .wrap-in {
       height: 500px;
       text-align: center;

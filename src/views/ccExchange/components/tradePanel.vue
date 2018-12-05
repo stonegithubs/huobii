@@ -182,6 +182,9 @@
         },
       }
     },
+    created(){
+     
+    },
     methods: {
       handle_xj_buy() {
         let formData = new FormData()

@@ -16,6 +16,9 @@
         <vue-recaptcha ref="invisibleRecaptcha" size='Invisible' :sitekey="getSiteKey" @verify="getVerify"></vue-recaptcha>
       </el-dialog>
     </el-form-item>
+     <el-form-item>
+        <vue-recaptcha ref="invisibleRecaptcha" size='Invisible' :sitekey="getSiteKey" @verify="getVerify"></vue-recaptcha>
+    </el-form-item>
     <el-form-item>
       <el-button class="login-btn" type="primary" @click="dialogTableVisible = true">登录</el-button>
       <div style="float:right;margin-top: 24px;margin-right: 116px;">
@@ -58,6 +61,9 @@
       if (sessionStorage.getItem('Authorization')) {
         this.$router.back()
       }  
+    var obj=document.getElementById("iframe的name").contentWindow;  
+
+
     },
     methods: { 
       getVerify(verifyCode) {

@@ -8,9 +8,10 @@
     <div style="width: 86%">
       <el-menu
         :default-active="$route.path"
-        text-color="#c7cce6"
-        background-color="#181b2a"
-        active-text-color="#7a98f7"
+        :text-color="$navbarFontColor"
+        background-color="#243445"
+        
+        active-text-color="#ffffff"
         class="el-menu-demo"
         mode="horizontal"
       >
@@ -30,25 +31,25 @@
         </slot>
         <div class="right-nav">
           <router-link :to="{ name: 'order'}" v-if="checkAuth">
-            <i class="iconfont icon-file-text"></i>订单
+            <i class="iconfont icon-file-text"></i>{{$t("navbar.user.order")}}
           </router-link>
           <router-link :to="{ name: 'finance'}" v-if="checkAuth">
-            <i class="iconfont icon-wallet"></i>资产
+            <i class="iconfont icon-wallet"></i>{{$t("navbar.user.finance")}}
           </router-link>
           <el-submenu index="5" v-if="checkAuth">
             <template slot="title">
-              <i class="iconfont icon-user"></i>个人信息
+              <i class="iconfont icon-user"></i>{{$t("navbar.user.userProfile")}}
             </template>
             <!--  <router-link :to="{ name: 'invite'}">
               <el-menu-item index="5-1">我的邀请码</el-menu-item>
             </router-link>-->
             <router-link :to="{ name: 'tradeUserCenter'}">
-              <el-menu-item index="5-2">个人中心</el-menu-item>
+              <el-menu-item index="5-2">{{$t("navbar.user.userCenter")}}</el-menu-item>
             </router-link>
             <router-link :to="{ name: 'verify'}">
-              <el-menu-item index="5-3">身份认证</el-menu-item>
+              <el-menu-item index="5-3">{{$t("navbar.user.verify")}}</el-menu-item>
             </router-link>
-            <el-menu-item index="5-4" @click="logoutHandler">注销</el-menu-item>
+            <el-menu-item index="5-4" @click="logoutHandler">{{$t("navbar.user.logout")}}</el-menu-item>
           </el-submenu>
           <router-link :to="{ name: 'login'}" v-if="!checkAuth">{{$t("navbar.signIn")}}</router-link>
           <router-link :to="{ name: 'registry'}" v-if="!checkAuth">{{$t("navbar.signUp")}}</router-link>
@@ -104,10 +105,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../../assets/custom-theme/theme';
 .nav {
   height: 60px;
   overflow: hidden;
-  background-color: #181b2a;
+  background-color: $navbarColor;
 
   .logo-wrapper {
     display: flex;
@@ -126,7 +128,11 @@ export default {
     border: none;
     width: 100%;
     display: flex;
-
+    background-color: $navbarColor;
+    color: $navbarFontColor;
+    .el-menu-item {
+      color: $navbarFontColor;
+    }
     .right-nav {
       margin-left: auto;
       display: flex;
@@ -141,12 +147,12 @@ export default {
         height: 60px;
         padding: 0 15px;
         line-height: 60px;
-        color: #c7cce6;
+        color:$navbarFontColor;
         font-size: 14px;
       }
 
       .el-submenu {
-        color: #c7cce6;
+        color:$navbarColor;
       }
 
       .el-submenu__title {
@@ -155,7 +161,7 @@ export default {
       }
       .el-dropdown {
         line-height: 60px;
-        color: #c7cce6;
+        color: $navbarFontColor;
         margin-left: 13px;
       }
     }

@@ -89,7 +89,7 @@
 <style lang="scss" scoped>
   .hb-footer {
     height: 330px;
-    background-color: #181b2a;
+    background-color: #0a151e;
     padding-top: 50px;
     ul {
       width: 1000px;
