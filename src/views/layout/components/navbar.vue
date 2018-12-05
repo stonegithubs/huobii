@@ -2,33 +2,46 @@
   <div class="nav">
     <div class="logo-wrapper">
       <router-link to="/">
-        <img class="logo" :src="LOGO" >
-    </router-link>
+        <img class="logo" :src="LOGO">
+      </router-link>
     </div>
     <div style="width: 86%">
-      <el-menu :default-active="$route.path" text-color="#c7cce6" background-color="#181b2a" active-text-color="#7a98f7" class="el-menu-demo" mode="horizontal">
+      <el-menu
+        :default-active="$route.path"
+        text-color="#c7cce6"
+        background-color="#181b2a"
+        active-text-color="#7a98f7"
+        class="el-menu-demo"
+        mode="horizontal"
+      >
         <slot name="nav-item">
           <el-menu-item index="1">
-            <router-link :to="{ name: 'trade', params:{ option: 'buy', coin: 'btc' } }">法币交易</router-link>
+            <router-link :to="{ name: 'trade', params:{ option: 'buy', coin: 'btc' } }">{{$t("navbar.trade")}}</router-link>
           </el-menu-item>
           <el-menu-item index="2">
-            <router-link :to="{ name: 'ccExchange'}">币币交易</router-link>
+            <router-link :to="{ name: 'ccExchange'}">{{$t("navbar.exchange")}}</router-link>
           </el-menu-item>
           <el-menu-item index="3">
-            <router-link :to="{ name: 'ccMargin'}">C2C交易</router-link>
+            <router-link :to="{ name: 'ccMargin'}">{{$t("navbar.c2c")}}</router-link>
           </el-menu-item>
-          <el-menu-item index="4">
+          <!-- <el-menu-item index="4">
             <router-link :to="{ name: 'welfare'}">糖果活动</router-link>
-          </el-menu-item>
+          </el-menu-item> -->
         </slot>
         <div class="right-nav">
-          <router-link :to="{ name: 'order'}" v-if="checkAuth"><i class="iconfont icon-file-text"></i>订单</router-link>
-          <router-link :to="{ name: 'finance'}" v-if="checkAuth"><i class="iconfont icon-wallet"></i>资产</router-link>
+          <router-link :to="{ name: 'order'}" v-if="checkAuth">
+            <i class="iconfont icon-file-text"></i>订单
+          </router-link>
+          <router-link :to="{ name: 'finance'}" v-if="checkAuth">
+            <i class="iconfont icon-wallet"></i>资产
+          </router-link>
           <el-submenu index="5" v-if="checkAuth">
-            <template slot="title"><i class="iconfont icon-user"></i>个人信息</template>
-           <!--  <router-link :to="{ name: 'invite'}">
+            <template slot="title">
+              <i class="iconfont icon-user"></i>个人信息
+            </template>
+            <!--  <router-link :to="{ name: 'invite'}">
               <el-menu-item index="5-1">我的邀请码</el-menu-item>
-            </router-link> -->
+            </router-link>-->
             <router-link :to="{ name: 'tradeUserCenter'}">
               <el-menu-item index="5-2">个人中心</el-menu-item>
             </router-link>
@@ -37,14 +50,19 @@
             </router-link>
             <el-menu-item index="5-4" @click="logoutHandler">注销</el-menu-item>
           </el-submenu>
-          <router-link :to="{ name: 'login'}" v-if="!checkAuth">登录</router-link>
-          <router-link :to="{ name: 'registry'}" v-if="!checkAuth">注册</router-link>
-          <el-submenu index="6">
-            <template slot="title">Language</template>
-            <el-menu-item index="6-1">SXAASA</el-menu-item>
-            <el-menu-item index="6-2">账号安全</el-menu-item>
-            <el-menu-item index="6-3">活动记录</el-menu-item>
-          </el-submenu>
+          <router-link :to="{ name: 'login'}" v-if="!checkAuth">{{$t("navbar.signIn")}}</router-link>
+          <router-link :to="{ name: 'registry'}" v-if="!checkAuth">{{$t("navbar.signUp")}}</router-link>
+
+          <el-dropdown @command="changeLanguage">
+            <span class="el-dropdown-link">{{$t("lang")}}
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="th">ไทย</el-dropdown-item>
+              <el-dropdown-item command="en">English</el-dropdown-item>
+              <el-dropdown-item command="zh">简体中文</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
         </div>
       </el-menu>
     </div>
@@ -55,29 +73,34 @@ export default {
   name: "navbar",
   data() {
     return {
-      LOGO: require('../../../assets/LOGO/LOGO.png')
-    }
+      LOGO: require("../../../assets/LOGO/LOGO.png")
+    };
   },
   methods: {
     logoutHandler() {
-      this.$store.dispatch('LogOut').then(_ => {
-        this.$message.success("logout success")
-      }).catch(err => {
-        this.$message.error(err)
-      })
+      this.$store
+        .dispatch("LogOut")
+        .then(_ => {
+          this.$message.success("logout success");
+        })
+        .catch(err => {
+          this.$message.error(err);
+        });
+    },
+    changeLanguage(command){
+      this.$i18n.locale = command
+      // console.log(command)
     }
-
   },
   computed: {
     userInfo() {
-      return this.$store.state.user.userInfo
+      return this.$store.state.user.userInfo;
     },
     checkAuth() {
-      return !!this.$store.state.user.token
+      return !!this.$store.state.user.token;
     }
-
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -124,51 +147,18 @@ export default {
 
       .el-submenu {
         color: #c7cce6;
-
       }
 
       .el-submenu__title {
         height: 60px;
         line-height: 60px;
       }
+      .el-dropdown {
+        line-height: 60px;
+        color: #c7cce6;
+        margin-left: 13px;
+      }
     }
   }
-
-  /*.el-menu-demo {*/
-  /*width: 100%;*/
-  /*height: 60px;*/
-  /*position: relative;*/
-  /*font-size: 14px;*/
-  /*display: -ms-flexbox;*/
-  /*display: flex;*/
-  /*-ms-flex-align: center;*/
-  /*align-items: center;*/
-  /*border-width: 0;*/
-  /*}*/
-  /*.logo {*/
-  /*height: 25px;*/
-  /*width: auto;*/
-  /*margin-top: 18px;*/
-  /*margin-left: 10px;*/
-  /*}*/
-  /*.logo-wrapper {*/
-  /*margin-left: 15px;*/
-  /*height: 60px;*/
-  /*width: 170px;*/
-  /*overflow: hidden;*/
-  /*}*/
-  /*.hola {*/
-  /*margin-left: auto;*/
-  /*}*/
-  /*.el-tooltip {*/
-  /*height: 60px;*/
-  /*margin-bottom: 0;*/
-  /*margin-left: 20px;*/
-  /*line-height: 60px;*/
-  /*a {*/
-  /*color: #c7cce6;*/
-  /*}*/
-  /*}*/
 }
-
 </style>

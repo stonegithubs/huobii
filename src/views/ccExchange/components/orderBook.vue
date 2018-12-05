@@ -178,6 +178,7 @@
     }
     .inner {
       background-color: #1b1e2a;
+      padding-left:10px;
       .el-table th,
       .el-table tr {
         background-color: #1b1e2a;
