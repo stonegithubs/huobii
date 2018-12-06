@@ -2,10 +2,10 @@
   <div class="sidebar-chart">
     <div v-if="this.$store.state.user.token" class="total-balance">
       <div v-loading="isLoading">
-        <p style="font-size: 18px;margin-bottom: 0">{{$t('exchange.sidebar.account')}}:
+        <p style="font-size: 18px;margin-bottom: 0; color:#909399">{{$t('exchange.sidebar.account')}}:
           <span class="upper">{{this.$store.getters.getCoinBalanceByName(this.$store.getters.getMainCoin).coinBalance }} {{ this.$store.getters.getMainCoin }}</span>
         </p>
-        <p style="font-size: 18px;margin-bottom: 0">{{$t('exchange.sidebar.targetAccount')}}:
+        <p style="font-size: 18px;margin-bottom: 0; color:#909399">{{$t('exchange.sidebar.targetAccount')}}:
           <span class="upper">{{this.$store.getters.getCoinBalanceByName(this.$store.getters.getTargetCoin).coinBalance}} {{ this.$store.getters.getTargetCoin }}
           </span>
         </p>

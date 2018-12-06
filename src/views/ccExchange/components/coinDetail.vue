@@ -1,12 +1,12 @@
 <template>
   <div class="coin-detail">
-    <div class="cd-title">
+    <div class="hb-tab">
       <span>币种资料</span>
     </div>
     <div class="cd-inner">
       <div class="cd-left">
         <h3>
-          <span style="text-transform: uppercase;color: #61688a">etc</span>
+          <span style="text-transform: uppercase;">etc</span>
           <br/>
           以太坊(Ethereum)
         </h3>
@@ -47,14 +47,14 @@ export default {
     .cd-title {
       height: 48px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
-      background-color: #1b1e2e;
+      // background-color: #1b1e2e;
       font-size: 16px;
       line-height: 48px;
       padding-left: 20px;
     }
     .cd-inner {
       height: 400px;
-      background-color: #181b2a;
+      background-color: #FFF;
       overflow: hidden;
       padding: 10px 30px 30px;
       .cd-left {
@@ -71,7 +71,7 @@ export default {
         .cd-line {
           height: 1px;
           width: 90%;
-          background-color: $hbBackgroundColor;
+          // background-color: $hbBackgroundColor;
           margin: 20px 0;
         }
         .cd-in {
@@ -87,15 +87,15 @@ export default {
         ul li {
           height: 48px;
           line-height: 48px;
-          border-bottom: 1px solid;
-          color: #61688a;
+          border-bottom: 1px solid #eee;
+          // color: #61688a;
           font-size: 14px;
           p {
             width: 70%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            color: #c7cce6;
+            // color: #c7cce6;
             a {
               color : $hbHoverColor
             }

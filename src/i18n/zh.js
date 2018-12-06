@@ -77,7 +77,11 @@ module.exports = {
       direction: '方向',
       deal: '已成交',
       notClosed: '未成交',
-      operation: '操作'
+      operation: '操作',
+      depth: '深度图',
+      realtimeTrade: '实施成交',
+      
+
     }
   }
 }

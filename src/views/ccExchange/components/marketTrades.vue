@@ -1,7 +1,7 @@
 <template>
     <div class="market-trades">
-      <div class="mt-title">
-        <span>实时成交</span>
+      <div class="hb-tab">
+        <span>{{$t('exchange.main.realtimeTrade')}}</span>
       </div>
       <div class="mt-inner">
         <el-table cell-class-name='market-table' :data="marketHistory"  height='468' style="width: 100%">
@@ -12,21 +12,21 @@
           </el-table-column>
           <el-table-column label="方向">
               <template slot-scope="scope">
-                <span v-if="scope.row.data[0].direction == 'sell'" style="color:#ae4e54">
-                  卖出
+                <span v-if="scope.row.data[0].direction == 'sell'" style="color:#03c087">
+                  {{$t('exchange.main.buy')}}
                 </span>
-                <span v-if="scope.row.data[0].direction == 'buy'" style="color:#589065">
-                  买入
+                <span v-if="scope.row.data[0].direction == 'buy'" style="color:#f55858">
+                  {{$t('exchange.main.sell')}}
                 </span>
                 
             </template>
           </el-table-column>
-          <el-table-column :label="'价格'+'('+this.$store.state.coinData.targetCoin.toUpperCase()+')'">
+          <el-table-column :label="$t('exchange.main.price')+'('+this.$store.state.coinData.targetCoin.toUpperCase()+')'">
               <template slot-scope="scope">
             {{scope.row.data[0].price}}
             </template>
           </el-table-column>
-          <el-table-column :label="'数量'+'('+this.$store.state.coinData.mainCoin.toUpperCase()+')'">
+          <el-table-column :label="$t('exchange.main.amount')+'('+this.$store.state.coinData.mainCoin.toUpperCase()+')'">
               <template slot-scope="scope">
             {{scope.row.data[0].amount.toFixed(6)}}
           </template>
@@ -98,33 +98,33 @@ export default {
     width: 445px;
     height: 520px;
     /*background-color: lemonchiffon;*/
-    .mt-title {
-      height: 48px;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
-      background-color: #1b1e2e;
-      font-size: 16px;
-      line-height: 48px;
-      padding-left: 20px;
-    }
+    // .mt-title {
+    //   height: 48px;
+    //   box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
+    //   background-color: #1b1e2e;
+    //   font-size: 16px;
+    //   line-height: 48px;
+    //   padding-left: 20px;
+    // }
     .mt-inner {
       height: 472px;
       padding: 0 20px;
-      background-color: #181b2a;
+      background-color: #fff;
       // overflow: hidden;
       .el-table {
-        background-color: #181b2a;
+        // background-color: #181b2a;
         color: $hbColor;
         font-size: 13px;
         min-height:472px;
       }
       .el-table--enable-row-hover .el-table__body tr:hover>td {
-        background: #181b2a;
+        // background: #181b2a;
       }
       .market-table {
         padding: 0
       }
       .el-table th, .el-table tr {
-        background-color: #181b2a;
+        // background-color: #181b2a;
       }
       .el-table--border::after, .el-table--group::after, .el-table::before {
         display: none;

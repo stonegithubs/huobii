@@ -1,7 +1,7 @@
 <template>
     <div class="market-depth">
-      <div class="md-title">
-        <span>深度图</span>
+      <div class="hb-tab">
+        <span>{{$t('exchange.main.depth')}}</span>
       </div>
       <div class="md-inner">
 
@@ -24,14 +24,11 @@ export default {
     .md-title {
       height: 48px;
       box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
-      background-color: #1b1e2e;
+      background-color: #fff;
       font-size: 16px;
       line-height: 48px;
       padding-left: 20px;
     }
-    .md-inner {
-      background-color: #181b2a;
-      height: 470px;
-    }
+   
   }
 </style>
