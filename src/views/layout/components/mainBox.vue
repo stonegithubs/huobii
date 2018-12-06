@@ -13,7 +13,7 @@ export default {
 <style>
   .main-body {
     min-height: 800px;
-    background-color:#fcfdfd;
+    background-color:#f2f3f8;
 
   }
 

@@ -1,41 +1,41 @@
 <template>
   <div class="sidebar-chart">
     <div v-if="this.$store.state.user.token" class="total-balance">
-      <div v-loading="isLoading" element-loading-background="#1b1e2e">
-        <p style="font-size: 18px;margin-bottom: 0">当前币资产:
+      <div v-loading="isLoading">
+        <p style="font-size: 18px;margin-bottom: 0">{{$t('exchange.sidebar.account')}}:
           <span class="upper">{{this.$store.getters.getCoinBalanceByName(this.$store.getters.getMainCoin).coinBalance }} {{ this.$store.getters.getMainCoin }}</span>
         </p>
-        <p style="font-size: 18px;margin-bottom: 0">目标币资产:
+        <p style="font-size: 18px;margin-bottom: 0">{{$t('exchange.sidebar.targetAccount')}}:
           <span class="upper">{{this.$store.getters.getCoinBalanceByName(this.$store.getters.getTargetCoin).coinBalance}} {{ this.$store.getters.getTargetCoin }}
-                </span>
+          </span>
         </p>
       </div>
     </div>
     <div v-else class="not-login">
       <p>
-        <router-link :to="{ name: 'login'}">登录</router-link> 或
-        <router-link :to="{ name: 'registry'}">注册</router-link>开始交易
+        <router-link :to="{ name: 'login'}">{{$t('exchange.sidebar.signIn')}}</router-link> {{$t('exchange.sidebar.or')}}
+        <router-link :to="{ name: 'registry'}">{{$t('exchange.sidebar.registry')}}</router-link>{{$t('exchange.sidebar.startTrade')}}
       </p>
     </div>
     <div class="drawer">
       <el-tabs class="trade-bar" v-model="activeName" type="border-card" @tab-click="handleClick">
         <el-tab-pane v-for="symbol in symbols" v-bind:key="symbol.id" :name="symbol">
           <span slot="label">{{ symbol.toUpperCase() }}</span>
-          <el-table class="mini-trade" height="600"  :data="symbolList" :default-sort="{prop: 'close', order: 'descending'}" max-height="800" @row-click="handleRowClick" v-loading="symbolList.length == 0" element-loading-background="#181b2a" style="width: 100%">
-            <el-table-column prop="symbolName" label="币种" sortable >
+          <el-table class="mini-trade" height="600"  :data="symbolList" :default-sort="{prop: 'close', order: 'descending'}" max-height="800" @row-click="handleRowClick" v-loading="symbolList.length == 0" style="width: 100%">
+            <el-table-column prop="symbolName" :label="$t('index.tradeShow.pair')" sortable >
               <template slot-scope="scope">
                 {{ scope.row.target.toUpperCase()}}
                 </template>
           </el-table-column>
-          <el-table-column prop="close" label="最新价" sortable  >
+          <el-table-column prop="close" :label="$t('index.tradeShow.lastPrice')" sortable  >
             <template slot-scope="scope">
               {{ scope.row.close}}
               </template>
           </el-table-column>
-          <el-table-column label="涨幅">
+          <el-table-column :label="$t('index.tradeShow.change')">
 <template slot-scope="scope">
-  <span v-if="scope.row.rate>0" style='color:#589065'> +{{ scope.row.rate.toFixed(2)}}% </span>
-  <span v-if="scope.row.rate<0" style='color:#ae4e54'> {{ scope.row.rate.toFixed(2)}}% </span>
+  <span v-if="scope.row.rate>0" style='color:#03c087'> +{{ scope.row.rate.toFixed(2)}}% </span>
+  <span v-if="scope.row.rate<0" style='color:#f55858'> {{ scope.row.rate.toFixed(2)}}% </span>
 </template>
           </el-table-column>
           </el-table>
@@ -66,8 +66,6 @@
     methods: {
       handleClick(tab) {
         this.currentSymbol = this.symbols[tab.index]
-        // this.$store.commit('SET_MAINCOIN', this.currentSymbol)
-        // console.log(this.currentSymbol)
       },
       handleRowClick(row, event, column) {
         this.$store.commit('SET_MAINCOIN', row.symbolName)
@@ -96,7 +94,7 @@
         this.$store.dispatch('GetCoinBalanceBoth').then(_ => {
           this.balanceInfoLoading = false
         }).catch(_ => {
-          this.$notify.error(_.message) //todo:知道id之后最好把全部查询改为根据id查询
+          this.$notify.error(_.message) //TODO:知道id之后最好把全部查询改为根据id查询
         })
       }
     },
@@ -111,39 +109,29 @@
     margin-top: 5px;
     .not-login {
       padding: 16px 10px 16px 20px;
-      background-color: #1b1e2e;
-      a {
-        color: #7a98f7;
-      }
+      background-color: white;
+      margin-bottom: 5px;
     }
     .total-balance {
       border-radius: 3px 3px 0 0;
       padding: 16px 10px 16px 20px;
       border-bottom: 2px solid transparent;
-      background-color: #1b1e2e;
+      background-color: white;
     }
     .drawer {
-      background-color: #1b1e2e;
+      background-color: white;
       position: relative;
     }
     .el-tabs--border-card {
       border: none;
       &>.el-tabs__header {
-        background-color: #1b1e2e;
+        // background-color: #1b1e2e;
         border-bottom: 1px solid transparent;
         .el-tabs__item {
-          color: #c7cce6;
+          // color: #c7cce6;
           width: 70px;
           border: none;
-          &:not(.is-disabled):hover {
-            color: #7a98f7;
-          }
-          &.is-active {
-            color: #7a98f7;
-            background-color: #1b1e2e;
-            border-right-color: #1b1e2e;
-            border-left-color: #1b1e2e;
-          }
+      
         }
       }
       &>.el-tabs__content {
@@ -152,29 +140,16 @@
     }
     .el-table {
       font-size: 13px;
-      color: #c7cce6;
+      // color: #c7cce6;
       .caret-wrapper {
         width: unset;
       }
     }
-    .el-table--enable-row-hover {
-      .el-table__body {
-        tr {
-          &:hover {
-            &>td {
-              background-color: #1b1e2e !important;
-            }
-          }
-        }
-      }
-    }
-    .el-table td,
-    .el-table th.is-leaf {
-      border-color: #262a42;
-    }
+   
+  
     .el-table th,
     .el-table tr {
-      background-color: #181b2a;
+      // background-color: #181b2a;
       cursor: pointer;
     }
     .el-table td,
@@ -189,28 +164,17 @@
     .el-table--border th.gutter:last-of-type {
       border: none;
     }
-    .el-table--border,
-    .el-table--group {
-      border-color: #262a42;
-    }
-    .el-table,
-    .el-table__expanded-cell {
-      background-color: #181b2a;
-    }
+  
      ::-webkit-scrollbar {
       width: 10px;
-      background-color: #181b2a;
+      // background-color: #181b2a;
     }
-    /*滚动条的轨道*/
-     ::-webkit-scrollbar-track {
-      background-color: #181b2a;
-    }
+  
     /*滚动条的滑块按钮*/
      ::-webkit-scrollbar-thumb {
-      background-color: rgba(97, 104, 138, .15);
+      // background-color: rgba(97, 104, 138, .15);
       border-radius: 10px;
     }
-    /*滚动条的上下两端的按钮*/
-     ::-webkit-scrollbar-button {}
+    
   }
 </style>

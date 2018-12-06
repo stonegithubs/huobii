@@ -27,14 +27,16 @@ const coinData = {
     // targetCoinID: '098765432',
 
     // 汇率
-    usd_usdt:1,
+    usd_usdt: 1,
 
-   // 支持的交易对关系
-    symbol:{
-      'usdt':['btc','eth','tc'],
-      'eth':['btc','usdt','tc'],
-      'tc':['btc','usdt','eth'],
-      'btc':['tc','usdt','eth'],
+    symbolDetail: {},
+
+    // 支持的交易对关系
+    symbol: {
+      'usdt': ['btc', 'eth', 'tc'],
+      'eth': ['btc', 'usdt', 'tc'],
+      'tc': ['btc', 'usdt', 'eth'],
+      'btc': ['tc', 'usdt', 'eth'],
     },
 
     // 出售币种深度列表
@@ -77,6 +79,9 @@ const coinData = {
     },
     SET_BUY_DEPTH: (state, list) => {
       state.buyDepth = list
+    },
+    SET_SYMBOLDETAIL: (state, detail) => {
+      state.symbolDetail = detail
     }
   },
   actions: {
@@ -135,7 +140,19 @@ const coinData = {
         }).catch(err => {
           reject(err)
         })
-      });
+      })
+    },
+    // 更新当前交易对详细信息
+    updataPrice({ commit }, symbolName) {
+      return new Promise((resolve, reject) => {
+        getMarketDetail(symbolName).then(response => {
+          // commit('SET_LASTPRICE', response.content.tick.close)
+          commit('SET_SYMBOLDETAIL', response.content.tick)
+          resolve(response)
+        }).catch(err => {
+          reject(err)
+        })
+      })
     }
 
   },
@@ -143,39 +160,39 @@ const coinData = {
     getCoinList: (state) => (symbolName) => {
       let symbolList = []
       let targetCoinList = state.symbol[symbolName]
-      for(let item of state.symbolList){
-        for(let target of targetCoinList){
-          if(item.symbol === target+symbolName){
+      for (let item of state.symbolList) {
+        for (let target of targetCoinList) {
+          if (item.symbol === target + symbolName) {
             //usd
-            for(let shit of state.rateList){
-              if(shit.symbol === 'usdt_usd'){
+            for (let shit of state.rateList) {
+              if (shit.symbol === 'usdt_usd') {
                 state.usd_usdt = shit.close
               }
-              if(symbolName === 'usdt' && target +'_'+'usd' === shit.symbol){
-                item.rate = Number.parseFloat(shit.changePercentage)*state.usd_usdt
+              if (symbolName === 'usdt' && target + '_' + 'usd' === shit.symbol) {
+                item.rate = Number.parseFloat(shit.changePercentage) * state.usd_usdt
                 item.target = target
                 item.symbolName = symbolName
                 symbolList.push(item)
 
               }
-              if(target === 'usdt' && 'usd'+'_'+symbolName === shit.symbol){
-                item.rate = Number.parseFloat(shit.changePercentage)/state.usd_usdt
+              if (target === 'usdt' && 'usd' + '_' + symbolName === shit.symbol) {
+                item.rate = Number.parseFloat(shit.changePercentage) / state.usd_usdt
                 item.target = target
                 item.symbolName = symbolName
                 symbolList.push(item)
 
               }
-              if(target+'_'+symbolName === shit.symbol){
+              if (target + '_' + symbolName === shit.symbol) {
                 item.rate = Number.parseFloat(shit.changePercentage)
                 item.target = target
                 item.symbolName = symbolName
                 symbolList.push(item)
 
               }
-              
+
               //其他
             }
-           
+
           }
         }
       }

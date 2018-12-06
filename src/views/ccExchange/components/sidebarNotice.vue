@@ -1,9 +1,9 @@
 <template>
   <div class="sidebar-notice">
-    <div class="title">
-      <a href="#">公告</a>
+    <div class="title hb-tab">
+      <span>{{$t('exchange.sidebar.notice')}}</span>
     </div>
-    <div class="in">
+    <div class="in ">
       <ul id="notice_list">
         <li v-for="(item, index) in notice" v-bind:key="index">
           <router-link class="notice-inner" :to="{ name: 'index'}">{{ item.description }} </router-link>
@@ -45,40 +45,53 @@
 <style lang="scss" scoped>
   @import "../../../assets/custom-theme/theme";
   .sidebar-notice {
+    color: $hbColor;
     .title {
       height: 48px;
       line-height: 48px;
       font-size: 16px;
       padding: 0 20px;
-      background-color: rgb(27, 30, 46);
+      box-shadow: 0 3px 6px rgba(209, 211, 223, 0.8);    
+      z-index: 10;
+      background-color: #fff;
+      position: relative;
       margin-top: 20px;
       a {
-        color: #c7cce6;
+        transition: all .2s ease-in-out;
+
+        :hover{
+          color: $hbHoverColor;
+
+        }
       }
     }
     .in {
       padding: 0 20px;
-      background-color: #181b2a;
+      background-color: #fff;
       ul {
         li {
-          border-bottom: 1px solid #262a42;
+          border-bottom: 1px solid #fcfdfd;;
           padding-top: 10px;
           min-height: 70px;
           text-align: right;
-          border-bottom: 1px solid #1f2943;
+          border-top: 1px solid rgb(209, 211, 223);
           .notice-inner {
             display: block;
             height: 36px;
             line-height: 18px;
             text-align: left;
             overflow: hidden;
-            color: #c7cce6;
-            font-size: 14px;
+            color: $hbColor;
+            font-size: 13px;
+            transition: all .2s ease-in-out;
           }
           .notice-time {
             font-size: 11px; // opacity: 0.5;
-            color: #61688a;
+            // color: #61688a;
             height: 30px;
+          }
+          a:hover {
+          color: $hbHoverColor;
           }
         }
       }

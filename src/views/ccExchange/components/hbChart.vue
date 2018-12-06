@@ -1,12 +1,12 @@
 <template>
   <div class="hb-chart">
-    <div class="hc-title">
-      <span style="font-size: 20px;font-weight: 700;">BTC/USTD 6602</span>
+    <div class="hb-tab hc-title">
+      <span style="font-size: 20px;font-weight: 700;">{{this.$store.state.coinData.targetCoin.toUpperCase()}}/{{this.$store.state.coinData.mainCoin.toUpperCase()}}  {{this.$store.state.coinData.symbolDetail.close}}</span>
       <div style="float:right">
-      <span class="dis-item">涨幅 -96.20%</span>
-      <span class="dis-item">高 102240.26400000</span>
-      <span class="dis-item">低 3887.14500000</span>
-      <span class="dis-item">24H量 13289</span>
+      <!-- <span class="dis-item">涨幅 -96.20%</span> -->
+      <span class="dis-item">{{$t('index.tradeShow.high')}} {{this.$store.state.coinData.symbolDetail.high}}</span>
+      <span class="dis-item">{{$t('index.tradeShow.low')}} {{this.$store.state.coinData.symbolDetail.low}}</span>
+      <span class="dis-item">{{$t('index.tradeShow.vol24h')}} {{this.$store.state.coinData.symbolDetail.vol}}</span>
       </div>
     </div>
     <div class="hc-inner" id="chart"></div>
@@ -79,21 +79,21 @@ export default {
       let myChart = this.$echarts.init(dom);
       let app = {};
       let option = null;
-      let upColor = "#00da3c";
-      let downColor = "#ec0000";
+      let upColor = "#f55858";
+      let downColor = "#03c087";
       getKlineBySymbolName("btcusdt")
         .then(res => {
           let rawData = res.content.data;
           var data = this.splitData(rawData);
           myChart.setOption(
             (option = {
-              backgroundColor: "#181b2a",
+              backgroundColor: "#fff",
               // animation: false,
               legend: {
                 bottom: 10,
                 left: "center",
                 data: ["日K", "MA5", "MA10", "MA20", "MA30"],
-                inactiveColor: "#777",
+                // inactiveColor: "#777",
                 textStyle: {
                   color: "#fff"
                 }
@@ -104,7 +104,7 @@ export default {
                   animation: false,
                   type: "cross",
                   lineStyle: {
-                    color: "#376df4",
+                    // color: "#376df4",
                     width: 2,
                     opacity: 1
                   }
@@ -113,7 +113,7 @@ export default {
               axisPointer: {
                 link: { xAxisIndex: "all" },
                 label: {
-                  backgroundColor: "#777"
+                  // backgroundColor: "#777"
                 }
               },
               toolbox: {
@@ -197,7 +197,7 @@ export default {
                 {
                   scale: true,
                   axisLine: { lineStyle: { color: "#8392A5" } },
-                  splitLine: { show: false }
+                  // splitLine: { show: false }
                 },
                 {
                   scale: true,
@@ -313,7 +313,7 @@ export default {
         .catch(err => {
           console.log(err);
         });
-      console.log(dom);
+      // console.log(dom);
     }
   },
   mounted() {
@@ -329,22 +329,8 @@ export default {
 .hb-chart {
   height: 528px;
   width: 1136px;
-  .hc-title {
-    height: 48px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    background-color: #1b1e2e;
-    font-size: 16px;
-    line-height: 48px;
-    padding-left: 20px;
-    .dis-item{
-        margin: 0 10px;
-    }
-  }
-  .hc-inner {
-    // background-color: #181b2a;
-    // div{
+   .hc-inner {
     height: 480px;
-    // }
   }
 }
 </style>

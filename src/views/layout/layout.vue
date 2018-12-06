@@ -34,7 +34,7 @@ export default {
   }
   .lay-out {
     min-width: 1526px;
-    color: #c7cce6;
+    // color: #c7cce6;
     background-color: $hbBackgroundColor;
     margin: auto;
   }

@@ -1,5 +1,7 @@
 // 网站背景色
-$hbBackgroundColor: #fcfdfd;
+$hbBackgroundColor: #f2f3f8;
+
+$bodyColor: #FFF;
 
 // 网站tab色
 $tabColor:#1b1e2e;
@@ -28,12 +30,22 @@ $hbRed:#f55858;
 $navbarColor:#243445;
 $navbarFontColor: #adc1d5!important;
 
-// 蓝色
 $hbBlue: #f55858;
+$hbGreen:#03c087;
+
 
 .hb-tab{
     z-index: 4;
     box-shadow: 0 2px 6px rgba(0,0,0,.1);
     padding: 0 30px;    
     background-color: #fff;
+    height: 48px;
+    color: $hbColor;
+    font-size: 16px;
+    line-height: 48px;
+    position: relative;
+    z-index: 100;
+}
+a {
+    color: $hbHoverColor;
 }

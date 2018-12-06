@@ -43,5 +43,35 @@ module.exports = {
       dsc: '覆盖iOS、Android、Windows、Mac多个平台，支持全业务功能'
     }
 
+  },
+  exchange: {
+    sidebar: {
+      account: '钱包余额',
+      targetAccount: '目标币余额',
+      signIn: '登录',
+      registry: '注册',
+      or: '或',
+      startTrade: '开始交易',
+      notice: '公告'
+    },
+    main: {
+      sell: '卖出',
+      buy: '买入',
+      price: '价格',
+      amount: '数量',
+      total: '总计',
+      fixedPrice: '限价交易',
+      marketBestPrice: '市价交易',
+      sellPrice: '卖出价',
+      sellAmount: '卖出量',
+      buyPrice: '买入价',
+      buyAmount: '买入量',
+      tradeTotalPrice: '交易额',
+      topUps: '充币',
+      available: '可用',
+      buyInWithBestPrice: '以市面上最优价格买入',
+      sellWithBestPrice: '以市面上最优价格卖出'
+
+    }
   }
 }
