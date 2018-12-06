@@ -70,8 +70,14 @@ module.exports = {
       topUps: '充币',
       available: '可用',
       buyInWithBestPrice: '以市面上最优价格买入',
-      sellWithBestPrice: '以市面上最优价格卖出'
-
+      sellWithBestPrice: '以市面上最优价格卖出',
+      openBook: '当前委托',
+      historyBook: '历史委托',
+      time: '时间',
+      direction: '方向',
+      deal: '已成交',
+      notClosed: '未成交',
+      operation: '操作'
     }
   }
 }
