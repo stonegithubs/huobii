@@ -84,7 +84,7 @@ module.exports = {
       operation: '操作',
       depth: '深度图',
       realtimeTrade: '实施成交',
-      
+
 
     }
   },
@@ -118,5 +118,20 @@ module.exports = {
     confirmAgreement: '您必须同意用户协议',
     pwdRule: '密码不能低于8位且由字符、数字、字母构成',
     pwdNotConsistent: '两次输入的密码不一致',
+    signUpTip1: '国籍信息注册后不可修改，请务必如实选择。',
+    signUpTip2: '验证邮件可能会被误判为垃圾邮件，请注意查收。',
+    signUpTip3: '请妥善保存您的账号及登录密码。',
+    signUpTip4: '请勿和其他网站使用相同的登录密码',
+  },
+  userOptions: {
+    changePwd: '修改密码',
+    currentPwd: '当前密码',
+    newPwd: '新密码',
+    confirmNewPwd: '确认新密码',
+    familyName: '姓氏',
+    givenName: '名字',
+    idNo: '证件号码',
+    type: '证件类型',
+    yourCaptcha: '请输入您收到的验证码'
   }
 }

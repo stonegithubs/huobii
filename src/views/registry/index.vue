@@ -5,7 +5,11 @@
       <registry-form></registry-form>
     </div>
     <div class="lg-text">
-      <p v-for="(item,index) in registryTip" v-bind:key="index">{{ item.message }}</p>
+      <!-- <p v-for="(item,index) in registryTip" v-bind:key="index">{{ item.message }}</p> -->
+      <p>{{$t('login.signUpTip1')}}</p>
+      <p>{{$t('login.signUpTip2')}}</p>
+      <p>{{$t('login.signUpTip3')}}</p>
+      <p>{{$t('login.signUpTip4')}}</p>
     </div>
   </div>
 </template>
@@ -20,12 +24,6 @@
     data() {
       return {
         BackgroundURL: require('../../assets/imgs/login.png'),
-        registryTip: [
-          { message:'国籍信息注册后不可修改，请务必如实选择。'},
-          { message:'验证邮件可能会被误判为垃圾邮件，请注意查收。'},
-          { message:'请妥善保存您的Huobi账号及登录密码。'},
-          { message:'请勿和其他网站使用相同的登'}
-          ]
       }
     },
     methods: {

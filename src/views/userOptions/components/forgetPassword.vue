@@ -1,5 +1,8 @@
 <template>
-    <div class="forget-password">
+<el-card  class="box-card">
+  <div slot="header" class="clearfix">
+    <span>忘记密码</span>
+  </div>
         <el-form :model="forgetForm" status-icon ref="forget-form" label-width="100px" label-position="top">
             <el-form-item label="手机号" prop="phone" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
                 <el-input type="text" v-model="forgetForm.phone" autocomplete="off">
@@ -32,6 +35,8 @@
             </el-form-item>
         </el-form>
     </div>
+            </el-card>
+
 </template>
 <script>
     import {

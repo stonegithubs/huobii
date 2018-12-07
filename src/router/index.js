@@ -166,39 +166,81 @@ export const constantRouterMap = [
     component: layout,
     children: [
       {
-        path: '/userOptions/change_password',
-        name: 'change_password',
-        component: () => import('@/views/changePassword/index')
-      },
-      {
-        path: '/userOptions/change_trade_password',
-        name: 'change_trade_password',
-        component: () => import('@/views/changePassword/index')
-      },
-      {
-        path: '/userOptions/change_phone',
-        name: 'change_phone',
-        component: () => import('@/views/changePassword/index')
-
-      },
-      {
-        path: '/userOptions/bind_email',
-        name: 'bind_email',
-        component: () => import('@/views/changePassword/index')
-
-      },
-      {
-        path: '/userOptions/verify',
-        name: 'verify',
-        component: () => import('@/views/changePassword/index')
-
-      },
-      {
-        path: '/userOptions/forget',
-        name: 'forget_password',
-        component: () => import('@/views/changePassword/index')
-
+        path: 'userOptions',
+        name: 'userOptions',
+        component: () => import('@/views/userOptions/index'),
+        children: [
+          {
+            path: '/userOptions/change_password',
+            component: () => import('@/views/userOptions/components/changePasswordForm')
+          },
+          {
+            path: '/userOptions/change_trade_password',
+            name: 'change_trade_password',
+            component: () => import('@/views/userOptions/components/changeTradePwd')
+          },
+          {
+            path: '/userOptions/change_phone',
+            name: 'change_phone',
+            component: () => import('@/views/userOptions/components/changePhone')
+          },
+          {
+            path: '/userOptions/bind_email',
+            name: 'bind_email',
+            component: () => import('@/views/userOptions/components/bindEmail')
+          },
+          {
+            path: '/userOptions/verify',
+            name: 'verify',
+            component: () => import('@/views/userOptions/components/verified')
+          },
+          {
+            path: '/userOptions/forget',
+            name: 'forget_password',
+            component: () => import('@/views/userOptions/components/forgetPassword')
+          }
+        ]
       }
+      // {
+      //   path: 'change_password',
+      //   name: 'change_password',
+      //   component: () => import('@/views/userOptions/index'),
+      //   children: [
+      //     {
+      //       path: '',
+      //       component: () => import('@/views/userOptions/components/changePasswordForm')
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: '/userOptions/change_trade_password',
+      //   name: 'change_trade_password',
+      //   component: () => import('@/views/userOptions/index')
+      // },
+      // {
+      //   path: '/userOptions/change_phone',
+      //   name: 'change_phone',
+      //   component: () => import('@/views/userOptions/index')
+
+      // },
+      // {
+      //   path: '/userOptions/bind_email',
+      //   name: 'bind_email',
+      //   component: () => import('@/views/userOptions/index')
+
+      // },
+      // {
+      //   path: '/userOptions/verify',
+      //   name: 'verify',
+      //   component: () => import('@/views/userOptions/index')
+
+      // },
+      // {
+      //   path: '/userOptions/forget',
+      //   name: 'forget_password',
+      //   component: () => import('@/views/userOptions/index')
+
+      // }
     ]
 
   },
