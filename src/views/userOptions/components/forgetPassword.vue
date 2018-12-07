@@ -1,42 +1,38 @@
 <template>
-<el-card  class="box-card">
-  <div slot="header" class="clearfix">
-    <span>忘记密码</span>
-  </div>
+    <el-card class="box-card">
+        <div slot="header" class="clearfix">
+            <span>{{$t('login.forgetPwd')}}</span>
+        </div>
         <el-form :model="forgetForm" status-icon ref="forget-form" label-width="100px" label-position="top">
-            <el-form-item label="手机号" prop="phone" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
-                <el-input type="text" v-model="forgetForm.phone" autocomplete="off">
-                    <template slot="suffix" class="send-code">
-                        <el-button style="background:transparent;border:none" :class="buttonColor" @click="sendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
-</template>
-                </el-input>
+            <el-form-item :label="$t('login.account')" prop="phone" :rules="[{ required: true, message: 'This field is required', trigger: 'blur' }]">
+                <el-input type="text" v-model="forgetForm.phone" autocomplete="off"/>
             </el-form-item>
-            <el-form-item label="身份证号" prop="idcode" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
+            <el-form-item :label="$t('userOptions.idNo')" prop="idcode" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
                 <el-input type="text" v-model="forgetForm.idcode" autocomplete="off" />
             </el-form-item>
-            <el-form-item label="姓氏" prop="familyName" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
+            <el-form-item :label="$t('userOptions.familyName')" prop="familyName" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
                 <el-input type="text" v-model="forgetForm.familyName " autocomplete="off" />
             </el-form-item>
-            <el-form-item label="名字" prop="givenName" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
+            <el-form-item :label="$t('userOptions.givenName')" prop="givenName" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
                 <el-input type="text" v-model="forgetForm.givenName " autocomplete="off" />
             </el-form-item>
-            <el-form-item label="新密码" prop="newpwd" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
+            <el-form-item :label="$t('userOptions.newPwd')" prop="newpwd" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
                 <el-input type="password" v-model="forgetForm.newpwd " autocomplete="off" />
             </el-form-item>
-            <el-form-item label="确认密码" prop="confirm" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
+            <el-form-item :label="$t('userOptions.confirmNewPwd')" prop="confirm" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
                 <el-input type="password" v-model="forgetForm.confirm " autocomplete="off" />
             </el-form-item>
-            <el-form-item label="验证码" prop="captcha" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
-                <el-input type="text" v-model="forgetForm.captcha" autocomplete="off">
-                </el-input>
-            </el-form-item>
             <el-form-item>
-                <el-button class="forget-button" type='primary' @click="handleSubmit('forget-form')">提交</el-button>
+                <el-button class="forget-button" type='primary' @click="beforeSubmit('forget-form')" >{{$t('confirm')}}</el-button>
             </el-form-item>
         </el-form>
-    </div>
-            </el-card>
-
+        <el-dialog width='300px' :before-close="handleClose" :title="$t('userOptions.yourCaptcha')" :visible.sync="captchaVisible">
+            <el-input type="text" v-model="forgetForm.captcha" autocomplete="off"/>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="primary" @click="handleSubmit('forget-form')">{{$t('confirm')}}</el-button>
+            </span>
+        </el-dialog>
+    </el-card>
 </template>
 <script>
     import {
@@ -61,26 +57,32 @@
                     newpwd: "",
                     confirm: "",
                     captcha: ""
-                }
+                },
+                captchaVisible: false
             };
         },
         computed: {
-            buttonInner() {
-                if (this.isDisable === true) {
-                    return "s 后重新发送";
-                } else {
-                    return "点击发送验证码";
-                }
-            },
-            buttonColor() {
-                if (this.isDisable) {
-                    return "disabled-color";
-                } else {
-                    return "ok-color";
-                }
-            }
+      
         },
         methods: {
+            beforeSubmit(formName) {
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        this.captchaVisible = true
+                        let formData = new FormData();
+                        formData.append('phone', this.$store.state.user.userInfo.mobile)
+                        formData.append('country', this.$store.state.user.userInfo.countryCode)
+                        sendCode(formData).then(res => {
+                            //TODO: 接收验证码需要删除
+                            getCode(this.$store.state.user.userInfo.countryCode, this.$store.state.user.userInfo.mobile)
+                                .then(res => {
+                                    this.$notify.success(res.content)
+                                })
+                        })
+                        // console.log()
+                    }
+                })
+            },
             handleSubmit(formName) {
                 this.$refs[formName].validate(valid => {
                     if (valid) {
@@ -130,57 +132,64 @@
                         this.isDisable = false;
                     }
                 }, 1000);
+            },
+            handleClose(done) {
+                this.$confirm(this.$t('confirmToClose'))
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {});
             }
         },
         created() {}
     }
 </script>
 <style lang='scss' scoped>
-    .forget-password /deep/ {
-        width: 600px;
-        margin: auto;
-        .ok-color {
-            color: white
-        }
-        button:focus {
-            outline: none
-        }
-        .send-code {
-            background: transparent;
-            border: none;
-            border-radius: 0%;
-            width: 26%;
-            color: white;
-             ::before {
-                content: "|";
-                margin-right: 30px;
-                color: #1e2235;
-            }
-        }
-        .el-form /deep/ {
-            .forget-button {
-                // height: 48px;
-                border-radius: 3px;
-                border: none;
-                min-width: 200px;
-                font-size: 16px;
-                width: 100%;
-                background-color: #7a98f7;
-                &:hover {
-                    background-color: #a0b6f9;
-                }
-            }
-            .el-form-item__label {
-                color: #61688a;
-            }
-            .el-input__inner {
-                background-color: #1e2235;
-                color: #c7cce6;
-                box-sizing: border-box; // height: 48px;
-                border: 1px solid #4e5b85;
-                border-radius: 3px;
-                font-size: 16px;
-            }
-        }
-    }
+    // .forget-password /deep/ {
+    //     width: 600px;
+    //     margin: auto;
+    //     .ok-color {
+    //         color: white
+    //     }
+    //     button:focus {
+    //         outline: none
+    //     }
+    //     .send-code {
+    //         background: transparent;
+    //         border: none;
+    //         border-radius: 0%;
+    //         width: 26%;
+    //         color: white;
+    //          ::before {
+    //             content: "|";
+    //             margin-right: 30px;
+    //             color: #1e2235;
+    //         }
+    //     }
+    //     .el-form /deep/ {
+    //         .forget-button {
+    //             // height: 48px;
+    //             border-radius: 3px;
+    //             border: none;
+    //             min-width: 200px;
+    //             font-size: 16px;
+    //             width: 100%;
+    //             background-color: #7a98f7;
+    //             &:hover {
+    //                 background-color: #a0b6f9;
+    //             }
+    //         }
+    //         .el-form-item__label {
+    //             color: #61688a;
+    //         }
+    //         .el-input__inner {
+    //             background-color: #1e2235;
+    //             color: #c7cce6;
+    //             box-sizing: border-box; // height: 48px;
+    //             border: 1px solid #4e5b85;
+    //             border-radius: 3px;
+    //             font-size: 16px;
+    //         }
+    //     }
+    // }
 </style>

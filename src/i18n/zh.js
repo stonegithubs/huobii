@@ -3,6 +3,7 @@ module.exports = {
   siteName: '数字资产交易平台',
   confirm: '确定',
   captcha: '验证码',
+  confirmToClose: '确认关闭?',
   shitHappens: '发生了未知错误',
   navbar: {
     trade: '法币交易',
@@ -137,6 +138,7 @@ module.exports = {
     emialInvaild: '请输入正确的邮箱地址',
     emailAddressTip: '请输入邮箱地址',
     sendEmail: '发送邮件',
-    haveSent: '邮件已发送，请注意查收'
+    haveSent: '邮件已发送，请注意查收',
+    
   }
 }

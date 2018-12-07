@@ -18,16 +18,16 @@
         <el-input v-model="verifyForm.type"></el-input>
       </el-form-item>
       <!-- <el-form-item :label="$t('captcha')" prop="captcha" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
-          <el-input v-model="verifyForm.captcha"></el-input>
-        </el-form-item> -->
+            <el-input v-model="verifyForm.captcha"></el-input>
+          </el-form-item> -->
       <el-form-item>
-        <el-button type="primary" @click="beforeSubmit('verifyForm')">提交</el-button>
+        <el-button type="primary" @click="beforeSubmit('verifyForm')">{{$t('submit')}}</el-button>
       </el-form-item>
     </el-form>
     <div class="ct" v-else>
-      <h3 v-if=" auditFlag === 1|| auditFlag >2"><i style="color: #55a532" class="el-icon-success"></i> 您已经通过了实名认证</h3>
-      <h3 v-if=" auditFlag === 0"><i style="color: dodgerblue" class="el-icon-info"></i> 您提交的信息正在审核中</h3>
-      <h3 v-if=" auditFlag === 2"><i style="color: red" class="el-icon-warning"></i> 审核未通过</h3>
+      <h3 v-if=" auditFlag === 1|| auditFlag >2"><i style="color: #55a532" class="el-icon-success"></i> {{$t('userOptions.verifyPassed')}}</h3>
+      <h3 v-if=" auditFlag === 0"><i style="color: dodgerblue" class="el-icon-info"></i> {{$t('userOptions.verifing')}}</h3>
+      <h3 v-if=" auditFlag === 2"><i style="color: red" class="el-icon-warning"></i>{{$t('userOptions.verifyFailed')}} </h3>
       <div class="vd-inner">
         <div class="verify-info">
           <span>{{$t('userOptions.givenName')}}</span><span>{{ this.$store.state.user.verifyInfo.name }}</span>
@@ -43,9 +43,9 @@
     <el-dialog width='300px' :before-close="handleClose" :title="$t('userOptions.yourCaptcha')" :visible.sync="captchaVisible">
       <el-input v-model="verifyForm.captcha"></el-input>
       <span slot="footer" class="dialog-footer">
-      <!-- <el-button style="" @click="dialogVisible = false">取 消</el-button> -->
-      <el-button type="primary" @click="handleResubmit('verifyForm')">确 定</el-button>
-    </span>
+        <!-- <el-button style="" @click="dialogVisible = false">取 消</el-button> -->
+        <el-button type="primary" @click="handleResubmit('verifyForm')">{{$t('confirm')}}</el-button>
+      </span>
     </el-dialog>
   </el-card>
 </template>
@@ -111,7 +111,7 @@
         });
       },
       handleClose(done) {
-        this.$confirm('确认关闭？')
+        this.$confirm(this.$t('confirmToClose'))
           .then(_ => {
             done();
           })
