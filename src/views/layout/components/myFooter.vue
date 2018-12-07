@@ -1,32 +1,4 @@
 <template>
-  <!-- <el-footer class="footer-wrapper">
-      <el-container class="footer-inner">
-          <dl>
-            <dt><h1>{{ siteName }}</h1></dt>
-            <dd style="margin-right: 60px"><p>{{ siteIntroduction}}</p></dd>
-            <dd class="copyright" style=" margin-top: 90px;
-      display: inline-block; margin-right: 60px">{{ copyright }}</dd>
-          </dl>
-          <dl style="margin-left: auto; width: 100px">
-            <dt><h2>新手指南</h2></dt>
-            <dd v-for="item in guide">
-              <a href="#">{{item}}</a>
-            </dd>
-          </dl>
-          <dl style="width: 100px">
-            <dt><h2>币种资料</h2></dt>
-            <dd v-for="item in coinInfo">
-              <a href="#">{{item}}</a>
-            </dd>
-          </dl>
-          <dl style="width: 100px">
-            <dt><h2>服务协议</h2></dt>
-            <dd v-for="item in agreement">
-              <a href="#">{{item}}</a>
-            </dd>
-          </dl>
-      </el-container>
-    </el-footer> -->
   <footer class="hb-footer">
     <ul>
       <li v-for="(category, id) in list" v-bind:key="id">

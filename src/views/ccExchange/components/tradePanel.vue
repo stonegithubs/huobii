@@ -7,7 +7,7 @@
         <template slot="label">
           <span style="padding:0 15px;margin-left:15px">{{$t('exchange.main.fixedPrice')}}</span>
         </template>
-          <div class="buy">
+          <div class="hb-buy">
                 <div  v-if="!isAuth">
                <router-link :to="{ name: 'registry'}"> {{$t('exchange.sidebar.registry')}}</router-link> {{$t('exchange.sidebar.or')}} <router-link :to="{ name: 'login'}">{{$t('exchange.sidebar.signIn')}} </router-link>{{$t('exchange.sidebar.startTrade')}}
             </div>
@@ -33,7 +33,7 @@
               </div>
             </div>
           </div>
-          <div class="sell">
+          <div class="hb-sell">
             <div  v-if="!isAuth">
                <router-link :to="{ name: 'registry'}"> {{$t('exchange.sidebar.registry')}}</router-link> {{$t('exchange.sidebar.or')}} <router-link :to="{ name: 'login'}">{{$t('exchange.sidebar.signIn')}} </router-link>{{$t('exchange.sidebar.startTrade')}}
             </div>
@@ -68,7 +68,7 @@
               <template slot="label">
               <span style="padding:0 15px">{{$t('exchange.main.marketBestPrice')}}</span>
               </template>
-          <div class="buy">
+          <div class="hb-buy">
                 <div  v-if="!isAuth">
                <router-link :to="{ name: 'registry'}"> {{$t('exchange.sidebar.registry')}}</router-link> {{$t('exchange.sidebar.or')}} <router-link :to="{ name: 'login'}">{{$t('exchange.sidebar.signIn')}} </router-link>{{$t('exchange.sidebar.startTrade')}}
             </div>
@@ -93,7 +93,7 @@
               
             </div>
           </div>
-          <div class="sell">
+          <div class="hb-sell">
                 <div  v-if="!isAuth">
                <router-link :to="{ name: 'registry'}"> {{$t('exchange.sidebar.registry')}}</router-link> {{$t('exchange.sidebar.or')}} <router-link :to="{ name: 'login'}">{{$t('exchange.sidebar.signIn')}} </router-link>{{$t('exchange.sidebar.startTrade')}}
             </div>
@@ -239,8 +239,8 @@
       font-size: 16px;
     }
     
-    .buy,
-    .sell {
+    .hb-buy,
+    .hb-sell {
       width: 350px;
       height: 310px;
       float: left;
