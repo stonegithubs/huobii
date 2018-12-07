@@ -99,6 +99,7 @@ module.exports = {
     fastLogin: '快速登录',
     account: '账号',
     password: '密码',
+    confirmPwd: '确认密码',
     country: '国籍',
     countryTip: '请选择您的的国籍',
     phoneNumber: '手机号码',
@@ -111,6 +112,10 @@ module.exports = {
     forgetPwd: '忘记密码?',
     reSend: '重新发送',
     clickToSendCaptcha: '点击发送验证码',
+    iHaveReadAndConfirm: '我已经阅读并同意',
+    agreement: '《用户协议》',
+    signUp: '注册',
+    confirmAgreement: '您必须同意用户协议'
 
   }
 }

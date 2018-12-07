@@ -70,7 +70,16 @@ export function sendCaptcha(data) {
   })
 }
 
-// todo:测试发送验证码 需要删除
+// TODO:测试收到验证码 需要删除
+export function getCaptcha(phoneNumber, country) {
+  return request({
+    url: '/api/v1/public/user/captcha_t',
+    method: 'get',
+    params: { phone: phoneNumber, country: country }
+  })
+}
+
+// TODO:测试发送验证码 需要删除
 export function sendCode(data) {
   return request({
     url: '/api/v1/token/code_t',
@@ -78,21 +87,13 @@ export function sendCode(data) {
     data
   })
 }
-// todo:测试获取验证码 需要删除
+
+// TODO:测试获取验证码 需要删除
 export function getCode(country, phone) {
   return request({
     url: '/api/v1/token/code_t',
     method: 'get',
     params: { country: country, phone: phone }
-  })
-}
-
-// todo:测试收到验证码 需要删除
-export function getCaptcha(phoneNumber) {
-  return request({
-    url: '/api/v1/public/user/captcha_t',
-    method: 'get',
-    params: { phone: phoneNumber }
   })
 }
 

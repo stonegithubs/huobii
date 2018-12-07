@@ -145,7 +145,7 @@
                                     duration: 0
                                 });
                             } else {
-                                this.$notify.error()
+                                this.$notify.error(this.$t('shitHappens'),)
                             }
                         }).catch(_ => {});
                     }, 4000);
@@ -165,7 +165,7 @@
             },
         },
         beforeDestroy() {
-            clearInterval(this.counter);
+            // clearInterval(this.counter);
         },
     }
 </script>

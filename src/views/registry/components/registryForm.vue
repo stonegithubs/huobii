@@ -1,37 +1,36 @@
 <template>
   <el-form class="registry-form" ref="registryForm" :model="registryForm" :rules="rules" status-icon label-width="100px">
-    <el-form-item label="国籍">
-      <el-select v-model="registryForm.region" placeholder="请选择您的国籍">
+    <el-form-item :label="$t('login.country')">
+      <el-select v-model="registryForm.region" :placeholder="$t('login.countryTip')">
         <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" v-bind:key="item.id"></el-option>
       </el-select>
     </el-form-item>
-    <el-form-item label="手机号" prop="phone">
-      <el-input v-model="registryForm.phone" type="text" placeholder="手机号" autocomplete="off">
+    <el-form-item :label="$t('login.account')" prop="phone">
+      <el-input v-model="registryForm.phone" type="text" :placeholder="$t('login.phoneNumber')" autocomplete="off">
         <template slot="suffix">
             <el-button class="send-code" :class="buttonColor" @click="sendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
 </template>
       </el-input>
     </el-form-item>
-    <el-form-item label="密码" prop="password">
-      <el-input v-model="registryForm.password" type="password" placeholder="请输入登录密码" autocomplete="off" />
+    <el-form-item :label="$t('login.password')" prop="password">
+      <el-input v-model="registryForm.password" type="password" :placeholder="$t('login.pwdTip')" autocomplete="off" />
     </el-form-item>
-    <el-form-item label="确认密码" prop="confirm">
-      <el-input v-model="registryForm.confirm" type="password" placeholder="再次输入登录密码" autocomplete="off" />
+    <el-form-item :label="$t('login.confirmPwd')" prop="confirm">
+      <el-input v-model="registryForm.confirm" type="password" :placeholder="$t('login.confirmPwd')" autocomplete="off" />
     </el-form-item>
-    <el-form-item label="验证码" prop="code">
-      <el-input v-model="registryForm.code" type="text" placeholder="请输入验证码" autocomplete="off" @keyup.enter.native ="sendCode">
-       
+    <el-form-item :label="$t('captcha')" prop="code">
+      <el-input v-model="registryForm.code" type="text" :placeholder="$t('login.captchaTip')" autocomplete="off" @keyup.enter.native ="sendCode">
       </el-input>
     </el-form-item>
-    <!--   <el-form-item label="邀请码" prop="inviteCode">
-      <el-input v-model="registryForm.inviteCode" type="text" placeholder="您的邀请码（选填）" autocomplete="off" />
+   <!-- <el-form-item>
+      <vue-recaptcha  size='Invisible' :sitekey="getSiteKey" @verify="getVerify"></vue-recaptcha>
     </el-form-item> -->
     <el-form-item>
-      <el-checkbox v-model="checked">我已阅读并同意 <router-link :to="{ name: 'agreement'}">《用户协议》</router-link>
+      <el-checkbox v-model="checked">{{$t('login.iHaveReadAndConfirm')}} <router-link :to="{ name: 'agreement'}">{{$t('login.agreement')}}</router-link>
       </el-checkbox>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="handleRegistry('registryForm')">注册</el-button>
+      <el-button type="primary" @click="handleRegistry('registryForm')">{{$t('login.signUp')}}</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -52,8 +51,12 @@
   import {
     mapGetters
   } from 'vuex'
+  import VueRecaptcha from 'vue-recaptcha';
   export default {
     name: "registry-form",
+    components: {
+      VueRecaptcha
+    },
     data() {
       let vallidatePassword = (rule, value, callback) => {
         if (value === "") {
@@ -102,12 +105,10 @@
             trigger: "blur"
           }],
           password: [{
-              require: true,
-              validator: checkPasswrod,
-              trigger: "change"
-            }
-            // todo:  密码的验证和后端保持一致  手机号正则暂时不需要 以后台为准
-          ],
+            require: true,
+            validator: checkPasswrod,
+            trigger: "change"
+          }],
           confirm: [{
             require: true,
             validator: vallidatePassword,
@@ -121,15 +122,20 @@
           // inviteCode: [
           //   { require: false }
           // ]
-        }
+        },
       };
     },
     computed: {
+      ...mapGetters([
+        // 'getCountry',
+        // 'getCountryCodeByAbbr',
+        'getSiteKey'
+      ]),
       buttonInner() {
         if (this.isDisable === true) {
-          return "s 后重新发送";
+          return "s " + this.$t('login.reSend');
         } else {
-          return "点击发送验证码";
+          return this.$t('login.clickToSendCaptcha');
         }
       },
       buttonColor() {
@@ -146,13 +152,12 @@
     },
     methods: {
       sendCode() {
-        // console.log('已经发送')
         if (this.registryForm.region === '') {
-          this.$notify.error('请选择国籍')
+          this.$notify.error(this.$t('login.countryIsRequired'))
           return false
         }
         if (this.registryForm.phone === '') {
-          this.$notify.error('请输入您的手机号')
+          this.$notify.error(this.$t('login.accountIsRequired'))
           return false
         }
         let phone = new FormData();
@@ -161,17 +166,17 @@
         phone.append("country", this.registryForm.region);
         sendCaptcha(phone).then(responese => {
           setTimeout(() => {
-            getCaptcha(regionPhone).then(responese1 => {
-              if (responese1 && responese1.code == '200') {
-                this.$notify({
-                  title: "验证码",
-                  message: responese1.content,
-                  duration: 0
-                });
-              } else {
-                this.$notify.error('发生了未知错误')
-              }
-            }).catch(_ => {});
+              getCaptcha(regionPhone, this.registryForm.region).then(responese1 => {
+                  if (responese1.code == '200') {
+                      this.$notify({
+                          title: this.$t('captcha'),
+                          message: responese1.content,
+                          duration: 0
+                      });
+                  } else {
+                      this.$notify.error(this.$t('shitHappens'),)
+                  }
+              }).catch(_ => {});
           }, 4000);
         });
         (this.isDisable = true), this.timeRest--;
@@ -186,7 +191,6 @@
           }
         }, 1000);
       },
-    
       doSubmit() {
         let regionPhone = this.getCountryCodeByAbbr(this.registryForm.region) + this.registryForm.phone
         let form = new FormData();
@@ -220,12 +224,15 @@
             }
           });
         } else {
-          this.$notify.warning("您必须同意用户协议");
+          this.$notify.warning(this.$t('login.confirmAgreement'));
         }
-      }
+      },
+      // getVerify(verifyCode){
+      //   this.handleRegistry('registryForm')
+      // }
     },
     beforeDestroy() {
-      clearInterval(this.counter);
+      // clearInterval(this.counter);
     },
     created() {
       if (getCountry.length === 0) {
@@ -237,54 +244,28 @@
 <style lang="scss" scoped>
   @import "../../../assets/custom-theme/theme";
   .registry-form /deep/ {
+    .ok-color {
+      color: $hbHoverColor;
+    }
     input {
-      color: #61688a !important;
-      background-color: #1e2235; // height: 48px;
       width: 100%;
-      border: 1px solid;
     }
     .el-select {
       width: 100%;
     }
-    .disabled-color {
-      color: #606266 !important;
-    }
-    .el-input.is-active .el-input__inner,
-    .el-input__inner:focus {
-      color: $hbColor !important;
-      border-color: $hbHoverColor;
-    }
-    .el-checkbox__input.is-checked+.el-checkbox__label {
-      color: #7a98f7;
-    }
-    .el-checkbox__input.is-checked .el-checkbox__inner,
-    .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-      background-color: #7a98f7;
-      border-color: #7a98f7;
-    }
     .el-button--primary {
-      background-color: #7a98f7;
-      border-color: #7a98f7;
+      // background-color: #7a98f7;
+      // border-color: #7a98f7;
       width: 180px;
-    }
-    .el-checkbox {
-      color: #c7cce6;
     }
     .send-code {
       background: transparent;
       border: none;
-      border-radius: 0%;
-      color: #7a98f7;
+      border-radius: 0%; // color: #7a98f7;
        ::before {
         content: "|";
-        margin-right: 30px;
-        color: #1e2235;
+        margin-right: 30px; // color: #1e2235;
       }
-    }
-    .el-button--primary:focus,
-    .el-button--primary:hover {
-      background-color: #a0b6f9;
-      border-color: #a0b6f9;
     }
   }
 </style>
