@@ -132,6 +132,12 @@ module.exports = {
     givenName: '名字',
     idNo: '证件号码',
     type: '证件类型',
-    yourCaptcha: '请输入您收到的验证码'
+    yourCaptcha: '请输入您收到的验证码',
+    bindEmail: '绑定邮箱',
+    emailAddress: '邮箱地址',
+    emialInvaild: '请输入正确的邮箱地址',
+    emailAddressTip: '请输入邮箱地址',
+    sendEmail: '发送邮件',
+    haveSent: '邮件已发送，请注意查收'
   }
 }

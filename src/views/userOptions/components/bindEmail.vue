@@ -1,14 +1,17 @@
 <template>
-  <div class="bind-email">
-    <el-form :model="emailForm" status-icon ref="emailForm" label-width="100px">
-      <el-form-item label="邮箱地址" prop="address" :rules="[{ required: true, message: '请输入邮箱地址', trigger: 'blur' },{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }]">
+  <el-card  class="box-card">
+  <div slot="header" class="clearfix">
+    <span>{{$t('userOptions.bindEmail')}}</span>
+  </div>
+    <el-form label-position='top' :model="emailForm" status-icon ref="emailForm" label-width="100px">
+      <el-form-item :label="$t('userOptions.emailAddress')" prop="address" :rules="[{ required: true, message: $t('userOptions.emailAddressTip'), trigger: 'blur' },{ type: 'email', message: $t('userOptions.emialInvaild'), trigger: ['blur', 'change'] }]">
         <el-input type="text" v-model="emailForm.address" autocomplete="off" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitEmailForm('emailForm')">发送邮件</el-button>
+        <el-button type="primary" @click="submitEmailForm('emailForm')">{{$t('userOptions.sendEmail')}}</el-button>
       </el-form-item>
     </el-form>
-  </div>
+</el-card>
 </template>
 
 <script>
@@ -33,13 +36,13 @@
             console.log(bindEmail)
             bindEmail(formData).then(response => {
               if (response.content) {
-                this.$notify.success('邮件已发送，请注意查收')
+                this.$notify.success(this.$t('userOptions.haveSent'))
                 this.$router.goBack()
               } else {
                 alert(response.message)
               }
             }).catch(error => {
-              this.$notify.error(error.message)
+              // this.$notify.error(error.message)
             })
           }
         })
