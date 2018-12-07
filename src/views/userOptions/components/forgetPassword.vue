@@ -136,6 +136,7 @@
             handleClose(done) {
                 this.$confirm(this.$t('confirmToClose'))
                     .then(_ => {
+                        this.captchaVisible = false
                         done();
                     })
                     .catch(_ => {});

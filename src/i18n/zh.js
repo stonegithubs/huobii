@@ -3,6 +3,7 @@ module.exports = {
   siteName: '数字资产交易平台',
   confirm: '确定',
   captcha: '验证码',
+  submit: '提交',
   confirmToClose: '确认关闭?',
   shitHappens: '发生了未知错误',
   navbar: {
@@ -139,6 +140,12 @@ module.exports = {
     emailAddressTip: '请输入邮箱地址',
     sendEmail: '发送邮件',
     haveSent: '邮件已发送，请注意查收',
-    
+    verifyPassed: '您已经通过了实名认证',
+    verifing: '您提交的信息正在审核中',
+    verifyFailed: '审核未通过',
+    setTradePwd: '设置交易密码',
+    tradePwd: '当前交易密码,如果没有设置则为登陆密码',
+    tradePwdRequire: '请输入交易密码',
+    tradePwdTip: '长度在6到8个字符'
   }
 }
