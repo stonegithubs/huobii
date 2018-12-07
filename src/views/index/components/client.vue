@@ -38,12 +38,14 @@ export default {
     .wrap-in {
       height: 500px;
       text-align: center;
+      color:#f2f3f8;
       h3 {
         font-size: 28px;
         margin-bottom: 30px;
       }
       p {
         font-size: 15px;
+        color: #9eb5ca;
       }
     }
     .wrap-bg {

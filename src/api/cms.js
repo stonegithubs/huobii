@@ -36,7 +36,7 @@ export function linkCategory() {
   return request({
     url: '/api/v1/public/cms/link/category',
     method: 'post',
-    params: { page: 0, size: 4 }
+    params: { page: 0, size: 10 }
   })
 }
 
@@ -45,6 +45,6 @@ export function cmsLink(category_id) {
   return request({
     url: '/api/v1/public/cms/link',
     method: 'post',
-    params: { category: category_id, page: 0, size: 5 }
+    params: { category: category_id, page: 0, size: 10 }
   })
 }

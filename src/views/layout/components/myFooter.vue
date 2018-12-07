@@ -29,14 +29,14 @@
     </el-footer> -->
   <footer class="hb-footer">
     <ul>
-      <li v-for="(category, id) in categorys" v-bind:key="id">
+      <li v-for="(category, id) in list" v-bind:key="id">
         <span>{{ category.name }}</span>
-        <a v-for="(link,index) in category.linkList" v-bind:key="index" :href="link.href">{{ link.title }}</a>
+        <a :class="category.id === item.parentID? '':'hid'"  v-for="item  in linkList" v-bind:key="item.id" :href="item.href">{{ item.title }}</a>
       </li>
     </ul>
   </footer>
 </template>
-
+ 
 <script>
   import {
     cmsLink,
@@ -54,12 +54,22 @@
     data() {
       return {
         categorys: [],
+        links: [],
+      }
+    
+    },
+    computed: {
+      // getList = () => this.categorys,
+      list(){
+        return this.categorys
+      },
+      linkList(){
+        return this.links;
       }
     },
     created() {
       linkCategory()
         .then(res => {
-          
           for(let item of res.content.records){
             this.categorys.push({
               id:item.id,
@@ -69,13 +79,16 @@
         })
         .then(() => {
           for(let item of this.categorys){
+            // item.linkList = []
             cmsLink(item.id).then(res => {
               for(let link of res.content.records){
-                item.linkList = []
-                item.linkList.push({
-                  title:link.title, 
-                  href:link.href,
+                // vm.$set(vm.item)
+                this.links.push({
+                  'parentID': item.id,
+                  'title':link.title, 
+                  'href':link.href,
                 })
+                console.log(item)
               }
             });
 
@@ -91,6 +104,9 @@
     height: 330px;
     background-color: #0a151e;
     padding-top: 50px;
+    .hid {
+      display: none
+    }
     ul {
       width: 1000px;
       margin: auto;

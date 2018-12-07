@@ -25,7 +25,7 @@
           </el-table-column>
           <el-table-column prop="low" :label="$t('index.tradeShow.low')"  min-width="170">
           </el-table-column>
-          <el-table-column prop="amount" :label="$t('index.tradeShow.vol24h')" min-width="135" :formatter="amountFormatter">
+          <el-table-column prop="amount" :label="$t('index.tradeShow.vol24h')" min-width="135" >
           </el-table-column>
         </el-table>
       </el-tab-pane>
