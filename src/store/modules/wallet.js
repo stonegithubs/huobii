@@ -1,34 +1,47 @@
-import { CoinBalanceBoth } from "../../api/wallet";
+import { CoinBalanceBoth, ordersAll } from "../../api/wallet";
 
 const wallet = {
   state: {
-    coinBalance:[]
-
+    coinBalance: [],
+    orderHistory: [],
   },
   mutations: {
     SET_COINBALANCE: (state, list) => {
       state.userInfo = list
     },
+    SET_ORDERHISTORY:(state, list) => {
+      state.orderHistory = list
+    }, 
   },
- actions: {
-    //查询所有币种所有余额
+  actions: {
+    // 查询所有币种所有余额
     GetCoinBalanceBoth({ commit }) {
       return new Promise((resolve, reject) => {
         CoinBalanceBoth().then(response => {
-          commit('SET_COINBALANCE',response.content)
+          commit('SET_COINBALANCE', response.content)
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
+    getOrderHistoryAll({ commit }, symbol) {
+      return new Promise((resolve, reject) => {
+        ordersAll(symbol).then(response => {
+          commit('SET_ORDERHISTORY', response.content)
         }).catch(error => {
           reject(error)
         })
       })
     }
- },
- getters: {
-    getCoinBalance(state){
+
+  },
+  getters: {
+    getCoinBalance(state) {
       return state.coinBalance;
     },
-   getCoinBalanceByName:(state)=>(balanceName)=>{
-      for(item of state.coinBalance) {
-        if(item == balanceName){
+    getCoinBalanceByName: (state) => (balanceName) => {
+      for (item of state.coinBalance) {
+        if (item == balanceName) {
           return item
         }
       }
@@ -44,7 +57,7 @@ const wallet = {
         remarks: "",
         userId: ""
       }
-   }
+    }
   }
 
 };

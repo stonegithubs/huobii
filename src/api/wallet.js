@@ -16,3 +16,21 @@ export function addressAdd(abbr, address, remarks) {
     params: { abbr: abbr, address: address, remarks: remarks }
   })
 }
+
+// 币币订单查询全部
+export function ordersAll(symbol) {
+  return request({
+    url: '/api/v1/coin_trade/orders_symbol_all',
+    method: 'post',
+    params: { symbol: symbol }
+  })
+}
+
+// 币币订单条件查询
+export function orders() {
+  return request({
+    url: '/api/v1/coin_trade/orders_symbol',
+    method: 'post',
+    // params: { abbr: abbr, address: address, remarks: remarks }
+  })
+}

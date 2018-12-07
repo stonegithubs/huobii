@@ -1,29 +1,27 @@
 <template>
     <el-form label-position='top' ref="loginForm" :model="loginForm" status-icon label-width="100px" class="login-form">
-        <el-form-item label="国籍" prop="region" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]">
-            <el-select v-model="loginForm.region" placeholder="请选择您的国籍">
+    <el-form-item :label="$t('login.country')" prop="region" :rules="[{ required: true, message:$t('login.countryIsRequired'), trigger: 'blur' }]">
+            <el-select v-model="loginForm.region" :placeholder="$t('login.countryTip')">
                 <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" v-bind:key="item.id"></el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="手机号" prop="phone" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]">
-            <el-input v-model="loginForm.phone" type="text" placeholder="手机号" autocomplete="off">
+        <el-form-item :label="$t('login.account')" prop="phone" :rules="[{ required: true, message: $t('login.accountIsRequired'), trigger: 'blur' }]">
+            <el-input v-model="loginForm.phone" type="text" :placeholder="$t('login.phoneNumber')" autocomplete="off">
                 <template slot="suffix">
-                <el-button class="send-code" :class="buttonColor" @click="msendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
-</template>
-      </el-input>
+                    <el-button class="send-code" :class="buttonColor" @click="msendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
+                </template>
+             </el-input>
     </el-form-item>
-    <el-form-item label="验证码" prop="code" :rules="[{ required: true, message: '请输入密码', trigger: 'blur' }]">
-      <el-input v-model="loginForm.code" type="text" placeholder="请输入验证码" autocomplete="off" />
+    <el-form-item :label="$t('captcha')" prop="code" :rules="[{ required: true, message: $t('login.captchaIsRequired'), trigger: 'blur' }]">
+      <el-input v-model="loginForm.code" type="text" :placeholder="$t('login.captchaTip')" autocomplete="off" />
     </el-form-item>
-    <el-form-item>
-      <el-dialog title='are you robot?' :visible.sync="dialogTableVisible" width='302px'>
-        <vue-recaptcha ref="invisibleRecaptcha" size='Invisible' :sitekey="getSiteKey" @verify="getVerify"></vue-recaptcha>
-      </el-dialog>
+     <el-form-item>
+      <vue-recaptcha ref="invisibleRecaptcha" size='Invisible' :sitekey="getSiteKey" @verify="getVerify"></vue-recaptcha>
     </el-form-item>
     <el-form-item>
-      <el-button class="login-btn" type="primary" @click="dialogTableVisible = true">登录</el-button>
+      <el-button class="login-btn" type="primary" @click="getVerify">{{$t('login.login')}}</el-button>
       <div style="float:right;margin-top: 24px;margin-right: 116px;">
-        <router-link :to="{ name: 'forget_password'}">忘记密码</router-link>
+        <router-link :to="{ name: 'forget_password'}">{{$t('login.forgetPwd')}}</router-link>
       </div>
     </el-form-item>
   </el-form>
@@ -59,7 +57,8 @@
                 counter: {},
                 isDisable: false,
                 isVerify: false,
-                dialogTableVisible: false,
+                mycode: '',
+                // dialogTableVisible: false,
             }
         },
         computed: {
@@ -70,9 +69,9 @@
             ]),
             buttonInner() {
                 if (this.isDisable === true) {
-                    return "s 后重新发送";
+                    return "s " + this.$t('login.reSend');
                 } else {
-                    return "点击发送验证码";
+                    return this.$t('login.clickToSendCaptcha');
                 }
             },
             buttonColor() {
@@ -98,28 +97,37 @@
                         formData.append('captcha', verifyCode)
                         formData.append('code', this.loginForm.code)
                         this.$store.dispatch('FastLogin', formData).then(responese => {
-                            if (responese && responese.code === '200') {
+                            if (responese.code === '200') {
                                 this.$router.push({
                                     name: 'index'
                                 })
-                                this.$message.success(responese.message)
+                                // this.$message.success(responese.message)
                             } else {
-                                window.location.reload()
-                                this.$notify.error(responese.message)
+                                this.$alert(responese.message, this.$t('login.failed'), {
+                                    confirmButtonText: this.$t('confirm'),
+                                    callback: action => {
+                                        window.location.reload()
+                                    }
+                                });
                             }
                         }).catch(err => {
-                            this.$message.error(err.message)
+                            this.$alert(err.message, this.$t('login.failed'), {
+                                confirmButtonText: this.$t('confirm'),
+                                callback: action => {
+                                    window.location.reload()
+                                }
+                            });
                         })
                     }
                 })
             },
             msendCode() {
-                if(this.loginForm.region === ''){
-                    this.$notify.error('请选择国籍')
+                if (this.loginForm.region === '') {
+                    this.$notify.error(this.$t('login.countryIsRequired'))
                     return false
                 }
-                if(this.loginForm.phone === ''){
-                    this.$notify.error('请输入您的手机号')
+                if (this.loginForm.phone === '') {
+                    this.$notify.error(this.$t('login.accountIsRequired'))
                     return false
                 }
                 // console.log('已经发送')
@@ -128,19 +136,19 @@
                 phone.append("phone", regionPhone);
                 phone.append("country", this.loginForm.region)
                 sendCode(phone).then(responese => {
-                  setTimeout(() => {
-                    getCode(this.loginForm.region, regionPhone).then(responese1 => {
-                      if (responese1 && responese1.code == '200') {
-                        this.$notify({
-                          title: "验证码",
-                          message: responese1.content,
-                          duration: 0
-                        });
-                      } else {
-                        this.$notify.error('发生了未知错误')
-                      }
-                    }).catch(_ => {});
-                  }, 4000);
+                    setTimeout(() => {
+                        getCode(this.loginForm.region, regionPhone).then(responese1 => {
+                            if (responese1 && responese1.code == '200') {
+                                this.$notify({
+                                    title: this.$t('captcha'),
+                                    message: responese1.content,
+                                    duration: 0
+                                });
+                            } else {
+                                this.$notify.error()
+                            }
+                        }).catch(_ => {});
+                    }, 4000);
                 });
                 this.isDisable = true
                 this.timeRest--;
@@ -166,17 +174,15 @@
     .login-form /deep/ {
         width: 520px;
         .disabled-color {
-            color: #606266 !important;
+            // color: #606266 !important;
         }
         .send-code {
             background: transparent;
             border: none;
-            border-radius: 0%;
-            color: #7a98f7;
+            border-radius: 0%; // color: #7a98f7;
              ::before {
                 content: "|";
-                margin-right: 30px;
-                color: #1e2235;
+                margin-right: 30px; // color: #1e2235;
             }
         }
         .el-select {
@@ -197,22 +203,19 @@
             }
         }
         .login-btn {
-            background-color: #357ce1;
+            // background-color: #357ce1;
             margin-top: 20px;
-            color: #fff;
-            border: 1px solid #357ce1;
+            color: #fff; // border: 1px solid #357ce1;
             width: 200px;
         }
         .el-input__inner {
-            color: #61688a;
-            background-color: #1e2235; // height: 48px;
-            width: 100%;
-            border: 1px solid
-        }
-        .el-input.is-active .el-input__inner,
-        .el-input__inner:focus {
-            color: $hbColor;
-            border-color: $hbHoverColor;
-        }
+            // color: #61688a;
+            // background-color: #1e2235; // height: 48px;
+            width: 100%; // border: 1px solid
+        } // .el-input.is-active .el-input__inner,
+        // .el-input__inner:focus {
+        //     color: $hbColor;
+        //     border-color: $hbHoverColor;
+        // }
     }
 </style>

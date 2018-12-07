@@ -32,7 +32,7 @@ const user = {
         loginByUsername(formData).then(response => {
           commit('SET_TOKEN', response.content)
           sessionStorage.setItem('Authorization', response.content)
-          resolve(response.message)
+          resolve(response)
         }).catch(error => {
           reject(error)
         })
@@ -44,7 +44,7 @@ const user = {
           fastLogin(formData).then(response => {
             commit('SET_TOKEN', response.content)
             sessionStorage.setItem('Authorization', response.content)
-            resolve(response.message)
+            resolve(response)
           }).catch(error => {
             reject(error)
           })

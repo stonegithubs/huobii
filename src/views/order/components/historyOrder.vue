@@ -1,23 +1,35 @@
 <template>
     <div class="history-order">
-      <el-table :data="currentOrderData"  style="width: 100%">
-        <el-table-column prop="date" label="时间" width="150"> </el-table-column>
-        <el-table-column prop="type" label="交易类型" width="90"> </el-table-column>
-        <el-table-column prop="market" label="市场"> </el-table-column>
-        <el-table-column prop="price" label="价格"> </el-table-column>
-        <el-table-column prop="number" label="数量"> </el-table-column>
-        <el-table-column prop="total" label="委托总额"> </el-table-column>
-        <el-table-column prop="deal" label="已成交"> </el-table-column>
-        <el-table-column prop="average" label="成交均价"> </el-table-column>
-        <el-table-column prop="status" label="状态"> </el-table-column>
-        <el-table-column prop="id" label="操作"> </el-table-column>
-      </el-table>
-      <div class="co-pagination">
+      <el-table :data="currentOrderData" style="width: 100%">
+      <el-table-column prop="tradeTime" label="时间" width="150"/>
+      <el-table-column prop="direction" label="交易类型" width="90"/>
+      <el-table-column prop="" label="交易对">
+        <template slot-scope="scope">
+          {{scoped.row.forgCoinId}}_{{scoped.row.localCoinId}}
+        </template>
+      </el-table-column>
+      <el-table-column prop="price" label="价格"/>
+      <el-table-column prop="amount" label="数量"/>
+      <el-table-column prop="tradeAmount" label="委托总额"/>
+      <!-- <el-table-column prop="deal" label="已成交"/> -->
+      <!-- <el-table-column prop="average" label="成交均价"/> -->
+      <el-table-column prop="status" label="状态">
+         <template slot-scope="scope">
+          {{scoped.row.status}}
+        </template>
+      </el-table-column>
+      <!-- <el-table-column prop="id" label="操作">
+         <template slot-scope="scope">
+          <el-button type=""></el-button>
+        </template>
+      </el-table-column> -->
+    </el-table>
+      <!-- <div class="co-pagination">
         <el-pagination
           layout="prev, pager, next"
           :total="90">
         </el-pagination>
-      </div>
+      </div> -->
     </div>
 </template>
 
@@ -39,6 +51,11 @@ export default {
         {id: '9',date:'2018-10-05 02:13:30', type: '卖出', 	market: 'BTC_USDT', price:'10069.47300000', number:'0.10000000', total:	'1006.24243689',	deal:'0.00000000',	average:'0.00000000', status: '交易中'},
       ]
     }
+  },
+   computed: {
+    allOrderList(){
+      return this.$store.state.wallet.orderHistory
+    }
   }
 }
 </script>
@@ -47,14 +64,14 @@ export default {
   @import "../../../assets/custom-theme/theme";
   .history-order {
     .el-table {
-      background-color: #1b1e2e;
+      // background-color: #1b1e2e;
     }
     .el-table--border {
-      border-color: #1f2943;
+      // border-color: #1f2943;
       th {
         &.gutter {
           &:last-of-type {
-            border-color: #1f2943;
+            // border-color: #1f2943;
           }
         }
       }
@@ -64,19 +81,19 @@ export default {
         tr {
           &:hover {
             & > td {
-              background-color: #1b1e2e !important;
+              // background-color: #1b1e2e !important;
             }
           }
         }
       }
     }
     .el-table th, .el-table tr {
-      background-color: #1b1e2e;
-      color: #c7cce6;
+      // background-color: #1b1e2e;
+      // color: #c7cce6;
 
     }
     .el-table td, .el-table th.is-leaf {
-      border-color: #1f2943;
+      // border-color: #1f2943;
       font-size: 12px;
     }
     .el-table--border::after, .el-table--group::after{
@@ -91,7 +108,7 @@ export default {
     }
     .co-pagination {
       height: 60px;
-    }
+      }
     .el-pagination {
       width: 250px;
       margin:25px auto auto;

@@ -1,5 +1,9 @@
 module.exports = {
   lang: '简体中文',
+  siteName: '数字资产交易平台',
+  confirm: '确定',
+  captcha: '验证码',
+  shitHappens: '发生了未知错误',
   navbar: {
     trade: '法币交易',
     exchange: '币币交易',
@@ -83,5 +87,30 @@ module.exports = {
       
 
     }
+  },
+  login: {
+    login: '登录',
+    success: '登录成功',
+    failed: '登录失败',
+    notOurUser: '还不是我们的用户?',
+    registryNow: '立即注册,开始交易',
+    signUpNow: '现在注册',
+    loginWithPassword: '密码登录',
+    fastLogin: '快速登录',
+    account: '账号',
+    password: '密码',
+    country: '国籍',
+    countryTip: '请选择您的的国籍',
+    phoneNumber: '手机号码',
+    pwdTip: '输入您的密码',
+    captchaTip: '请输入验证',
+    captchaIsRequired: '请输入验证码',
+    accountIsRequired: '请输入您的账号',
+    pwdIsRequired: '请输入密码',
+    countryIsRequired: '请输入您的国籍',
+    forgetPwd: '忘记密码?',
+    reSend: '重新发送',
+    clickToSendCaptcha: '点击发送验证码',
+
   }
 }

@@ -106,11 +106,15 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../../assets/custom-theme/theme';
+.el-menu-item {
+      color: $navbarFontColor;
+    }
 .nav {
   height: 60px;
   overflow: hidden;
   background-color: $navbarColor;
-
+ color: $navbarFontColor;
+ 
   .logo-wrapper {
     display: flex;
     align-items: center;
@@ -124,6 +128,15 @@ export default {
     }
   }
 
+  .el-submenu /deep/ {
+    .el-submenu__title {
+      i {
+         color: $navbarFontColor;
+      }
+      color: $navbarFontColor;
+    }
+  }
+  
   .el-menu /deep/ {
     border: none;
     width: 100%;

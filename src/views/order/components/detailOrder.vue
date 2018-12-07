@@ -46,14 +46,14 @@ export default {
   @import "../../../assets/custom-theme/theme";
   .detail-order {
     .el-table {
-      background-color: #1b1e2e;
+      // background-color: #1b1e2e;
     }
     .el-table--border {
-      border-color: #1f2943;
+      // border-color: #1f2943;
       th {
         &.gutter {
           &:last-of-type {
-            border-color: #1f2943;
+            // border-color: #1f2943;
           }
         }
       }
@@ -63,19 +63,19 @@ export default {
         tr {
           &:hover {
             & > td {
-              background-color: #1b1e2e !important;
+              // background-color: #1b1e2e !important;
             }
           }
         }
       }
     }
     .el-table th, .el-table tr {
-      background-color: #1b1e2e;
-      color: #c7cce6;
+      // background-color: #1b1e2e;
+      // color: #c7cce6;
 
     }
     .el-table td, .el-table th.is-leaf {
-      border-color: #1f2943;
+      // border-color: #1f2943;
       font-size: 12px;
     }
     .el-table--border::after, .el-table--group::after{
@@ -90,7 +90,7 @@ export default {
     }
     .co-pagination {
       height: 60px;
-    }
+      }
     .el-pagination {
       width: 250px;
       margin:25px auto auto;
