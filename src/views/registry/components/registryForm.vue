@@ -8,7 +8,7 @@
     <el-form-item :label="$t('login.account')" prop="phone">
       <el-input v-model="registryForm.phone" type="text" :placeholder="$t('login.phoneNumber')" autocomplete="off">
         <template slot="suffix">
-            <el-button class="send-code" :class="buttonColor" @click="sendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
+              <el-button class="send-code" :class="buttonColor" @click="sendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
 </template>
       </el-input>
     </el-form-item>
@@ -60,9 +60,9 @@
     data() {
       let vallidatePassword = (rule, value, callback) => {
         if (value === "") {
-          callback(new Error("请再次输入密码"));
+          callback(new Error(this.$t('login.confirmPwd')));
         } else if (value !== this.registryForm.password) {
-          callback(new Error("两次输入密码不一致!"));
+          callback(new Error(this.$t('login.pwdNotConsistent')));
         } else {
           callback();
         }
@@ -72,7 +72,7 @@
           "^(?:(?=.*[0-9].*)(?=.*[A-Za-z].*)(?=.*[,\\.#%'\\+\\*\\-:;^_`].*))[,\\.#%'\\+\\*\\-:;^_`0-9A-Za-z]{8,30}$"
         );
         if (!reg.test(value)) {
-          callback("密码不能低于8位且由字符、数字、字母构成");
+          callback(this.$t('login.pwdRule'));
         } else {
           callback();
         }
@@ -81,7 +81,7 @@
         if (value !== "") {
           callback();
         } else {
-          callback("请输入验证码");
+          callback(this.$t('login.captchaTip'));
         }
       };
       return {
@@ -101,7 +101,7 @@
         rules: {
           phone: [{
             require: true,
-            message: "请输入账号",
+            message: this.$t('login.accountIsRequired'),
             trigger: "blur"
           }],
           password: [{
@@ -166,17 +166,17 @@
         phone.append("country", this.registryForm.region);
         sendCaptcha(phone).then(responese => {
           setTimeout(() => {
-              getCaptcha(regionPhone, this.registryForm.region).then(responese1 => {
-                  if (responese1.code == '200') {
-                      this.$notify({
-                          title: this.$t('captcha'),
-                          message: responese1.content,
-                          duration: 0
-                      });
-                  } else {
-                      this.$notify.error(this.$t('shitHappens'),)
-                  }
-              }).catch(_ => {});
+            getCaptcha(regionPhone, this.registryForm.region).then(responese1 => {
+              if (responese1.code == '200') {
+                this.$notify({
+                  title: this.$t('captcha'),
+                  message: responese1.content,
+                  duration: 0
+                });
+              } else {
+                this.$notify.error(this.$t('shitHappens'), )
+              }
+            }).catch(_ => {});
           }, 4000);
         });
         (this.isDisable = true), this.timeRest--;

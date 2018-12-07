@@ -115,7 +115,8 @@ module.exports = {
     iHaveReadAndConfirm: '我已经阅读并同意',
     agreement: '《用户协议》',
     signUp: '注册',
-    confirmAgreement: '您必须同意用户协议'
-
+    confirmAgreement: '您必须同意用户协议',
+    pwdRule: '密码不能低于8位且由字符、数字、字母构成',
+    pwdNotConsistent: '两次输入的密码不一致',
   }
 }
