@@ -8,8 +8,8 @@
     <el-form-item :label="$t('login.account')" prop="phone">
       <el-input v-model="registryForm.phone" type="text" :placeholder="$t('login.phoneNumber')" autocomplete="off">
         <template slot="suffix">
-              <el-button class="send-code" :class="buttonColor" @click="sendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
-</template>
+          <el-button class="send-code" :class="buttonColor" @click="sendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
+        </template>
       </el-input>
     </el-form-item>
     <el-form-item :label="$t('login.password')" prop="password">
@@ -100,22 +100,22 @@
         },
         rules: {
           phone: [{
-            require: true,
+            required: true,
             message: this.$t('login.accountIsRequired'),
             trigger: "blur"
           }],
           password: [{
-            require: true,
+            required: true,
             validator: checkPasswrod,
             trigger: "change"
           }],
           confirm: [{
-            require: true,
+            required: true,
             validator: vallidatePassword,
             trigger: "blur"
           }],
           captcha: [{
-            require: true,
+            required: true,
             validator: captchaCheck,
             trigger: "blur"
           }]

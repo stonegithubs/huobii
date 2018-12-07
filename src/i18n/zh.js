@@ -83,9 +83,7 @@ module.exports = {
       notClosed: '未成交',
       operation: '操作',
       depth: '深度图',
-      realtimeTrade: '实施成交',
-
-
+      realtimeTrade: '实施成交'
     }
   },
   login: {
@@ -128,6 +126,7 @@ module.exports = {
     currentPwd: '当前密码',
     newPwd: '新密码',
     confirmNewPwd: '确认新密码',
+    confirmTochange: '确认修改',
     familyName: '姓氏',
     givenName: '名字',
     idNo: '证件号码',
