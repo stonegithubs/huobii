@@ -8,6 +8,24 @@ export function CoinBalanceBoth() {
   })
 }
 
+// 币币转法币
+export function coin2currency(coinId ,amount) {
+  return request({
+    url: '/api/v1/wallet/coin/coin2currency',
+    method: 'post',
+    params: { coinId ,amount }
+  })
+}
+
+// 法币转币币
+export function currency2coin(coinId ,amount) {
+  return request({
+    url: '/api/v1/wallet/coin/currency2coin',
+    method: 'post',
+    params: { coinId ,amount }
+  })
+}
+
 // 添加提币地址
 export function addressAdd(abbr, address, remarks) {
   return request({

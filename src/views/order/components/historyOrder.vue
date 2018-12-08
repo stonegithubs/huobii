@@ -1,6 +1,6 @@
 <template>
   <div class="current-order">
-    <el-table  :data="currentOrderData" style="width: 100%">
+    <el-table v-loading='this.loading'  :data="currentOrderData" style="width: 100%">
         <el-table-column :label="$t('exchange.main.time')">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.updateDate===null?0: scope.row.updateDate) }}</span>
@@ -81,14 +81,17 @@ import  { mapGetters} from 'vuex'
       return {
         currentOrderData: [],
         page: 0,
-        symbolName: 'usdt_btc'
+        symbolName: 'usdt_btc',
+        loading: true
       }
     },
     methods: {
       update() {
         this.page++
+         this.loading = true
           getOrderBySymbolName(page, 10, 10, this.symbolName, 8, '2018-12-08', '2038-12-08', 1)
           .then(response => {
+             this.loading = false
             if (response.content.records instanceof Array) {
               this.currentOrderData = response.content.records
             }
@@ -96,8 +99,10 @@ import  { mapGetters} from 'vuex'
       }
     },
     created() {
+      this.loading = true
       getOrderBySymbolName(0, 10, 10, this.symbolName, 8, '2018-12-08', '2038-12-08', 1)
         .then(response => {
+          this.loading = false
           if (response.content.records instanceof Array) {
             this.currentOrderData = response.content.records
           }

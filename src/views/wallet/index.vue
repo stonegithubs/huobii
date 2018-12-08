@@ -2,9 +2,9 @@
   <div class="trade-finance">
     <div class="top-info">
       <div>
-        <h2 class="font18">我的资产</h2>
+        <h2 class="font18">{{$t('wallet.myProperty')}}</h2>
       </div>
-      <div class="value-show">
+      <!-- <div class="value-show">
         <p class="font14">
 
           <span class="font-gray">总资产折合: </span>
@@ -16,7 +16,7 @@
           <span class="font-gray">缴纳保证金: </span>
           {{ estimatedValue }} {{ $store.getters.getCurrencyType}}
         </p>
-      </div>
+      </div> -->
 
     </div>
     <trade-assets/>

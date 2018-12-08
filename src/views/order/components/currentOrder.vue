@@ -1,6 +1,6 @@
 <template>
   <div class="current-order">
-    <el-table :data="currentOrderData" style="width: 100%">
+    <el-table  v-loading='this.loading'  :data="currentOrderData" style="width: 100%">
       <el-table-column :label="$t('exchange.main.time')">
         <template slot-scope="scope">
               <span>{{ parseTime(scope.row.updateDate===null?0: scope.row.updateDate) }}</span>
@@ -85,14 +85,17 @@
       return {
         currentOrderData: [],
         page: 0,
-        symbolName: 'usdt_btc'
+        symbolName: 'usdt_btc',
+        loading: true,
       }
     },
     methods: {
       update() {
+        this.loading = true
         this.page++
           getOrderBySymbolName(page, 10, 10, this.symbolName, 9, '2018-12-08', '2038-12-08', 1)
           .then(response => {
+            this.loading = false
             if (response.content.records instanceof Array) {
               this.currentOrderData = response.content.records
             }
@@ -100,9 +103,11 @@
       }
     },
     created() {
+      this.loading = true
       this.$store.dispatch('getSupportCoin').then(_ => {
         getOrderBySymbolName(0, 10, 10, this.symbolName, 9, '2018-12-08', '2038-12-08', 1)
           .then(response => {
+            this.loading = false
             if (response.content.records instanceof Array) {
               this.currentOrderData = response.content.records
             }
