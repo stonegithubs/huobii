@@ -19,6 +19,8 @@ module.exports = {
   confirmToClose: '确认关闭?',
   shitHappens: '发生了未知错误',
   navbar: {
+    myAdv: '我的广告',
+    sendAvd: '发布广告',
     trade: '法币交易',
     exchange: '币币交易',
     c2c: 'C2C交易',
@@ -26,6 +28,8 @@ module.exports = {
     signUp: '注册',
     user: {
       order: '订单',
+      exchangeOrder: '币币订单',    // 
+      financeOrder: '法币订单',     // 
       finance: '资产',
       userProfile: '个人信息',
       userCenter: '个人信息',
@@ -73,7 +77,9 @@ module.exports = {
       notice: '公告'
     },
     main: {
-
+      userCanceled: '用户撤销',   //
+      finished: '已完成',         //
+      status: '状态',             //
       notGet: '未收到',
       getWrong: '收到数量不正确',
       moneyWrong: '扣费不正确',
@@ -169,5 +175,17 @@ module.exports = {
     tradePwd: '当前交易密码,如果没有设置则为登陆密码',
     tradePwdRequire: '请输入交易密码',
     tradePwdTip: '长度在6到8个字符'
+  },
+  advertisetment: {       // 以下
+    businessAuth: '商家申请',
+    appNow: '立即申请',
+    bussinessPrivilege: '成为我们的商家，享受更多交易特权',
+    advSubmit: '广告发布',
+    advPrivilege: '商家自由发布广告，买卖更灵活、更便捷。',
+    ownFlag: '专属标识',
+    vipPri: '商家名称后会显示专属的加V标识，增强交易方信任',
+    o2oSerivce: '一对一服务',
+    o2oPri: '我们将向商家提供一对一专属服务',
+
   }
 }

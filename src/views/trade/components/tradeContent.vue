@@ -3,44 +3,7 @@
     <div>
     </div>
     <el-dialog :modal="false" title="交易详情" :visible.sync="tradeInfoVisible" :lock-scroll="true" :modal-append-to-body="false">
-      <el-form :model="tradeForm" :rules="tradeRule" ref="tradeForm">
-        <div class="trade-tab">
-          <div class="trade-name">{{currentTrade.r_name}}</div>
-          <div class="tt-num"><span>数量：</span>{{currentTrade.num}} {{currentTrade.coin_name}}</div>
-          <div class="tt-limit"><span>限额：</span>{{currentTrade.min_amount}}-{{currentTrade.max_amount}}</div>
-            <div class="tt-price"><span>单价：</span>{{currentTrade.price}}</div>
-            <div  class="tt-payment">
-              <span>支付方式：</span>
-              <div v-for="item  in currentTrade.payment_list">
-                 <svg-icon iconName="alipay" width="25px" height="25px"></svg-icon>
-
-                <!-- <div v-if="item === '支付宝'"><i class="iconfont icon-alipay"></i>支付宝</div>
-                <div v-if="item === '银行转账'"><i class="iconfont icon-yinhangqia"></i>银行转账</div>
-                <div  v-if="item === '微信支付'"><i class="iconfont icon-wechat"></i>微信支付</div> -->
-              </div>
-            </div>
-        </div>
-        <el-form-item label="限额" prop="currency" >
-          <el-input v-model.number="tradeForm.currency"  autocomplete="off" v-on:input="getNumber"></el-input>
-        </el-form-item>
-        <el-form-item label="下单数量" prop="number" >
-          <el-input v-model.number="tradeForm.number" autocomplete="off" v-on:input="getCurrency"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="tradeForm.password" type="password" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="支付方式" prop="payment">
-          <el-select v-model="tradeForm.payment" placeholder="请选择支付方式">
-            <el-option label="支付宝" value="alipay"></el-option>
-            <el-option label="微信" value="wechat"></el-option>
-            <el-option label="银行卡" value="bank"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" style="width: 100%" @click="handleOrder">下单</el-button>
-        </el-form-item>
-
-      </el-form>
+      
     </el-dialog>
     <el-dialog :modal="false" title="设置昵称与交易密码" :visible.sync="verifyVisible" :lock-scroll="true" :modal-append-to-body="false">
       <div style="margin: 20px 0">为保证交易安全，请您耐心完善以下信息</div>
@@ -102,7 +65,8 @@
     </el-dialog>
     <!--高级认证需要测试 视频上传待定--> 
     <el-table class="hidden-xs-only" :data="tradeData" style="width: 100%">
-      <el-table-column prop="true_name" label="商家(订单数|完成率)" width="180">
+   
+      <el-table-column  prop="true_name" label="商家(订单数|完成率)" width="180">
         <template slot-scope="scope">
           <div class="avatar-container" :class="getAvatarColor(scope.row.id)">
             <em class="name">{{scope.row.r_name}}</em>
@@ -128,13 +92,13 @@
         </template>
       </el-table-column>
 
-      <el-table-column sortable  prop="price"  label="单价" >
+      <el-table-column sortable  prop="price"  width="180"  label="单价" >
         <template slot-scope="scope">
           <span class="price">{{ scope.row.price }}</span>
         </template>
       </el-table-column>
 
-      <el-table-column prop="payment_list" label="支付方式">
+      <el-table-column prop="payment_list" width='200'  label="支付方式">
         <template slot-scope="scope">
           <!-- <paymentIcon :paymentList></paymentIcon>  -->
         <span v-for="icon in scope.row.payment_list">
@@ -151,9 +115,27 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="id" label="操作">
-        <template slot-scope="scope">
-          <span><el-button @click="handleTrade(scope.row)" type="primary">购买{{ scope.row.coin_name }}</el-button></span>
+      <!-- // <el-table-column prop="id" label="操作">
+      //   <template slot-scope="scope">
+      //     <span><el-button @click="handleTrade(scope.row)" type="primary">购买{{ scope.row.coin_name }}</el-button></span>
+      //   </template>
+      // </el-table-column> -->
+
+         <el-table-column type="expand" width='100' label="查看详情">
+        <template slot-scope="props">
+          <el-card class="box-card">
+            <el-form :inline="true" :model="tradeForm" :rules="tradeRule" ref="tradeForm">
+              <el-form-item label="审批人">
+                <el-input v-model="tradeForm.number" placeholder="审批人"></el-input>
+              </el-form-item>
+               <el-form-item label="审批人">
+                <el-input v-model="tradeForm.currency" placeholder="审批人"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" style="width: 100%" @click="handleOrder">下单</el-button>
+              </el-form-item>
+              </el-form>
+          </el-card>
         </template>
       </el-table-column>
 
@@ -491,10 +473,10 @@ export default {
       isVerified: true, //todo: 写死 需要请求后台 没验证昵称 安全密码 不可以购买
       isAdvanceVerified: false, //同样写死  是否高级认证
       tradeForm: {
-        password: "",
+        // password: "",
         number: 0,
         currency: 0,
-        payment: ""
+        // payment: ""
       },
       verifyForm: {
         nick_name: "",
@@ -641,13 +623,19 @@ export default {
 };
 </script>
 
-<style lang="scss" >
+<style lang="scss" scoped >
 .trade-content {
   width: 90%;
+  background: #fff;
   .el-table /deep/ {
+
     .cell {
       display: flex;
       align-items: center;
+    }
+    .el-card {
+      margin: -25px -44px;
+      box-shadow:0 0 10px rgba(0,0,0,.2);
     }
   }
   .avatar-container {

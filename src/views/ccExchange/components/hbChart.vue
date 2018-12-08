@@ -9,7 +9,7 @@
       <span class="dis-item">{{$t('index.tradeShow.vol24h')}} {{this.$store.state.coinData.symbolDetail.vol}}</span>
       </div>
     </div>
-    <div class="hc-inner" id="chart"></div>
+    <div v-loading="this.loading" class="hc-inner" id="chart"></div>
   </div>
 </template>
 <script>
@@ -19,7 +19,8 @@ export default {
   name: "hb-chart",
   data() {
     return {
-      currentCoin: this.$store.state.coinData.symbolShow || "btcsudt"
+      currentCoin: this.$store.state.coinData.symbolShow || "btcsudt",
+      loading: true
     };
   },
   computed:{
@@ -318,6 +319,8 @@ targetCoin() {
           if (option && typeof option === "object") {
             myChart.setOption(option, true);
           }
+        }).then(()=>{
+          this.loading = false
         })
         .catch(err => {
           console.log(err);
@@ -325,11 +328,13 @@ targetCoin() {
     }
   },
   mounted() {
+    
     let symbol = this.$store.state.coinData.targetCoin+""+this.$store.state.coinData.mainCoin
     this.initChart(symbol);
   },
   watch:{
     targetCoin: function(){
+      this.loading = true
       let symbol = this.$store.state.coinData.targetCoin+""+this.$store.state.coinData.mainCoin
       
       this.initChart(symbol)
@@ -346,6 +351,9 @@ targetCoin() {
   height: 528px;
   width: 1136px;
    .hc-inner {
+    height: 480px;
+  }
+  #chart {
     height: 480px;
   }
 }

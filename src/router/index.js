@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import layout from '../views/layout/layout'
-import tradeLayout from '../views/tradeLayout/index'
+// import tradeLayout from '../views/tradeLayout/index'
 
 Vue.use(VueRouter)
 
@@ -55,7 +55,7 @@ export const constantRouterMap = [
   },
   {
     path: '/trade',
-    component: tradeLayout,
+    component: layout,
     children: [
       {
         path: '',
@@ -64,17 +64,6 @@ export const constantRouterMap = [
       }
     ]
 
-  },
-  {
-    path: '/welfare',
-    component: layout,
-    children: [
-      {
-        path: '',
-        name: 'welfare',
-        component: () => import('@/views/welfare/index')
-      }
-    ]
   },
   {
     path: '/login',
@@ -101,7 +90,7 @@ export const constantRouterMap = [
 
   },
 
-  {
+  {                               // 币币订单
     path: '/order',
     component: layout,
     children: [
@@ -113,18 +102,6 @@ export const constantRouterMap = [
     ]
 
   },
-  // {
-  //   path: '/finance',
-  //   component: layout,
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'finance',
-  //       component: () => import('@/views/finance/index')
-  //     }
-  //   ]
-
-  // },
   {
     path: '/agreement',
     component: layout,
@@ -137,18 +114,6 @@ export const constantRouterMap = [
     ]
 
   },
-  // {
-  //   path: '/verify',
-  //   component: layout,
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'verify',
-  //       component: () => import('@/views/verify/index')
-  //     }
-  //   ]
-
-  // },
   {
     path: '/user_center',
     component: layout,
@@ -160,6 +125,35 @@ export const constantRouterMap = [
       }
     ]
 
+  },
+  {
+    path: '/ads',
+    component: layout,
+    children: [
+      {
+        path: 'ads',
+        name: 'ads',
+        component: () => import('@/views/advertisement/index'),
+        children: [
+          {
+            path: '/ads/business',
+            name: 'advAuth',
+            component: () => import('@/views/advertisement/components/advAuth')
+          },
+          {
+            path: '/ads/advList',
+            name: 'advList',
+            component: () => import('@/views/advertisement/components/advList')
+          },
+          {
+            path: '/ads/',
+            name: 'advertising',
+            component: () => import('@/views/advertisement/components/advertising')
+          },
+          
+        ]
+      }
+    ]
   },
   {
     path: '/userOptions',
@@ -200,77 +194,11 @@ export const constantRouterMap = [
             component: () => import('@/views/userOptions/components/forgetPassword')
           }
         ]
-      }
-      // {
-      //   path: 'change_password',
-      //   name: 'change_password',
-      //   component: () => import('@/views/userOptions/index'),
-      //   children: [
-      //     {
-      //       path: '',
-      //       component: () => import('@/views/userOptions/components/changePasswordForm')
-      //     }
-      //   ]
-      // },
-      // {
-      //   path: '/userOptions/change_trade_password',
-      //   name: 'change_trade_password',
-      //   component: () => import('@/views/userOptions/index')
-      // },
-      // {
-      //   path: '/userOptions/change_phone',
-      //   name: 'change_phone',
-      //   component: () => import('@/views/userOptions/index')
-
-      // },
-      // {
-      //   path: '/userOptions/bind_email',
-      //   name: 'bind_email',
-      //   component: () => import('@/views/userOptions/index')
-
-      // },
-      // {
-      //   path: '/userOptions/verify',
-      //   name: 'verify',
-      //   component: () => import('@/views/userOptions/index')
-
-      // },
-      // {
-      //   path: '/userOptions/forget',
-      //   name: 'forget_password',
-      //   component: () => import('@/views/userOptions/index')
-
-      // }
-    ]
-
+      }]
   },
-  // {
-  //   path: '/bind_email',
-  //   component: layout,
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'bind_email',
-  //       component: () => import('@/views/bindEmail/index')
-  //     }
-  //   ]
-
-  // },
-  // {
-  //   path: '/change_phone',
-  //   component: layout,
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'change_phone',
-  //       component: () => import('@/views/changePhone/index')
-  //     }
-  //   ]
-
-  // },
   {
     path: '/order_detail/:id',
-    component: tradeLayout,
+    component: layout,
     children: [
       {
         path: '',
@@ -282,7 +210,7 @@ export const constantRouterMap = [
   // 订单详情
   {
     path: '/trader/:id',
-    component: tradeLayout,
+    component: layout,
     children: [
       {
         path: '',
@@ -294,7 +222,7 @@ export const constantRouterMap = [
   // 用户信息
   {
     path: '/trade_user_center',
-    component: tradeLayout,
+    component: layout,
     children: [
       {
         path: '',
@@ -305,8 +233,8 @@ export const constantRouterMap = [
   },
   // 法币交易个人中心
   {
-    path: '/trade_order',
-    component: tradeLayout,
+    path: '/trade_order',           // 法币订单
+    component: layout,
     children: [
       {
         path: '',
@@ -317,19 +245,19 @@ export const constantRouterMap = [
   },
   // 法币交易订单列表
   {
-    path: '/trade_finance',
-    component: tradeLayout,
+    path: '/wallet',
+    component: layout,
     children: [
       {
         path: '',
-        name: 'tradeFinance',
-        component: () => import('@/views/tradeFinance/index')
+        name: 'wallet',
+        component: () => import('@/views/wallet/index')
       }
     ]
   },
   {
     path: '/withdraw_address',
-    component: tradeLayout,
+    component: layout,
     children: [
       {
         path: '',
@@ -351,6 +279,7 @@ export const constantRouterMap = [
     ]
   },
   { path: '*', redirect: '/404', hidden: true }
+
 ]
 
 const router = new VueRouter({

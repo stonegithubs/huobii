@@ -26,6 +26,7 @@ const coinTrade = {
     }
   },
   actions: {
+    
     getHistoryOrders({ commit }, symbolName, state) {
       return new Promise((resolve, reject) => {
         getOrderBySymbolName(0, 20, 10, symbolName, state, '2018-12-08', '2038-12-08', 1)
@@ -54,7 +55,7 @@ const coinTrade = {
     // 主页委托使用 初始化两栏交易
     initOrdersByName({ commit }, symbolName) {
     // 查询历史订单到history
-      getOrderBySymbolName(0, 500, 10, symbolName, 2, '2018-12-08', '2038-12-08', 1)
+      getOrderBySymbolName(0, 500, 10, symbolName, 8, '2018-12-08', '2038-12-08', 1)
         .then(response => {
           commit('SET_HISTORY', response.content.records)
         })

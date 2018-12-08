@@ -19,11 +19,12 @@ import ElContainer from "element-ui/packages/container/src/main";
   }
 </script>
 
-<style lang="scss">
-  .trade {
+<style lang="scss" scoped>
+  .trade /deep/ {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    background-color: #fff;
     .trade-select{
 
     }

@@ -33,6 +33,7 @@
     computed: {
       // getList = () => this.categorys,
       list(){
+
         return this.categorys
       },
       linkList(){
@@ -40,7 +41,11 @@
       }
     },
     created() {
-      linkCategory()
+      // this.categorys = sessionStorage.getItem("categorys", this.categorys)
+      // this.links = sessionStorage.getItem("links", this.links)
+      if( false){ }
+      else{
+        linkCategory()
         .then(res => {
           for(let item of res.content.records){
             this.categorys.push({
@@ -48,6 +53,7 @@
               name:item.name,
             })
           }
+          // sessionStorage.setItem("categorys", JSON.stringify(this.categorys));
         })
         .then(() => {
           for(let item of this.categorys){
@@ -55,18 +61,32 @@
             cmsLink(item.id).then(res => {
               for(let link of res.content.records){
                 // vm.$set(vm.item)
-                this.links.push({
+                let i = {
                   'parentID': item.id,
                   'title':link.title, 
                   'href':link.href,
-                })
+                }
+                this.links.push(i)
                 // console.log(item)
               }
             });
 
           }
+
+        //   console.log(this.links instanceof Array)
+        //   // let a = []
+        //   window.a = this.links
+        //   console.log(a)
+        //   let arr = []
+        //   // for(let item of this.links){
+        //   //   let a = {  }
+        //   // }
+        // sessionStorage.setItem("links", this.links);
+        
         })
         .catch(_ => {});
+      }
+       
     }
   };
 </script>

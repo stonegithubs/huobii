@@ -50,11 +50,13 @@
             </template>
           </el-table-column>
 
-          <!-- <el-table-column :label="$t('exchange.main.operation')">
+          <el-table-column
+          :label="$t('exchange.main.status')">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="appeal(scope.row)">{{$t('appeal')}}</el-button>
+              <span v-if="(scope.row.price*scope.row.amount - Number(scope.row.tradeAmount)) === 0"> {{$t('exchange.main.finished')}}</span>
+              <span v-else>{{$t('exchange.main.userCanceled')}} </span>
             </template>
-          </el-table-column> -->
+           </el-table-column>
           </el-table>
       <el-dialog
         :title="$t('appeal')"
@@ -146,9 +148,9 @@ import {
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import "../../../assets/custom-theme/theme";
-  .order-history {
+  .order-history /deep/ {
     width: 1136px;
     min-height: 190px;
     /*background-color: darkgoldenrod;*/
@@ -172,20 +174,8 @@ import {
         .cell {
           white-space: pre;
           overflow:unset;
+          font-size: 12px;
         }
-      }
-      .el-table th,
-      .el-table tr {
-        // background-color: #181b2a;
-      }
-      .el-table--border::after,
-      .el-table--group::after,
-      .el-table::before {
-        display: none;
-      }
-      .el-table td,
-      .el-table th.is-leaf {
-        border-bottom: none;
       }
     }
   }

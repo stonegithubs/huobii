@@ -8,7 +8,6 @@
     <div style="width: 86%">
       <el-menu
         :default-active="$route.path"
-        :text-color="$navbarFontColor"
         background-color="#243445"
         
         active-text-color="#ffffff"
@@ -29,11 +28,26 @@
             <router-link :to="{ name: 'welfare'}">糖果活动</router-link>
           </el-menu-item> -->
         </slot>
-        <div class="right-nav">
-          <router-link :to="{ name: 'order'}" v-if="checkAuth">
-            <i class="iconfont icon-file-text"></i>{{$t("navbar.user.order")}}
-          </router-link>
-          <router-link :to="{ name: 'finance'}" v-if="checkAuth">
+        <div class="right-nav" v-if="checkAuth">
+           
+          <el-submenu index='4'>
+            <template slot="title">
+              <i class="iconfont icon-file-text"></i>{{$t("navbar.user.order")}}
+            </template>
+
+              <router-link :to="{ name: 'order'}">
+            <el-menu-item index="4-1">
+                 {{$t("navbar.user.exchangeOrder")}}
+          </el-menu-item>
+            </router-link>
+              <router-link :to="{ name: 'tradeOrder'}">
+            <el-menu-item index="4-2">
+                 {{$t("navbar.user.financeOrder")}}
+          </el-menu-item>
+            </router-link>
+          </el-submenu>
+          
+          <router-link :to="{ name: 'wallet'}" v-if="checkAuth">
             <i class="iconfont icon-wallet"></i>{{$t("navbar.user.finance")}}
           </router-link>
           <el-submenu index="5" v-if="checkAuth">
@@ -49,7 +63,13 @@
             <router-link :to="{ name: 'verify'}">
               <el-menu-item index="5-3">{{$t("navbar.user.verify")}}</el-menu-item>
             </router-link>
-            <el-menu-item index="5-4" @click="logoutHandler">{{$t("navbar.user.logout")}}</el-menu-item>
+             <router-link :to="{ name: 'advList'}">
+              <el-menu-item index="5-4">{{$t("navbar.myAdv")}}</el-menu-item>
+            </router-link>
+             <router-link :to="{ name: 'advertising'}">
+              <el-menu-item index="5-5">{{$t("navbar.sendAvd")}}</el-menu-item>
+            </router-link>
+            <el-menu-item index="5-6" @click="logoutHandler">{{$t("navbar.user.logout")}}</el-menu-item>
           </el-submenu>
           <router-link :to="{ name: 'login'}" v-if="!checkAuth">{{$t("navbar.signIn")}}</router-link>
           <router-link :to="{ name: 'registry'}" v-if="!checkAuth">{{$t("navbar.signUp")}}</router-link>
