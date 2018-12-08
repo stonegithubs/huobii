@@ -1,6 +1,6 @@
 <template>
     <el-form label-position='top' ref="loginForm" :model="loginForm" status-icon label-width="100px" class="login-form">
-    <el-form-item :label="$t('login.country')" prop="region" :rules="[{ required: true, message:$t('login.countryIsRequired'), trigger: 'blur' }]">
+        <el-form-item :label="$t('login.country')" prop="region" :rules="[{ required: true, message:$t('login.countryIsRequired'), trigger: 'blur' }]">
             <el-select v-model="loginForm.region" :placeholder="$t('login.countryTip')">
                 <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" v-bind:key="item.id"></el-option>
             </el-select>
@@ -8,8 +8,8 @@
         <el-form-item :label="$t('login.account')" prop="phone" :rules="[{ required: true, message: $t('login.accountIsRequired'), trigger: 'blur' }]">
             <el-input v-model="loginForm.phone" type="text" :placeholder="$t('login.phoneNumber')" autocomplete="off">
                 <template slot="suffix">
-                    <el-button class="send-code" :class="buttonColor" @click="msendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
-                </template>
+                        <el-button class="send-code" :class="buttonColor" @click="msendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
+</template>
              </el-input>
     </el-form-item>
     <el-form-item :label="$t('captcha')" prop="code" :rules="[{ required: true, message: $t('login.captchaIsRequired'), trigger: 'blur' }]">
@@ -58,8 +58,12 @@
                 isDisable: false,
                 isVerify: false,
                 mycode: '',
+                cacheVerifyCode: null,
                 // dialogTableVisible: false,
             }
+        },
+        mounted(){
+            this.cacheVerifyCode = null
         },
         computed: {
             ...mapGetters([
@@ -89,6 +93,19 @@
         },
         methods: {
             getVerify(verifyCode) {
+                let myCode = verifyCode
+                if ((Object.prototype.toString.call(myCode) === '[object MouseEvent]') && this.cacheVerifyCode === null) {
+                    // 如果没有正确显示验证码则返回值不是字符串 并且没有缓存到上一次的验证码 
+                    //  提示网络状况
+                    this.$notify.error(this.$t('googleCaptchaNeed'))
+                    // console.log('无法加载谷歌验证码，请检查您的网络状况'+ verifyCode)
+                    return false;
+                }
+                if (Object.prototype.toString.call(myCode) === '[object MouseEvent]' && Object.prototype.toString.call(this.cacheVerifyCode) === '[object String]') {
+                    // 如果点击按钮并且拿到上一次的缓存谷歌验证码 则把上一次的有效验证码提交
+                    myCode = this.cacheVerifyCode
+                    // console.log('检测到先行点击 上一次的谷歌验证码'+ myCode)
+                }
                 this.$refs['loginForm'].validate(valid => {
                     if (valid) {
                         let formData = new FormData()
@@ -118,6 +135,8 @@
                                 }
                             });
                         })
+                    }else {
+                        this.cacheVerifyCode = verifyCode
                     }
                 })
             },
@@ -145,7 +164,7 @@
                                     duration: 0
                                 });
                             } else {
-                                this.$notify.error(this.$t('shitHappens'),)
+                                this.$notify.error(this.$t('shitHappens'), )
                             }
                         }).catch(_ => {});
                     }, 4000);

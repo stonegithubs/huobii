@@ -63,6 +63,9 @@
         this.$router.back()
       }
     },
+        mounted(){
+            this.cacheVerifyCode = null
+        },
     methods: {
       getVerify(verifyCode) {
         let myCode = verifyCode
@@ -76,7 +79,7 @@
         if(Object.prototype.toString.call(myCode) === '[object MouseEvent]' && Object.prototype.toString.call(this.cacheVerifyCode) === '[object String]'){
           // 如果点击按钮并且拿到上一次的缓存谷歌验证码 则把上一次的有效验证码提交
           myCode = this.cacheVerifyCode
-          console.log('检测到先行点击 上一次的谷歌验证码'+ myCode)
+          // console.log('检测到先行点击 上一次的谷歌验证码'+ myCode)
 
         }
         // this.dialogTableVisible = false
@@ -94,6 +97,7 @@
                 })
                 this.$message.success(this.$t('login.success'))
               } else {
+                console.log(responese)
                 this.$alert(responese.message, this.$t('login.failed'), {
                   confirmButtonText: this.$t('confirm'),
                   callback: action => {
