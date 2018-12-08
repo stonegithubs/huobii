@@ -9,7 +9,7 @@ import coinData from './modules/coins'
 import trade from './modules/trade'
 import wallet from './modules/wallet'
 import Common from './modules/common'
-
+import coinTrade from './modules/coin_trade'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
@@ -20,7 +20,8 @@ const store = new Vuex.Store({
     siteCMS,      // 网站CMS
     trade,     	  // 法币交易数据
     wallet,		  // 用户钱包数据
-    Common
+    Common,
+    coinTrade // 币币交易
   }
 })
 

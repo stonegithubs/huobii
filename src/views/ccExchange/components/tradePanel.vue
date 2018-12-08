@@ -177,11 +177,18 @@
     },
     created() {
       this.$store.dispatch('GetCoinBalanceBoth')
+      // console.log(this.getSymbol())
+      this.$store.dispatch('initOrdersByName',this.getSymbol()).catch(_=>{
+              // console.log(_)
+            })
     },
     methods: {
+      getSymbol(){
+          return this.getMainCoin+'_'+this.getTargetCoin
+      },
       //TODO: 交易之前使用谷歌验证器
       handle_xj_buy() {
-        if(Number(this.xj_buyForm.price) === 0){
+        if(Number(this.xj_buyForm.price*this.xj_buyForm.amount) === 0){
             this.$notify.error(this.$t('exchange.main.tradeInvailed'))
             return;
         }
@@ -198,11 +205,19 @@
           formData.append('foreignId', this.$store.getters.getCoinIdByName(this.getTargetCoin))
           formData.append('type', this.xj_buyForm.type)
           submitTrade(formData).then(response => {
-            this.$message({
+            if(response.code === '200'){
+              this.$store.dispatch('GetCoinBalanceBoth')
+              this.$message({
               type: 'success',
               message: this.$t('exchange.main.tradeSucceed')
             });
+            }else{
+              this.$message.error(this.$t('exchange.main.tradeFailed'))
+            }
             console.log(response)
+            this.$store.dispatch('initOrdersByName',this.getSymbol()).catch(_=>{
+              // console.log(_)
+            })
           })
         }).catch(() => {
           this.$message({
@@ -212,7 +227,7 @@
         });
       },
       handle_xj_sell() {
-        if(Number(this.xj_sellForm.price) === 0){
+        if(Number(this.xj_sellForm.price*this.xj_sellForm.amount) === 0){
             this.$notify.error(this.$t('exchange.main.tradeInvailed'))
             return;
         }
@@ -228,13 +243,19 @@
           formData.append('localId', this.$store.getters.getCoinIdByName(this.getMainCoin))
           formData.append('foreignId', this.$store.getters.getCoinIdByName(this.getTargetCoin))
           formData.append('type', this.xj_sellForm.type)
-          // this.$notify.error('等待币种信息完善此模块')
           submitTrade(formData).then(response => {
-            this.$message({
+            if(response.code === '200'){
+              this.$store.dispatch('GetCoinBalanceBoth')
+              this.$message({
               type: 'success',
               message: this.$t('exchange.main.tradeSucceed')
-            });
-            console.log(response)
+            });}else{
+              this.$message.error(this.$t('exchange.main.tradeFailed'))
+            }
+            // console.log(response)
+            this.$store.dispatch('initOrdersByName',this.getSymbol()).catch(_=>{
+              // console.log(_)
+            })
           })
         }).catch(() => {
           this.$message({

@@ -6,21 +6,18 @@
       </div>
     </div>
     <div class="inner">
-      <el-table :data="openOrderList" style="width: 100%">
+      <el-table max-height='600' :data="this.$store.state.coinTrade.openOrders" style="width: 100%">
         <el-table-column :label="$t('exchange.main.time')">
           <template slot-scope="scope">
-                <span>{{ scope.row.tradeTime }}</span>
-</template>
+            <span>{{ parseTime(scope.row.updateDate===null?0: scope.row.updateDate) }}</span>
+            </template>
           </el-table-column>
 
-          <el-table-column
-          :label="$t('index.tradeShow.pair')"
-          >
+          <el-table-column :label="$t('index.tradeShow.pair')">
 <template slot-scope="scope">
   <span>{{ getCoinNameByID(scope.row.forgCoinId).toUpperCase() }}/{{ getCoinNameByID(scope.row.localCoinId).toUpperCase() }}</span>
 </template>
           </el-table-column>
-          <!-- todo:这里id要查询到币种 -->
 
           <el-table-column
             :label="$t('exchange.main.direction')">
@@ -71,7 +68,7 @@
 <template slot-scope="scope">
   <el-button size="mini" type="text" @click="repeal(scope.row)">
     {{$t('repeal')}}</el-button>
-  <el-button size="mini" type="text" @click="appeal(scope.row)">{{$t('appeal')}}</el-button>
+  <!-- <el-button size="mini" type="text" @click="appeal(scope.row)">{{$t('appeal')}}</el-button> -->
 </template>
           </el-table-column>
         </el-table>
@@ -81,8 +78,10 @@
 </template>
 
 <script>
+import { parseTime } from '../../../utils';
+
   import {
-    getOrderBySymbolName
+    getOrderBySymbolName, submitRpeal
   } from "../../../api/coin_trade";
   import {
     mapGetters
@@ -98,25 +97,37 @@
     },
     computed: {
       ...mapGetters([
-        'getCoinNameByID'
+        'getCoinNameByID',
       ])
     },
     created() {
-      // console.log(this.$store.getters.getCoinNameByID)
-      getOrderBySymbolName(0, 20, 10, 'usdt_btc', 9, '2018-12-08', '2038-12-08', 1)
-        .then(response => {
-          this.openOrderList = response.content.records;
-        })
-        .catch(_ => {});
+      // console.log(this.$store.state)
+      // .coinTrade.openOrders)
+      // // console.log(this.$store.getters.getCoinNameByID)
+      // getOrderBySymbolName(0, 20, 10, ' ', 9, '2018-12-08', '2038-12-08', 1)
+      //   .then(response => {
+      //     this.openOrderList = response.content.records;
+      //   })
+      //   .catch(_ => {});
     },
     methods: {
       repeal(row) {
-        console.log(row)
+        this.$confirm(this.$t('confirmToRepal'))
+        .then(_=>{
+            submitRpeal(row.id).then(res=>{
+              if(res.code === '200'){
+              this.$notify.success(this.$t('repealSuccess'))
+          }else{
+            this.$notify.error(this.$t('repealFailed'))
+          }
+          // console.log(res)
+        })
+        })
+        
+        
+        // console.log(row)
       },
-      appeal(row) {
-        this.appealVisible = true
-        console.log(row)
-      },
+      
       handleClose(done) {
         this.$confirm(this.$t('confirmToClose'))
           .then(_ => {
@@ -124,6 +135,9 @@
             done();
           })
           .catch(_ => {});
+      },
+       parseTime(timeStamp){
+        return parseTime(timeStamp)
       }
     }
   };
@@ -150,8 +164,12 @@
       .el-table {
         // background-color: #181b2a;
         color: $hbColor;
-        font-size: 13px;
+        font-size: 12px;
         min-height: 140px;
+         .cell {
+          white-space: pre;
+          overflow:unset;
+        }
       }
       .el-table--border::after,
       .el-table--group::after,

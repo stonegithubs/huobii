@@ -6,10 +6,10 @@
       </div>
     </div>
     <div class="inner">
-      <el-table :data="orderHistoryData" style="width: 100%">
+      <el-table max-height='600' :data="this.$store.state.coinTrade.historyOrders" style="width: 100%">
         <el-table-column :label="$t('exchange.main.time')">
           <template slot-scope="scope">
-           <span>{{ scope.row.tradeTime }}</span>
+           <span>{{ parseTime(scope.row.updateDate===null?0: scope.row.updateDate) }}</span>
            </template>
           </el-table-column>
           <el-table-column :label="$t('index.tradeShow.pair')">
@@ -50,20 +50,18 @@
             </template>
           </el-table-column>
 
-          <el-table-column :label="$t('exchange.main.operation')">
+          <!-- <el-table-column :label="$t('exchange.main.operation')">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="repeal(scope.row)">
-                {{$t('repeal')}}</el-button>
               <el-button size="mini" type="text" @click="appeal(scope.row)">{{$t('appeal')}}</el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           </el-table>
       <el-dialog
         :title="$t('appeal')"
         :visible.sync="appealVisible"
         width="500px"
         :before-close="handleClose">
-      <el-form ref="appealForm" :model="appealForm" label-width="80px">
+        <el-form ref="appealForm" :model="appealForm" label-width="80px">
         <el-form-item :label="$t('appealType')">
           <el-select v-model="appealForm.type" :placeholder="$t('appealReason')">
             <el-option :label="$t('exchange.main.notGet')" value="0"></el-option>
@@ -74,11 +72,10 @@
         <el-form-item :label="$t('appealReason')">
           <el-input v-model="appealForm.reason"></el-input>
         </el-form-item>
-      </el-form>
-        <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitAppeal">{{$t('appeal')}}</el-button>
-          <el-button @click="appealVisible = false">{{$t('canceled')}}</el-button>
-        </span>
+        </el-form>
+          <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="submitAppeal">{{$t('appeal')}}</el-button>
+          </span>
       </el-dialog>
     </div>
   </div>
@@ -86,14 +83,16 @@
 </template>
 
 <script>
+import { parseTime } from '../../../utils';
+import { mapGetters } from 'vuex'
 import {
-    getOrderBySymbolName
+    getOrderBySymbolName, submitAppeals
   } from "../../../api/coin_trade";
   export default {
     name: "order-history",
     data() {
       return {
-        orderHistoryData: [],
+        // orderHistoryData: this.getHistoryOrder,
         appealVisible: false,
         appealForm: {
           id: '',
@@ -102,21 +101,35 @@ import {
         }
       }
     },
+    computed: {
+       ...mapGetters([
+        'getCoinNameByID',
+      ]),
+      // getHistoryOrder(){
+      //   return this.$store.state.coinTrade.historyOrders
+      //   }
+      
+    },
     created(){
-       getOrderBySymbolName(0, 20, 10, 'usdt_btc', 2, '2018-12-08', '2038-12-08', 1)
-        .then(response => {
-          this.orderHistoryData = response.content.records;
-        })
-        .catch(_ => {});
+      console.log(this.getHistoryOrder)
     },
     methods: {
+
       appeal(row) {
         this.appealVisible = true
         this.appealForm.id = row.id
-        console.log(row)
+        // console.log(row)
       },
       submitAppeal(){
-        console.log(this.appealForm)
+        submitAppeals(this.appealForm.id, this.appealForm.reason, this.appealForm.type)
+        .then(res=>{
+          if(res.code === '200'){
+              this.$notify.success(this.$t('appealSuccess'))
+          }else{
+            this.$notify.success(this.$t('appealFailed'))
+          }
+          console.log(res)
+        })
       },
       handleClose(done) {
         this.$confirm(this.$t('confirmToClose'))
@@ -125,6 +138,9 @@ import {
             done();
           })
           .catch(_ => {});
+      },
+      parseTime(timeStamp){
+        return parseTime(timeStamp)
       }
     }
   }
@@ -151,8 +167,12 @@ import {
       .el-table {
         // background-color: #181b2a;
         color: $hbColor;
-        font-size: 13px;
+        font-size: 12px;
         min-height: 140px;
+        .cell {
+          white-space: pre;
+          overflow:unset;
+        }
       }
       .el-table th,
       .el-table tr {

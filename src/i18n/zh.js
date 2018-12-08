@@ -1,4 +1,5 @@
 module.exports = {
+  googleCaptchaNeed: '请点击谷歌验证码，如果未加载请检查您的网络状况',   // 1
   lang: '简体中文',
   siteName: '数字资产交易平台',
   confirm: '确定',
@@ -9,7 +10,12 @@ module.exports = {
   appeal: '申诉',
   appealReason: '申诉理由',
   appealType: '申诉类型',
+  appealSuccess: '申诉成功',  // 1
+  appealFailed: '申诉失败',   // 1
   repeal: '撤销',
+  confirmToRepal: '确定撤销',   // 1
+  repealSuccess: '撤销成功',    //
+  repealFailed: '撤销失败',     //
   confirmToClose: '确认关闭?',
   shitHappens: '发生了未知错误',
   navbar: {
