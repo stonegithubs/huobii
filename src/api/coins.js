@@ -54,11 +54,11 @@ export function getMarketDepth(form) {
 }
 
 // 拉取单个symbol的k线数据
-export function getKlineBySymbolName(symbolName) {
+export function getKlineBySymbolName(symbol, period, size) {
   return request({
     url: 'api/v1/public/market/market/history/kline',
     method: 'post',
     // data: form
-    params: { 'symbol': symbolName, 'period': '1day', 'size': '150' }
+    params: { symbol, period, size }
   })
 }

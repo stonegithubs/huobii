@@ -89,14 +89,15 @@ targetCoin() {
       let upColor = "#f55858";
       let downColor = "#03c087";
       
-      getKlineBySymbolName(symbol)
+      // TODO: 修改为可变
+      getKlineBySymbolName(symbol, '15min', 150)
         .then(res => {
           let rawData = res.content.data;
           var data = this.splitData(rawData);
           myChart.setOption(
             (option = {
               backgroundColor: "#fff",
-              // animation: false,
+              animation: false,
               legend: {
                 bottom: 10,
                 left: "center",
@@ -330,8 +331,9 @@ targetCoin() {
   watch:{
     targetCoin: function(){
       let symbol = this.$store.state.coinData.targetCoin+""+this.$store.state.coinData.mainCoin
+      
       this.initChart(symbol)
-      console.log(symbol)
+      // console.log(symbol)
     }
     }
 };

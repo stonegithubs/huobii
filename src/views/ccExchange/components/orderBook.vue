@@ -130,15 +130,17 @@
     },
     watch: {
       targetCoin: function() {
+        let symbol = this.$store.state.coinData.targetCoin + this.$store.state.coinData.mainCoin
         this.latestLoading = true
-        getMarketDetail(this.$store.state.coinData.targetCoin + this.$store.state.coinData.mainCoin).then(response => {
+        getMarketDetail(symbol).then(response => {
           this.latestPrice = response.content.tick.close
         })
+        this.$store.dispatch('updataPrice', symbol)
         this.latestLoading = false
         clearInterval(this.latestPriceInterval)
         this.latestPriceInterval = setInterval(() => {
           this.latestLoading = true
-          getMarketDetail(this.$store.state.coinData.targetCoin + this.$store.state.coinData.mainCoin).then(response => {
+          getMarketDetail(symbol).then(response => {
             this.latestPrice = response.content.tick.close
             // console.log(this.latestPrice)
           })
