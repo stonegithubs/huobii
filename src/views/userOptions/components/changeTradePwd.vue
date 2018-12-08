@@ -125,7 +125,9 @@
           .catch(_ => {});
       }
     },
-    created() {}
+    created() {
+      
+    }
   }
 </script>
 <style lang='scss' scoped>

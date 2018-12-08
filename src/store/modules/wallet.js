@@ -7,11 +7,11 @@ const wallet = {
   },
   mutations: {
     SET_COINBALANCE: (state, list) => {
-      state.userInfo = list
+      state.coinBalance = list
     },
-    SET_ORDERHISTORY:(state, list) => {
+    SET_ORDERHISTORY: (state, list) => {
       state.orderHistory = list
-    }, 
+    },
   },
   actions: {
     // 查询所有币种所有余额
@@ -40,8 +40,9 @@ const wallet = {
       return state.coinBalance;
     },
     getCoinBalanceByName: (state) => (balanceName) => {
-      for (item of state.coinBalance) {
-        if (item == balanceName) {
+      for (let item of state.coinBalance) {
+        // console.log(item.coinName)
+        if (item.coinName == balanceName) {
           return item
         }
       }

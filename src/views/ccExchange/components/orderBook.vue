@@ -140,7 +140,7 @@
           this.latestLoading = true
           getMarketDetail(this.$store.state.coinData.targetCoin + this.$store.state.coinData.mainCoin).then(response => {
             this.latestPrice = response.content.tick.close
-            console.log(this.latestPrice)
+            // console.log(this.latestPrice)
           })
           this.latestLoading = false
         }, 15000)

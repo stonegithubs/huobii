@@ -3,12 +3,11 @@
     <el-tabs v-model="activeName">
       <!--<div>费率</div>-->
       <el-tab-pane name="xj">
-        
         <template slot="label">
-          <span style="padding:0 15px;margin-left:15px">{{$t('exchange.main.fixedPrice')}}</span>
-        </template>
+            <span style="padding:0 15px;margin-left:15px">{{$t('exchange.main.fixedPrice')}}</span>
+</template>
           <div class="hb-buy">
-                <div  v-if="!isAuth">
+            <div  v-if="!isAuth">
                <router-link :to="{ name: 'registry'}"> {{$t('exchange.sidebar.registry')}}</router-link> {{$t('exchange.sidebar.or')}} <router-link :to="{ name: 'login'}">{{$t('exchange.sidebar.signIn')}} </router-link>{{$t('exchange.sidebar.startTrade')}}
             </div>
             <div class="balance" v-if="isAuth"><span> {{$t('exchange.main.available')}} {{Number(this.getCoinBalanceByName(this.getMainCoin).coinBalance).toFixed(8) }} {{ this.getMainCoin.toUpperCase() }}</span><router-link :to="{ name: 'tradeFinance'}">{{$t('exchange.main.topUps')}}</router-link></div>
@@ -64,10 +63,10 @@
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane name="sj">
-              <template slot="label">
-              <span style="padding:0 15px">{{$t('exchange.main.marketBestPrice')}}</span>
-              </template>
+        <el-tab-pane v-if="false" name="sj">
+<template slot="label">
+  <span style="padding:0 15px">{{$t('exchange.main.marketBestPrice')}}</span>
+</template>
           <div class="hb-buy">
                 <div  v-if="!isAuth">
                <router-link :to="{ name: 'registry'}"> {{$t('exchange.sidebar.registry')}}</router-link> {{$t('exchange.sidebar.or')}} <router-link :to="{ name: 'login'}">{{$t('exchange.sidebar.signIn')}} </router-link>{{$t('exchange.sidebar.startTrade')}}
@@ -129,8 +128,6 @@
         <el-button  class="buy-button" @click="handle_xj_buy" :disabled="!isAuth" :class="isAuth? '':'disabled-button'">买入 <span>{{ this.getTargetCoin.toUpperCase()  }}</span></el-button>
     <el-button class="sell-button" @click="handle_xj_sell" :disabled="!isAuth" :class="isAuth? '':'disabled-button'">卖出 <span>{{ this.getTargetCoin.toUpperCase() }}</span></el-button>
   </div>
-              <!-- <a @click="handle_xj_buy">买入 <span>{{ this.getTargetCoin.toUpperCase()  }}</span></a> -->
-
     </div>
 </template>
 
@@ -151,7 +148,7 @@
         'getTargetCoin',
         'getCoinIdByName'
       ]),
-      isAuth(){
+      isAuth() {
         return !!this.$store.state.user.token
       }
     },
@@ -178,36 +175,73 @@
         },
       }
     },
-    created(){
-     
+    created() {
+      this.$store.dispatch('GetCoinBalanceBoth')
     },
     methods: {
       //TODO: 交易之前使用谷歌验证器
       handle_xj_buy() {
-        let formData = new FormData()
-        formData.append('direction', this.xj_buyForm.direction)
-        formData.append('amount', this.xj_buyForm.amount)
-        formData.append('price', this.xj_buyForm.price)
-        formData.append('localId', this.$store.getters.getCoinIdByName(this.getMainCoin))
-        formData.append('foreignId', this.$store.getters.getCoinIdByName(this.getTargetCoin))
-        formData.append('type', this.xj_buyForm.type)
-        // this.$notify.error('等待币种信息完善此模块')
-        submitTrade(formData).then(response => {
-          console.log(response)
-        })
+        if(Number(this.xj_buyForm.price) === 0){
+            this.$notify.error(this.$t('exchange.main.tradeInvailed'))
+            return;
+        }
+        this.$confirm(this.$t('exchange.main.tradeBuyConfirm')+this.xj_buyForm.price*this.xj_buyForm.amount, this.$t('info'), {
+          confirmButtonText: this.$t('confirm'),
+          cancelButtonText: this.$t('canceled'),
+          type: 'info'
+        }).then(() => {
+          let formData = new FormData()
+          formData.append('direction', this.xj_buyForm.direction)
+          formData.append('amount', this.xj_buyForm.amount)
+          formData.append('price', this.xj_buyForm.price)
+          formData.append('localId', this.$store.getters.getCoinIdByName(this.getMainCoin))
+          formData.append('foreignId', this.$store.getters.getCoinIdByName(this.getTargetCoin))
+          formData.append('type', this.xj_buyForm.type)
+          submitTrade(formData).then(response => {
+            this.$message({
+              type: 'success',
+              message: this.$t('exchange.main.tradeSucceed')
+            });
+            console.log(response)
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: this.$t('exchange.main.tradeCanceled')
+          });
+        });
       },
       handle_xj_sell() {
-        let formData = new FormData()
-        formData.append('direction', this.xj_sellForm.direction)
-        formData.append('amount', this.xj_sellForm.amount)
-        formData.append('price', this.xj_sellForm.price)
-        formData.append('localId', this.$store.getters.getCoinIdByName(this.getMainCoin))
-        formData.append('foreignId', this.$store.getters.getCoinIdByName(this.getTargetCoin))
-        formData.append('type', this.xj_sellForm.type)
-        // this.$notify.error('等待币种信息完善此模块')
-        submitTrade(formData).then(response => {
-          console.log(response)
-        })
+        if(Number(this.xj_sellForm.price) === 0){
+            this.$notify.error(this.$t('exchange.main.tradeInvailed'))
+            return;
+        }
+        this.$confirm(this.$t('exchange.main.tradeSellConfirm')+this.xj_sellForm.price*this.xj_sellForm.amount, this.$t('info'), {
+          confirmButtonText: this.$t('confirm'),
+          cancelButtonText: this.$t('canceled'),
+          type: 'info'
+        }).then(() => {
+          let formData = new FormData()
+          formData.append('direction', this.xj_sellForm.direction)
+          formData.append('amount', this.xj_sellForm.amount)
+          formData.append('price', this.xj_sellForm.price)
+          formData.append('localId', this.$store.getters.getCoinIdByName(this.getMainCoin))
+          formData.append('foreignId', this.$store.getters.getCoinIdByName(this.getTargetCoin))
+          formData.append('type', this.xj_sellForm.type)
+          // this.$notify.error('等待币种信息完善此模块')
+          submitTrade(formData).then(response => {
+            this.$message({
+              type: 'success',
+              message: this.$t('exchange.main.tradeSucceed')
+            });
+            console.log(response)
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: this.$t('exchange.main.tradeCanceled')
+          });
+        });
       },
     },
   }
@@ -218,14 +252,12 @@
   .trade-panel /deep/ {
     width: 763px;
     height: 490px;
-    background-color:$bodyColor ;
-    // padding-left: 30px;
-   .el-tabs /deep/{
-     .el-tabs__content {
-       margin-left: 45px;
-     }
-   }
-   
+    background-color: $bodyColor; // padding-left: 30px;
+    .el-tabs /deep/ {
+      .el-tabs__content {
+        margin-left: 45px;
+      }
+    }
     .el-tabs__header {
       box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
     }
@@ -238,7 +270,6 @@
       line-height: 48px;
       font-size: 16px;
     }
-    
     .hb-buy,
     .hb-sell {
       width: 350px;
@@ -247,13 +278,11 @@
       font-size: 14px;
       .balance {
         height: 40px;
-        line-height: 30px;
-        // border-bottom: 1px solid $hbBackgroundColor;
+        line-height: 30px; // border-bottom: 1px solid $hbBackgroundColor;
         a {
           transition: all .2s ease-in-out;
           float: right;
-          margin-right: 20px;
-          // color: $hbHoverColor;
+          margin-right: 20px; // color: $hbHoverColor;
           &:hover {
             // color: $hbColor;
           }
@@ -272,17 +301,16 @@
         .coin-name {
           line-height: 40px;
           height: 40px;
-          margin-right: 40px;
-          // color: $lightColor;
+          margin-right: 40px; // color: $lightColor;
           font-weight: 600;
         }
         .best-price {
-             line-height: 40px;
-    height: 40px;
-    margin-right: 40px;
-    font-weight: 600;
-    background: #f5f7fa;
-    margin-left: 14px;
+          line-height: 40px;
+          height: 40px;
+          margin-right: 40px;
+          font-weight: 600;
+          background: #f5f7fa;
+          margin-left: 14px;
         }
         a {
           display: inline-block;
@@ -308,8 +336,7 @@
       }
       .math-price {
         width: 90%;
-        height: 24px;
-        // background: rgba(78, 91, 133, .4);
+        height: 24px; // background: rgba(78, 91, 133, .4);
         border-bottom-right-radius: 5px;
         border-bottom-left-radius: 5px;
         span {
@@ -324,26 +351,25 @@
         font-size: 16px;
       }
     }
-    .button-group{
+    .button-group {
       // display: flex;
       // justify-content: space-around;
       .el-button {
         background-color: $hbRed;
-      width: 290px;
-      height: 40px;
-      color: #fff
-      // line-height: 40px;
-    }
-    .sell-button {
-      margin-left: 60px;
-    }
-    .buy-button {
-      margin-left: 45px;
-      background-color: $hbGreen;
-    }
-    .disabled-button {
-      background-color: #d1d3df;
-    }
+        width: 290px;
+        height: 40px;
+        color: #fff // line-height: 40px;
+      }
+      .sell-button {
+        margin-left: 60px;
+      }
+      .buy-button {
+        margin-left: 45px;
+        background-color: $hbGreen;
+      }
+      .disabled-button {
+        background-color: #d1d3df;
+      }
     }
   }
 </style>

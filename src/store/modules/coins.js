@@ -1,7 +1,7 @@
 // 网站货币信息
 
 import { getRemoteSymbols, getRemoteSymbolList, getSupportedCoin, getMarketDetail, getMarketDepth, okcoinTicket } from "../../api/coins";
-import { stat } from "fs";
+// import { stat } from "fs";
 // import store from "../index";
 
 const coinData = {
@@ -258,17 +258,25 @@ const coinData = {
           return item.id
         }
       }
+    },
+    getCoinNameByID: (state) => (ID) => {
+      for (const item of state.supportedCoin) {
+        if (item.id == ID) {
+          return item.abbr
+        }
+      }
+    },
+    getBuyDepth: (state) => {
+      let addUp = 0, buyDepthList = []
+      for (const item of state.buyDepth) {
+        addUp += item[1]
+        let listItem = { 'price': item[0], amount: item[1], 'accumulative': addUp }
+        buyDepthList.push(listItem)
+      }
+      return buyDepthList
     }
-  },
-  getBuyDepth: (state) => {
-    let addUp = 0, buyDepthList = []
-    for (item of state.buyDepth) {
-      addUp += item[1]
-      listItem = { 'price': item[0], amount: item[1], 'accumulative': addUp }
-      buyDepthList.push(listItem)
-    }
-    return buyDepthList
   }
 }
 
-export default coinData;
+export default coinData
+

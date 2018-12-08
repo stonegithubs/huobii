@@ -18,6 +18,15 @@ export function getOrder(form) {
   })
 }
 
+// 获取交易对订单列表
+export function getOrderBySymbolName(page, size, direction, symbol, state, start, end, order) {
+  return request({
+    url: '/api/v1/coin_trade/orders_symbol',
+    method: 'post',
+    params: { page, size, direction, symbol, state, start, end, order }
+  })
+}
+
 // 获取实施成交记录
 export function getHistoryTrade(form) {
   return request({

@@ -22,6 +22,11 @@ export default {
       currentCoin: this.$store.state.coinData.symbolShow || "btcsudt"
     };
   },
+  computed:{
+targetCoin() {
+        return this.$store.state.coinData.targetCoin
+      },
+  },
   methods: {
     calculateMA(dayCount, data) {
       var result = [];
@@ -71,8 +76,10 @@ export default {
         .toLocaleString()
         .replace(/:\d{1,2}$/, " ");
     },
-
-    initChart() {
+    putSymbol(){
+      console.log(this.$store.state.coinData.targetCoin+""+this.$store.state.coinData.mainCoin)
+    },
+    initChart(symbol) {
       var echarts = require("echarts");
 
       let dom = document.getElementById("chart");
@@ -81,7 +88,8 @@ export default {
       let option = null;
       let upColor = "#f55858";
       let downColor = "#03c087";
-      getKlineBySymbolName("btcusdt")
+      
+      getKlineBySymbolName(symbol)
         .then(res => {
           let rawData = res.content.data;
           var data = this.splitData(rawData);
@@ -305,7 +313,7 @@ export default {
             }),
             true
           );
-          console.log(myChart);
+          // console.log(myChart);
           if (option && typeof option === "object") {
             myChart.setOption(option, true);
           }
@@ -313,13 +321,19 @@ export default {
         .catch(err => {
           console.log(err);
         });
-      // console.log(dom);
     }
   },
   mounted() {
-    this.initChart();
-    // var echarts = require('echarts');
-  }
+    let symbol = this.$store.state.coinData.targetCoin+""+this.$store.state.coinData.mainCoin
+    this.initChart(symbol);
+  },
+  watch:{
+    targetCoin: function(){
+      let symbol = this.$store.state.coinData.targetCoin+""+this.$store.state.coinData.mainCoin
+      this.initChart(symbol)
+      console.log(symbol)
+    }
+    }
 };
 </script>
 

@@ -47,6 +47,8 @@
         isDisable: false,
         isVerify: false,
         // dialogTableVisible:false,
+
+        cacheVerifyCode: null, // 缓存谷歌验证码
       }
     },
     computed: {
@@ -63,6 +65,20 @@
     },
     methods: {
       getVerify(verifyCode) {
+        let myCode = verifyCode
+        if((Object.prototype.toString.call(myCode) === '[object MouseEvent]') && this.cacheVerifyCode === null){
+          // 如果没有正确显示验证码则返回值不是字符串 并且没有缓存到上一次的验证码 
+          //  提示网络状况
+          this.$notify.error(this.$t('googleCaptchaNeed'))
+          // console.log('无法加载谷歌验证码，请检查您的网络状况'+ verifyCode)
+          return false;
+        }
+        if(Object.prototype.toString.call(myCode) === '[object MouseEvent]' && Object.prototype.toString.call(this.cacheVerifyCode) === '[object String]'){
+          // 如果点击按钮并且拿到上一次的缓存谷歌验证码 则把上一次的有效验证码提交
+          myCode = this.cacheVerifyCode
+          console.log('检测到先行点击 上一次的谷歌验证码'+ myCode)
+
+        }
         // this.dialogTableVisible = false
         this.$refs['loginForm'].validate(valid => {
           if (valid) {
@@ -70,7 +86,7 @@
             formData.append('username', this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.username)
             formData.append('password', this.loginForm.password)
             formData.append('country', this.loginForm.region)
-            formData.append('captcha', verifyCode)
+            formData.append('captcha', myCode)
             this.$store.dispatch('LoginByUsername', formData).then(responese => {
               if (responese.code === '200') {
                 this.$router.push({
@@ -93,7 +109,9 @@
                 }
               });
             })
-          } else {}
+          } else {
+            this.cacheVerifyCode = verifyCode
+          }
         })
       }
     }
