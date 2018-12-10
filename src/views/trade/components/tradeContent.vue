@@ -287,13 +287,15 @@
     methods: {
       getMerchantList(page, size, direction, payments, coinId, cashId) {
         fbList(page, size, direction, payments, coinId, cashId).then(res => {
-          let content = res.content
-          if (content.records instanceof Array) {
+          if(res.code === '200'){
+            let content = res.content
+            if (content.records instanceof Array) {
             this.merchantList = content.records
             this.total = content.total
           }
-          console.log(this.merchantList)
-        })
+          // console.log(this.merchantList)
+          }
+        }).catch(_=>{})
       },
       search(){
         this.page = 0;

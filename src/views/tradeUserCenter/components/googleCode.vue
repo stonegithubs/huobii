@@ -154,10 +154,6 @@
                 justify-content: space-around;
                 align-items: flex-end;
                 margin-top: 25px;
-                p,
-                span {
-                    // margin-bottom: 0;
-                }
             }
             .ga_detail,
             .ga_text {

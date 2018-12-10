@@ -306,9 +306,7 @@
           transition: all .2s ease-in-out;
           float: right;
           margin-right: 20px; // color: $hbHoverColor;
-          &:hover {
-            // color: $hbColor;
-          }
+         
         }
       }
       .trade-from>span {

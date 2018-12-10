@@ -10,7 +10,7 @@
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
+    "lint": "eslint --ext --fix .js,.vue src test/unit test/e2e/specs",
     "build": "node build/build.js"
   },
   "dependencies": {
@@ -22,7 +22,7 @@
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "node-sass": "^4.9.4",
-    "sass-loader": "^7.1.0",
+    "sass-loader": "^7.1.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

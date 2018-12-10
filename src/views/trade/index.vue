@@ -208,8 +208,8 @@ import ElContainer from "element-ui/packages/container/src/main";
       min-height: 800px;
       margin: auto;
     }
-    .trade-select{
+    // .trade-select{
 
-    }
+    // }
   }
 </style>

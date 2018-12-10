@@ -56,9 +56,9 @@ export default {
 
   }
   /*滚动条的上下两端的按钮*/
-  ::-webkit-scrollbar-button{
+  // ::-webkit-scrollbar-button{
       /*display: none;*/
-  }
+  // }
 
   .upper {
     text-transform: uppercase;
