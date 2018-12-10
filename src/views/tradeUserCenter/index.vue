@@ -82,7 +82,8 @@
                             </div>
                         </div>
                     </el-card>
-                    <el-card class="box-card" :body-style="{ padding: '30px'}">
+
+                    <el-card  class="box-card" width="500" :body-style="{ padding: '30px'}">
                         <div slot="header" class="clearfix">
                             <span style="font-size: 18px; font-weight:700"> 身份认证</span>
                             <p class="font14 font-gray" style="margin-bottom: 0;margin-top: 15px;">请如实填写您的身份信息，一经认证不可修改</p>
@@ -109,7 +110,7 @@
                                     <a v-if="auditFlag !== '4'" class="isActive m-button" @click="adv_verifyDialogVisible = true">认证</a>
                                     <!-- <span v-if="hasAdvVerify" class="isActive m-button">已认证</span> -->
                                 </p>
-                                <el-dialog :modal="true" title="高级认证" :visible.sync="adv_verifyDialogVisible" :lock-scroll="true" center :modal-append-to-body="false">
+                                <el-dialog width='500px' :modal="true" title="高级认证" :visible.sync="adv_verifyDialogVisible" :lock-scroll="true" center :modal-append-to-body="false">
                                     <div style="text-align: center;">
                                         <div class="dialog-info">
                                             <!-- <div style="margin: 20px 0;font-weight: 700;"><span>交易额超过单笔 {{ normalUserMax }}{{ this.currencyType }} 或累计 {{ normalUserTotal }}{{this.currencyType}} 需进行高级认证！</span></div> -->
@@ -137,11 +138,14 @@
                                         <p class="list-desc"><span class="desc-name m-desc-name">{{getPaywayByID(item.paywayId || '-1').payName}}</span>
                                             <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">{{item.pram1 === "null"? '':item.pram1}} {{item.pram2 === "null"? '':item.pram2}} {{item.pram3=== "null"? '':item.pram3}} {{item.pram4 === "null"? '':item.pram4}}</span>
                                             <span class="isActive m-button">
-                                                                            <el-switch active-text='on' inactive-text='off'	 :id="item.paywayId"  @click.native="init(item.paywayId)" v-model="getUserPaywayByID(item.paywayId).statusFlag" active-value="1" inactive-value="0" @change="handleChangePayStatus">
-                                                                            </el-switch>
-                                                                        </span>
+                                                <el-switch active-text='ON' inactive-text='OFF'	 :id="item.paywayId"  @click.native="init(item.paywayId)" v-model="getUserPaywayByID(item.paywayId).statusFlag" active-value="1" inactive-value="0" @change="handleChangePayStatus">
+                                                </el-switch>
+                                            </span>
                                         </p>
                                     </div>
+                            </div>
+                            <div style="text-align:center;margin-top:30px">
+                                <p> <a @click="AddPaymentdialogVisible=true" class="font14" style="color:#638bd4; ">点击添加收款方式</a></p>
                             </div>
                         </div>
                         <div v-else>
@@ -200,7 +204,7 @@
                 return this.$store.state.user.userInfo
             },
             hasPayment() {
-                return this.$store.state.user.payway.length === 0 || this.$store.state.user.payway==={}
+                return this.$store.state.user.payway.length ==! 0 || this.$store.state.user.payway !=={}
             },
             userPayment() {
                 return this.$store.state.user.payway
@@ -251,7 +255,7 @@
             handleChangePayStatus(newValue) {
                 this.$nextTick(() => {
                     let formData = new FormData()
-                    formData.append('id', this.targetPaywayID)
+                    formData.append('payWayId', this.targetPaywayID)
                     formData.append('status', newValue)
                     changePaymentStatus(formData).then(response => {
                         this.$store.dispatch("GetUserPayway");
@@ -319,6 +323,9 @@
 
 <style lang='scss' scoped>
     .trade-user-center /deep/ {
+        .adv-verify {
+            width: 500px;
+        }
         .noo {
             display: none;
         }

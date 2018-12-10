@@ -1,6 +1,15 @@
 import request from '@/utils/request'
 // 货币交易
 
+// 查询法币商家
+export function fbList(page, size, direction, payments, coinId, cashId) {
+  return request({
+    url: '/api/v1/currency_trade/trade_orders',
+    method: 'post',
+    params: { page, size, direction, payments, coinId, cashId }
+  })
+}
+
 // 查询法币订单列表
 export function fbOrders(page, size, direction, localId, foreignId, state, start, end, order) {
   return request({

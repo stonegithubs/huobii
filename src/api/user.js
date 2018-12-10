@@ -70,6 +70,14 @@ export function sendCaptcha(data) {
   })
 }
 
+// 最新验证码接口
+export function codeSender() {
+  return request({
+    url: '/api/v1/verify_code/sms',
+    method: 'post'
+  })
+}
+
 // TODO:测试收到验证码 需要删除
 export function getCaptcha(phoneNumber, country) {
   return request({
@@ -120,5 +128,13 @@ export function bindGoogleAuth(code) {
     url: '/api/v1/user/google_auth/bind',
     method: 'post',
     params: { code: code }
+  })
+}
+
+// 拉取谷歌验证码url
+export function getGoogleUrl() {
+  return request({
+    url: '/api/v1/user/google_auth/url',
+    method: 'post'
   })
 }

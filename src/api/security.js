@@ -36,7 +36,3 @@ export function freeze(data) {
     data
   })
 }
-
-
-
-

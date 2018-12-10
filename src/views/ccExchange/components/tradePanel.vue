@@ -176,11 +176,13 @@
       }
     },
     created() {
+      if(this.$store.state.user.token){
       this.$store.dispatch('GetCoinBalanceBoth')
       // console.log(this.getSymbol())
       this.$store.dispatch('initOrdersByName',this.getSymbol()).catch(_=>{
               // console.log(_)
             })
+      }
     },
     methods: {
       getSymbol(){
@@ -214,7 +216,7 @@
             }else{
               this.$message.error(this.$t('exchange.main.tradeFailed'))
             }
-            console.log(response)
+            // console.log(response)
             this.$store.dispatch('initOrdersByName',this.getSymbol()).catch(_=>{
               // console.log(_)
             })

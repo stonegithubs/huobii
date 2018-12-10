@@ -22,6 +22,9 @@
             <el-form-item :label="$t('userOptions.confirmNewPwd')" prop="confirm" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
                 <el-input type="password" v-model="forgetForm.confirm " autocomplete="off" />
             </el-form-item>
+             <el-form-item :label="$t('login.country')" prop="country" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]">
+                <el-input type="text" v-model="forgetForm.country " autocomplete="off" />
+            </el-form-item>
             <el-form-item>
                 <el-button class="forget-button" type='primary' @click="beforeSubmit('forget-form')" >{{$t('confirm')}}</el-button>
             </el-form-item>
@@ -40,7 +43,9 @@
     } from "../../../api/security";
     import {
         sendCaptcha,
-        getCaptcha
+        getCaptcha,
+        sendCode,
+        getCode,
     } from "../../../api/user";
     export default {
         name: "forget-password",
@@ -52,6 +57,7 @@
                 forgetForm: {
                     phone: "",
                     idcode: "",
+                    country: "",
                     familyName: "",
                     givenName: "",
                     newpwd: "",
@@ -70,11 +76,11 @@
                     if (valid) {
                         this.captchaVisible = true
                         let formData = new FormData();
-                        formData.append('phone', this.$store.state.user.userInfo.mobile)
-                        formData.append('country', this.$store.state.user.userInfo.countryCode)
+                        formData.append('phone', this.forgetForm.phone)
+                        formData.append('country', this.forgetForm.country)
                         sendCode(formData).then(res => {
                             //TODO: 接收验证码需要删除
-                            getCode(this.$store.state.user.userInfo.countryCode, this.$store.state.user.userInfo.mobile)
+                            getCode(this.forgetForm.country, this.forgetForm.phone)
                                 .then(res => {
                                     this.$notify.success(res.content)
                                 })

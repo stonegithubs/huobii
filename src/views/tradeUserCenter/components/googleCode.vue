@@ -44,7 +44,8 @@
     import {
         getGoogleSecret,
         GoogleAuth,
-        bindGoogleAuth
+        bindGoogleAuth,
+        getGoogleUrl,
     } from '../../../api/user'
     export default {
         name: "google-code",
@@ -53,7 +54,8 @@
                 qrCode: "",
                 googleForm: {
                     code: ''
-                }
+                },
+                qrCodeUrl: '',
             }
         },
         methods: {
@@ -61,7 +63,7 @@
                 let qrcode = new qrCode('qrcode', {
                     width: 130, // 设置宽度，单位像素
                     height: 130, // 设置高度，单位像素
-                    text: this.qrCode // 设置二维码内容或跳转地址
+                    text: this.qrCodeUrl // 设置二维码内容或跳转地址
                 })
             },
             copy() {
@@ -84,9 +86,17 @@
             getGoogleSecret().then(res => {
                 if (res.code === '200') {
                     this.qrCode = res.content
+                    
+                }
+            })
+            getGoogleUrl().then(res => {
+                if(res.code === '200'){
+                    this.qrCodeUrl = res.content
                     this.qrcode()
                 }
             })
+            
+
             //  this.$nextTick(() => {
             // })
         }

@@ -48,7 +48,7 @@
       <li>{{$t('wallet.finishTip')}}</li>
       </div>
     </el-dialog>
-    <el-dialog :title="$t('wallet.transfer')" :modal-append-to-body="false" :visible.sync="depositDiaVisible" :before-close="handledepositClose" width="50%">
+    <el-dialog :title="$t('wallet.transfer')" :modal-append-to-body="false" :visible.sync="depositDiaVisible" :before-close="handledepositClose" width="500px">
         <el-form label-position="top" label-width="80px" :model="depositForm" ref="depositForm">
           <el-form-item label="币种">
             <el-select v-model="depositForm.coinId" style="width: 100%" :placeholder="$t('wallet.chooseCoin')">
@@ -91,7 +91,7 @@ import { coin2currency, currency2coin} from '../../../api/wallet'
         loading: true,
         currentCoin: { coinName: 'BTC', address: ''},
         transferDiaVisible : false,
-        depositDiaVisible: true,
+        depositDiaVisible: false,
         QRCODE: '',
         depositForm: {
           depositType: '',
@@ -129,7 +129,7 @@ import { coin2currency, currency2coin} from '../../../api/wallet'
       handleTransfer(item) {
         if(this.QRCODE instanceof Object){
           // this.QRCODE.clear()
-          console.log(document.getElementById('qrcode').innerHTML = '')
+          // console.log(document.getElementById('qrcode').innerHTML = '')
           // document.getElementById('qrcode').html('')
         }
         this.currentCoin = item
@@ -151,7 +151,7 @@ import { coin2currency, currency2coin} from '../../../api/wallet'
           .catch(_ => {});
       },
       qrcode() {
-        console.log(this.currentCoin.address)
+        // console.log(this.currentCoin.address)
             this.QRCODE = new qrCode('qrcode', {
                 width: 130, // 设置宽度，单位像素
                 height: 130, // 设置高度，单位像素

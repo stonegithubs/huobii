@@ -33,17 +33,18 @@
           if (valid) {
             let formData = new FormData()
             formData.append('address', this.emailForm.address)
-            console.log(bindEmail)
+            // console.log(bindEmail)
             bindEmail(formData).then(response => {
-              if (response.content) {
+              // if (response.content) {
                 this.$notify.success(this.$t('userOptions.haveSent'))
-                this.$router.goBack()
-              } else {
-                alert(response.message)
-              }
+                // this.$router.goBack()
+              // } else {
+                // alert(response.message)
+              // }
             }).catch(error => {
               // this.$notify.error(error.message)
             })
+            this.$notify.success(this.$t('userOptions.haveSent'))
           }
         })
       }

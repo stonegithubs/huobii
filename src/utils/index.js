@@ -67,6 +67,7 @@ export function formatTime(time, option) {
 }
 
 export function getAvatarColor(id) {
+  id = id.charCodeAt()
   let colorIndex = id % 10;
   switch (colorIndex) {
     case 0: return 'one';

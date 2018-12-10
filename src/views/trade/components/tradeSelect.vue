@@ -10,7 +10,7 @@
         <a v-for="item in supportedCoin" @click="handleCoinChoose(item.id, 'sell')" href="javascript:;">{{ item.name }}</a>
       </div>
     </div>
-    <div class="m-trade-menu hidden-sm-and-up">
+    <!-- <div class="m-trade-menu hidden-sm-and-up">
         <el-radio-group  v-model="tradeType" size="small">
           <el-radio-button label="购买" ></el-radio-button>
           <el-radio-button label="出售"></el-radio-button>
@@ -19,6 +19,7 @@
         <a v-for="item in supportedCoin" @click="handleCoinChoose(item.id, tradeType)" href="javascript:;">{{ item.name }}</a>
       </div>
     </div>
+     -->
   </div>
 </template>
 

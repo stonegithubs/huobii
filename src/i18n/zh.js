@@ -215,11 +215,14 @@ module.exports = {
     listTip: '充值到账后会在下面的币币交易账户显示，通过划转功能 转至 法币交易账户后即可进行法币买卖交易',
     finishTip: '您充值至上述地址后，需整个网络节点的确认，6次网络确认后可划转，到账时间一般为10分钟-60分钟。',
     chooseCoin: '请选择币种',
-    chooseWallet: '选择您的钱包', 
+    chooseWallet: '选择您的钱包',
     from: '从',
     to: '转至',
     transfer: '资产互转',
+    transferSuccess: '转账成功',
+    transferFailed: '转账失败',
+  },
+  currency: {
     
-
   }
 }

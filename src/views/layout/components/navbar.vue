@@ -28,9 +28,9 @@
             <router-link :to="{ name: 'welfare'}">糖果活动</router-link>
           </el-menu-item> -->
         </slot>
-        <div class="right-nav" v-if="checkAuth">
+        <div class="right-nav" >
            
-          <el-submenu index='4'>
+          <el-submenu v-if="checkAuth" index='4'>
             <template slot="title">
               <i class="iconfont icon-file-text"></i>{{$t("navbar.user.order")}}
             </template>

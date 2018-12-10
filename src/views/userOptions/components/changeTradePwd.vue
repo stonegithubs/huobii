@@ -20,8 +20,8 @@
     <el-dialog width='300px' :before-close="handleClose" :title="$t('userOptions.yourCaptcha')" :visible.sync="captchaVisible">
       <el-input type="password" v-model="tradePwdForm.captcha" autocomplete="off" />
       <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="submitForm('tradePwdForm')">{{$t('confirm')}}</el-button>
-                </span>
+          <el-button type="primary" @click="submitForm('tradePwdForm')">{{$t('confirm')}}</el-button>
+      </span>
     </el-dialog>
   </el-card>
 </template>
@@ -31,7 +31,9 @@
   } from "../../../api/security";
   import {
     sendCaptcha,
-    getCaptcha
+    getCaptcha,
+    sendCode,
+    getCode 
   } from "../../../api/user";
   export default {
     name: "change-trade-pwd",
