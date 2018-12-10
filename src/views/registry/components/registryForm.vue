@@ -36,7 +36,7 @@
 </template>
 <script>
   import {
-    sendCaptcha,
+    sendCaptcha1,
     getCaptcha
   } from "../../../api/user";
   import {
@@ -160,11 +160,8 @@
           this.$notify.error(this.$t('login.accountIsRequired'))
           return false
         }
-        let phone = new FormData();
         let regionPhone = this.getCountryCodeByAbbr(this.registryForm.region) + this.registryForm.phone
-        phone.append("phone", regionPhone);
-        phone.append("country", this.registryForm.region);
-        sendCaptcha(phone).then(responese => {
+        sendCaptcha1(regionPhone, this.registryForm.region).then(responese => {
           setTimeout(() => {
             getCaptcha(regionPhone, this.registryForm.region).then(responese1 => {
               if (responese1.code == '200') {

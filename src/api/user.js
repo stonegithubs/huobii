@@ -78,6 +78,14 @@ export function codeSender() {
   })
 }
 
+// 发送验证码111
+export function sendCaptcha1(phone, country) {
+  return request({
+    url: '/api/v1/public/user/captcha_t',
+    method: 'post',
+    params: { phone, country }
+  })
+}
 // TODO:测试收到验证码 需要删除
 export function getCaptcha(phoneNumber, country) {
   return request({

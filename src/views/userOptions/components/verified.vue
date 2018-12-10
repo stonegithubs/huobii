@@ -52,8 +52,8 @@
 <script>
   import {
     normalVerify,
-    sendCode,
-    getCode
+    sendCaptcha1,
+    getCaptcha
   } from "../../../api/user";
   export default {
     name: "verified",
@@ -76,12 +76,11 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.captchaVisible = true
-            let formData = new FormData();
-            formData.append('phone', this.$store.state.user.userInfo.mobile)
-            formData.append('country', this.$store.state.user.userInfo.countryCode)
-            sendCode(formData).then(res => {
+            let phone = this.$store.state.user.userInfo.mobile
+            let country = this.$store.state.user.userInfo.country
+            sendCaptcha1(phone, country).then(res => {
               //TODO: 接收验证码需要删除
-              getCode(this.$store.state.user.userInfo.countryCode, this.$store.state.user.userInfo.mobile)
+              getCaptcha(phone, country)
                 .then(res => {
                   this.$notify.success(res.content)
                 })
@@ -100,8 +99,9 @@
               formData.append('type', this.verifyForm.type),
               formData.append('captcha', this.verifyForm.captcha),
               normalVerify(formData).then(responese => {
-                if (responese.code == 200) {
+                if (responese.code === '200') {
                   this.$notify.info(responese.message)
+                  this.$router.go(-1)
                 }
               }).catch(err => {
                 this.$notify.error(err.message)

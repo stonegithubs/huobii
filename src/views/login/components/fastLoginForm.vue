@@ -33,7 +33,9 @@
     } from 'vuex'
     import {
         sendCode,
-        getCode
+        getCode,
+        sendCaptcha1,
+        getCaptcha
     } from "../../../api/user";
     import {
         setTimeout,
@@ -150,13 +152,10 @@
                     return false
                 }
                 // console.log('已经发送')
-                let phone = new FormData();
                 let regionPhone = this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.phone
-                phone.append("phone", regionPhone);
-                phone.append("country", this.loginForm.region)
-                sendCode(phone).then(responese => {
+                sendCaptcha1(regionPhone, this.loginForm.region).then(responese => {
                     setTimeout(() => {
-                        getCode(this.loginForm.region, regionPhone).then(responese1 => {
+                        getCaptcha(regionPhone, this.loginForm.region).then(responese1 => {
                             if (responese1 && responese1.code == '200') {
                                 this.$notify({
                                     title: this.$t('captcha'),

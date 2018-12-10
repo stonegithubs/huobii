@@ -10,7 +10,7 @@
             <div  v-if="!isAuth">
                <router-link :to="{ name: 'registry'}"> {{$t('exchange.sidebar.registry')}}</router-link> {{$t('exchange.sidebar.or')}} <router-link :to="{ name: 'login'}">{{$t('exchange.sidebar.signIn')}} </router-link>{{$t('exchange.sidebar.startTrade')}}
             </div>
-            <div class="balance" v-if="isAuth"><span> {{$t('exchange.main.available')}} {{Number(this.getCoinBalanceByName(this.getMainCoin).coinBalance).toFixed(8) }} {{ this.getMainCoin.toUpperCase() }}</span><router-link :to="{ name: 'tradeFinance'}">{{$t('exchange.main.topUps')}}</router-link></div>
+            <div class="balance" v-if="isAuth"><span> {{$t('exchange.main.available')}} {{Number(this.getCoinBalanceByName(this.getMainCoin).coinBalance).toFixed(8) }} {{ this.getMainCoin.toUpperCase() }}</span><router-link :to="{ name: 'wallet'}">{{$t('exchange.main.topUps')}}</router-link></div>
             <div class="trade-from">
               <span> {{$t('exchange.main.buyPrice')}}</span>
               <el-input v-model.number="xj_buyForm.price">
@@ -38,7 +38,7 @@
             </div>
             <div v-if="isAuth" class="balance">
               <span>{{Number(this.getCoinBalanceByName(this.getTargetCoin).coinBalance).toFixed(8)}} {{ this.getTargetCoin.toUpperCase() }}</span>
-              <router-link :to="{ name: 'tradeFinance'}">{{$t('exchange.main.topUps')}}</router-link>
+              <router-link :to="{ name: 'wallet'}">{{$t('exchange.main.topUps')}}</router-link>
             </div>
             <div class="trade-from">
               <span> {{$t('exchange.main.sellPrice')}}</span>
@@ -71,7 +71,7 @@
                 <div  v-if="!isAuth">
                <router-link :to="{ name: 'registry'}"> {{$t('exchange.sidebar.registry')}}</router-link> {{$t('exchange.sidebar.or')}} <router-link :to="{ name: 'login'}">{{$t('exchange.sidebar.signIn')}} </router-link>{{$t('exchange.sidebar.startTrade')}}
             </div>
-            <div v-if="isAuth" class="balance"><span> {{$t('exchange.main.available')}} {{ Number(this.getCoinBalanceByName(this.getMainCoin).coinBalance).toFixed(8) }} {{ this.getMainCoin.toUpperCase() }}</span><router-link :to="{ name: 'tradeFinance'}">{{$t('exchange.main.topUps')}}</router-link></div>
+            <div v-if="isAuth" class="balance"><span> {{$t('exchange.main.available')}} {{ Number(this.getCoinBalanceByName(this.getMainCoin).coinBalance).toFixed(8) }} {{ this.getMainCoin.toUpperCase() }}</span><router-link :to="{ name: 'wallet'}">{{$t('exchange.main.topUps')}}</router-link></div>
             <div class="trade-from">
               <span> {{$t('exchange.main.buyPrice')}}</span>
               <el-input disabled placeholder="" v-model.number="xj_buyForm.price">
@@ -98,7 +98,7 @@
             </div>
             <div class="balance" v-if="isAuth">
               <span>{{Number(this.getCoinBalanceByName(this.getTargetCoin).coinBalance).toFixed(8) }} {{ this.getTargetCoin.toUpperCase() }}</span>
-              <router-link :to="{ name: 'tradeFinance'}">{{$t('exchange.main.topUps')}}</router-link>
+              <router-link :to="{ name: 'wallet'}">{{$t('exchange.main.topUps')}}</router-link>
             </div>
             <div class="trade-from">
               <span> {{$t('exchange.main.sellPrice')}}</span>

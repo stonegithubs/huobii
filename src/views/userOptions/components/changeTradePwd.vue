@@ -30,10 +30,10 @@
     trade_pwd
   } from "../../../api/security";
   import {
-    sendCaptcha,
+    sendCaptcha1,
     getCaptcha,
-    sendCode,
-    getCode 
+    // sendCode,
+    // getCode 
   } from "../../../api/user";
   export default {
     name: "change-trade-pwd",
@@ -104,14 +104,13 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.captchaVisible = true
-            let formData = new FormData();
-            formData.append('phone', this.$store.state.user.userInfo.mobile)
-            formData.append('country', this.$store.state.user.userInfo.countryCode)
-            sendCode(formData).then(res => {
+             let phone = this.$store.state.user.userInfo.mobile
+            let country = this.$store.state.user.userInfo.countryCode
+            sendCaptcha1(phone, country).then(res => {
               //TODO: 接收验证码需要删除
-              getCode(this.$store.state.user.userInfo.countryCode, this.$store.state.user.userInfo.mobile)
-                .then(res => {
+              getCaptcha(phone, country).then(res => {
                   this.$notify.success(res.content)
+                  this.$router.go(-1)
                 })
             })
             // console.log()
@@ -128,7 +127,7 @@
       }
     },
     created() {
-      
+      // console.log()
     }
   }
 </script>

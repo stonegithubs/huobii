@@ -1,17 +1,19 @@
-import { CoinBalanceBoth, ordersAll } from "../../api/wallet";
+import { CoinBalanceBoth, ordersAll } from '../../api/wallet';
 
 const wallet = {
   state: {
     coinBalance: [],
-    orderHistory: [],
+    orderHistory: []
   },
   mutations: {
     SET_COINBALANCE: (state, list) => {
-      state.coinBalance = list
+      if (list instanceof Array) {
+        state.coinBalance = list
+      }
     },
     SET_ORDERHISTORY: (state, list) => {
       state.orderHistory = list
-    },
+    }
   },
   actions: {
     // 查询所有币种所有余额
@@ -37,30 +39,30 @@ const wallet = {
   },
   getters: {
     getCoinBalance(state) {
-      return state.coinBalance;
+      return state.coinBalance
     },
     getCoinBalanceByName: (state) => (balanceName) => {
-      for (let item of state.coinBalance) {
+      for (const item of state.coinBalance) {
         // console.log(item.coinName)
         if (item.coinName == balanceName) {
           return item
         }
       }
       return {
-        address: "",
+        address: '',
         coinBalance: 0,
         coinFrozen: 0,
-        coinId: "",
+        coinId: '',
         currencyBalance: 0,
         currencyFrozen: 0,
-        id: "",
-        name: "",
-        remarks: "",
-        userId: ""
+        id: '',
+        name: '',
+        remarks: '',
+        userId: ''
       }
     }
   }
 
-};
+}
 
-export default wallet;
+export default wallet

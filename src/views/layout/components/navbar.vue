@@ -21,9 +21,9 @@
           <el-menu-item index="2">
             <router-link :to="{ name: 'ccExchange'}">{{$t("navbar.exchange")}}</router-link>
           </el-menu-item>
-          <el-menu-item index="3">
+          <!-- <el-menu-item index="3">
             <router-link :to="{ name: 'ccMargin'}">{{$t("navbar.c2c")}}</router-link>
-          </el-menu-item>
+          </el-menu-item> -->
           <!-- <el-menu-item index="4">
             <router-link :to="{ name: 'welfare'}">糖果活动</router-link>
           </el-menu-item> -->

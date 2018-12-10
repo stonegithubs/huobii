@@ -180,7 +180,8 @@
   import {
     fbList, fbTrade
   } from '../../../api/coin_trade'
-  import { codeSender } from '../../../api/user'
+  import { sendCaptcha1,getCaptcha } from '../../../api/user'
+  import { mapGetters } from 'vuex'
   export default {
     name: "trade-content",
     components: {
@@ -277,6 +278,7 @@
     created() {
       // 拉取商家列表
       this.getMerchantList(this.page, this.onePageNum, this.direction, this.payments, this.coinId, this.cashId)
+      
       // 拉取实名信息
       this.$store.dispatch('GetVerifyInfo').catch(_ => {})
       // 拉去支持的支付方式
@@ -324,6 +326,14 @@
         this.currentOrder = order
         this.tradeForm.id = order.id
         this.tradeForm.direction = this.direction
+        this.$store.dispatch('GetUserInfo').then(res=>{
+        if(res.code !== '200'){
+          this.$notify.error("请先登录")
+          return false
+          }else{
+
+          }
+        }).catch(_ => {})
         // console.log(order)
       },
       // getCurrency() {
@@ -351,12 +361,18 @@
       //   }
       // },
       handleOrder(id) {
+        // 拉取个人信息
         this.$refs["tradeForm"].validate(valid => {
           if (valid) {
             // 发送验证码吗
-            codeSender().then(res=>{
+            let country = this.$store.state.user.userInfo.countryCode
+            let phone = this.$store.state.user.userInfo.mobile
+            sendCaptcha1(phone, country).then(res=>{
               if(res.code === '200'){
                 this.smsDialog = true;
+                getCaptcha(phone, country).then(res=>{
+                  this.$notify.success(res.content)
+                })
               }else{
                 this.$notify.error(this.$t('shitHappens'))
               }
@@ -367,18 +383,19 @@
       doTrade(){
         let form = this.tradeForm
         console.log(form.id, form.direction, form.code, form.amount)
-        // fbTrade(form.id, form.direction, form.code, form.amount).then(res => {
-        //     dialogVisible = false
-        //     if(res.code === '200'){
-        //         this.$notify.success("下单成功，请于15分钟内完成交易")
-        //         console.log(res)
-        //         // this.push({ name: '***' })
-        //     }else{
-        //       this.$notify.error("下单失败"+ res.content.message)
-        //       console.log(res)
-        //     }
-        // })
-        
+        fbTrade(form.id, form.direction, form.code, form.amount).then(res => {
+            dialogVisible = false
+            if(res.code === '200'){
+                this.$notify.success("下单成功，请于15分钟内完成交易")
+                console.log(res)
+                // this.push({ name: '***' })
+            }else{
+              this.$notify.error("下单失败"+ res.content.message)
+              console.log(res)
+            }
+        }).catch(err=>{
+          this.notify.error(err.message)
+        })
       },
       //界面
       getIcon(iconName) {
@@ -426,7 +443,11 @@
       },
       getCurrency(){
         return this.tradeForm.currency
-      }
+      },
+       ...mapGetters([
+        'getCountry',
+        'getCountryCodeByAbbr'
+      ])
     },
   
   };

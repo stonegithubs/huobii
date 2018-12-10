@@ -42,7 +42,7 @@
         forget
     } from "../../../api/security";
     import {
-        sendCaptcha,
+        sendCaptcha1,
         getCaptcha,
         sendCode,
         getCode,
@@ -75,12 +75,11 @@
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
                         this.captchaVisible = true
-                        let formData = new FormData();
-                        formData.append('phone', this.forgetForm.phone)
-                        formData.append('country', this.forgetForm.country)
-                        sendCode(formData).then(res => {
+                        let phone = this.forgetForm.phone
+                        let country = this.forgetForm.country
+                        sendCaptcha1(phone, country).then(res => {
                             //TODO: 接收验证码需要删除
-                            getCode(this.forgetForm.country, this.forgetForm.phone)
+                            getCode(phone, country)
                                 .then(res => {
                                     this.$notify.success(res.content)
                                 })
@@ -103,11 +102,12 @@
                             if (response.content) {
                                 //todo:验证码修复后继续
                                 this.$notify.success(response.message)
+                                this.$router.go(-1)
                             } else {
-                                console.log(response)
+                                // console.log(response)
                             }
                         }).catch(error => {
-                            console.log(error)
+                            // console.log(error)
                         })
                     }
                 });

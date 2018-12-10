@@ -35,8 +35,8 @@
     login_pwd
   } from "../../../api/security";
   import {
-    sendCode,
-    getCode
+    sendCaptcha1,
+    getCaptcha
   } from "../../../api/user";
   export default {
     name: "change-password-form",
@@ -100,13 +100,11 @@
         this.$refs[formName].validate(valid => {
           if (valid) {
             this.captchaVisible = true
-            let formData = new FormData();
-            formData.append('phone', this.$store.state.user.userInfo.mobile)
-            formData.append('country', this.$store.state.user.userInfo.countryCode)
-            sendCode(formData).then(res => {
+            let phone = this.$store.state.user.userInfo.mobile
+            let country = this.$store.state.user.userInfo.countryCode
+            sendCaptcha1(phone, country).then(res => {
               //TODO: 接收验证码需要删除
-              getCode(this.$store.state.user.userInfo.countryCode, this.$store.state.user.userInfo.mobile)
-                .then(res => {
+              getCaptcha(phone, country).then(res => {
                   this.$notify.success(res.content)
                 })
             })
@@ -124,7 +122,8 @@
             login_pwd(formData).then(response => {
               if (response.content) {
                 this.$notify.success(response.message)
-                this.$router.reload()
+                this.$store.dispatch('LogOut')
+                this.$router.push({ name: 'login'})
               } else {
                 alert(response.message)
               }

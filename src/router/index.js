@@ -165,6 +165,7 @@ export const constantRouterMap = [
         component: () => import('@/views/userOptions/index'),
         children: [
           {
+            name: 'change_password',
             path: '/userOptions/change_password',
             component: () => import('@/views/userOptions/components/changePasswordForm')
           },
