@@ -11,10 +11,10 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/api': {
-        target: 'https://api.hextec.cn:8443/',
+      '/api/v1': {
+        target: 'https://api.hextec.cn/api/v1',
         changeOrigin: true,
-      }
+     }
     },
 
     // Various Dev Server settings

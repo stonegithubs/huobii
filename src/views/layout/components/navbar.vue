@@ -5,7 +5,7 @@
         <img class="logo" :src="LOGO">
       </router-link>
     </div>
-    <div style="width: 86%">
+    <div style="width: 81%">
       <el-menu
         :default-active="$route.path"
         background-color="#243445"
@@ -139,7 +139,7 @@ export default {
     display: flex;
     align-items: center;
     margin: 0 20px;
-    width: 130px;
+    width: 217px;
 
     .logo {
       height: 25px;

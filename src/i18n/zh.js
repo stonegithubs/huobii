@@ -1,7 +1,8 @@
 module.exports = {
+  siteName: '通链数字资产交易所',        //  1
   googleCaptchaNeed: '请点击谷歌验证码，如果未加载请检查您的网络状况',   // 1
   lang: '简体中文',
-  siteName: '数字资产交易平台',
+  // siteName: '数字资产交易平台',
   confirm: '确定',
   canceled: '取消',
   captcha: '验证码',
