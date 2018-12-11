@@ -14,12 +14,12 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
   modules: {
-    staticData,   // 测试数据
-    coinData,     // 货币数据
-    user,         // 用户相关
-    siteCMS,      // 网站CMS
-    trade,     	  // 法币交易数据
-    wallet,		  // 用户钱包数据
+    staticData, // 测试数据
+    coinData, // 货币数据
+    user, // 用户相关
+    siteCMS, // 网站CMS
+    trade, // 法币交易数据
+    wallet, // 用户钱包数据
     Common,
     coinTrade // 币币交易
   }

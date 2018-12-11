@@ -27,7 +27,6 @@ export function trade_pwd(data) {
   })
 }
 
-
 // 主动冻结账号
 export function freeze(data) {
   return request({

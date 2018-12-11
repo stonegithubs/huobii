@@ -2,7 +2,7 @@
   <div class="trade-finance">
     <div class="top-info">
       <div>
-        <h2 class="font18">{{$t('wallet.myProperty')}}</h2>
+        <h2 class="font18">{{ $t('wallet.myProperty') }}</h2>
       </div>
       <!-- <div class="value-show">
         <p class="font14">
@@ -25,21 +25,21 @@
 </template>
 
 <script>
-  import assetsDetail from './components/assetsDetail'
-  import tradeAssets from './components/tradeAssets'
+import assetsDetail from './components/assetsDetail'
+import tradeAssets from './components/tradeAssets'
 export default {
-  name: "tradeFinance",
+  name: 'TradeFinance',
   components: {
     assetsDetail,
     tradeAssets
   },
-  data(){
+  data() {
     return {
-      estimatedValue: 0.00000,    //折合虚拟货币
-      valueType: "BTC",           //虚拟货币种类
-      estimatedCurrency: 0.00,    //折合现金
-      securityDeposit: 0.00000,   //保证金
-      securityDepositType: "HT",  //保证金币种
+      estimatedValue: 0.00000, // 折合虚拟货币
+      valueType: 'BTC', // 虚拟货币种类
+      estimatedCurrency: 0.00, // 折合现金
+      securityDeposit: 0.00000, // 保证金
+      securityDepositType: 'HT' // 保证金币种
 
     }
   },
@@ -58,7 +58,7 @@ export default {
       width: 90%;
     }
     margin: auto;
-    
+
     .top-info {
       display: flex;
       justify-content: space-between;

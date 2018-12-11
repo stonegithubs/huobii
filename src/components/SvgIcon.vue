@@ -1,15 +1,15 @@
 <template>
   <!-- <svg :class="svgClass" aria-hidden="true">
     <use :xlink:href="iconName"></use> -->
-    <div>
-      <img :src="require(`../assets/svg/${this.iconName}.svg`)" alt="">
-    </div>
+  <div>
+    <img :src="require(`../assets/svg/${this.iconName}.svg`)" alt="">
+  </div>
   <!-- </svg> -->
 </template>
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'svg-icon',
+  name: 'SvgIcon',
   props: {
     iconName: {
       type: String

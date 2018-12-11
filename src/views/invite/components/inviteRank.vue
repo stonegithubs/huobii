@@ -1,34 +1,34 @@
 <template>
-    <div class="invite-rank">
-      <div class="ir-title">
-        <span>2018年10月邀请榜单</span>
-      </div>
-        <div class="ir-inner">
-        <el-table
-          :show-header="false"
-          :highlight-current-row="false"
-          :data="inviteRankList"
-          height="200"
-          style="width: 100%">
-          <el-table-column width="500" prop="rank"></el-table-column>
-          <el-table-column width="460" prop="id"></el-table-column>
-          <el-table-column prop="money"></el-table-column>
-        </el-table>
-      </div>
+  <div class="invite-rank">
+    <div class="ir-title">
+      <span>2018年10月邀请榜单</span>
     </div>
+    <div class="ir-inner">
+      <el-table
+        :show-header="false"
+        :highlight-current-row="false"
+        :data="inviteRankList"
+        height="200"
+        style="width: 100%">
+        <el-table-column width="500" prop="rank"/>
+        <el-table-column width="460" prop="id"/>
+        <el-table-column prop="money"/>
+      </el-table>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: "invite-rank",
-  data(){
-      return {
-        inviteRankList: [
-          {rank: '1', id:'921****6353', money:'73851.53265422'},
-          {rank: '2', id:'921****6353', money:'73851.53265422'},
-          {rank: '3', id:'921****6353', money:'73851.53265422'},
-          ]
-      }
+  name: 'InviteRank',
+  data() {
+    return {
+      inviteRankList: [
+        { rank: '1', id: '921****6353', money: '73851.53265422' },
+        { rank: '2', id: '921****6353', money: '73851.53265422' },
+        { rank: '3', id: '921****6353', money: '73851.53265422' }
+      ]
+    }
   }
 }
 </script>
@@ -75,6 +75,5 @@ export default {
       }
     }
   }
-
 
 </style>

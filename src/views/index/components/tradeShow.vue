@@ -1,32 +1,29 @@
 <template>
   <div class="trade-show">
-    <el-tabs class="trade-bar" v-model="activeName" type="border-card" @tab-click="handleClick">
-      <el-tab-pane class="trade-show-panel" v-for="symbol in symbols" :name='symbol'  v-bind:key="symbol.id">
+    <el-tabs v-model="activeName" class="trade-bar" type="border-card" @tab-click="handleClick">
+      <el-tab-pane v-for="symbol in symbols" :name="symbol" :key="symbol.id" class="trade-show-panel">
         <span slot="label">
-        <i :class="'iconfont icon-'+symbol.toUpperCase()" style="font-size: 18px"></i> &nbsp;{{ symbol.toUpperCase() }}</span>
-        <el-table @row-click="chooseCoin" v-loading="mainTradeLoading" :data="symbolList" :default-sort="{prop: 'close', order: 'descending'}" height="600" style="width: 100%">
-          <el-table-column prop="symbolName" :label="$t('index.tradeShow.pair')" sortable min-width="160">
+        <i :class="'iconfont icon-'+symbol.toUpperCase()" style="font-size: 18px"/> &nbsp;{{ symbol.toUpperCase() }}</span>
+        <el-table v-loading="mainTradeLoading" :data="symbolList" :default-sort="{prop: 'close', order: 'descending'}" height="600" style="width: 100%" @row-click="chooseCoin">
+          <el-table-column :label="$t('index.tradeShow.pair')" prop="symbolName" sortable min-width="160">
             <template slot-scope="scope">
-              {{ scope.row.target}} / <span style="color:#61688a">{{ scope.row.symbolName}}</span>
+              {{ scope.row.target }} / <span style="color:#61688a">{{ scope.row.symbolName }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="close" :label="$t('index.tradeShow.lastPrice')" sortable   min-width="170">
+          <el-table-column :label="$t('index.tradeShow.lastPrice')" prop="close" sortable min-width="170">
             <template slot-scope="scope">
-               {{ scope.row.close}}
+              {{ scope.row.close }}
             </template>
           </el-table-column>
           <el-table-column :label="$t('index.tradeShow.change')">
             <template slot-scope="scope">
-             <span v-if="scope.row.rate>0" class="green-rate" > +{{ scope.row.rate.toFixed(2)}}% </span>
-            <span v-if="scope.row.rate<0" class="red-rate"> {{ scope.row.rate.toFixed(2)}}% </span>
+              <span v-if="scope.row.rate>0" class="green-rate" > +{{ scope.row.rate.toFixed(2) }}% </span>
+              <span v-if="scope.row.rate<0" class="red-rate"> {{ scope.row.rate.toFixed(2) }}% </span>
             </template>
           </el-table-column>
-          <el-table-column prop="high" :label="$t('index.tradeShow.high')" width="170">
-          </el-table-column>
-          <el-table-column prop="low" :label="$t('index.tradeShow.low')"  min-width="170">
-          </el-table-column>
-          <el-table-column prop="amount" :label="$t('index.tradeShow.vol24h')" min-width="135" >
-          </el-table-column>
+          <el-table-column :label="$t('index.tradeShow.high')" prop="high" width="170"/>
+          <el-table-column :label="$t('index.tradeShow.low')" prop="low" min-width="170"/>
+          <el-table-column :label="$t('index.tradeShow.vol24h')" prop="amount" min-width="135" />
         </el-table>
       </el-tab-pane>
     </el-tabs>
@@ -34,35 +31,22 @@
 </template>
 <script>
 export default {
-  name: "tradeShow",
+  name: 'TradeShow',
   data() {
     return {
-      activeName: "usdt",
+      activeName: 'usdt',
       currentSymbol: 'usdt',
-      //这里可以进行热插拔，选择需要显示的symbol名字
-      symbols: ['usdt','btc','eth','tc'],
+      // 这里可以进行热插拔，选择需要显示的symbol名字
+      symbols: ['usdt', 'btc', 'eth', 'tc'],
       mainInterval: {}
-    };
+    }
   },
   computed: {
- 
-    symbolList() {
-      return this.$store.getters.getCoinList(this.currentSymbol);
-    },
-    
-  },
-  methods: {
-    handleClick(tab) {
-      this.currentSymbol = this.symbols[tab.index]
-    },
-   
-    chooseCoin(row, event, column) {
-      this.$store.commit('SET_SYMBOL_SHOW', row.symbolName)
-      this.$store.commit('SET_MAINCOIN', row.symbolName)
-      this.$store.commit('SET_TARGETCOIN', row.target)
-      this.$router.push('/coin_coin/exchange')
 
+    symbolList() {
+      return this.$store.getters.getCoinList(this.currentSymbol)
     }
+
   },
   created() {
     this.mainTradeLoading = true
@@ -76,19 +60,29 @@ export default {
     this.$store.dispatch('getSymbolList').catch(() => {
       // this.$message.error("can't get coin information")
     })
-    this.$store.dispatch('SymbolRate').catch(_=>{})
+    this.$store.dispatch('SymbolRate').catch(_ => {})
     this.$nextTick(() => {
       this.mainTradeLoading = false
-      this.mainInterval = setInterval(()=>{
-            this.$store.dispatch('getSymbolList')
-            this.$store.dispatch('SymbolRate')
-          },15000)
+      this.mainInterval = setInterval(() => {
+        this.$store.dispatch('getSymbolList')
+        this.$store.dispatch('SymbolRate')
+      }, 15000)
     })
-
-
   },
-  beforeDestroy(){
+  beforeDestroy() {
     clearInterval(this.mainInterval)
+  },
+  methods: {
+    handleClick(tab) {
+      this.currentSymbol = this.symbols[tab.index]
+    },
+
+    chooseCoin(row, event, column) {
+      this.$store.commit('SET_SYMBOL_SHOW', row.symbolName)
+      this.$store.commit('SET_MAINCOIN', row.symbolName)
+      this.$store.commit('SET_TARGETCOIN', row.target)
+      this.$router.push('/coin_coin/exchange')
+    }
   }
 }
 
@@ -104,8 +98,6 @@ export default {
   padding: 30px 60px;
   position: relative;
   margin-top: 60px;
-
- 
 
   .el-table--border::after,
   .el-table--group::after,
@@ -137,12 +129,9 @@ export default {
     background-color: rgba(239,86,86,.1);
   }
 
-
-
   .el-tabs--border-card {
     &>.el-tabs__header {
       background-color: #f2f6fa;
-
 
       .el-tabs__item {
         color: $hbColor;
@@ -171,7 +160,6 @@ export default {
     height: 22px;
     vertical-align: middle;
   }
-
 
   .el-table td,
   .el-table th.is-leaf {

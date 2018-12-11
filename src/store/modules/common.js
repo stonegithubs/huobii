@@ -5,7 +5,7 @@ const Common = {
   state: {
     supportPayway: [],
     sitekey: '6LdoLXkUAAAAANF3D7WorL31LhnwBJk3KSnmCnJu',
-    countryList: [],
+    countryList: []
 
   },
   mutations: {
@@ -14,7 +14,7 @@ const Common = {
     },
     SET_COUNTRY: (state, list) => {
       state.countryList = list
-    },
+    }
   },
   actions: {
     // 支持的支付方式
@@ -48,12 +48,12 @@ const Common = {
       return state.countryList
     },
     getCountryCodeByAbbr: (state) => (abbr) => {
-      for (let item of state.countryList) {
+      for (const item of state.countryList) {
         if (item.abbr == abbr) {
           return item.code.length === 2 ? '+' + item.code : item.code
         }
       }
-      return 0;
+      return 0
     },
     getSiteKey: (state) => {
       return state.sitekey

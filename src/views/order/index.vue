@@ -31,8 +31,8 @@ export default {
       activeName: 'first'
     }
   },
-  created(){
-    
+  created() {
+
   }
 }
 </script>
@@ -42,7 +42,7 @@ export default {
   .order {
     width: 1200px !important;
     margin: 40px auto auto !important;
-   
+
   }
 
 </style>

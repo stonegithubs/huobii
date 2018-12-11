@@ -1,5 +1,5 @@
 import { loginByUsername, registerByPhone, logout, fastLogin } from '../../api/login'
-import { getVerifyInfo, getUserInfo, getPayway } from "../../api/user";
+import { getVerifyInfo, getUserInfo, getPayway } from '../../api/user'
 
 const user = {
   state: {
@@ -23,7 +23,7 @@ const user = {
     },
     SET_USER_PAYWAY: (state, paylist) => {
       state.payway = paylist
-    },
+    }
   },
   actions: {
     // 用户名登录
@@ -38,18 +38,18 @@ const user = {
         })
       })
     },
-      // 快速登录
-      FastLogin({ commit }, formData) {
-        return new Promise((resolve, reject) => {
-          fastLogin(formData).then(response => {
-            commit('SET_TOKEN', response.content)
-            sessionStorage.setItem('Authorization', response.content)
-            resolve(response)
-          }).catch(error => {
-            reject(error)
-          })
+    // 快速登录
+    FastLogin({ commit }, formData) {
+      return new Promise((resolve, reject) => {
+        fastLogin(formData).then(response => {
+          commit('SET_TOKEN', response.content)
+          sessionStorage.setItem('Authorization', response.content)
+          resolve(response)
+        }).catch(error => {
+          reject(error)
         })
-      },
+      })
+    },
     // 用户注册
     Register({ commit }, form) {
       return new Promise((resolve, reject) => {
@@ -99,7 +99,7 @@ const user = {
     // 登出
     LogOut({ commit }) {
       return new Promise((resolve, reject) => {
-        logout(sessionStorage.getItem("Authorization")).then(response => {
+        logout(sessionStorage.getItem('Authorization')).then(response => {
           resolve(response.message)
         }).catch(err => {
           reject(err)

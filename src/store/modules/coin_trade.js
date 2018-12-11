@@ -26,7 +26,7 @@ const coinTrade = {
     }
   },
   actions: {
-    
+
     getHistoryOrders({ commit }, symbolName, state) {
       return new Promise((resolve, reject) => {
         getOrderBySymbolName(0, 20, 10, symbolName, state, '2018-12-08', '2038-12-08', 1)

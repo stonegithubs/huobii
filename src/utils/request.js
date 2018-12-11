@@ -4,7 +4,6 @@ import { Message, MessageBox } from 'element-ui'
 import store from '../store/index'
 import router from '../router'
 
-
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.BASE_API, // api 的 base_url
@@ -86,7 +85,7 @@ service.interceptors.response.use(
       return Promise.reject(res)
     }
     // if (res.data.code === '401') {
-      
+
     // }
 
     if (res.code === '404') {

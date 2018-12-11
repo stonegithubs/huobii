@@ -1,12 +1,12 @@
 <template>
   <div class="sidebar-notice">
     <div class="title hb-tab">
-      <span>{{$t('exchange.sidebar.notice')}}</span>
+      <span>{{ $t('exchange.sidebar.notice') }}</span>
     </div>
     <div class="in ">
       <ul id="notice_list">
-        <li v-for="(item, index) in notice" v-bind:key="index">
-          <router-link class="notice-inner" :to="{ name: 'index'}">{{ item.description }} </router-link>
+        <li v-for="(item, index) in notice" :key="index">
+          <router-link :to="{ name: 'index'}" class="notice-inner">{{ item.description }} </router-link>
           <div class="notice-time">{{ parseTime(item.updateDate,'{y}-{m}-{d} {h}:{i}:{s}') }}</div>
         </li>
       </ul>
@@ -15,31 +15,31 @@
 </template>
 
 <script>
-  import {
-    parseTime
-  } from '../../../utils/index'
-  export default {
-    name: "sidebar-notice",
-    created() {
-      if (this.$store.state.siteCMS.notice.length === 0) {
-        this.$store.dispatch('getNoticeRemote').then(() => {
-          this.notice = this.$store.state.siteCMS.notice;
-        })
-      } else {
-        this.notice = this.$store.state.siteCMS.notice;
-      }
-    },
-    data() {
-      return {
-        notice: [],
-      }
-    },
-    methods: {
-      parseTime(time, cFormat) {
-        return parseTime(time, cFormat)
-      }
+import {
+  parseTime
+} from '../../../utils/index'
+export default {
+  name: 'SidebarNotice',
+  data() {
+    return {
+      notice: []
+    }
+  },
+  created() {
+    if (this.$store.state.siteCMS.notice.length === 0) {
+      this.$store.dispatch('getNoticeRemote').then(() => {
+        this.notice = this.$store.state.siteCMS.notice
+      })
+    } else {
+      this.notice = this.$store.state.siteCMS.notice
+    }
+  },
+  methods: {
+    parseTime(time, cFormat) {
+      return parseTime(time, cFormat)
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -51,7 +51,7 @@
       line-height: 48px;
       font-size: 16px;
       padding: 0 20px;
-      box-shadow: 0 3px 6px rgba(209, 211, 223, 0.8);    
+      box-shadow: 0 3px 6px rgba(209, 211, 223, 0.8);
       z-index: 10;
       background-color: #fff;
       position: relative;

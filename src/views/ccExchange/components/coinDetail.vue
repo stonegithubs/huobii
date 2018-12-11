@@ -7,10 +7,10 @@
       <div class="cd-left">
         <h3>
           <span style="text-transform: uppercase;">etc</span>
-          <br/>
+          <br>
           以太坊(Ethereum)
         </h3>
-        <div class="cd-line"></div>
+        <div class="cd-line"/>
         <div class="cd-in">
           <span style="color: #61688a;font-size: 14px;margin-bottom: 10px;display: inline-block">简介</span>
           <p>以太坊（Ethereum）是下一代密码学账本，可以支持众多的高级功能，包括用户发行货币，智能协议，去中心化的交易和设立去中心化自治组织(DAOs)或去中心化自治公司（DACs）。以太坊并不是把每一单个类型的功能作为特性来特别支持，相反，以太坊包括一个内置的图灵完备的脚本语言，允许通过被称为“合同”的机制来为自己想实现的特性写代码。一个合同就像一个自动的代理，每当接收到一笔交易，合同就会运行特定的一段代码，这段代码能修改合同内部的数据存储或者发送交易。</p>
@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: "coin-detail"
+  name: 'CoinDetail'
 }
 </script>
 

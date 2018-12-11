@@ -1,4 +1,4 @@
-import { CoinBalanceBoth, ordersAll } from '../../api/wallet';
+import { CoinBalanceBoth, ordersAll } from '../../api/wallet'
 
 const wallet = {
   state: {

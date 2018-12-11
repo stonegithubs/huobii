@@ -1,58 +1,56 @@
 <template>
-    <div class="adv-auth">
-        <div class="auth-title">
-            <h3>{{$t('advertisetment.businessAuth')}}</h3>
-            <p>{{$t('advertisetment.bussinessPrivilege')}}</p>
-        </div>
-        <div class="card-list">
-            <el-card class="box-card">
-                <img :src=" require('../../../assets/imgs/advertising.png')" alt="">
-                <h4>{{$t('advertisetment.advSubmit')}}</h4>
-                <p>{{$t('advertisetment.advPrivilege')}}</p>
-            </el-card>
-            <el-card class="box-card">
-                <img :src=" require('../../../assets/imgs/vip.png')" alt="">
-                <h4>{{$t('advertisetment.ownFlag')}}
-                </h4>
-                <p>{{$t('advertisetment.vipPri')}}
-                </p>
-            </el-card>
-            <el-card class="box-card">
-                <img :src=" require('../../../assets/imgs/icon_kefu.png')" alt="">
-                <h4>{{$t('advertisetment.o2oSerivce')}}
-                </h4>
-                <p>{{$t('advertisetment.o2oPri')}}
-                </p>
-            </el-card>
-        </div>
-        <div class="auth-button">
-            <el-button type='primary' @click="dialogVisible = true">{{$t('advertisetment.appNow')}}</el-button>
-        </div>
-        <el-dialog :visible.sync="dialogVisible" width="472" :before-close="handleClose">
-            <div>
-
-            </div>
-         <span slot="footer" class="dialog-footer">
+  <div class="adv-auth">
+    <div class="auth-title">
+      <h3>{{ $t('advertisetment.businessAuth') }}</h3>
+      <p>{{ $t('advertisetment.bussinessPrivilege') }}</p>
+    </div>
+    <div class="card-list">
+      <el-card class="box-card">
+        <img :src=" require('../../../assets/imgs/advertising.png')" alt="">
+        <h4>{{ $t('advertisetment.advSubmit') }}</h4>
+        <p>{{ $t('advertisetment.advPrivilege') }}</p>
+      </el-card>
+      <el-card class="box-card">
+        <img :src=" require('../../../assets/imgs/vip.png')" alt="">
+        <h4>{{ $t('advertisetment.ownFlag') }}
+        </h4>
+        <p>{{ $t('advertisetment.vipPri') }}
+        </p>
+      </el-card>
+      <el-card class="box-card">
+        <img :src=" require('../../../assets/imgs/icon_kefu.png')" alt="">
+        <h4>{{ $t('advertisetment.o2oSerivce') }}
+        </h4>
+        <p>{{ $t('advertisetment.o2oPri') }}
+        </p>
+      </el-card>
+    </div>
+    <div class="auth-button">
+      <el-button type="primary" @click="dialogVisible = true">{{ $t('advertisetment.appNow') }}</el-button>
+    </div>
+    <el-dialog :visible.sync="dialogVisible" :before-close="handleClose" width="472">
+      <div/>
+      <span slot="footer" class="dialog-footer">
         <!-- <el-button @click="dialogVisible = false">取 消</el-button> -->
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
-        </el-dialog>
-    </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "adv-auth",
-        data() {
-            return {
-                dialogVisible: false
-                // img1: require('../../../assets/imgs/advertising')
-            }
-        },
-        beforeCreate(){
-            
-        }
+export default {
+  name: 'AdvAuth',
+  data() {
+    return {
+      dialogVisible: false
+      // img1: require('../../../assets/imgs/advertising')
     }
+  },
+  beforeCreate() {
+
+  }
+}
 </script>
 
 <style lang="scss" scoped>

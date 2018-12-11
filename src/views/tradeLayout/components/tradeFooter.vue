@@ -1,12 +1,10 @@
 <template>
-<div class="trade-footer">
-
-</div>
+  <div class="trade-footer"/>
 </template>
 
 <script>
 export default {
-    name: "trade-footer"
+  name: 'TradeFooter'
 }
 </script>
 

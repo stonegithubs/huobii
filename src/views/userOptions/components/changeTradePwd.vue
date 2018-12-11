@@ -1,135 +1,135 @@
 <template>
   <el-card class="box-card">
     <div slot="header" class="clearfix">
-      <span>{{$t('userOptions.setTradePwd')}}</span>
+      <span>{{ $t('userOptions.setTradePwd') }}</span>
     </div>
-    <el-form :model="tradePwdForm" status-icon :rules="rules" ref="tradePwdForm" label-width="100px" label-position="top">
+    <el-form ref="tradePwdForm" :model="tradePwdForm" :rules="rules" status-icon label-width="100px" label-position="top">
       <el-form-item :label="$t('userOptions.tradePwd')" prop="current">
-        <el-input type="password" v-model="tradePwdForm.current" autocomplete="off" />
+        <el-input v-model="tradePwdForm.current" type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item :label="$t('userOptions.newPwd')" prop="newpwd">
-        <el-input type="password" v-model="tradePwdForm.newpwd" autocomplete="off" />
+        <el-input v-model="tradePwdForm.newpwd" type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item :label="$t('userOptions.confirmNewPwd')" prop="confirm">
-        <el-input type="password" v-model="tradePwdForm.confirm" autocomplete="off" />
+        <el-input v-model="tradePwdForm.confirm" type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="beforeSubmit('tradePwdForm')">{{$t('confirm')}}</el-button>
+        <el-button type="primary" @click="beforeSubmit('tradePwdForm')">{{ $t('confirm') }}</el-button>
       </el-form-item>
     </el-form>
-    <el-dialog width='300px' :before-close="handleClose" :title="$t('userOptions.yourCaptcha')" :visible.sync="captchaVisible">
-      <el-input type="password" v-model="tradePwdForm.captcha" autocomplete="off" />
+    <el-dialog :before-close="handleClose" :title="$t('userOptions.yourCaptcha')" :visible.sync="captchaVisible" width="300px">
+      <el-input v-model="tradePwdForm.captcha" type="password" autocomplete="off" />
       <span slot="footer" class="dialog-footer">
-          <el-button type="primary" @click="submitForm('tradePwdForm')">{{$t('confirm')}}</el-button>
+        <el-button type="primary" @click="submitForm('tradePwdForm')">{{ $t('confirm') }}</el-button>
       </span>
     </el-dialog>
   </el-card>
 </template>
 <script>
-  import {
-    trade_pwd
-  } from "../../../api/security";
-  import {
-    sendCaptcha1,
-    getCaptcha,
-    // sendCode,
-    // getCode 
-  } from "../../../api/user";
-  export default {
-    name: "change-trade-pwd",
-    data() {
-      let vallidatePassword = (rule, value, callback) => {
-        if (value === "") {
-          callback(new Error(this.$t('login.confirmPwd')));
-        } else if (value !== this.tradePwdForm.newpwd) {
-          callback(new Error(this.$t('login.pwdNotConsistent')));
-        } else {
-          callback();
-        }
-      };
-      return {
-        tradePwdForm: {
-          current: '',
-          newpwd: '',
-          confirm: '',
-          captcha: ''
-        },
-        captchaVisible: false,
-        rules: {
-          current: [{
-            required: true,
-            message: this.$t('login.pwdIsRequired'),
-            trigger: "blur"
-          }],
-          newpwd: [{
-            required: true,
-            trigger: "change"
-          }, {
-            min: 6,
-            max: 8,
-            message: this.$t('userOptions.tradePwdTip')
-          }],
-          confirm: [{
-            required: true,
-            validator: vallidatePassword,
-            trigger: "blur"
-          }],
-        },
+import {
+  trade_pwd
+} from '../../../api/security'
+import {
+  sendCaptcha1,
+  getCaptcha
+  // sendCode,
+  // getCode
+} from '../../../api/user'
+export default {
+  name: 'ChangeTradePwd',
+  data() {
+    const vallidatePassword = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error(this.$t('login.confirmPwd')))
+      } else if (value !== this.tradePwdForm.newpwd) {
+        callback(new Error(this.$t('login.pwdNotConsistent')))
+      } else {
+        callback()
       }
-    },
-    computed: {},
-    methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate(valid => {
-          if (valid) {
-            let formData = new FormData()
-            formData.append('current', this.tradePwdForm.current)
-            formData.append('newpwd', this.tradePwdForm.newpwd)
-            formData.append('confirm', this.tradePwdForm.confirm)
-            formData.append('captcha', this.tradePwdForm.captcha)
-            trade_pwd(formData).then(response => {
-              if (response.content) {
-                this.$notify.success(response.message)
-                this.$router.goBack()
-              } else {
-                alert(response.message)
-              }
-            }).catch(error => {
-              this.$notify.error(error.message)
-            })
-          }
-        })
+    }
+    return {
+      tradePwdForm: {
+        current: '',
+        newpwd: '',
+        confirm: '',
+        captcha: ''
       },
-      beforeSubmit(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            this.captchaVisible = true
-             let phone = this.$store.state.user.userInfo.mobile
-            let country = this.$store.state.user.userInfo.countryCode
-            sendCaptcha1(phone, country).then(res => {
-              //TODO: 接收验证码需要删除
-              getCaptcha(phone, country).then(res => {
-                  this.$notify.success(res.content)
-                  this.$router.go(-1)
-                })
-            })
-            // console.log()
-          }
-        })
-      },
-      handleClose() {
-        this.$confirm(this.$t('confirmToClose'))
-          .then(_ => {
-            this.captchaVisible = false
-            done();
+      captchaVisible: false,
+      rules: {
+        current: [{
+          required: true,
+          message: this.$t('login.pwdIsRequired'),
+          trigger: 'blur'
+        }],
+        newpwd: [{
+          required: true,
+          trigger: 'change'
+        }, {
+          min: 6,
+          max: 8,
+          message: this.$t('userOptions.tradePwdTip')
+        }],
+        confirm: [{
+          required: true,
+          validator: vallidatePassword,
+          trigger: 'blur'
+        }]
+      }
+    }
+  },
+  computed: {},
+  created() {
+    // console.log()
+  },
+  methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          const formData = new FormData()
+          formData.append('current', this.tradePwdForm.current)
+          formData.append('newpwd', this.tradePwdForm.newpwd)
+          formData.append('confirm', this.tradePwdForm.confirm)
+          formData.append('captcha', this.tradePwdForm.captcha)
+          trade_pwd(formData).then(response => {
+            if (response.content) {
+              this.$notify.success(response.message)
+              this.$router.goBack()
+            } else {
+              alert(response.message)
+            }
+          }).catch(error => {
+            this.$notify.error(error.message)
           })
-          .catch(_ => {});
-      }
+        }
+      })
     },
-    created() {
-      // console.log()
+    beforeSubmit(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          this.captchaVisible = true
+          const phone = this.$store.state.user.userInfo.mobile
+          const country = this.$store.state.user.userInfo.countryCode
+          sendCaptcha1(phone, country).then(res => {
+            // TODO: 接收验证码需要删除
+            getCaptcha(phone, country).then(res => {
+              this.$notify.success(res.content)
+              this.$router.go(-1)
+            })
+          })
+          // console.log()
+        }
+      })
+    },
+    handleClose() {
+      this.$confirm(this.$t('confirmToClose'))
+        .then(_ => {
+          this.captchaVisible = false
+          done()
+        })
+        .catch(_ => {})
     }
   }
+}
 </script>
 <style lang='scss' scoped>
   .change-trade-pwd {

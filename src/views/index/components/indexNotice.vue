@@ -1,30 +1,30 @@
 <template>
   <div class="index-notice el-row--flex">
-    <span class="notice-item" v-for="(item,index) in notice" v-bind:key='index'>
-      <a :href="item.link">{{item.description}}</a>
-      <span class="notice-slicer" v-if="index != notice.length-1"></span>
+    <span v-for="(item,index) in notice" :key="index" class="notice-item">
+      <a :href="item.link">{{ item.description }}</a>
+      <span v-if="index != notice.length-1" class="notice-slicer"/>
     </span>
   </div>
 </template>
 
 <script >
 export default {
-  name: "index-notice",
+  name: 'IndexNotice',
+  data() {
+    return {
+      notice: []
+    }
+  },
   created() {
-      this.$store.dispatch('getNoticeRemote').then(response => {
-        // console.log(response)
-        if(response.code){
-          this.notice =  response.content.records.slice(0,3);
-        }
-      })
-      },
+    this.$store.dispatch('getNoticeRemote').then(response => {
+      // console.log(response)
+      if (response.code) {
+        this.notice = response.content.records.slice(0, 3)
+      }
+    })
+  },
   mounted() {
 
-  },
-  data () {
-    return {
-      notice: [],
-    }
   }
 }
 </script>
@@ -59,7 +59,5 @@ export default {
     content: "/";
     margin: 0 25px;
   }
-
-
 
 </style>

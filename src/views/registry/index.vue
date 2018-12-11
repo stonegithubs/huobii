@@ -1,34 +1,34 @@
 <template>
-  <div class="login" :style="{ background: 'url('+ BackgroundURL +') center no-repeat'}">
+  <div :style="{ background: 'url('+ BackgroundURL +') center no-repeat'}" class="login">
     <div class="lg-form">
       <h1>欢迎注册</h1>
-      <registry-form></registry-form>
+      <registry-form/>
     </div>
     <div class="lg-text">
       <!-- <p v-for="(item,index) in registryTip" v-bind:key="index">{{ item.message }}</p> -->
-      <p>{{$t('login.signUpTip1')}}</p>
-      <p>{{$t('login.signUpTip2')}}</p>
-      <p>{{$t('login.signUpTip3')}}</p>
-      <p>{{$t('login.signUpTip4')}}</p>
+      <p>{{ $t('login.signUpTip1') }}</p>
+      <p>{{ $t('login.signUpTip2') }}</p>
+      <p>{{ $t('login.signUpTip3') }}</p>
+      <p>{{ $t('login.signUpTip4') }}</p>
     </div>
   </div>
 </template>
 
 <script>
-  import registryForm from './components/registryForm'
-  export default {
-    name: 'registry',
-    components: {
-      registryForm
-    },
-    data() {
-      return {
-        BackgroundURL: require('../../assets/imgs/login.png'),
-      }
-    },
-    methods: {
+import registryForm from './components/registryForm'
+export default {
+  name: 'Registry',
+  components: {
+    registryForm
+  },
+  data() {
+    return {
+      BackgroundURL: require('../../assets/imgs/login.png')
     }
+  },
+  methods: {
   }
+}
 </script>
 
 <style lang="scss" scoped>

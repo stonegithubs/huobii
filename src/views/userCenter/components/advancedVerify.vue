@@ -1,6 +1,6 @@
 <template>
   <div class="advanced-verify">
-    <el-dialog title="开启验证" :visible.sync="VerifyTableVisible">
+    <el-dialog :visible.sync="VerifyTableVisible" title="开启验证">
       <span class="vf-info">修改验证后24小时内禁止提币</span>
       <el-input>
         <template slot="append">
@@ -15,10 +15,10 @@
     <div class="av-inner">
       <div class="ai-list">
         <span>安全等级：</span>
-        <el-progress :percentage="figurePercentage" :color="progressColor"></el-progress>
+        <el-progress :percentage="figurePercentage" :color="progressColor"/>
       </div>
       <div class="ai-list">
-        <span>邮箱：</span>{{email}}
+        <span>邮箱：</span>{{ email }}
         <div class="al-email">
           <router-link :to="{ name: 'bind_email' }">绑定</router-link>
           <!--todo:邮箱绑定后可否更换绑定-->
@@ -36,7 +36,7 @@
 </template>
 <script>
 export default {
-  name: "advanced-verify",
+  name: 'AdvancedVerify',
   data() {
     return {
       VerifyTableVisible: false,
@@ -45,33 +45,33 @@ export default {
       phone: 'unset' || this.$store.state.user.userInfo.phone
     }
   },
-  methods: {
-    sendVerifyCode() {
-      this.$message.success('验证码已发送') //回调结束
-    },
-  },
   computed: {
     figurePercentage() {
-      let percentage = 20;
+      let percentage = 20
       if (this.$store.state.user.userInfo.phone) {
-        percentage += 40;
+        percentage += 40
         this.progressColor = '#409eff'
       }
       if (this.$store.state.user.userInfo.email) {
-        percentage += 40;
+        percentage += 40
         this.progressColor = '#67c23a'
       }
-      return percentage;
-    },
+      return percentage
+    }
   },
-created() {
-  if (this.$store.state.user.verifyInfo === null) {
+  created() {
+    if (this.$store.state.user.verifyInfo === null) {
       this.$store.dispatch('GetVerifyInfo').then(response => {
       }).catch(err => {
         this.$notify.error(err.message)
       })
     }
-}
+  },
+  methods: {
+    sendVerifyCode() {
+      this.$message.success('验证码已发送') // 回调结束
+    }
+  }
 }
 
 </script>

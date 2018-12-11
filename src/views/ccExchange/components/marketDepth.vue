@@ -1,17 +1,15 @@
 <template>
-    <div class="market-depth">
-      <div class="hb-tab">
-        <span>{{$t('exchange.main.depth')}}</span>
-      </div>
-      <div class="md-inner">
-
-      </div>
+  <div class="market-depth">
+    <div class="hb-tab">
+      <span>{{ $t('exchange.main.depth') }}</span>
     </div>
+    <div class="md-inner"/>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "market-depth"
+  name: 'MarketDepth'
 }
 </script>
 
@@ -29,6 +27,6 @@ export default {
       line-height: 48px;
       padding-left: 20px;
     }
-   
+
   }
 </style>

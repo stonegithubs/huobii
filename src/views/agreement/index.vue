@@ -1,27 +1,27 @@
 <template>
-    <div class="agreement">
-      <div class="ag-title">
-        <span>用户协议</span>
-      </div>
-      <div class="ag-inner">
-        <pre>{{ agreementConent }}</pre>
-      </div>
+  <div class="agreement">
+    <div class="ag-title">
+      <span>用户协议</span>
     </div>
+    <div class="ag-inner">
+      <pre>{{ agreementConent }}</pre>
+    </div>
+  </div>
 </template>
 
 <script>
-import {getAgreement} from "../../api/cms";
+import { getAgreement } from '../../api/cms'
 
 export default {
-    name: "index",
-    data(){
-      return {
-        agreementConent:''
-      }
-    },
-  created(){
+  name: 'Index',
+  data() {
+    return {
+      agreementConent: ''
+    }
+  },
+  created() {
     getAgreement().then(response => {
-      this.agreementConent = response.content;
+      this.agreementConent = response.content
     }).catch(err => {
       this.$message({
         message: err,

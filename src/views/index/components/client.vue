@@ -1,18 +1,18 @@
 <template>
-  <div class="client" :style="{ background: 'url('+ require('../../../assets/imgs/wrap_download.png') +') center no-repeat' }">
+  <div :style="{ background: 'url('+ require('../../../assets/imgs/wrap_download.png') +') center no-repeat' }" class="client">
     <div class="wrap-in">
-      <h3>{{$t('index.client.title')}}</h3>
-      <p>{{$t('index.client.dsc')}}</p>
+      <h3>{{ $t('index.client.title') }}</h3>
+      <p>{{ $t('index.client.dsc') }}</p>
       <div class="wrap-bg">
         <div class="download-app">
-          <i class="iconfont icon-shouji-copy type"> </i>
-          <i class="iconfont icon-pingguo logo"> </i>
+          <i class="iconfont icon-shouji-copy type"/>
+          <i class="iconfont icon-pingguo logo"/>
 
-          <i class="iconfont icon-shouji-copy type"> </i>
-          <i class="iconfont icon-anzhuo logo"> </i>
+          <i class="iconfont icon-shouji-copy type"/>
+          <i class="iconfont icon-anzhuo logo"/>
 
-          <i class="iconfont icon-diannao type"> </i>
-          <i class="iconfont icon-weiruan logo"> </i>
+          <i class="iconfont icon-diannao type"/>
+          <i class="iconfont icon-weiruan logo"/>
 
           <a class="ios">IOS</a>
           <a class="android">Android</a>
@@ -25,7 +25,7 @@
 
 <script>
 export default {
-    name: "client"
+  name: 'Client'
 }
 </script>
 

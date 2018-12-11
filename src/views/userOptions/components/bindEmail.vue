@@ -1,55 +1,55 @@
 <template>
-  <el-card  class="box-card">
-  <div slot="header" class="clearfix">
-    <span>{{$t('userOptions.bindEmail')}}</span>
-  </div>
-    <el-form label-position='top' :model="emailForm" status-icon ref="emailForm" label-width="100px">
-      <el-form-item :label="$t('userOptions.emailAddress')" prop="address" :rules="[{ required: true, message: $t('userOptions.emailAddressTip'), trigger: 'blur' },{ type: 'email', message: $t('userOptions.emialInvaild'), trigger: ['blur', 'change'] }]">
-        <el-input type="text" v-model="emailForm.address" autocomplete="off" />
+  <el-card class="box-card">
+    <div slot="header" class="clearfix">
+      <span>{{ $t('userOptions.bindEmail') }}</span>
+    </div>
+    <el-form ref="emailForm" :model="emailForm" label-position="top" status-icon label-width="100px">
+      <el-form-item :label="$t('userOptions.emailAddress')" :rules="[{ required: true, message: $t('userOptions.emailAddressTip'), trigger: 'blur' },{ type: 'email', message: $t('userOptions.emialInvaild'), trigger: ['blur', 'change'] }]" prop="address">
+        <el-input v-model="emailForm.address" type="text" autocomplete="off" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitEmailForm('emailForm')">{{$t('userOptions.sendEmail')}}</el-button>
+        <el-button type="primary" @click="submitEmailForm('emailForm')">{{ $t('userOptions.sendEmail') }}</el-button>
       </el-form-item>
     </el-form>
-</el-card>
+  </el-card>
 </template>
 
 <script>
-  import {
-    bindEmail
-  } from "../../../api/verify_code";
-  export default {
-    name: "bind-email",
-    data() {
-      return {
-        emailForm: {
-          address: ''
-        }
-      }
-    },
-    methods: {
-      submitEmailForm(formName) {
-        this.$refs[formName].validate(valid => {
-          if (valid) {
-            let formData = new FormData()
-            formData.append('address', this.emailForm.address)
-            // console.log(bindEmail)
-            bindEmail(formData).then(response => {
-              // if (response.content) {
-                this.$notify.success(this.$t('userOptions.haveSent'))
-                // this.$router.goBack()
-              // } else {
-                // alert(response.message)
-              // }
-            }).catch(error => {
-              // this.$notify.error(error.message)
-            })
-            this.$notify.success(this.$t('userOptions.haveSent'))
-          }
-        })
+import {
+  bindEmail
+} from '../../../api/verify_code'
+export default {
+  name: 'BindEmail',
+  data() {
+    return {
+      emailForm: {
+        address: ''
       }
     }
+  },
+  methods: {
+    submitEmailForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          const formData = new FormData()
+          formData.append('address', this.emailForm.address)
+          // console.log(bindEmail)
+          bindEmail(formData).then(response => {
+            // if (response.content) {
+            this.$notify.success(this.$t('userOptions.haveSent'))
+            // this.$router.goBack()
+            // } else {
+            // alert(response.message)
+            // }
+          }).catch(error => {
+            // this.$notify.error(error.message)
+          })
+          this.$notify.success(this.$t('userOptions.haveSent'))
+        }
+      })
+    }
   }
+}
 </script>
 
 <style lang="scss">

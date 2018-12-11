@@ -7,7 +7,7 @@
 <script>
 
 export default {
-    name: "siderbar-img"
+  name: 'SiderbarImg'
 }
 </script>
 

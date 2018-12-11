@@ -1,6 +1,6 @@
 module.exports = {
-  siteName: '通链数字资产交易所',        //  1
-  googleCaptchaNeed: '请点击谷歌验证码，如果未加载请检查您的网络状况',   // 1
+  siteName: '通链数字资产交易所', //  1
+  googleCaptchaNeed: '请点击谷歌验证码，如果未加载请检查您的网络状况', // 1
   lang: '简体中文',
   // siteName: '数字资产交易平台',
   confirm: '确定',
@@ -11,12 +11,12 @@ module.exports = {
   appeal: '申诉',
   appealReason: '申诉理由',
   appealType: '申诉类型',
-  appealSuccess: '申诉成功',  // 1
-  appealFailed: '申诉失败',   // 1
+  appealSuccess: '申诉成功', // 1
+  appealFailed: '申诉失败', // 1
   repeal: '撤销',
-  confirmToRepal: '确定撤销',   // 1
-  repealSuccess: '撤销成功',    //
-  repealFailed: '撤销失败',     //
+  confirmToRepal: '确定撤销', // 1
+  repealSuccess: '撤销成功', //
+  repealFailed: '撤销失败', //
   confirmToClose: '确认关闭?',
   shitHappens: '发生了未知错误',
   navbar: {
@@ -29,8 +29,8 @@ module.exports = {
     signUp: '注册',
     user: {
       order: '订单',
-      exchangeOrder: '币币订单',    // 
-      financeOrder: '法币订单',     // 
+      exchangeOrder: '币币订单', //
+      financeOrder: '法币订单', //
       finance: '资产',
       userProfile: '个人信息',
       userCenter: '个人信息',
@@ -78,9 +78,9 @@ module.exports = {
       notice: '公告'
     },
     main: {
-      userCanceled: '用户撤销',   //
-      finished: '已完成',         //
-      status: '状态',             //
+      userCanceled: '用户撤销', //
+      finished: '已完成', //
+      status: '状态', //
       notGet: '未收到',
       getWrong: '收到数量不正确',
       moneyWrong: '扣费不正确',
@@ -150,7 +150,7 @@ module.exports = {
     signUpTip1: '国籍信息注册后不可修改，请务必如实选择。',
     signUpTip2: '验证邮件可能会被误判为垃圾邮件，请注意查收。',
     signUpTip3: '请妥善保存您的账号及登录密码。',
-    signUpTip4: '请勿和其他网站使用相同的登录密码',
+    signUpTip4: '请勿和其他网站使用相同的登录密码'
   },
   userOptions: {
     changePwd: '修改密码',
@@ -177,7 +177,7 @@ module.exports = {
     tradePwdRequire: '请输入交易密码',
     tradePwdTip: '长度在6到8个字符'
   },
-  advertisetment: {            // 以下
+  advertisetment: { // 以下
     businessAuth: '商家申请',
     appNow: '立即申请',
     bussinessPrivilege: '成为我们的商家，享受更多交易特权',
@@ -186,10 +186,10 @@ module.exports = {
     ownFlag: '专属标识',
     vipPri: '商家名称后会显示专属的加V标识，增强交易方信任',
     o2oSerivce: '一对一服务',
-    o2oPri: '我们将向商家提供一对一专属服务',
+    o2oPri: '我们将向商家提供一对一专属服务'
 
   },
-  wallet: {                   //以下
+  wallet: { // 以下
     myProperty: '我的资产',
     propertyDetail: '钱包明细',
     withDrawAddr: '提币地址管理',
@@ -199,12 +199,12 @@ module.exports = {
     available: '可用',
     getStronger: '充值',
     deposit: '划转提现',
-    //  注释: 下面两句话要拼接成一句话 比如请将 [BTC] 充值到如下地址（扫描二维码获取地址） 
+    //  注释: 下面两句话要拼接成一句话 比如请将 [BTC] 充值到如下地址（扫描二维码获取地址）
     //  但是其中BTC是动态生成的 所以不能写死 一整个句子要拆开来 后面遇到拆开的句子都会注解
     //  翻译君辛苦啦
     strongTip: '请将',
     strongTip1: '充值到如下地址（扫描二维码获取地址）',
-    
+
     // 拆分句
     share: '法币交易账户与币币交易账户共用一个',
     share1: '的充值地址',
@@ -212,7 +212,7 @@ module.exports = {
     // 拆分句
     info: '请勿向上述地址充值任何非',
     info1: '资产，否则资产将不可找回。',
-    
+
     listTip: '充值到账后会在下面的币币交易账户显示，通过划转功能 转至 法币交易账户后即可进行法币买卖交易',
     finishTip: '您充值至上述地址后，需整个网络节点的确认，6次网络确认后可划转，到账时间一般为10分钟-60分钟。',
     chooseCoin: '请选择币种',
@@ -221,9 +221,9 @@ module.exports = {
     to: '转至',
     transfer: '资产互转',
     transferSuccess: '转账成功',
-    transferFailed: '转账失败',
+    transferFailed: '转账失败'
   },
   currency: {
-    
+
   }
 }

@@ -1,37 +1,37 @@
 <template>
   <div class="feature_wrap">
     <div class="section">
-        <div class="feature">
-          <div class="text-wrap fl">
-            <h5> {{$t('index.feature.first.title')}}</h5>
-            <pre>
-              {{$t('index.feature.first.dsc')}}
-            </pre>
-          </div>
-          <div class="img-wrap fr "><img :src="require('../../../assets/imgs/feature_1.png')" ></div>
-        </div >
-        <div class="feature">
-          <div class="img-wrap fl"><img :src="require('../../../assets/imgs/feature_2.png')" alt=""></div>
-          <div class="text-wrap fr">
-            <h5> {{$t('index.feature.second.title')}}</h5>
-            <pre> {{$t('index.feature.second.dsc')}}</pre>
-          </div>
+      <div class="feature">
+        <div class="text-wrap fl">
+          <h5> {{ $t('index.feature.first.title') }}</h5>
+          <pre>
+              {{ $t('index.feature.first.dsc') }}
+          </pre>
         </div>
-        <div class="feature">
-          <div class="text-wrap fl">
-            <h5>{{$t('index.feature.thrid.title')}}</h5>
-            <pre>{{$t('index.feature.thrid.dsc')}}</pre>
-          </div>
-          <div class="img-wrap fr "><img :src="require('../../../assets/imgs/feature_3.png')" alt=""></div>
+        <div class="img-wrap fr "><img :src="require('../../../assets/imgs/feature_1.png')" ></div>
+      </div >
+      <div class="feature">
+        <div class="img-wrap fl"><img :src="require('../../../assets/imgs/feature_2.png')" alt=""></div>
+        <div class="text-wrap fr">
+          <h5> {{ $t('index.feature.second.title') }}</h5>
+          <pre> {{ $t('index.feature.second.dsc') }}</pre>
         </div>
       </div>
+      <div class="feature">
+        <div class="text-wrap fl">
+          <h5>{{ $t('index.feature.thrid.title') }}</h5>
+          <pre>{{ $t('index.feature.thrid.dsc') }}</pre>
+        </div>
+        <div class="img-wrap fr "><img :src="require('../../../assets/imgs/feature_3.png')" alt=""></div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "feature"
-    }
+export default {
+  name: 'Feature'
+}
 </script>
 
 <style lang="scss">

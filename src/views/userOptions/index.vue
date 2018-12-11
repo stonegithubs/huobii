@@ -1,16 +1,16 @@
 <template>
   <div class="user-option">
-    <router-view></router-view>
+    <router-view/>
   </div>
 </template>
 <script>
 export default {
-  name: "user-options",
+  name: 'UserOptions',
   data() {
-    return {};
+    return {}
   },
   created() {}
-};
+}
 </script>
 <style lang="scss" scoped>
 .user-option {
@@ -23,7 +23,7 @@ export default {
   width: 500px;
   margin: auto;
   .el-card__body {
-      padding: 20px 50px; 
+      padding: 20px 50px;
   }
     .el-card__header {
         font-size: 22px;
@@ -35,7 +35,7 @@ export default {
         line-height: unset;
     }
     .el-input {
-        
+
     }
     .el-button {
         margin-top: 24px;

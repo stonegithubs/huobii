@@ -110,7 +110,6 @@ export function getOrderBySymbolNameAll(symbol) {
   })
 }
 
-
 // 获取实施成交记录
 export function getHistoryTrade(form) {
   return request({

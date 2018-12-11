@@ -9,20 +9,20 @@ export function CoinBalanceBoth() {
 }
 
 // 币币转法币
-export function coin2currency(coinId ,amount) {
+export function coin2currency(coinId, amount) {
   return request({
     url: '/api/v1/wallet/coin/coin2currency',
     method: 'post',
-    params: { coinId ,amount }
+    params: { coinId, amount }
   })
 }
 
 // 法币转币币
-export function currency2coin(coinId ,amount) {
+export function currency2coin(coinId, amount) {
   return request({
     url: '/api/v1/wallet/coin/currency2coin',
     method: 'post',
-    params: { coinId ,amount }
+    params: { coinId, amount }
   })
 }
 
@@ -48,7 +48,7 @@ export function ordersAll(symbol) {
 export function orders() {
   return request({
     url: '/api/v1/coin_trade/orders_symbol',
-    method: 'post',
+    method: 'post'
     // params: { abbr: abbr, address: address, remarks: remarks }
   })
 }

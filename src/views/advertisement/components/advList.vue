@@ -1,21 +1,21 @@
 <template>
-    <div>
-         advList
-    </div>
+  <div>
+    advList
+  </div>
 </template>
 
 <script>
 
 export default {
-    name: "adv-list",
-    data(){
-      return {
+  name: 'AdvList',
+  data() {
+    return {
 
-      }
     }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-  
+
 </style>

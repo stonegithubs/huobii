@@ -2,73 +2,71 @@
   <div class="cc-exchange">
     <div class="sidebar">
       <!--<sidebar-img></sidebar-img>-->
-      <sidebar-chart></sidebar-chart>
-      <sidebar-notice></sidebar-notice>
+      <sidebar-chart/>
+      <sidebar-notice/>
     </div>
     <div class="cc-content">
       <!--k线图-->
 
-      <hb-chart></hb-chart>
+      <hb-chart/>
 
       <div class="trade-wrap">
         <!--交易栏-->
-        <trade-panel></trade-panel>
+        <trade-panel/>
         <!--最新报价-->
-        <order-book></order-book>
+        <order-book/>
       </div>
 
       <!--正在委托-->
-      <open-orders  v-if="this.$store.state.user.token"></open-orders>
+      <open-orders v-if="this.$store.state.user.token"/>
       <!--历史委托-->
-      <order-history  v-if="this.$store.state.user.token"></order-history>
+      <order-history v-if="this.$store.state.user.token"/>
 
       <div class="market-wrap">
         <!--深度图-->
-        <market-depth></market-depth>
+        <market-depth/>
         <!--实时成交-->
-        <market-trades></market-trades>
+        <market-trades/>
 
       </div>
 
       <!--币种资料-->
-      <coin-detail></coin-detail>
-
+      <coin-detail/>
 
     </div>
   </div>
 </template>
 
 <script>
-  import sidebarImg from './components/siderbarImg'
-  import sidebarChart from './components/sidebarChart'
-  import sidebarNotice from './components/sidebarNotice'
-  import hbChart from './components/hbChart'
-  import openOrders from './components/openOrders'
-  import orderHistory from './components/orderHistory'
-  import orderBook from './components/orderBook'
-  import tradePanel from './components/tradePanel'
-  import marketDepth from './components/marketDepth'
-  import coinDetail from './components/coinDetail'
-  import marketTrades from './components/marketTrades'
+import sidebarImg from './components/siderbarImg'
+import sidebarChart from './components/sidebarChart'
+import sidebarNotice from './components/sidebarNotice'
+import hbChart from './components/hbChart'
+import openOrders from './components/openOrders'
+import orderHistory from './components/orderHistory'
+import orderBook from './components/orderBook'
+import tradePanel from './components/tradePanel'
+import marketDepth from './components/marketDepth'
+import coinDetail from './components/coinDetail'
+import marketTrades from './components/marketTrades'
 export default {
-  name: "ccExchange",
+  name: 'CcExchange',
   components: {
-    'sidebar-img':sidebarImg,
-    'sidebar-chart':sidebarChart,
-    'sidebar-notice':sidebarNotice,
-    'hb-chart':hbChart,
+    'sidebar-img': sidebarImg,
+    'sidebar-chart': sidebarChart,
+    'sidebar-notice': sidebarNotice,
+    'hb-chart': hbChart,
     'open-orders': openOrders,
-    'order-history':orderHistory,
-    'order-book':orderBook,
-    'trade-panel':tradePanel,
-    'market-depth':marketDepth,
-    'coin-detail':coinDetail,
-    'market-trades':marketTrades
+    'order-history': orderHistory,
+    'order-book': orderBook,
+    'trade-panel': tradePanel,
+    'market-depth': marketDepth,
+    'coin-detail': coinDetail,
+    'market-trades': marketTrades
   },
-  created(){
-     this.$store.dispatch('getSupportCoin')
+  created() {
+    this.$store.dispatch('getSupportCoin')
   }
-
 
 }
 </script>

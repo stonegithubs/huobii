@@ -1,191 +1,191 @@
 <template>
-    <el-form label-position='top' ref="loginForm" :model="loginForm" status-icon label-width="100px" class="login-form">
-        <el-form-item :label="$t('login.country')" prop="region" :rules="[{ required: true, message:$t('login.countryIsRequired'), trigger: 'blur' }]">
-            <el-select v-model="loginForm.region" :placeholder="$t('login.countryTip')">
-                <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" v-bind:key="item.id"></el-option>
-            </el-select>
-        </el-form-item>
-        <el-form-item :label="$t('login.account')" prop="phone" :rules="[{ required: true, message: $t('login.accountIsRequired'), trigger: 'blur' }]">
-            <el-input v-model="loginForm.phone" type="text" :placeholder="$t('login.phoneNumber')" autocomplete="off">
-                <template slot="suffix">
-                        <el-button class="send-code" :class="buttonColor" @click="msendCode" :disabled='timeRest === 60? false:true'>{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
-</template>
-             </el-input>
+  <el-form ref="loginForm" :model="loginForm" label-position="top" status-icon label-width="100px" class="login-form">
+    <el-form-item :label="$t('login.country')" :rules="[{ required: true, message:$t('login.countryIsRequired'), trigger: 'blur' }]" prop="region">
+      <el-select v-model="loginForm.region" :placeholder="$t('login.countryTip')">
+        <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" :key="item.id"/>
+      </el-select>
     </el-form-item>
-    <el-form-item :label="$t('captcha')" prop="code" :rules="[{ required: true, message: $t('login.captchaIsRequired'), trigger: 'blur' }]">
-      <el-input v-model="loginForm.code" type="text" :placeholder="$t('login.captchaTip')" autocomplete="off" />
+    <el-form-item :label="$t('login.account')" :rules="[{ required: true, message: $t('login.accountIsRequired'), trigger: 'blur' }]" prop="phone">
+      <el-input v-model="loginForm.phone" :placeholder="$t('login.phoneNumber')" type="text" autocomplete="off">
+        <template slot="suffix">
+          <el-button :class="buttonColor" :disabled="timeRest === 60? false:true" class="send-code" @click="msendCode">{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
+        </template>
+      </el-input>
     </el-form-item>
-     <el-form-item>
-      <vue-recaptcha ref="invisibleRecaptcha" size='Invisible' :sitekey="getSiteKey" @verify="getVerify"></vue-recaptcha>
+    <el-form-item :label="$t('captcha')" :rules="[{ required: true, message: $t('login.captchaIsRequired'), trigger: 'blur' }]" prop="code">
+      <el-input v-model="loginForm.code" :placeholder="$t('login.captchaTip')" type="text" autocomplete="off" />
     </el-form-item>
     <el-form-item>
-      <el-button class="login-btn" type="primary" @click="getVerify">{{$t('login.login')}}</el-button>
+      <vue-recaptcha ref="invisibleRecaptcha" :sitekey="getSiteKey" size="Invisible" @verify="getVerify"/>
+    </el-form-item>
+    <el-form-item>
+      <el-button class="login-btn" type="primary" @click="getVerify">{{ $t('login.login') }}</el-button>
       <div style="float:right;margin-top: 24px;margin-right: 116px;">
-        <router-link :to="{ name: 'forget_password'}">{{$t('login.forgetPwd')}}</router-link>
+        <router-link :to="{ name: 'forget_password'}">{{ $t('login.forgetPwd') }}</router-link>
       </div>
     </el-form-item>
   </el-form>
 </template>
 <script>
-    import VueRecaptcha from 'vue-recaptcha';
-    import {
-        mapGetters
-    } from 'vuex'
-    import {
-        sendCode,
-        getCode,
-        sendCaptcha1,
-        getCaptcha
-    } from "../../../api/user";
-    import {
-        setTimeout,
-        setInterval,
-        clearInterval,
-        clearTimeout
-    } from "timers";
-    export default {
-        name: "fast-login-form",
-        components: {
-            VueRecaptcha
-        },
-        data() {
-            return {
-                loginForm: {
-                    region: '',
-                    phone: '',
-                    code: ''
-                },
-                timeRest: 60,
-                counter: {},
-                isDisable: false,
-                isVerify: false,
-                mycode: '',
-                cacheVerifyCode: null,
-                // dialogTableVisible: false,
-            }
-        },
-        mounted(){
-            this.cacheVerifyCode = null
-        },
-        computed: {
-            ...mapGetters([
-                'getCountry',
-                'getCountryCodeByAbbr',
-                'getSiteKey'
-            ]),
-            buttonInner() {
-                if (this.isDisable === true) {
-                    return "s " + this.$t('login.reSend');
-                } else {
-                    return this.$t('login.clickToSendCaptcha');
-                }
-            },
-            buttonColor() {
-                if (this.isDisable) {
-                    return "disabled-color";
-                } else {
-                    return "ok-color";
-                }
-            },
-        },
-        created() {
-            if (sessionStorage.getItem('Authorization')) {
-                this.$router.back()
-            }
-        },
-        methods: {
-            getVerify(verifyCode) {
-                let myCode = verifyCode
-                if ((Object.prototype.toString.call(myCode) === '[object MouseEvent]') && this.cacheVerifyCode === null) {
-                    // 如果没有正确显示验证码则返回值不是字符串 并且没有缓存到上一次的验证码 
-                    //  提示网络状况
-                    this.$notify.error(this.$t('googleCaptchaNeed'))
-                    // console.log('无法加载谷歌验证码，请检查您的网络状况'+ verifyCode)
-                    return false;
-                }
-                if (Object.prototype.toString.call(myCode) === '[object MouseEvent]' && Object.prototype.toString.call(this.cacheVerifyCode) === '[object String]') {
-                    // 如果点击按钮并且拿到上一次的缓存谷歌验证码 则把上一次的有效验证码提交
-                    myCode = this.cacheVerifyCode
-                    // console.log('检测到先行点击 上一次的谷歌验证码'+ myCode)
-                }
-                this.$refs['loginForm'].validate(valid => {
-                    if (valid) {
-                        let formData = new FormData()
-                        formData.append('phone', this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.phone)
-                        formData.append('country', this.loginForm.region)
-                        formData.append('captcha', verifyCode)
-                        formData.append('code', this.loginForm.code)
-                        this.$store.dispatch('FastLogin', formData).then(responese => {
-                            if (responese.code === '200') {
-                                this.$router.push({
-                                    name: 'index'
-                                })
-                                // this.$message.success(responese.message)
-                            } else {
-                                this.$alert(responese.message, this.$t('login.failed'), {
-                                    confirmButtonText: this.$t('confirm'),
-                                    callback: action => {
-                                        window.location.reload()
-                                    }
-                                });
-                            }
-                        }).catch(err => {
-                            this.$alert(err.message, this.$t('login.failed'), {
-                                confirmButtonText: this.$t('confirm'),
-                                callback: action => {
-                                    window.location.reload()
-                                }
-                            });
-                        })
-                    }else {
-                        this.cacheVerifyCode = verifyCode
-                    }
-                })
-            },
-            msendCode() {
-                if (this.loginForm.region === '') {
-                    this.$notify.error(this.$t('login.countryIsRequired'))
-                    return false
-                }
-                if (this.loginForm.phone === '') {
-                    this.$notify.error(this.$t('login.accountIsRequired'))
-                    return false
-                }
-                // console.log('已经发送')
-                let regionPhone = this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.phone
-                sendCaptcha1(regionPhone, this.loginForm.region).then(responese => {
-                    setTimeout(() => {
-                        getCaptcha(regionPhone, this.loginForm.region).then(responese1 => {
-                            if (responese1 && responese1.code == '200') {
-                                this.$notify({
-                                    title: this.$t('captcha'),
-                                    message: responese1.content,
-                                    duration: 0
-                                });
-                            } else {
-                                this.$notify.error(this.$t('shitHappens'), )
-                            }
-                        }).catch(_ => {});
-                    }, 4000);
-                });
-                this.isDisable = true
-                this.timeRest--;
-                // clearInterval(this.counter)
-                this.counter = setInterval(() => {
-                    if (this.timeRest > 0) {
-                        this.timeRest--;
-                    } else {
-                        clearInterval(this.counter);
-                        this.timeRest = 60;
-                        this.isDisable = false;
-                    }
-                }, 1000);
-            },
-        },
-        beforeDestroy() {
-            // clearInterval(this.counter);
-        },
+import VueRecaptcha from 'vue-recaptcha'
+import {
+  mapGetters
+} from 'vuex'
+import {
+  sendCode,
+  getCode,
+  sendCaptcha1,
+  getCaptcha
+} from '../../../api/user'
+import {
+  setTimeout,
+  setInterval,
+  clearInterval,
+  clearTimeout
+} from 'timers'
+export default {
+  name: 'FastLoginForm',
+  components: {
+    VueRecaptcha
+  },
+  data() {
+    return {
+      loginForm: {
+        region: '',
+        phone: '',
+        code: ''
+      },
+      timeRest: 60,
+      counter: {},
+      isDisable: false,
+      isVerify: false,
+      mycode: '',
+      cacheVerifyCode: null
+      // dialogTableVisible: false,
     }
+  },
+  mounted() {
+    this.cacheVerifyCode = null
+  },
+  computed: {
+    ...mapGetters([
+      'getCountry',
+      'getCountryCodeByAbbr',
+      'getSiteKey'
+    ]),
+    buttonInner() {
+      if (this.isDisable === true) {
+        return 's ' + this.$t('login.reSend')
+      } else {
+        return this.$t('login.clickToSendCaptcha')
+      }
+    },
+    buttonColor() {
+      if (this.isDisable) {
+        return 'disabled-color'
+      } else {
+        return 'ok-color'
+      }
+    }
+  },
+  created() {
+    if (sessionStorage.getItem('Authorization')) {
+      this.$router.back()
+    }
+  },
+  beforeDestroy() {
+    // clearInterval(this.counter);
+  },
+  methods: {
+    getVerify(verifyCode) {
+      let myCode = verifyCode
+      if ((Object.prototype.toString.call(myCode) === '[object MouseEvent]') && this.cacheVerifyCode === null) {
+        // 如果没有正确显示验证码则返回值不是字符串 并且没有缓存到上一次的验证码
+        //  提示网络状况
+        this.$notify.error(this.$t('googleCaptchaNeed'))
+        // console.log('无法加载谷歌验证码，请检查您的网络状况'+ verifyCode)
+        return false
+      }
+      if (Object.prototype.toString.call(myCode) === '[object MouseEvent]' && Object.prototype.toString.call(this.cacheVerifyCode) === '[object String]') {
+        // 如果点击按钮并且拿到上一次的缓存谷歌验证码 则把上一次的有效验证码提交
+        myCode = this.cacheVerifyCode
+        // console.log('检测到先行点击 上一次的谷歌验证码'+ myCode)
+      }
+      this.$refs['loginForm'].validate(valid => {
+        if (valid) {
+          const formData = new FormData()
+          formData.append('phone', this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.phone)
+          formData.append('country', this.loginForm.region)
+          formData.append('captcha', verifyCode)
+          formData.append('code', this.loginForm.code)
+          this.$store.dispatch('FastLogin', formData).then(responese => {
+            if (responese.code === '200') {
+              this.$router.push({
+                name: 'index'
+              })
+              // this.$message.success(responese.message)
+            } else {
+              this.$alert(responese.message, this.$t('login.failed'), {
+                confirmButtonText: this.$t('confirm'),
+                callback: action => {
+                  window.location.reload()
+                }
+              })
+            }
+          }).catch(err => {
+            this.$alert(err.message, this.$t('login.failed'), {
+              confirmButtonText: this.$t('confirm'),
+              callback: action => {
+                window.location.reload()
+              }
+            })
+          })
+        } else {
+          this.cacheVerifyCode = verifyCode
+        }
+      })
+    },
+    msendCode() {
+      if (this.loginForm.region === '') {
+        this.$notify.error(this.$t('login.countryIsRequired'))
+        return false
+      }
+      if (this.loginForm.phone === '') {
+        this.$notify.error(this.$t('login.accountIsRequired'))
+        return false
+      }
+      // console.log('已经发送')
+      const regionPhone = this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.phone
+      sendCaptcha1(regionPhone, this.loginForm.region).then(responese => {
+        setTimeout(() => {
+          getCaptcha(regionPhone, this.loginForm.region).then(responese1 => {
+            if (responese1 && responese1.code == '200') {
+              this.$notify({
+                title: this.$t('captcha'),
+                message: responese1.content,
+                duration: 0
+              })
+            } else {
+              this.$notify.error(this.$t('shitHappens'),)
+            }
+          }).catch(_ => {})
+        }, 4000)
+      })
+      this.isDisable = true
+      this.timeRest--
+      // clearInterval(this.counter)
+      this.counter = setInterval(() => {
+        if (this.timeRest > 0) {
+          this.timeRest--
+        } else {
+          clearInterval(this.counter)
+          this.timeRest = 60
+          this.isDisable = false
+        }
+      }, 1000)
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
     @import "../../../assets/custom-theme/theme";

@@ -1,17 +1,17 @@
-import { trade_pwd_exist } from '../../api/trade';
+import { trade_pwd_exist } from '../../api/trade'
 
 const trade = {
   state: {
     supportedPayment: {
 
     },
-    currencyType: "CNY", //支持的法币
+    currencyType: 'CNY', // 支持的法币
     hasTradePwd: false
   },
   mutations: {
     SET_HASTRADEPWD: (state, content) => {
       state.hasTradePwd = content
-    },
+    }
   },
   actions: {
     GetTradePwd({ commit }) {
@@ -42,4 +42,4 @@ const trade = {
   }
 }
 
-export default trade;
+export default trade

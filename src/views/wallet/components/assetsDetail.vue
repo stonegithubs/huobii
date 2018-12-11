@@ -1,14 +1,12 @@
 <template>
-    <div class="assets-detail">
-      <div class="assets-list hidden-xs-only">
-
-      </div>
-    </div>
+  <div class="assets-detail">
+    <div class="assets-list hidden-xs-only"/>
+  </div>
 </template>
 
 <script>
 export default {
-    name: "assets-detail"
+  name: 'AssetsDetail'
 }
 </script>
 

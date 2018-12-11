@@ -1,22 +1,22 @@
 <template>
-    <div>
-         advList
-    </div>
+  <div>
+    advList
+  </div>
 </template>
 
 <script>
 
 export default {
-    // 发布广告
-    name: "advertising",
-    data(){
-      return {
+  // 发布广告
+  name: 'Advertising',
+  data() {
+    return {
 
-      }
     }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-  
+
 </style>

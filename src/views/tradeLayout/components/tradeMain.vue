@@ -1,12 +1,12 @@
 <template>
-    <div class="trade-main">
-      <router-view/>
-    </div>
+  <div class="trade-main">
+    <router-view/>
+  </div>
 </template>
 
 <script>
 export default {
-    name: "trade-main"
+  name: 'TradeMain'
 }
 </script>
 

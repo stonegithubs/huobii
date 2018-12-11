@@ -14,13 +14,13 @@ import mainbox from './components/mainBox'
 import myFooter from './components/myFooter'
 
 export default {
-  name: "layout",
+  name: 'Layout',
   components: {
     navbar,
     mainbox,
     myFooter
   },
-  created(){
+  created() {
 
   }
 }

@@ -1,12 +1,12 @@
 <template>
-    <div class="main-body">
-        <router-view/>
-    </div>
+  <div class="main-body">
+    <router-view/>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "mainbox"
+  name: 'Mainbox'
 }
 </script>
 

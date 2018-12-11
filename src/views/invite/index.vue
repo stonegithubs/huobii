@@ -1,14 +1,14 @@
 <template>
   <div class="invite">
-    <div class="i-banner" :style="{ background: 'url('+ BackgroundURL +') center no-repeat'}">
+    <div :style="{ background: 'url('+ BackgroundURL +') center no-repeat'}" class="i-banner">
       <h2>
-          邀请好友注册火币，轻松获得交易返佣
-        </h2>
+        邀请好友注册火币，轻松获得交易返佣
+      </h2>
       <p>
         当日即得手续费30%返佣福利
       </p>
     </div>
-    <invite-rank></invite-rank>
+    <invite-rank/>
     <div class="i-way">
       <div class="title">我的分享方式</div>
       <div class="iw-inner">
@@ -18,15 +18,15 @@
         </div>
         <div>
           <span>我的邀请码</span>
-          <el-input type="text" class="i-code" readonly :value=inviteCode>
-            <template slot="suffix"><span class="code" :data-clipboard-text="inviteCode" @click="copyCode">复制邀请码</span></template>
+          <el-input :value="inviteCode" type="text" class="i-code" readonly>
+            <template slot="suffix"><span :data-clipboard-text="inviteCode" class="code" @click="copyCode">复制邀请码</span></template>
           </el-input>
         </div>
         <div>
           <span>我的邀请链接</span>
-          <el-input class="i-link" type="text" readonly :value=getInviteLink>
+          <el-input :value="getInviteLink" class="i-link" type="text" readonly>
             <template slot="suffix">
-              <span class="link-text" :data-clipboard-text="inviteLink" @click="copyLink">点击复制链接</span>
+              <span :data-clipboard-text="inviteLink" class="link-text" @click="copyLink">点击复制链接</span>
             </template>
           </el-input>
         </div>
@@ -68,68 +68,12 @@
 <script>
 import Clipboard from 'clipboard'
 import inviteRank from './components/inviteRank'
-import {get_rec_code} from "../../api/login";
+import { get_rec_code } from '../../api/login'
 
 export default {
-  name: "index",
+  name: 'Index',
   components: {
     inviteRank
-  },
-  created() {
-    if (!this.$store.state.user.token) {
-      this.$router.push('/login')
-    }
-    get_rec_code().then(response=>{
-        this.inviteCode = response.content
-    }).catch(err=>{
-      this.$notify.error({
-        title: "error",
-        message: err.message
-      })
-    })
-
-  },
-  methods: {
-    copyCode() {
-      let clipboard = new Clipboard('.code')
-      clipboard.on('success', e => {
-        this.$message({
-          message: '复制成功',
-          type: 'success'
-        })
-        clipboard.destroy()
-      })
-      clipboard.on('error', e => {
-        this.$message({
-          message: '复制失败，请您手动复制',
-          type: 'success'
-        })
-        clipboard.destroy()
-      })
-    },
-    copyLink() {
-      let clipboard = new Clipboard('.link-text')
-      clipboard.on('success', e => {
-        this.$message({
-          message: '复制成功',
-          type: 'success'
-        })
-        clipboard.destroy()
-      })
-      clipboard.on('error', e => {
-        this.$message({
-          message: '复制失败，请您手动复制',
-          type: 'success'
-        })
-        clipboard.destroy()
-      })
-    },
-   
-  },
-  computed: {
-    getInviteLink(){
-      return process.env.BASE_API + this.inviteCode
-    }
   },
   data() {
     return {
@@ -148,9 +92,64 @@ export default {
         { text: '返佣的形式以USDT或点卡的形式返佣到您的交易账户，USDT返佣比例为30%，点卡返佣比例为30%。' },
         { text: '邀请人享受好友交易返佣有效时长以被邀请人实际注册的时间开始进行计算，到达有效时长（90天）后您将不享受该邀请人交易产生手续费的返佣.' },
         { text: '平台将以每5分钟取一次市价进行相应币种的USDT实时换算，返佣金额以实际返佣金额为准。' },
-        { text: '如被邀请人违反邀请返佣的相应风控规则，其手续费将不能返还给邀请人，同时，被邀请人的邀请状态变成【已无效】并且产生的返佣记录状态变成【返佣无效】' },
+        { text: '如被邀请人违反邀请返佣的相应风控规则，其手续费将不能返还给邀请人，同时，被邀请人的邀请状态变成【已无效】并且产生的返佣记录状态变成【返佣无效】' }
       ]
     }
+  },
+  computed: {
+    getInviteLink() {
+      return process.env.BASE_API + this.inviteCode
+    }
+  },
+  created() {
+    if (!this.$store.state.user.token) {
+      this.$router.push('/login')
+    }
+    get_rec_code().then(response => {
+      this.inviteCode = response.content
+    }).catch(err => {
+      this.$notify.error({
+        title: 'error',
+        message: err.message
+      })
+    })
+  },
+  methods: {
+    copyCode() {
+      const clipboard = new Clipboard('.code')
+      clipboard.on('success', e => {
+        this.$message({
+          message: '复制成功',
+          type: 'success'
+        })
+        clipboard.destroy()
+      })
+      clipboard.on('error', e => {
+        this.$message({
+          message: '复制失败，请您手动复制',
+          type: 'success'
+        })
+        clipboard.destroy()
+      })
+    },
+    copyLink() {
+      const clipboard = new Clipboard('.link-text')
+      clipboard.on('success', e => {
+        this.$message({
+          message: '复制成功',
+          type: 'success'
+        })
+        clipboard.destroy()
+      })
+      clipboard.on('error', e => {
+        this.$message({
+          message: '复制失败，请您手动复制',
+          type: 'success'
+        })
+        clipboard.destroy()
+      })
+    }
+
   }
 
 }

@@ -4,13 +4,13 @@
       <span>基本信息</span>
     </div>
     <div class="bf-inner">
-      <div><span>账号</span>{{ this.$store.state.user.userInfo.mobile || ''}}</div>
-      <div><span>UID</span>{{ this.$store.state.user.verifyInfo.userId || ''}}</div>
-      <div><span>支付密码</span>{{getPayPassword}}</div>
+      <div><span>账号</span>{{ this.$store.state.user.userInfo.mobile || '' }}</div>
+      <div><span>UID</span>{{ this.$store.state.user.verifyInfo.userId || '' }}</div>
+      <div><span>支付密码</span>{{ getPayPassword }}</div>
       <div class="change-pay-pwd">
         <router-link :to="{ name: 'change_trade_password'}">修改</router-link>
       </div>
-      <div><span>登陆密码</span>{{getHiddenPassword}}</div>
+      <div><span>登陆密码</span>{{ getHiddenPassword }}</div>
       <div class="change-pwd">
         <router-link :to="{ name: 'change_password'}">修改</router-link>
       </div>
@@ -19,7 +19,24 @@
 </template>
 <script>
 export default {
-  name: "base-info",
+  name: 'BaseInfo',
+  data() {
+    return {
+
+    }
+  },
+  computed: {
+    getHiddenPassword() {
+      return '**********'
+    },
+    getPayPassword() {
+      if (this.$store.getters.getTradePwdStatus) {
+        return '**********'
+      } else {
+        return 'unset'
+      }
+    }
+  },
   created() {
     if (this.$store.state.user.userInfo == null) {
       this.$store.dispatch('GetUserInfo').then(response => {
@@ -28,28 +45,10 @@ export default {
         this.$notify.error(err.message)
       })
     }
-     if(this.$store.getters.getTradePwdStatus === false) {
-      this.$store.dispatch('GetTradePwd').then(()=>{}).catch(_=>{
-      this.$notify.error(_.message)
-    })
-  }
-  },
-  computed: {
-    getHiddenPassword() {
-        return '**********'
-    },
-    getPayPassword(){
-        if(this.$store.getters.getTradePwdStatus){
-          return '**********'
-        }
-        else {
-          return "unset"
-        }
-    }
-  },
-  data() {
-    return {
-
+    if (this.$store.getters.getTradePwdStatus === false) {
+      this.$store.dispatch('GetTradePwd').then(() => {}).catch(_ => {
+        this.$notify.error(_.message)
+      })
     }
   }
 

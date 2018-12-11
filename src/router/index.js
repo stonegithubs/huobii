@@ -90,7 +90,7 @@ export const constantRouterMap = [
 
   },
 
-  {                               // 币币订单
+  { // 币币订单
     path: '/order',
     component: layout,
     children: [
@@ -149,8 +149,8 @@ export const constantRouterMap = [
             path: '/ads/',
             name: 'advertising',
             component: () => import('@/views/advertisement/components/advertising')
-          },
-          
+          }
+
         ]
       }
     ]
@@ -234,7 +234,7 @@ export const constantRouterMap = [
   },
   // 法币交易个人中心
   {
-    path: '/trade_order',           // 法币订单
+    path: '/trade_order', // 法币订单
     component: layout,
     children: [
       {

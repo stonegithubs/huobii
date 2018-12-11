@@ -68,17 +68,17 @@ export function formatTime(time, option) {
 
 export function getAvatarColor(id) {
   id = id.charCodeAt()
-  let colorIndex = id % 10;
+  const colorIndex = id % 10
   switch (colorIndex) {
-    case 0: return 'one';
-    case 1: return 'two';
-    case 2: return 'three';
-    case 3: return 'four';
-    case 4: return 'five';
-    case 5: return 'six';
-    case 6: return 'seven';
-    case 7: return 'eight';
-    case 8: return 'nine';
-    case 9: return 'ten';
+    case 0: return 'one'
+    case 1: return 'two'
+    case 2: return 'three'
+    case 3: return 'four'
+    case 4: return 'five'
+    case 5: return 'six'
+    case 6: return 'seven'
+    case 7: return 'eight'
+    case 8: return 'nine'
+    case 9: return 'ten'
   }
 }

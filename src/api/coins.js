@@ -13,7 +13,7 @@ export function getRemoteSymbols() {
 export function getRemoteSymbolList() {
   return request({
     url: '/api/v1/public/market/tickers',
-    method: 'post',
+    method: 'post'
   })
 }
 

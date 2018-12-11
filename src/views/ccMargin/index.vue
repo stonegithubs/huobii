@@ -1,47 +1,47 @@
 <template>
   <el-container>
     <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
-      <el-tab-pane v-for="item in supportCoin" v-bind:key="item.id" :name="item.abbr.toUpperCase()">
-        <template slot="label">{{item.abbr.toUpperCase()}}交易
-</template>
-      <div class="trade-tab">
-        <div class="hb-buy">
-          <h3 class="title">买入{{item.abbr.toUpperCase()}}</h3>
-          <div class="trade-form">
-            <el-input disabled v-model="buyPrice">
-            <template slot="suffix">
-              <span class="suf-msg"> 买入价</span>
-            </template>
+      <el-tab-pane v-for="item in supportCoin" :key="item.id" :name="item.abbr.toUpperCase()">
+        <template slot="label">{{ item.abbr.toUpperCase() }}交易
+        </template>
+        <div class="trade-tab">
+          <div class="hb-buy">
+            <h3 class="title">买入{{ item.abbr.toUpperCase() }}</h3>
+            <div class="trade-form">
+              <el-input v-model="buyPrice" disabled>
+                <template slot="suffix">
+                  <span class="suf-msg"> 买入价</span>
+                </template>
               </el-input>
-                <el-input v-model="buyNumber">
-            <template slot="suffix">
-              <span class="suf-msg">买入数量</span>
-            </template>
-            </el-input>
-            <div class="total-price">需要 <span class="buy">13.4</span> CNY</div>
-            <el-button class="buy-button">立即买入</el-button>
+              <el-input v-model="buyNumber">
+                <template slot="suffix">
+                  <span class="suf-msg">买入数量</span>
+                </template>
+              </el-input>
+              <div class="total-price">需要 <span class="buy">13.4</span> CNY</div>
+              <el-button class="buy-button">立即买入</el-button>
+            </div>
           </div>
-        </div>
-        <div class="hb-sell">
-          <div class="trade-form">
-            <h3 class="title">卖出{{item.abbr.toUpperCase()}}</h3>
-            <el-input disabled v-model="buyPrice">
-            <template slot="suffix">
-              <span class="suf-msg"> 卖出价</span>
-            </template>
-            </el-input>
-            <el-input v-model="buyNumber">
-            <template slot="suffix">
-              <span class="suf-msg">   卖出数量</span>
-            </template>
-            </el-input>
-            <div class="total-price">可得 <span class="sell">13.4</span> CNY</div>
-            <el-button class="sell-button">立即卖出</el-button>
-          </div>
+          <div class="hb-sell">
+            <div class="trade-form">
+              <h3 class="title">卖出{{ item.abbr.toUpperCase() }}</h3>
+              <el-input v-model="buyPrice" disabled>
+                <template slot="suffix">
+                  <span class="suf-msg"> 卖出价</span>
+                </template>
+              </el-input>
+              <el-input v-model="buyNumber">
+                <template slot="suffix">
+                  <span class="suf-msg">   卖出数量</span>
+                </template>
+              </el-input>
+              <div class="total-price">可得 <span class="sell">13.4</span> CNY</div>
+              <el-button class="sell-button">立即卖出</el-button>
+            </div>
 
+          </div>
         </div>
-      </div>
-      <div class="trade-history">
+        <div class="trade-history">
           <div class="buy-show">
             <div class="shd">
               <span>用户</span>
@@ -50,7 +50,7 @@
               <span>状态</span>
             </div>
             <div class="trade-wrap">
-              <scrollBar></scrollBar>
+              <scrollBar/>
             </div>
           </div>
           <div class="sell-show">
@@ -61,54 +61,54 @@
               <span>状态</span>
             </div>
             <div class="trade-wrap">
-              <scrollBar></scrollBar>
+              <scrollBar/>
             </div>
           </div>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span>兑换记录</span>
+        <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
       </div>
-    </el-tab-pane>
-  </el-tabs>
-  <el-card class="box-card">
-  <div slot="header" class="clearfix">
-    <span>兑换记录</span>
-    <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button>
-  </div>
-  <tradeTable></tradeTable>
-  </el-card>
+      <tradeTable/>
+    </el-card>
   </el-container>
-  </template>
+</template>
 
 <script>
-  import scrollBar from './components/scrollBar/scrollBar'
-  import tradeTable from './components/tradeTable/tradeTable'
-  export default {
-    name: "index",
-    components: {
-      scrollBar,
-      tradeTable
-    },
-    data() {
-      return {
-        activeName: 'btc',
-        buyPrice: 12,
-        buyNumber: 0,
-        supportCoin: [],
-      }
-    },
-    computed: {
-    
-    },
-    methods: {
-    handleClick(tab, e){
+import scrollBar from './components/scrollBar/scrollBar'
+import tradeTable from './components/tradeTable/tradeTable'
+export default {
+  name: 'Index',
+  components: {
+    scrollBar,
+    tradeTable
+  },
+  data() {
+    return {
+      activeName: 'btc',
+      buyPrice: 12,
+      buyNumber: 0,
+      supportCoin: []
+    }
+  },
+  computed: {
+
+  },
+
+  beforeCreate() {
+    this.$store.dispatch('getSupportCoin').then(_ => {
+      this.supportCoin = _.content.records
+    }).catch(_ => {})
+  },
+  methods: {
+    handleClick(tab, e) {
       console.log(tab)
     }
-    },
-
-    beforeCreate(){
-        this.$store.dispatch('getSupportCoin').then(_=>{
-          this.supportCoin = _.content.records
-        }).catch(_=>{})
-    }
   }
+}
 </script>
 
 <style lang='scss' scoped>

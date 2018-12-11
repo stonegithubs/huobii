@@ -1,6 +1,6 @@
 // 网站货币信息
 
-import { getRemoteSymbols, getRemoteSymbolList, getSupportedCoin, getMarketDetail, getMarketDepth, okcoinTicket } from "../../api/coins";
+import { getRemoteSymbols, getRemoteSymbolList, getSupportedCoin, getMarketDetail, getMarketDepth, okcoinTicket } from '../../api/coins'
 // import { stat } from "fs";
 // import store from "../index";
 
@@ -36,7 +36,7 @@ const coinData = {
       'usdt': ['btc', 'eth', 'tc'],
       'eth': ['btc', 'usdt', 'tc'],
       'tc': ['btc', 'usdt', 'eth'],
-      'btc': ['tc', 'usdt', 'eth'],
+      'btc': ['tc', 'usdt', 'eth']
     },
 
     // 出售币种深度列表
@@ -95,7 +95,7 @@ const coinData = {
         })
       })
     },
-    // 获取货币信息 
+    // 获取货币信息
     getSymbolList({ commit }) {
       return new Promise((resolve, reject) => {
         getRemoteSymbolList().then(response => {
@@ -130,7 +130,7 @@ const coinData = {
         }).catch(err => {
           reject(err)
         })
-      });
+      })
     },
     SymbolRate({ commit }) {
       return new Promise((resolve, reject) => {
@@ -158,13 +158,13 @@ const coinData = {
   },
   getters: {
     getCoinList: (state) => (symbolName) => {
-      let symbolList = []
-      let targetCoinList = state.symbol[symbolName]
-      for (let item of state.symbolList) {
-        for (let target of targetCoinList) {
+      const symbolList = []
+      const targetCoinList = state.symbol[symbolName]
+      for (const item of state.symbolList) {
+        for (const target of targetCoinList) {
           if (item.symbol === target + symbolName) {
-            //usd
-            for (let shit of state.rateList) {
+            // usd
+            for (const shit of state.rateList) {
               if (shit.symbol === 'usdt_usd') {
                 state.usd_usdt = shit.close
               }
@@ -173,39 +173,35 @@ const coinData = {
                 item.target = target
                 item.symbolName = symbolName
                 symbolList.push(item)
-
               }
               if (target === 'usdt' && 'usd' + '_' + symbolName === shit.symbol) {
                 item.rate = Number.parseFloat(shit.changePercentage) / state.usd_usdt
                 item.target = target
                 item.symbolName = symbolName
                 symbolList.push(item)
-
               }
               if (target + '_' + symbolName === shit.symbol) {
                 item.rate = Number.parseFloat(shit.changePercentage)
                 item.target = target
                 item.symbolName = symbolName
                 symbolList.push(item)
-
               }
 
-              //其他
+              // 其他
             }
-
           }
         }
       }
       return symbolList
     },
     getUniqueSymbol: (state) => () => {
-      let res = []
-      for (let item of state.symbols) {
+      const res = []
+      for (const item of state.symbols) {
         if (!res.includes(item['quote-currency'])) {
           res.push(item['quote-currency'])
         }
       }
-      return res;
+      return res
     },
     // getSymbolData: (state) => (symbolName) => {
     //   let res = []
@@ -253,7 +249,7 @@ const coinData = {
       return state.rateList
     },
     getCoinIdByName: (state) => (coinName) => {
-      for (let item of state.supportedCoin) {
+      for (const item of state.supportedCoin) {
         if (item.name == coinName) {
           return item.id
         }
@@ -270,7 +266,7 @@ const coinData = {
       let addUp = 0, buyDepthList = []
       for (const item of state.buyDepth) {
         addUp += item[1]
-        let listItem = { 'price': item[0], amount: item[1], 'accumulative': addUp }
+        const listItem = { 'price': item[0], amount: item[1], 'accumulative': addUp }
         buyDepthList.push(listItem)
       }
       return buyDepthList

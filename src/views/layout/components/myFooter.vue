@@ -1,76 +1,72 @@
 <template>
   <footer class="hb-footer">
     <ul>
-      <li v-for="(category, id) in list" v-bind:key="id">
+      <li v-for="(category, id) in list" :key="id">
         <span>{{ category.name }}</span>
-        <a :class="category.id === item.parentID? '':'hid'"  v-for="item  in linkList" v-bind:key="item.id" :href="item.href">{{ item.title }}</a>
+        <a v-for="item in linkList" :class="category.id === item.parentID? '':'hid'" :key="item.id" :href="item.href">{{ item.title }}</a>
       </li>
     </ul>
   </footer>
 </template>
- 
-<script>
-  import {
-    cmsLink,
-    linkCategory
-  } from "../../../api/cms";
-  import ElContainer from "element-ui/packages/container/src/main";
-  import {
-    mapState
-  } from "vuex";
-  export default {
-    name: "my-footer",
-    components: {
-      ElContainer
-    },
-    data() {
-      return {
-        categorys: [],
-        links: [],
-      }
-    
-    },
-    computed: {
-      // getList = () => this.categorys,
-      list(){
 
-        return this.categorys
-      },
-      linkList(){
-        return this.links;
-      }
+<script>
+import {
+  cmsLink,
+  linkCategory
+} from '../../../api/cms'
+import ElContainer from 'element-ui/packages/container/src/main'
+import {
+  mapState
+} from 'vuex'
+export default {
+  name: 'MyFooter',
+  components: {
+    ElContainer
+  },
+  data() {
+    return {
+      categorys: [],
+      links: []
+    }
+  },
+  computed: {
+    // getList = () => this.categorys,
+    list() {
+      return this.categorys
     },
-    created() {
-      // this.categorys = sessionStorage.getItem("categorys", this.categorys)
-      // this.links = sessionStorage.getItem("links", this.links)
-      if( false){ }
-      else{
-        linkCategory()
+    linkList() {
+      return this.links
+    }
+  },
+  created() {
+    // this.categorys = sessionStorage.getItem("categorys", this.categorys)
+    // this.links = sessionStorage.getItem("links", this.links)
+    if (false) { } else {
+      linkCategory()
         .then(res => {
-          for(let item of res.content.records){
+          for (const item of res.content.records) {
             this.categorys.push({
-              id:item.id,
-              name:item.name,
+              id: item.id,
+              name: item.name
             })
           }
           // sessionStorage.setItem("categorys", JSON.stringify(this.categorys));
         })
         .then(() => {
-          for(let item of this.categorys){
+          for (const item of this.categorys) {
             // item.linkList = []
             cmsLink(item.id).then(res => {
-              for(let link of res.content.records){
+              for (const link of res.content.records) {
                 // vm.$set(vm.item)
-                let i = {
+                const i = {
                   'parentID': item.id,
-                  'title':link.title, 
-                  'href':link.href,
+                  'title': link.title,
+                  'href': link.href
                 }
                 this.links.push(i)
                 // console.log(item)
               }
-            });
-
+            })
           }
 
         //   console.log(this.links instanceof Array)
@@ -82,13 +78,11 @@
         //   //   let a = {  }
         //   // }
         // sessionStorage.setItem("links", this.links);
-        
         })
-        .catch(_ => {});
-      }
-       
+        .catch(_ => {})
     }
-  };
+  }
+}
 </script>
 
 <style lang="scss" scoped>

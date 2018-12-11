@@ -1,10 +1,10 @@
 <template>
   <div>
-    <banner></banner>
-    <indexNotice></indexNotice>
-    <tradeShow></tradeShow>
-    <feature></feature>
-    <client></client>
+    <banner/>
+    <indexNotice/>
+    <tradeShow/>
+    <feature/>
+    <client/>
   </div>
 </template>
 
@@ -15,7 +15,7 @@ import feature from './components/feature'
 import indexNotice from './components/indexNotice'
 import tradeShow from './components/tradeShow'
 export default {
-  name: "index",
+  name: 'Index',
   components: {
     banner,
     client,

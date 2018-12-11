@@ -13,7 +13,7 @@ export function isAuthed(code) {
   if (process.env.NODE_ENV === 'development') {
     console.log('Function isAuth return true while dev')
     return true
-  }else if(code !== 200){
+  } else if (code !== 200) {
     return false
   }
   return true

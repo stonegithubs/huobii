@@ -1,29 +1,29 @@
 <template>
-    <div class="user-center">
-      <div class="uc-title">
-        <span>账号安全</span>
-      </div>
-      <base-info></base-info>
-      <!-- <advanced-verify></advanced-verify> -->
-      <user-history></user-history>
+  <div class="user-center">
+    <div class="uc-title">
+      <span>账号安全</span>
     </div>
+    <base-info/>
+    <!-- <advanced-verify></advanced-verify> -->
+    <user-history/>
+  </div>
 </template>
 
 <script>
-  import baseInfo from './components/baseInfo'
-  import advancedVerify from './components/advancedVerify'
-  import userHistory from './components/userHistory'
+import baseInfo from './components/baseInfo'
+import advancedVerify from './components/advancedVerify'
+import userHistory from './components/userHistory'
 export default {
-  name: "index",
+  name: 'Index',
   components: {
     baseInfo,
     advancedVerify,
     userHistory
   },
-  created(){
-    if(this.$store.state.user.token === null){
+  created() {
+    if (this.$store.state.user.token === null) {
       this.$router.push('/login')
-    }else {
+    } else {
       // this.$store.dispatch('GetUserInfo').then( msg => {
       //     this.$message.success(msg)
       //   }).catch( err => {

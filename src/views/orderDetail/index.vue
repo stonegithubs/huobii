@@ -1,130 +1,130 @@
 <template>
-    <div class="trade-order">
-      <div class="to-info">
-        <span class="ti-order-id">
-          订单：{{this.orderInfo.order_id}}
-        </span>
-        <div class="ti-order-message">
-          您向{{orderInfo.target_user.name}}购买{{orderInfo.number}}{{orderInfo.coinType}}
-        </div>
-        <div class="ti-price">
-          <span>单价:</span>{{orderInfo.price}} {{ orderInfo.coinType }}
-        </div>
-        <div class="ti-total">
-          <span>总价:</span>{{orderInfo.total}}
-        </div>
+  <div class="trade-order">
+    <div class="to-info">
+      <span class="ti-order-id">
+        订单：{{ this.orderInfo.order_id }}
+      </span>
+      <div class="ti-order-message">
+        您向{{ orderInfo.target_user.name }}购买{{ orderInfo.number }}{{ orderInfo.coinType }}
       </div>
-      <div class="to-payment">
-        <div class="tp-tip">
-          <span>卖方收款方式 </span>
-          <hr/>
-          <span  v-for="item in orderInfo.ensure.ensureVerify" class="tq-verify"><i class="el-icon-success"></i> {{item.type}}认证</span>
-        </div>
-        <div class="tp-list" v-if="orderInfo.isPending">
-          <div v-for="item in orderInfo.target_user.payment_list">
-            <span>{{item.name}}</span>{{item.payname}}{{item.cardNo}}
-          </div>
-        </div>
-        <p class="payment-canceled" v-if="orderInfo.isCanceled">订单已失效 支付方式无法查看</p>
-        <p class="payment-success" v-if="orderInfo.isSuccess">订单已放行</p>
+      <div class="ti-price">
+        <span>单价:</span>{{ orderInfo.price }} {{ orderInfo.coinType }}
       </div>
-      <div class="to-service">
-        <div class="ts-tip">
-          <span>增值保障服务</span>
-          <hr/>
-        </div>
-        <div  class="ts-inner"  v-if="orderInfo.isPending">
-          <span> <a :href="this.law_service.link"></a>服务协议</span>
-        </div>
-      </div>
-      <div class="to-pay" v-if="orderInfo.isPending">
-        <p>待支付，请于{{ orderInfo.timeLeft }}秒内向{{ orderInfo.target_user.name }}支付 <span class="tp-price">{{ orderInfo.total }}</span>  ,付款参考号: <span class="tp-flag">{{orderInfo.flagNumber}}</span></p>
-        <div  class="tp-pay">
-          <el-button type="primary" @click="handlePay">立即支付</el-button>
-          <el-button @click="handleCancel">取消</el-button>
-        </div>
-      </div>
-      <p class="payment-canceled" v-if="orderInfo.isCanceled">订单已失效 无法支付</p>
-      <p class="payment-success" v-if="orderInfo.isSuccess">订单已放行</p>
-      <div class="to-question">
-        <div class="tq-user">
-          <div v-if="this.orderInfo.ensure">
-            <p v-if="this.orderInfo.ensure.ensureMoney" class="ensure-money"><i class="el-icon-success"></i> 对方已缴纳 {{orderInfo.ensure.ensureMoney.number}} {{orderInfo.ensure.ensureMoney.type}}</p>
-          </div>
-        </div>
-        <div class="tq-title">
-          <span>常见问题</span>
-        </div>
-        <el-collapse v-model="activeNames" >
-          <el-collapse-item v-for="item in question_list" :key="item.id" :title="item.title" :name="item.id">
-            <div>{{item.des}}</div>
-          </el-collapse-item>
-        </el-collapse>
+      <div class="ti-total">
+        <span>总价:</span>{{ orderInfo.total }}
       </div>
     </div>
+    <div class="to-payment">
+      <div class="tp-tip">
+        <span>卖方收款方式 </span>
+        <hr>
+        <span v-for="item in orderInfo.ensure.ensureVerify" class="tq-verify"><i class="el-icon-success"/> {{ item.type }}认证</span>
+      </div>
+      <div v-if="orderInfo.isPending" class="tp-list">
+        <div v-for="item in orderInfo.target_user.payment_list">
+          <span>{{ item.name }}</span>{{ item.payname }}{{ item.cardNo }}
+        </div>
+      </div>
+      <p v-if="orderInfo.isCanceled" class="payment-canceled">订单已失效 支付方式无法查看</p>
+      <p v-if="orderInfo.isSuccess" class="payment-success">订单已放行</p>
+    </div>
+    <div class="to-service">
+      <div class="ts-tip">
+        <span>增值保障服务</span>
+        <hr>
+      </div>
+      <div v-if="orderInfo.isPending" class="ts-inner">
+        <span> <a :href="this.law_service.link"/>服务协议</span>
+      </div>
+    </div>
+    <div v-if="orderInfo.isPending" class="to-pay">
+      <p>待支付，请于{{ orderInfo.timeLeft }}秒内向{{ orderInfo.target_user.name }}支付 <span class="tp-price">{{ orderInfo.total }}</span>  ,付款参考号: <span class="tp-flag">{{ orderInfo.flagNumber }}</span></p>
+      <div class="tp-pay">
+        <el-button type="primary" @click="handlePay">立即支付</el-button>
+        <el-button @click="handleCancel">取消</el-button>
+      </div>
+    </div>
+    <p v-if="orderInfo.isCanceled" class="payment-canceled">订单已失效 无法支付</p>
+    <p v-if="orderInfo.isSuccess" class="payment-success">订单已放行</p>
+    <div class="to-question">
+      <div class="tq-user">
+        <div v-if="this.orderInfo.ensure">
+          <p v-if="this.orderInfo.ensure.ensureMoney" class="ensure-money"><i class="el-icon-success"/> 对方已缴纳 {{ orderInfo.ensure.ensureMoney.number }} {{ orderInfo.ensure.ensureMoney.type }}</p>
+        </div>
+      </div>
+      <div class="tq-title">
+        <span>常见问题</span>
+      </div>
+      <el-collapse v-model="activeNames" >
+        <el-collapse-item v-for="item in question_list" :key="item.id" :title="item.title" :name="item.id">
+          <div>{{ item.des }}</div>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "order-detail",
-  data(){
+  name: 'OrderDetail',
+  data() {
     return {
-      orderInfo:{       //订单信息
-        order_id: this.$route.params.id,   //订单号
-        isCanceled: false,            // TODO: 写死失效订单
-        isSuccess: true,             //TODO: 写死 订单放行
-        isPending: false,              //
-        flagNumber: '12345',        // 付款参考号
-        target_user:{
+      orderInfo: { // 订单信息
+        order_id: this.$route.params.id, // 订单号
+        isCanceled: false, // TODO: 写死失效订单
+        isSuccess: true, // TODO: 写死 订单放行
+        isPending: false, //
+        flagNumber: '12345', // 付款参考号
+        target_user: {
           id: -1,
           name: '测试名字',
-          payment_list:[
-            { payment_id: 1, name: '支付宝', payname:'赵海鹏', cardNo:'765789876789878'},
-            { payment_id: 2, name: '微信', payname:'赵海鹏',cardNo:'878678909087'},
-            { payment_id: 3, name: '银行卡', payname:'赵海鹏',cardNo:'9876546789876'},
-          ],
-        },    //交易对象
-        ensure:{
-          ensureMoney:{ type: '测试币种', number:'00000' },  //保证金
-          ensureVerify:[
-            { type: 'email'},
-            { type: 'phone'},
-            { type: 'trueName'},
+          payment_list: [
+            { payment_id: 1, name: '支付宝', payname: '赵海鹏', cardNo: '765789876789878' },
+            { payment_id: 2, name: '微信', payname: '赵海鹏', cardNo: '878678909087' },
+            { payment_id: 3, name: '银行卡', payname: '赵海鹏', cardNo: '9876546789876' }
           ]
-        },      //保证金 认证信息
-        price: 0,       //单价
-        coinType: '测试币种',   //币种
-        number: 0,      //购买个数
-        total: 0,       //总价
-        timeLeft: 900    //订单剩余时间 写死！
+        }, // 交易对象
+        ensure: {
+          ensureMoney: { type: '测试币种', number: '00000' }, // 保证金
+          ensureVerify: [
+            { type: 'email' },
+            { type: 'phone' },
+            { type: 'trueName' }
+          ]
+        }, // 保证金 认证信息
+        price: 0, // 单价
+        coinType: '测试币种', // 币种
+        number: 0, // 购买个数
+        total: 0, // 总价
+        timeLeft: 900 // 订单剩余时间 写死！
       },
-      law_service:{
-        link:'www.baidu.com'
+      law_service: {
+        link: 'www.baidu.com'
       },
       orderForm: {
 
       },
       question_list: [
-        { id: 1, title:'buyy8oihb',des:'测试问题测试问题测试问题测试问题', link:'www.baidu.com' },
-        { id: 2, title:'b测试测试b',des:'测试问题测试问题测试问题', link:'www.baidu.com' },
-        { id: 3, title:'hasbas',des:'测试问65789090876ghm,', link:'www.baidu.com' },
-        { id: 4, title:'buyy8oihb',des:'测试问题hvgujb9809题测试问题', link:'www.baidu.com' },
-      ], //常见问题列表
+        { id: 1, title: 'buyy8oihb', des: '测试问题测试问题测试问题测试问题', link: 'www.baidu.com' },
+        { id: 2, title: 'b测试测试b', des: '测试问题测试问题测试问题', link: 'www.baidu.com' },
+        { id: 3, title: 'hasbas', des: '测试问65789090876ghm,', link: 'www.baidu.com' },
+        { id: 4, title: 'buyy8oihb', des: '测试问题hvgujb9809题测试问题', link: 'www.baidu.com' }
+      ], // 常见问题列表
       activeNames: ['1']
     }
   },
-  methods: {
-    handlePay(){
-
-    },
-    handleCancel(){
-
-    },
-  },
-  mounted(){
-    setInterval(()=>{
+  mounted() {
+    setInterval(() => {
       this.orderInfo.timeLeft--
-    },1000)
+    }, 1000)
+  },
+  methods: {
+    handlePay() {
+
+    },
+    handleCancel() {
+
+    }
   }
 }
 </script>

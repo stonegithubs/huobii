@@ -1,27 +1,24 @@
 <template>
-    <div class="user-history">
-      <div class="uh-title">
-        <span>登陆历史</span>
-      </div>
-      <div class="ul-inner">
-        <el-table :data="userHistory" style="width: 100%">
-          <el-table-column prop="date" label="时间" >
-          </el-table-column>
-
-          <el-table-column prop="name" label="内容" >
-          </el-table-column>
-
-          <el-table-column prop="address" label="IP地址">
-          </el-table-column>
-        </el-table>
-      </div>
+  <div class="user-history">
+    <div class="uh-title">
+      <span>登陆历史</span>
     </div>
+    <div class="ul-inner">
+      <el-table :data="userHistory" style="width: 100%">
+        <el-table-column prop="date" label="时间" />
+
+        <el-table-column prop="name" label="内容" />
+
+        <el-table-column prop="address" label="IP地址"/>
+      </el-table>
+    </div>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "user-history",
-  data(){
+  name: 'UserHistory',
+  data() {
     return {
       userHistory: []
     }

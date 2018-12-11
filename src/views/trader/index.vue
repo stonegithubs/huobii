@@ -4,29 +4,29 @@
       <div class="base-info">
         <div class="top-info">
           <div class="span-text">
-            <div class="avatar-container" :class="getAvatarColor(id)">
-              <em class="name">{{r_name}}</em>
+            <div :class="getAvatarColor(id)" class="avatar-container">
+              <em class="name">{{ r_name }}</em>
             </div>
-            <div>{{userName}}</div></div>
+          <div>{{ userName }}</div></div>
           <div class="trade-info">
             <div class="trade-item">
-              <p>{{ensuranceMoney}} {{ensuranceCoin}}</p>
+              <p>{{ ensuranceMoney }} {{ ensuranceCoin }}</p>
               <p>商家保证金</p>
             </div>
             <div class="trade-item">
-              <p>{{recentDealRate}}%</p>
+              <p>{{ recentDealRate }}%</p>
               <p>30日成交率</p>
             </div>
             <div class="trade-item">
-              <p>{{orderTotal}} 次</p>
+              <p>{{ orderTotal }} 次</p>
               <p>成交总数</p>
             </div>
             <div class="trade-item">
-              <p>{{recentOrder}} 次</p>
+              <p>{{ recentOrder }} 次</p>
               <p>30日成交总数</p>
             </div>
             <div class="trade-item">
-              <p>{{averageDealTime}} 分钟</p>
+              <p>{{ averageDealTime }} 分钟</p>
               <p>平均放行时间</p>
             </div>
 
@@ -34,20 +34,20 @@
         </div>
         <div class="down-info">
           <div class="register-time">
-            注册时间： {{registerTime}}
+            注册时间： {{ registerTime }}
           </div>
           <div class="auth-info">
-            <div class="auth-item" :class="{ 'done': verifyList.email}">
-              邮箱认证 <i class="el-icon-success"></i>
+            <div :class="{ 'done': verifyList.email}" class="auth-item">
+              邮箱认证 <i class="el-icon-success"/>
             </div>
-            <div class="auth-item" :class="{ 'done': verifyList.phone}">
-              手机认证 <i class="el-icon-success "></i>
+            <div :class="{ 'done': verifyList.phone}" class="auth-item">
+              手机认证 <i class="el-icon-success "/>
             </div>
-            <div class="auth-item" :class="{ 'done': verifyList.true_name}">
-              实名认证 <i class="el-icon-success "></i>
+            <div :class="{ 'done': verifyList.true_name}" class="auth-item">
+              实名认证 <i class="el-icon-success "/>
             </div>
-            <div class="auth-item" :class="{ 'done': verifyList.adVerify}">
-              高级认证 <i class="el-icon-success "></i>
+            <div :class="{ 'done': verifyList.adVerify}" class="auth-item">
+              高级认证 <i class="el-icon-success "/>
             </div>
           </div>
         </div>
@@ -61,7 +61,7 @@
             <el-table-column
               label="币种">
               <template slot-scope="scope">
-                <i :class="'iconfont'+' '+'icon-'+  scope.row.coinType" ></i>
+                <i :class="'iconfont'+' '+'icon-'+ scope.row.coinType" />
                 <span style="margin-left: 10px; font-weight: 700;">{{ scope.row.coinType }}</span>
               </template>
             </el-table-column>
@@ -77,22 +77,22 @@
             <el-table-column
               label="限额">
               <template slot-scope="scope">
-                <span>{{ scope.row.limit.min }}-{{ scope.row.limit.max }} {{ scope.row.priceType}}</span>
+                <span>{{ scope.row.limit.min }}-{{ scope.row.limit.max }} {{ scope.row.priceType }}</span>
               </template>
             </el-table-column>
 
             <el-table-column
               label="单价">
               <template slot-scope="scope">
-                <span style="color:#489972;font-weight: 700;">{{ scope.row.price}} {{ scope.row.priceType}}</span>
+                <span style="color:#489972;font-weight: 700;">{{ scope.row.price }} {{ scope.row.priceType }}</span>
               </template>
             </el-table-column>
 
             <el-table-column
               label="支付方式">
               <template slot-scope="scope">
-                <el-tooltip v-for="item in scope.row.payment_list"  class="item" effect="dark" :content="item" placement="bottom">
-                  <img :src=getIcon(item) alt="">
+                <el-tooltip v-for="item in scope.row.payment_list" :content="item" class="item" effect="dark" placement="bottom">
+                  <img :src="getIcon(item)" alt="">
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -100,7 +100,7 @@
             <el-table-column
               label="支付方式">
               <template slot-scope="scope">
-                <el-button type="primary" @click="handleOrder(scope.row)">购买{{ scope.row.coinType}}</el-button>
+                <el-button type="primary" @click="handleOrder(scope.row)">购买{{ scope.row.coinType }}</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -113,7 +113,7 @@
             <el-table-column
               label="币种">
               <template slot-scope="scope">
-                <i :class="'iconfont'+' '+'icon-'+  scope.row.coinType" ></i>
+                <i :class="'iconfont'+' '+'icon-'+ scope.row.coinType" />
                 <span style="margin-left: 10px; font-weight: 700;">{{ scope.row.coinType }}</span>
               </template>
             </el-table-column>
@@ -129,21 +129,21 @@
             <el-table-column
               label="限额">
               <template slot-scope="scope">
-                <span>{{ scope.row.limit.min }}-{{ scope.row.limit.max }} {{ scope.row.priceType}}</span>
+                <span>{{ scope.row.limit.min }}-{{ scope.row.limit.max }} {{ scope.row.priceType }}</span>
               </template>
             </el-table-column>
 
             <el-table-column
               label="单价">
               <template slot-scope="scope">
-                <span style="color:#489972;font-weight: 700;">{{ scope.row.price}} {{ scope.row.priceType}}</span>
+                <span style="color:#489972;font-weight: 700;">{{ scope.row.price }} {{ scope.row.priceType }}</span>
               </template>
             </el-table-column>
 
             <el-table-column
               label="支付方式">
               <template slot-scope="scope">
-                <el-tooltip v-for="item in scope.row.payment_list"  class="item" effect="dark" :content="item" placement="bottom">
+                <el-tooltip v-for="item in scope.row.payment_list" :content="item" class="item" effect="dark" placement="bottom">
                   <img :src="getIcon(item)" alt="">
                 </el-tooltip>
               </template>
@@ -152,169 +152,169 @@
             <el-table-column
               label="支付方式">
               <template slot-scope="scope">
-                <el-button type="primary" @click="handleOrder(scope.row)">出售{{ scope.row.coinType}}</el-button>
+                <el-button type="primary" @click="handleOrder(scope.row)">出售{{ scope.row.coinType }}</el-button>
               </template>
             </el-table-column>
           </el-table>
         </div>
       </div>
     </div>
-   <div class="m-wrapper hidden-sm-and-up">
-     <div class="base-info">
-       <div class="m-user-info">
-         <div class="avatar-container">
-           <em class="name">{{r_name}}</em>
-         </div>
-         <div>
-           <span>{{userName}}</span>
-           <p>注册时间： {{registerTime}}</p>
-         </div>
-         </div>
-       <div class="m-credit-info">
-         <div class="baseInfo-in">
-           <p><span class="text-box">商家保证金</span><span>{{ensuranceMoney}} {{ensuranceCoin}}</span></p>
-           <p><span class="text-box">30日完成率</span><span>{{recentDealRate}}%</span></p>
-           <p><span class="text-box">总成交</span><span>{{orderTotal}}次</span></p>
-           <p><span class="text-box">30日成交</span><span>{{recentOrder}}次</span></p>
-           <p><span class="text-box">平均放行</span><span>{{averageDealTime}}分钟</span></p>
-         </div>
-         <div class="verify-info">
-           <div class="auth-item" :class="{ 'done': verifyList.email}">
-             邮箱认证 <i class="el-icon-success"></i>
-           </div>
-           <div class="auth-item" :class="{ 'done': verifyList.phone}">
-             手机认证 <i class="el-icon-success "></i>
-           </div>
-           <div class="auth-item" :class="{ 'done': verifyList.true_name}">
-             实名认证 <i class="el-icon-success "></i>
-           </div>
-           <div class="auth-item" :class="{ 'done': verifyList.adVerify}">
-             高级认证 <i class="el-icon-success "></i>
-           </div>
-       </div>
-     </div>
-   </div>
-     <div class="ad-info">
+    <div class="m-wrapper hidden-sm-and-up">
+      <div class="base-info">
+        <div class="m-user-info">
+          <div class="avatar-container">
+            <em class="name">{{ r_name }}</em>
+          </div>
+          <div>
+            <span>{{ userName }}</span>
+            <p>注册时间： {{ registerTime }}</p>
+          </div>
+        </div>
+        <div class="m-credit-info">
+          <div class="baseInfo-in">
+            <p><span class="text-box">商家保证金</span><span>{{ ensuranceMoney }} {{ ensuranceCoin }}</span></p>
+            <p><span class="text-box">30日完成率</span><span>{{ recentDealRate }}%</span></p>
+            <p><span class="text-box">总成交</span><span>{{ orderTotal }}次</span></p>
+            <p><span class="text-box">30日成交</span><span>{{ recentOrder }}次</span></p>
+            <p><span class="text-box">平均放行</span><span>{{ averageDealTime }}分钟</span></p>
+          </div>
+          <div class="verify-info">
+            <div :class="{ 'done': verifyList.email}" class="auth-item">
+              邮箱认证 <i class="el-icon-success"/>
+            </div>
+            <div :class="{ 'done': verifyList.phone}" class="auth-item">
+              手机认证 <i class="el-icon-success "/>
+            </div>
+            <div :class="{ 'done': verifyList.true_name}" class="auth-item">
+              实名认证 <i class="el-icon-success "/>
+            </div>
+            <div :class="{ 'done': verifyList.adVerify}" class="auth-item">
+              高级认证 <i class="el-icon-success "/>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="ad-info">
         <div>
           <p>在线出售</p>
-          <div class="ad-list" v-for="item in sellList">
+          <div v-for="item in sellList" class="ad-list">
             <div class="trader-logo">
               <div>
-                <i :class="'iconfont'+' '+'icon-'+  item.coinType" style="font-size: 30px; margin-right: 10px" ></i>
-            </div>
+                <i :class="'iconfont'+' '+'icon-'+ item.coinType" style="font-size: 30px; margin-right: 10px" />
+              </div>
               <div>
-                <span>{{ item.coinType }}</span></div>
+              <span>{{ item.coinType }}</span></div>
             </div>
             <div class="list">
               <p>
                 <span class="ad-detail">数量：</span>
-                <span>{{item.number}} {{item.coinType}}</span>
+                <span>{{ item.number }} {{ item.coinType }}</span>
               </p>
             </div>
             <div class="list">
               <span class="ad-detail">限额：</span>
-              <span>{{item.limit.min}}-{{item.limit.max}} {{item.priceType}}</span>
+              <span>{{ item.limit.min }}-{{ item.limit.max }} {{ item.priceType }}</span>
             </div>
             <div class="list">
               <span class="ad-detail">单价：</span>
-              <span style="color: #489972;font-weight: 700;">{{item.price}}{{item.priceType}}</span>
+              <span style="color: #489972;font-weight: 700;">{{ item.price }}{{ item.priceType }}</span>
             </div>
             <div class="pay-box">
               <div style="padding-left: 40px">
-                <el-tooltip v-for="i in item.payment_list"  class="item" effect="dark" :content="i" placement="bottom"  style="margin-right: 5px">
+                <el-tooltip v-for="i in item.payment_list" :content="i" class="item" effect="dark" placement="bottom" style="margin-right: 5px">
                   <img :src="getIcon(i)" alt="">
                 </el-tooltip>
               </div>
-              <el-button type="primary" @click="handleOrder(item)">出售{{ item.coinType}}</el-button>
+              <el-button type="primary" @click="handleOrder(item)">出售{{ item.coinType }}</el-button>
             </div>
           </div>
         </div>
         <div style="margin-top: 40px">
           <p>在线购买</p>
-          <div class="ad-list" v-for="item in buyList">
+          <div v-for="item in buyList" class="ad-list">
             <div class="trader-logo">
               <div>
-                <i :class="'iconfont'+' '+'icon-'+  item.coinType" style="font-size: 30px; margin-right: 10px" ></i>
-            </div>
+                <i :class="'iconfont'+' '+'icon-'+ item.coinType" style="font-size: 30px; margin-right: 10px" />
+              </div>
               <div>
-                <span>{{ item.coinType }}</span></div>
+              <span>{{ item.coinType }}</span></div>
             </div>
             <div class="list">
               <p>
                 <span class="ad-detail">数量：</span>
-                <span>{{item.number}} {{item.coinType}}</span>
+                <span>{{ item.number }} {{ item.coinType }}</span>
               </p>
             </div>
             <div class="list">
               <span class="ad-detail">限额：</span>
-              <span>{{item.limit.min}}-{{item.limit.max}} {{item.priceType}}</span>
+              <span>{{ item.limit.min }}-{{ item.limit.max }} {{ item.priceType }}</span>
             </div>
             <div class="list">
               <span class="ad-detail">单价：</span>
-              <span style="color: #489972;font-weight: 700;">{{item.price}}{{item.priceType}}</span>
+              <span style="color: #489972;font-weight: 700;">{{ item.price }}{{ item.priceType }}</span>
             </div>
             <div class="pay-box">
               <div style="padding-left: 40px">
-                <el-tooltip v-for="i in item.payment_list"  class="item" effect="dark" :content="i" placement="bottom"  style="margin-right: 5px">
+                <el-tooltip v-for="i in item.payment_list" :content="i" class="item" effect="dark" placement="bottom" style="margin-right: 5px">
                   <img :src="getIcon(i)" alt="">
                 </el-tooltip>
               </div>
-              <el-button type="primary" @click="handleOrder(item)">购买{{ item.coinType}}</el-button>
+              <el-button type="primary" @click="handleOrder(item)">购买{{ item.coinType }}</el-button>
             </div>
           </div>
         </div>
-     </div>
-  </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-  import { getAvatarColor } from '../../utils/index'
+import { getAvatarColor } from '../../utils/index'
 export default {
-  name: "trader",
+  name: 'Trader',
   data() {
     return {
       id: this.$route.params.id,
-      userName: '测试名',        //用户名
-      r_name: '姓',              //用户名首字母
-      ensuranceMoney: 5000,     //保证金
-      ensuranceCoin: '测试币种', //保证金种类
-      orderTotal: 13221,       //成交单总数
-      recentDealRate: 98,       //30日成交率
-      recentOrder: 122,         //30日成交
-      averageDealTime: 121,     //平均放行时间（分钟）
-      verifyList:{
-        email:true,
-        phone:true,
-        true_name:false,
+      userName: '测试名', // 用户名
+      r_name: '姓', // 用户名首字母
+      ensuranceMoney: 5000, // 保证金
+      ensuranceCoin: '测试币种', // 保证金种类
+      orderTotal: 13221, // 成交单总数
+      recentDealRate: 98, // 30日成交率
+      recentOrder: 122, // 30日成交
+      averageDealTime: 121, // 平均放行时间（分钟）
+      verifyList: {
+        email: true,
+        phone: true,
+        true_name: false,
         adVerify: true
       },
-      registerTime: '2017-12-11测试时间',//注册时间
-      sellList:[
-        { id:98, coinType:"BTC", number:15.87653, limit:{ min: 300, max: 1789},price:21334, priceType: "CNY", payment_list:["alipay","wechat","bank"]},
-        { id:91, coinType:"USDT", number:15.87653, limit:{ min: 301230, max: 125789},price:21334, priceType: "CNY", payment_list:["wechat","bank"]},
-        { id:90, coinType:"EOS", number:15.87653, limit:{ min: 300, max: 621789},price:21334, priceType: "CNY", payment_list:["alipay","wechat"]},
-        { id:11, coinType:"HT", number:15.87653, limit:{ min: 300, max: 1265789},price:21334, priceType: "CNY", payment_list:["alipay","bank"]},
-        { id:99, coinType:"BTC", number:15.87653, limit:{ min: 12000, max: 65789},price:21334, priceType: "CNY", payment_list:["alipay","wechat","bank"],}
+      registerTime: '2017-12-11测试时间', // 注册时间
+      sellList: [
+        { id: 98, coinType: 'BTC', number: 15.87653, limit: { min: 300, max: 1789 }, price: 21334, priceType: 'CNY', payment_list: ['alipay', 'wechat', 'bank'] },
+        { id: 91, coinType: 'USDT', number: 15.87653, limit: { min: 301230, max: 125789 }, price: 21334, priceType: 'CNY', payment_list: ['wechat', 'bank'] },
+        { id: 90, coinType: 'EOS', number: 15.87653, limit: { min: 300, max: 621789 }, price: 21334, priceType: 'CNY', payment_list: ['alipay', 'wechat'] },
+        { id: 11, coinType: 'HT', number: 15.87653, limit: { min: 300, max: 1265789 }, price: 21334, priceType: 'CNY', payment_list: ['alipay', 'bank'] },
+        { id: 99, coinType: 'BTC', number: 15.87653, limit: { min: 12000, max: 65789 }, price: 21334, priceType: 'CNY', payment_list: ['alipay', 'wechat', 'bank'] }
       ],
-      buyList:[
-        { id:98, coinType:"BTC", number:15.87653, limit:{ min: 300, max: 1789},price:21334, priceType: "CNY", payment_list:["alipay","wechat","bank"]},
-        { id:91, coinType:"USDT", number:15.87653, limit:{ min: 301230, max: 125789},price:21334, priceType: "CNY",  payment_list:["wechat","bank"]},
-        { id:90, coinType:"EOS", number:15.87653, limit:{ min: 300, max: 621789},price:21334, priceType: "CNY", payment_list:["alipay","wechat"]},
-        { id:11, coinType:"HT", number:15.87653, limit:{ min: 300, max: 1265789},price:21334, priceType: "CNY", payment_list:["alipay","bank"]},
-        { id:99, coinType:"BTC", number:15.87653, limit:{ min: 12000, max: 65789},price:21334, priceType: "CNY", payment_list:["alipay","wechat","bank"],}
-      ],
+      buyList: [
+        { id: 98, coinType: 'BTC', number: 15.87653, limit: { min: 300, max: 1789 }, price: 21334, priceType: 'CNY', payment_list: ['alipay', 'wechat', 'bank'] },
+        { id: 91, coinType: 'USDT', number: 15.87653, limit: { min: 301230, max: 125789 }, price: 21334, priceType: 'CNY', payment_list: ['wechat', 'bank'] },
+        { id: 90, coinType: 'EOS', number: 15.87653, limit: { min: 300, max: 621789 }, price: 21334, priceType: 'CNY', payment_list: ['alipay', 'wechat'] },
+        { id: 11, coinType: 'HT', number: 15.87653, limit: { min: 300, max: 1265789 }, price: 21334, priceType: 'CNY', payment_list: ['alipay', 'bank'] },
+        { id: 99, coinType: 'BTC', number: 15.87653, limit: { min: 12000, max: 65789 }, price: 21334, priceType: 'CNY', payment_list: ['alipay', 'wechat', 'bank'] }
+      ]
 
     }
   },
   methods: {
-    handleOrder(orderInfo){
+    handleOrder(orderInfo) {
       console.log(orderInfo)
     },
-    getIcon(iconName){
+    getIcon(iconName) {
       return this.$store.getters.getPaymentIcon(iconName)
     },
-    getAvatarColor(id){
+    getAvatarColor(id) {
       return getAvatarColor(id)
     }
 
@@ -541,8 +541,6 @@ export default {
       }
 
     }
-
-
 
   }
 
