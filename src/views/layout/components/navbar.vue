@@ -117,8 +117,20 @@ export default {
         })
     },
     changeLanguage(command) {
+      localStorage.setItem('locale', command)
+
       this.$i18n.locale = command
       // console.log(command)
+    }
+  },
+  beforeMount(){
+    let locale = localStorage.getItem('locale')
+    if(locale === 'zh'){
+      this.$i18n.locale = 'zh' 
+    }else if( locale === 'en'){
+      this.$i18n.locale = 'en' 
+    }else{
+      this.$i18n.locale = 'th'
     }
   }
 }
