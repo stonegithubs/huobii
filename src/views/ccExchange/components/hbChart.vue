@@ -20,7 +20,8 @@ export default {
   data() {
     return {
       currentCoin: this.$store.state.coinData.symbolShow || 'btcsudt',
-      loading: true
+      loading: true,
+      symbol: 'BTC/USDT'
     }
   },
   computed: {
@@ -32,9 +33,9 @@ export default {
     targetCoin: function() {
       this.loading = true
       const symbol = this.$store.state.coinData.targetCoin + '' + this.$store.state.coinData.mainCoin
-
+      this.symbol = symbol
       this.initChart(symbol)
-      // console.log(symbol)
+      console.log(symbol)
     }
   },
   mounted() {
@@ -251,7 +252,7 @@ export default {
               ],
               series: [
                 {
-                  name: 'Dow-Jones index',
+                  name: this.symbol,
                   type: 'candlestick',
                   data: data.values,
                   itemStyle: {

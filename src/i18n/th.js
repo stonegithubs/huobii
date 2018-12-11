@@ -130,6 +130,7 @@ module.exports = {
     clickToSendCaptcha: 'คลิกเพื่อส่งรหัสยืนยัน',
     iHaveReadAndConfirm: 'ฉันเข้าใจและยอมรับ',
     agreement: '《ข้อตกลงผู้ใช้》',
+    agreementTitle: 'ข้อตกลงผู้ใช้',
     signUp: 'ลงทะเบียน',
     confirmAgreement: 'ท่านต้องยอมรับข้อตกลงผู้ใช้',
     pwdRule: 'รหัสผ่านไม่สามารถต่ำกว่า 8 หลักและต้องประกอบด้วยอักขระ ตัวเลขและตัวอักษร',

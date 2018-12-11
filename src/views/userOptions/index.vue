@@ -9,7 +9,11 @@ export default {
   data() {
     return {}
   },
-  created() {}
+  created() {
+    if(!this.$store.state.user.token){
+      this.$router.push({ name: 'index'})
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

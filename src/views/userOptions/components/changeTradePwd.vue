@@ -32,8 +32,6 @@ import {
 import {
   sendCaptcha1,
   getCaptcha
-  // sendCode,
-  // getCode
 } from '../../../api/user'
 export default {
   name: 'ChangeTradePwd',

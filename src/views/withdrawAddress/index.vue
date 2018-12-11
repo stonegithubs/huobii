@@ -1,11 +1,11 @@
 <template>
   <div class="withdraw-address">
     <el-card class="box-card">
-      <h2 style="font-size:20px">提币地址管理</h2>
+      <h2 style="font-size:20px">{{$t('withDraw.title')}}</h2>
     </el-card>
     <el-card class="box-card head-card">
       <el-form ref="addressForm" :model="addressForm" :inline="true" label-position="top">
-        <el-form-item :rules="[{ required: true, message: '请选择币种', trigger: 'blur' }]" label="币种" prop="abbr">
+        <el-form-item :rules="[{ required: true, message: $t('wallet.chooseCoin'), trigger: 'blur' }]" :label="币种" prop="abbr">
           <el-select v-model="addressForm.abbr">
             <el-option v-for="(item, id) in coinList" :key="id" :value="item.abbr">{{ item.abbr }}</el-option>
           </el-select>
@@ -35,23 +35,7 @@ export default {
   components: {},
   data() {
     return {
-      coinList: [{
-        id: 'asvhabsbjxca576897812',
-        abbr: 'BTC'
-      },
-      {
-        id: 'asvhabsbjxc576897812',
-        abbr: 'ETH'
-      },
-      {
-        id: 'asvhabsxca576897812',
-        abbr: 'USDT'
-      },
-      {
-        id: 'asvhabs76897812',
-        abbr: 'HT'
-      }
-      ],
+      coinList: [],
       addressForm: {
         abbr: '',
         address: '',
@@ -59,6 +43,10 @@ export default {
       }
     }
   },
+  created(){
+    this.$store.dispatch('getSupportCoin').then(_ => {
+      this.coinList = _.content.records
+    }).catch(_ => {})  },
   computed: {},
   methods: {
     submit() {

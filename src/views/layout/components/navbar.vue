@@ -57,7 +57,7 @@
             <!--  <router-link :to="{ name: 'invite'}">
               <el-menu-item index="5-1">我的邀请码</el-menu-item>
             </router-link>-->
-            <router-link :to="{ name: 'tradeUserCenter'}">
+            <router-link :to="{ name: 'user_center'}">
               <el-menu-item index="5-2">{{ $t("navbar.user.userCenter") }}</el-menu-item>
             </router-link>
             <router-link :to="{ name: 'verify'}">

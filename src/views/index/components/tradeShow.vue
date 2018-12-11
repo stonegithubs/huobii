@@ -10,7 +10,7 @@
               {{ scope.row.target }} / <span style="color:#61688a">{{ scope.row.symbolName }}</span>
             </template>
           </el-table-column>
-          <el-table-column :label="$t('index.tradeShow.lastPrice')" prop="close" sortable min-width="170">
+          <el-table-column :label="$t('index.tradeShow.lastPrice')+' (USD)'" prop="close" sortable min-width="170">
             <template slot-scope="scope">
               {{ scope.row.close }}
             </template>

@@ -143,6 +143,7 @@ module.exports = {
     clickToSendCaptcha: '点击发送验证码',
     iHaveReadAndConfirm: '我已经阅读并同意',
     agreement: '《用户协议》',
+    agreementTitle: '用户协议',
     signUp: '注册',
     confirmAgreement: '您必须同意用户协议',
     pwdRule: '密码不能低于8位且由字符、数字、字母构成',
@@ -223,7 +224,18 @@ module.exports = {
     transferSuccess: '转账成功',
     transferFailed: '转账失败'
   },
-  currency: {
+  currency: { // 以下
 
+  },
+  order: {
+    orderNo: '订单号',
+    orderType: '交易类型',
+    orderTotal: '总价',
+    fee: '手续费',
+    orderUser: '交易对象',
+    myOrders: '我的订单',
+    passed: '已放行',
+    pending: '未付款',
+    canceled: '已取消',
   }
 }

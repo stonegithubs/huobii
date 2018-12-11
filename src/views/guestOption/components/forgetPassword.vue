@@ -22,8 +22,10 @@
       <el-form-item :label="$t('userOptions.confirmNewPwd')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="confirm">
         <el-input v-model="forgetForm.confirm " type="password" autocomplete="off" />
       </el-form-item>
-      <el-form-item :label="$t('login.country')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="country">
-        <el-input v-model="forgetForm.country " type="text" autocomplete="off" />
+      <el-form-item  :label="$t('login.country')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="country">
+        <el-select v-model="forgetForm.country"> 
+        <el-option v-for="item in this.$store.state.Common.countryList" :key="item.id" :label="item.name" :value="item.abbr"></el-option>
+    </el-select>
       </el-form-item>
       <el-form-item>
         <el-button class="forget-button" type="primary" @click="beforeSubmit('forget-form')" >{{ $t('confirm') }}</el-button>
@@ -41,6 +43,7 @@
 import {
   forget
 } from '../../../api/security'
+import { mapGetters } from 'vuex'
 import {
   sendCaptcha1,
   getCaptcha,
@@ -66,15 +69,20 @@ export default {
     }
   },
   computed: {
-
+      ...mapGetters([
+      'getCountry',
+      'getCountryCodeByAbbr'
+    ])
   },
-  created() {},
+  created() {
+    this.$store.dispatch('getCountryList')
+  },
   methods: {
     beforeSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           this.captchaVisible = true
-          const phone = this.forgetForm.phone
+          const phone = this.getCountryCodeByAbbr(this.forgetForm.country)+this.forgetForm.phone
           const country = this.forgetForm.country
           sendCaptcha1(phone, country).then(res => {
             // TODO: 接收验证码需要删除
@@ -150,51 +158,8 @@ export default {
 }
 </script>
 <style lang='scss' scoped>
-    // .forget-password /deep/ {
-    //     width: 600px;
-    //     margin: auto;
-    //     .ok-color {
-    //         color: white
-    //     }
-    //     button:focus {
-    //         outline: none
-    //     }
-    //     .send-code {
-    //         background: transparent;
-    //         border: none;
-    //         border-radius: 0%;
-    //         width: 26%;
-    //         color: white;
-    //          ::before {
-    //             content: "|";
-    //             margin-right: 30px;
-    //             color: #1e2235;
-    //         }
-    //     }
-    //     .el-form /deep/ {
-    //         .forget-button {
-    //             // height: 48px;
-    //             border-radius: 3px;
-    //             border: none;
-    //             min-width: 200px;
-    //             font-size: 16px;
-    //             width: 100%;
-    //             background-color: #7a98f7;
-    //             &:hover {
-    //                 background-color: #a0b6f9;
-    //             }
-    //         }
-    //         .el-form-item__label {
-    //             color: #61688a;
-    //         }
-    //         .el-input__inner {
-    //             background-color: #1e2235;
-    //             color: #c7cce6;
-    //             box-sizing: border-box; // height: 48px;
-    //             border: 1px solid #4e5b85;
-    //             border-radius: 3px;
-    //             font-size: 16px;
-    //         }
-    //     }
-    // }
+    .box-card {
+      width: 500px;
+      margin: auto;
+    }
 </style>

@@ -1,6 +1,7 @@
 // 网站货币信息
 
 import { getRemoteSymbols, getRemoteSymbolList, getSupportedCoin, getMarketDetail, getMarketDepth, okcoinTicket } from '../../api/coins'
+import { stat } from 'fs';
 // import { stat } from "fs";
 // import store from "../index";
 
@@ -43,7 +44,15 @@ const coinData = {
     sellDepth: [],
 
     // 购买币种深度列表
-    buyDepth: []
+    buyDepth: [],
+
+    // 支持的币种
+    supportedCoin: [],
+
+    supportedCash: [
+      { id: '1', name: 'USD' },
+      { id: '2', name: 'CNY' }
+    ]
   },
   mutations: {
     SET_RATELIST: (state, list) => {
@@ -232,13 +241,20 @@ const coinData = {
     getSupportCoin: (state) => {
       return state.supportedCoin
     },
-    // getSupportCoinByName: (state) => (coinName) => {
-    //   for (let item of state.supportedCoin) {
-    //     if (item.__ = coinName) { //todo:支持的币种未完成
-    //       return item
-    //     }
-    //   }
-    // },
+    getCashNameById: (state) => (id) => {
+      for (let item of state.supportedCash) {
+        if (id == item.id) {
+          return item.name
+        }
+      }
+    },
+    getCashIdByName: (state) => (name) => {
+      for (let item of state.supportedCash) {
+        if (name == item.name) {
+          return item.id
+        }
+      }
+    },
     getMainCoin: (state) => {
       return state.mainCoin
     },

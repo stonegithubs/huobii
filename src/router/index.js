@@ -102,18 +102,18 @@ export const constantRouterMap = [
     ]
 
   },
-  {
-    path: '/agreement',
-    component: layout,
-    children: [
-      {
-        path: '',
-        name: 'agreement',
-        component: () => import('@/views/agreement/index')
-      }
-    ]
+  // {
+  //   path: '/agreement',
+  //   component: layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'agreement',
+  //       component: () => import('@/views/agreement/index')
+  //     }
+  //   ]
 
-  },
+  // },
   {
     path: '/user_center',
     component: layout,
@@ -121,7 +121,7 @@ export const constantRouterMap = [
       {
         path: '',
         name: 'user_center',
-        component: () => import('@/views/userCenter/index')
+        component: () => import('@/views/userCenter/index') 
       }
     ]
 
@@ -188,11 +188,33 @@ export const constantRouterMap = [
             path: '/userOptions/verify',
             name: 'verify',
             component: () => import('@/views/userOptions/components/verified')
+          }
+          // {
+          //   path: '/userOptions/forget',
+          //   name: 'forget_password',
+          //   component: () => import('@/views/userOptions/components/forgetPassword')
+          // }
+        ]
+      }]
+  },
+  {
+    path: '/guestOption',
+    component: layout,
+    children: [
+      {
+        path: 'guestOption',
+        name: 'guestOption',
+        component: () => import('@/views/guestOption/index'),
+        children: [
+          {
+            path: '/guestOption/forget',
+            name: 'forget_password',
+            component: () => import('@/views/guestOption/components/forgetPassword')
           },
           {
-            path: '/userOptions/forget',
-            name: 'forget_password',
-            component: () => import('@/views/userOptions/components/forgetPassword')
+            path: '/guestOption/agreement',
+            name: 'agreement',
+            component: () => import('@/views/guestOption/components/agreement')
           }
         ]
       }]
@@ -221,17 +243,17 @@ export const constantRouterMap = [
     ]
   },
   // 用户信息
-  {
-    path: '/trade_user_center',
-    component: layout,
-    children: [
-      {
-        path: '',
-        name: 'tradeUserCenter',
-        component: () => import('@/views/tradeUserCenter/index')
-      }
-    ]
-  },
+  // {
+  //   path: '/trade_user_center',
+  //   component: layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'tradeUserCenter',
+  //       component: () => import('@/views/tradeUserCenter/index')
+  //     }
+  //   ]
+  // },
   // 法币交易个人中心
   {
     path: '/trade_order', // 法币订单

@@ -16,10 +16,11 @@ export function getCover() {
 }
 
 // 首页轮播图
-export function getBanner() {
+export function getBanner(page, size) {
   return request({
     url: '/api/v1/public/cms/banner',
-    method: 'post'
+    method: 'post',
+    params: { page, size }
   })
 }
 
