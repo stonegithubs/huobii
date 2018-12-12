@@ -291,7 +291,7 @@ export default {
     }
     .hb-buy,
     .hb-sell {
-      height: 372px;
+      // height: 372px;
       float: left;
       width: 50%;
       font-size: 14px;

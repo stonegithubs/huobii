@@ -28,7 +28,16 @@ export function okcoinTicket() {
 // 拉取支持的币种信息
 export function getSupportedCoin() {
   return request({
-    url: '/api/v1/public/common/coin?page=0&size=2000',
+    url: '/api/v1/public/common/coin?page=0&size=2000&type=0',
+    method: 'post'
+  })
+}
+
+// 拉取支持的法币
+
+export function getSupportedCash() {
+  return request({
+    url: '/api/v1/public/common/coin?page=0&size=2000&type=1',
     method: 'post'
   })
 }

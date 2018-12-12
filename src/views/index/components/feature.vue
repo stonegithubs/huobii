@@ -8,10 +8,10 @@
               {{ $t('index.feature.first.dsc') }}
           </pre>
         </div>
-        <div class="img-wrap fr "><img :src="require('../../../assets/imgs/feature_1.png')" ></div>
+        <div class="img-wrap fr "><img :src="featureList[0].image" ></div>
       </div >
       <div class="feature">
-        <div class="img-wrap fl"><img :src="require('../../../assets/imgs/feature_2.png')" alt=""></div>
+        <div class="img-wrap fl"><img :src="featureList[1].image" alt=""></div>
         <div class="text-wrap fr">
           <h5> {{ $t('index.feature.second.title') }}</h5>
           <pre> {{ $t('index.feature.second.dsc') }}</pre>
@@ -22,7 +22,7 @@
           <h5>{{ $t('index.feature.thrid.title') }}</h5>
           <pre>{{ $t('index.feature.thrid.dsc') }}</pre>
         </div>
-        <div class="img-wrap fr "><img :src="require('../../../assets/imgs/feature_3.png')" alt=""></div>
+        <div class="img-wrap fr "><img :src="featureList[2].image" alt=""></div>
       </div>
     </div>
   </div>
@@ -34,11 +34,12 @@ export default {
   name: 'Feature',
   data(){
     return {
+      // baseUrl: 'https://api.hextec.cn:8443',
       featureList: []
     }
   },
   created(){
-    waterFall('12','1',20).then(res=>{
+    waterFall(0,5).then(res=>{
       if(res.code === '200'){
         this.featureList = res.content.records
       }

@@ -23,7 +23,11 @@ export default {
     myFooter
   },
   created() {
-
+    this.$nextTick(()=>{
+      this.$store.dispatch('getSupportCash')
+      this.$store.dispatch('getSupportCoin')
+      this.$store.dispatch('getSupportedPayway')
+    })
   }
 }
 </script>

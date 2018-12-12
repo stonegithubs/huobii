@@ -11,7 +11,13 @@
                             {{ article.title }}
                         </router-link>
                     </div>
+                   
                 </div>
+                 <div class="check-all">
+                        <router-link :to="{ name: 'article_detail', params: { category_id: category.id}}">
+                            {{$t('notice.checkAll')}}
+                        </router-link>
+                    </div>
             </el-col>
         </el-row>
     </div>
@@ -64,15 +70,32 @@
             .list-wrapper {
                 font-size: 16px;
                 padding: 15px 0;
+                max-height: 350px;
+                position: relative;
+                overflow: hidden;
                 .list-item {
                     border-bottom: 1px solid #ddd;
                     font-size: 16px;
                     padding: 15px 0;
+                    white-space:nowrap;
+                    overflow:hidden;
+                    text-overflow : ellipsis 
+
                 }
                 a {
                     color: rgba(42, 58, 75, 1);
                 }
+               
             }
+             .check-all {
+                    // position: absolute;
+                    // bottom: 0;
+                    // margin-top: 20px;
+                    font-size: 14px;
+                    a{
+                        color: rgba(71, 78, 112, 1);
+                    }
+                }
         }
     }
 </style>

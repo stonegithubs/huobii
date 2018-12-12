@@ -126,6 +126,9 @@ const user = {
         })
       })
     }
+  },
+  getters: {
+    // getUserPayway: (state)
   }
 }
 

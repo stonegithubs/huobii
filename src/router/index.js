@@ -248,7 +248,7 @@ export const constantRouterMap = [
     component: layout,
     children: [
       {
-        path: '',
+        path: 'order_detail/:id/:processId',
         name: 'orderDetail',
         component: () => import('@/views/orderDetail/index')
       }

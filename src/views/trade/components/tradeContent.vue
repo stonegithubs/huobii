@@ -110,11 +110,9 @@
       <el-table-column prop="id" label="下单" width="100">
         <template slot-scope="scope">
           <el-popover
-            v-model="tradeBarVisible"
             placement="bottom"
             width="900px"
             height="900px">
-            <!-- <el-card class="box-card"> -->
             <el-form ref="tradeForm" :inline="false" :model="tradeForm">
 
               <el-form-item
@@ -143,18 +141,14 @@
         </template>
       </el-table-column>
 
-      <!-- <el-table-column type="expand" width='100' label="查看详情"> -->
-      <!-- <template slot-scope="props"> -->
-
-      <!-- </template> -->
-      <!-- </el-table-column> -->
+      
 
     </el-table>
 
     <!-- 分页 -->
     <div class="mpagination">
       <el-pagination
-        :page-count="total"
+        :page-count="Math.ceil(total/10)"
         :current-page.sync ="page"
         class=""
         background
@@ -169,7 +163,7 @@
       width="300px">
       <el-input v-model="tradeForm.code" placeholder="请输入您收到的验证码"/>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="doTrade()">确 定</el-button>
+        <el-button type="primary" @click="doTrade()">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -192,63 +186,7 @@ export default {
   },
   data() {
     return {
-      merchantList: [
-        //     {
-        //   "amount": 0,
-        //   "cashId": "string",
-        //   "coinId": "string",
-        //   "direction": "string",
-        //   "expire": 0,
-        //   "fee": 0,
-        //   "id": "string",
-        //   "max": 0,
-        //   "message": "string",
-        //   "min": 0,
-        //   "paywayIds": "9fe2dcef18e94c85adb3ff6da9c2a78d,1,2",
-        //   "price": 0,
-        //   "remarks": "string",
-        //   "status": "string",
-        //   "tradeAmount": 0,
-        //   "tradeTime": "2018-12-09T13:07:09.683Z",
-        //   "type": "string",
-        //   "updateDate": "2018-12-09T13:07:09.683Z",
-        //   "user": {
-        //     "companyId": "string",
-        //     "country": {
-        //       "abbr": "string",
-        //       "code": "string",
-        //       "enName": "string",
-        //       "id": "string",
-        //       "name": "string",
-        //       "remarks": "string",
-        //       "updateDate": "2018-12-09T13:07:09.683Z"
-        //     },
-        //     "countryCode": "string",
-        //     "discount": 0,
-        //     "email": "string",
-        //     "freezeFlag": "string",
-        //     "id": "string",
-        //     "loginDate": "2018-12-09T13:07:09.683Z",
-        //     "loginFlag": "string",
-        //     "loginIp": "string",
-        //     "loginName": "string",
-        //     "mobile": "string",
-        //     "name": "string",
-        //     "no": "string",
-        //     "officeId": "string",
-        //     "phone": "string",
-        //     "photo": "string",
-        //     "recommendCode": "string",
-        //     "recommenderId": "string",
-        //     "regIp": "string",
-        //     "remarks": "string",
-        //     "score": 0,
-        //     "updateDate": "2018-12-09T13:07:09.683Z",
-        //     "userType": "string"
-        //   },
-        //   "userId": "string"
-        // }
-      ],
+      merchantList: [],
       currentCoin: 'usdt',
       page: 0,
       total: 0,
@@ -303,6 +241,7 @@ export default {
 
   },
   created() {
+    // this.$router.push({ name: 'orderDetail', params: { id: '594f8c0ae4034fe79713cdafe4bcfd55', processId: '2bfeb0ea99bd49e9938a9952e9397295'} })
     // 拉取商家列表
     this.getMerchantList(this.page, this.onePageNum, this.direction, this.payments, this.coinId, this.cashId)
 
@@ -315,12 +254,14 @@ export default {
   },
   methods: {
     getMerchantList(page, size, direction, payments, coinId, cashId) {
+      this.merchantList = []
       fbList(page, size, direction, payments, coinId, cashId).then(res => {
         if (res.code === '200') {
           const content = res.content
+          this.total = content.total
           if (content.records instanceof Array) {
             this.merchantList = content.records
-            this.total = content.total
+            
           }
           // console.log(this.merchantList)
         }
@@ -330,12 +271,12 @@ export default {
       this.page = 0
       this.payments = this.searchForm.payments
       this.cashId = this.searchForm.cashId
-      console.log('搜索条件' + this.page, this.onePageNum, this.direction, this.payments, this.coinId, this.cashId)
+      // console.log('搜索条件' + this.page, this.onePageNum, this.direction, this.payments, this.coinId, this.cashId)
       this.getMerchantList(0, 10, 0, this.payments, this.coinId, this.cashId)
       // this.getMerchantList(this.page, this.total, this.direction, this.payments, this.coinId, this.cashId)
     },
     pageChange(s) {
-      console.log('页数改变 ' + s)
+      // console.log('页数改变 ' + s)
       this.getMerchantList(s, 10, this.direction, this.payments, this.coinId, this.payments)
     },
     filter() {
@@ -409,16 +350,15 @@ export default {
     },
     doTrade() {
       const form = this.tradeForm
-      console.log(form.id, form.direction, form.code, form.amount)
+      // console.log(form.id, form.direction, form.code, form.amount)
       fbTrade(form.id, form.direction, form.code, form.amount).then(res => {
-        dialogVisible = false
+        this.dialogVisible = false
         if (res.code === '200') {
-          this.$notify.success('下单成功，请于15分钟内完成交易')
-          console.log(res)
-          // this.push({ name: '***' })
+          this.$notify.success('下单成功，交易编号:'+ res.content.id)
+          this.$router.push({ name: 'orderDetail', params: { id:res.content.orderId  , processId:res.content.id} })
         } else {
           this.$notify.error('下单失败' + res.content.message)
-          console.log(res)
+          // console.log(res)
         }
       }).catch(err => {
         this.notify.error(err.message)
@@ -464,9 +404,11 @@ export default {
       padding-right: 20px;
   }
   .trade-content {
-    width: 90%; // background: #fff;
+    width: 1200px;
+    margin: auto; 
+    padding-bottom:50px; 
     .el-table /deep/ {
-      min-height: 400px;
+       min-height: 400px;
       .cell {
         display: flex;
         align-items: center;

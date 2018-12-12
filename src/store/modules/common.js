@@ -34,7 +34,7 @@ const Common = {
     getCountryList({ commit }) {
       return new Promise((resolve, reject) => {
         getCountry().then(response => {
-          const sortedCountry = response.content.sort(function(a, b) { return (a.id - b.id) })
+          const sortedCountry = response.content.sort(function (a, b) { return (a.id - b.id) })
           commit('SET_COUNTRY', sortedCountry)
           resolve(response)
         }).catch(err => {
@@ -57,6 +57,17 @@ const Common = {
     },
     getSiteKey: (state) => {
       return state.sitekey
+    },
+    getPayway: (state) => {
+      return state.supportPayway
+    },
+    getPaywayById: (state) => (id) => {
+      for (let item of state.supportPayway) {
+        if (id == item.id) {
+          return item
+        }
+      }
+      return
     }
   }
 

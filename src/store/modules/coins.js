@@ -1,6 +1,6 @@
 // 网站货币信息
 
-import { getRemoteSymbols, getRemoteSymbolList, getSupportedCoin, getMarketDetail, getMarketDepth, okcoinTicket } from '../../api/coins'
+import { getRemoteSymbols, getSupportedCash, getRemoteSymbolList, getSupportedCoin, getMarketDetail, getMarketDepth, okcoinTicket } from '../../api/coins'
 import { stat } from 'fs';
 // import { stat } from "fs";
 // import store from "../index";
@@ -57,6 +57,9 @@ const coinData = {
   mutations: {
     SET_RATELIST: (state, list) => {
       state.rateList = list
+    },
+    SET_CASH: (state, list) => {
+      state.supportedCash = list
     },
     SET_SYMBOLS: (state, content) => {
       state.symbols = content
@@ -115,11 +118,22 @@ const coinData = {
         })
       })
     },
-    // 获取支持的币种
+    // 获取支持的虚拟币种
     getSupportCoin({ commit }) {
       return new Promise((resolve, reject) => {
         getSupportedCoin().then(response => {
           commit('SET_SUPPORTED_COIN', response.content.records)
+          resolve(response)
+        }).catch(err => {
+          reject(err)
+        })
+      })
+    },
+    // 获取支持的法币
+    getSupportCash({ commit }) {
+      return new Promise((resolve, reject) => {
+        getSupportedCash().then(response => {
+          commit('SET_CASH', response.content.records)
           resolve(response)
         }).catch(err => {
           reject(err)
@@ -240,6 +254,9 @@ const coinData = {
     // },
     getSupportCoin: (state) => {
       return state.supportedCoin
+    },
+    getSupportCash: (state) => {
+      return state.supportedCash
     },
     getCashNameById: (state) => (id) => {
       for (let item of state.supportedCash) {

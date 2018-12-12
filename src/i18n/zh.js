@@ -236,6 +236,41 @@ module.exports = {
     passed: '已放行',
     pending: '未付款',
     canceled: '已取消',
+    // 拆分句
+    submitTip1: '发布一个',
+    submitTip1_1: '交易广告',
+    // 拆分句
+    submitTip2: '如果您经常交易',
+    submitTip2_2: '可以发布自己的',
+    submitTip2_3: '交易广告。如果您只想购买或出售一次，我们建议您直接从购买或出售列表中下单交易',
+    
+    submitTip4: '发布一则交易广告是免费的。',
+    submitTip5: '发布交易广告的数字资产交易用户每笔完成的交易需要缴纳1%的费用 。',
+    submitTip6: '您必须在交易广告或交易聊天中提供您的付款详细信息，发起交易后，价格会锁定，除非定价中有明显的错误',
+    submitTip7: '所有交流必须在数字资产交易上进行，请注意高风险有欺诈风险的付款方式。',
+
+    buyOnline: '在线购买',
+    sellOnline: '在线出售',
+    coinType: '货币类型',
+    coinTip: '请选择交易的法币类型',
+    priceTip: '请输入单价',
+    min: '最低限额',
+    minTip: '请输入最低限额',
+    max: '最高限额',
+    maxTip: '请输入最高限额',
+    expire: '交易时限（min）',
+    expireTip: '请输入交易时限',
+    amount: '交易数量',
+    amountTip: '请输入币种数量',
+    payways: '支付方式',
+    paywaysTip: '请输入支付方式',
+    message: '下单留言',
+    messageTip: '请输入下单留言',
+    direction: '选择广告类型',
+    directionTip: '请选择广告类型',
+    submitNow: '立即发布',
+    submitSuccess: '发布成功',
+    submitFailed: '发布失败',
   },
   withDraw: {   //以下
     title: '提币地址管理',
@@ -247,5 +282,12 @@ module.exports = {
     remark: '备注',
     add: '添加',
     addressList: '地址列表',
-  }
+  },
+  notice: {   // 以下
+    checkAll: '查看所有文章',
+    index: '首页',
+    articleCenter: '文章中心',
+    articleDetail: '文章详情',
+  },
+  
 }

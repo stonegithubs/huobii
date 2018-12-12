@@ -44,7 +44,7 @@
                 {{ $t("navbar.user.exchangeOrder") }}
               </el-menu-item>
             </router-link>
-            <router-link :to="{ name: 'tradeOrder'}">
+            <router-link :to="{ name: 'advList'}">
               <el-menu-item index="4-2">
                 {{ $t("navbar.user.financeOrder") }}
               </el-menu-item>

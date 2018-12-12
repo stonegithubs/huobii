@@ -40,6 +40,9 @@ export default {
     position: absolute;
     top:448px;
     z-index: 10;
+    
+    box-shadow: 48px 9px 20px 4px rgba(1,1,1,0.1);
+    border: 1px solid #EEE;
   }
   .index-notice .notice-item {
     flex-wrap: wrap;

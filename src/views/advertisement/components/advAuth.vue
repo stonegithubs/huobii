@@ -28,8 +28,13 @@
     <div class="auth-button">
       <el-button type="primary" @click="dialogVisible = true">{{ $t('advertisetment.appNow') }}</el-button>
     </div>
-    <el-dialog :visible.sync="dialogVisible" :before-close="handleClose" width="472">
-      <div/>
+    <el-dialog
+      title="No Verification During Testing Process"
+     :visible.sync="dialogVisible"
+      width="472px">
+      
+      <el-button width="100%" @click="goToAdvtising()">Click<strong> Here </strong>to Submit Advertisement</el-button>
+
       <span slot="footer" class="dialog-footer">
         <!-- <el-button @click="dialogVisible = false">取 消</el-button> -->
         <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
@@ -49,6 +54,11 @@ export default {
   },
   beforeCreate() {
 
+  },
+  methods: {
+    goToAdvtising(){
+      this.$router.push({ name: 'advertising'})
+    }
   }
 }
 </script>

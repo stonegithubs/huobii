@@ -51,11 +51,11 @@ export function cmsLink(category_id) {
 }
 
 // 获取对应友情链接
-export function waterFall(category, page, size) {
+export function waterFall(page, size) {
   return request({
     url: '/api/v1/public/cms/waterfall',
     method: 'post',
-    params: { category, page, size }
+    params: { page, size }
   })
 }
 

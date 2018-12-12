@@ -2,9 +2,9 @@
   <div>
     <div class="article-nav">
       <el-breadcrumb separator="/">
-        <el-breadcrumb-item :to="{ name: 'index' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ name: 'article_list' }">文章中心</el-breadcrumb-item>
-        <el-breadcrumb-item>文章详情</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'index' }">{{$t('notice.index')}}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'article_list' }">{{$t('notice.articleCenter')}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{$t('notice.articleDetail')}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <div class="article-tabs">
