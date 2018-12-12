@@ -29,6 +29,30 @@ export const constantRouterMap = [
     ]
 
   },
+  {
+    path: '/articles',
+    component: layout,
+    children: [
+      {
+        path: '/articles',
+        name: 'article',
+        component: () => import('@/views/article/index'),
+        children: [
+          {
+            path: '/articles',
+            name: 'article_list',
+            component: () => import('@/views/article/components/articleList')
+          },
+          {
+            path: '/articles/:category_id/:article_id',
+            name: 'article_detail',
+            component: () => import('@/views/article/components/articleDetail')
+          }
+        ]
+      }
+    ]
+
+  },
   // 邀请模块暂时不开启
   // {
   //   path: '/invite',

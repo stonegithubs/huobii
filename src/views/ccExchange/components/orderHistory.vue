@@ -151,7 +151,7 @@ export default {
 <style lang="scss" scoped>
   @import "../../../assets/custom-theme/theme";
   .order-history /deep/ {
-    width: 1136px;
+    // width: 1136px;
     min-height: 190px;
     /*background-color: darkgoldenrod;*/
     .title {

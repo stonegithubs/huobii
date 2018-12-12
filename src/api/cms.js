@@ -49,3 +49,39 @@ export function cmsLink(category_id) {
     params: { category: category_id, page: 0, size: 10 }
   })
 }
+
+// 获取对应友情链接
+export function waterFall(category, page, size) {
+  return request({
+    url: '/api/v1/public/cms/waterfall',
+    method: 'post',
+    params: { category, page, size }
+  })
+}
+
+// 获取文章分类
+export function articleCategory(page, size) {
+  return request({
+    url: '/api/v1/public/cms/category',
+    method: 'post',
+    params: { page, size }
+  })
+}
+
+// 获取文章列表
+export function articles(page, size) {
+  return request({
+    url: '/api/v1/public/cms/articles',
+    method: 'post',
+    params: { page, size }
+  })
+}
+
+// 获取文章详情
+export function articleDetail(id) {
+  return request({
+    url: '/api/v1/public/cms/article',
+    method: 'post',
+    params: { id }
+  })
+}

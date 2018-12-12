@@ -2,7 +2,6 @@ module.exports = {
   siteName: '通链数字资产交易所', //  1
   googleCaptchaNeed: '请点击谷歌验证码，如果未加载请检查您的网络状况', // 1
   lang: '简体中文',
-  // siteName: '数字资产交易平台',
   confirm: '确定',
   canceled: '取消',
   captcha: '验证码',
@@ -227,7 +226,7 @@ module.exports = {
   currency: { // 以下
 
   },
-  order: {
+  order: {      //  以下
     orderNo: '订单号',
     orderType: '交易类型',
     orderTotal: '总价',
@@ -237,5 +236,16 @@ module.exports = {
     passed: '已放行',
     pending: '未付款',
     canceled: '已取消',
+  },
+  withDraw: {   //以下
+    title: '提币地址管理',
+    coinRequire: '请选择币种',
+    addRequire: '请填写地址',
+    coin: '币种',
+    address: '地址',
+    remarkRequire: '请填写备注',
+    remark: '备注',
+    add: '添加',
+    addressList: '地址列表',
   }
 }

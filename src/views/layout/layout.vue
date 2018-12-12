@@ -1,7 +1,9 @@
 <template>
   <div class="lay-out">
     <navbar/>
-    <mainbox/>
+    <div class="view-port">
+      <mainbox/>
+    </div>
     <!--<router-view/>-->
     <my-footer/>
   </div>
@@ -33,10 +35,16 @@ export default {
     color: white;
   }
   .lay-out {
-    min-width: 1526px;
+    min-width: 1200px;
     // color: #c7cce6;
     background-color: $hbBackgroundColor;
     margin: auto;
+    .view-port {
+      @media (max-width: 1200px) {
+        width: 1200px;
+      }
+      margin: auto
+    }
   }
   ::-webkit-scrollbar{
     /*height: 20px;*/

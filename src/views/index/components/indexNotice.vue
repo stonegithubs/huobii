@@ -33,7 +33,7 @@ export default {
   .index-notice {
     display: inline-block;
     width: 100%;
-    min-width: 1526px;
+    min-width: 1200px;
     height: 60px;
     background-color: #181b2a ;
     text-align: center;

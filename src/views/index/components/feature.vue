@@ -29,8 +29,23 @@
 </template>
 
 <script>
+import { waterFall } from '../../../api/cms'
 export default {
-  name: 'Feature'
+  name: 'Feature',
+  data(){
+    return {
+      featureList: []
+    }
+  },
+  created(){
+    waterFall('12','1',20).then(res=>{
+      if(res.code === '200'){
+        this.featureList = res.content.records
+      }
+    }).catch(err=>{
+      console.log(err)
+    })
+  }
 }
 </script>
 
@@ -70,7 +85,7 @@ export default {
       }
       }
       .text-wrap {
-        width: 500px;
+        width: 600px;
       }
       .img-wrap {
         width: 500px;

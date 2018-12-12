@@ -7,7 +7,8 @@
           <span style="padding:0 15px;margin-left:15px">{{ $t('exchange.main.fixedPrice') }}</span>
         </template>
         <div class="hb-buy">
-          <div v-if="!isAuth">
+          <div class="panel-wrapper">
+            <div v-if="!isAuth">
             <router-link :to="{ name: 'registry'}"> {{ $t('exchange.sidebar.registry') }}</router-link> {{ $t('exchange.sidebar.or') }} <router-link :to="{ name: 'login'}">{{ $t('exchange.sidebar.signIn') }} </router-link>{{ $t('exchange.sidebar.startTrade') }}
           </div>
           <div v-if="isAuth" class="balance"><span> {{ $t('exchange.main.available') }} {{ Number(this.getCoinBalanceByName(this.getMainCoin).coinBalance).toFixed(8) }} {{ this.getMainCoin.toUpperCase() }}</span><router-link :to="{ name: 'wallet'}">{{ $t('exchange.main.topUps') }}</router-link></div>
@@ -30,8 +31,11 @@
               <p>{{ $t('exchange.main.tradeTotalPrice') }} <span>{{ Number(this.xj_buyForm.amount*this.xj_buyForm.price).toFixed(8) }} {{ this.getMainCoin.toUpperCase() }}</span></p>
             </div>
           </div>
+          <el-button :disabled="!isAuth" :class="isAuth? '':'disabled-button'" class="buy-button" @click="handle_xj_buy">买入 <span>{{ this.getTargetCoin.toUpperCase() }}</span></el-button>
+          </div>
         </div>
         <div class="hb-sell">
+          <div class="panel-wrapper">
           <div v-if="!isAuth">
             <router-link :to="{ name: 'registry'}"> {{ $t('exchange.sidebar.registry') }}</router-link> {{ $t('exchange.sidebar.or') }} <router-link :to="{ name: 'login'}">{{ $t('exchange.sidebar.signIn') }} </router-link>{{ $t('exchange.sidebar.startTrade') }}
           </div>
@@ -58,6 +62,8 @@
             <div class="total">
               <p>{{ $t('exchange.main.tradeTotalPrice') }} <span>{{ Number(this.xj_sellForm.amount*this.xj_sellForm.price).toFixed(8) }} {{ this.getMainCoin.toUpperCase() }}</span></p>
             </div>
+          </div>
+          <el-button :disabled="!isAuth" :class="isAuth? '':'disabled-button'" class="sell-button" @click="handle_xj_sell">卖出 <span>{{ this.getTargetCoin.toUpperCase() }}</span></el-button>
           </div>
         </div>
       </el-tab-pane>
@@ -116,14 +122,10 @@
             />
 
           </div>
+          <el-button :disabled="!isAuth" :class="isAuth? '':'disabled-button'" class="sell-button" @click="handle_xj_sell">卖出 <span>{{ this.getTargetCoin.toUpperCase() }}</span></el-button>
         </div>
       </el-tab-pane>
     </el-tabs>
-
-    <div class="button-group">
-      <el-button :disabled="!isAuth" :class="isAuth? '':'disabled-button'" class="buy-button" @click="handle_xj_buy">买入 <span>{{ this.getTargetCoin.toUpperCase() }}</span></el-button>
-      <el-button :disabled="!isAuth" :class="isAuth? '':'disabled-button'" class="sell-button" @click="handle_xj_sell">卖出 <span>{{ this.getTargetCoin.toUpperCase() }}</span></el-button>
-    </div>
   </div>
 </template>
 
@@ -270,13 +272,10 @@ export default {
 <style lang="scss" scoped>
   @import "../../../assets/custom-theme/theme";
   .trade-panel /deep/ {
-    width: 763px;
     height: 490px;
-    background-color: $bodyColor; // padding-left: 30px;
-    .el-tabs /deep/ {
-      .el-tabs__content {
-        margin-left: 45px;
-      }
+    background-color: $bodyColor; 
+    .el-tab-pane {
+      padding: 0 28px
     }
     .el-tabs__header {
       box-shadow: 0 3px 6px rgba(0, 0, 0, .1);
@@ -292,9 +291,9 @@ export default {
     }
     .hb-buy,
     .hb-sell {
-      width: 350px;
-      height: 310px;
+      height: 372px;
       float: left;
+      width: 50%;
       font-size: 14px;
       .balance {
         height: 40px;
@@ -313,7 +312,7 @@ export default {
       }
       .trade-from {
         .el-slider {
-          width: 90%;
+          // width: 90%;
           margin-top: 20px;
         }
         .coin-name {
@@ -332,7 +331,7 @@ export default {
         }
         a {
           display: inline-block;
-          width: 90%;
+          // width: 90%;
           height: 40px;
           line-height: 40px;
           box-sizing: border-box;
@@ -350,10 +349,10 @@ export default {
         }
       }
       .el-input__inner {
-        width: 90%;
+        // width: 90%;
       }
       .math-price {
-        width: 90%;
+        // width: 90%;
         height: 24px; // background: rgba(78, 91, 133, .4);
         border-bottom-right-radius: 5px;
         border-bottom-left-radius: 5px;
@@ -369,25 +368,26 @@ export default {
         font-size: 16px;
       }
     }
-    .button-group {
-      // display: flex;
-      // justify-content: space-around;
+    .panel-wrapper {
+      padding-right: 20px; 
+    }
       .el-button {
         background-color: $hbRed;
-        width: 290px;
+        // width: 290px;
+        width: 100%;
         height: 40px;
         color: #fff // line-height: 40px;
       }
       .sell-button {
-        margin-left: 60px;
+        // margin-left: 60px;
       }
       .buy-button {
-        margin-left: 45px;
+        // margin-left: 45px;
         background-color: $hbGreen;
       }
       .disabled-button {
         background-color: #d1d3df;
       }
-    }
+    // }
   }
 </style>

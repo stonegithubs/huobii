@@ -106,7 +106,6 @@ export default {
 <style lang="scss" scoped>
   @import "../../../assets/custom-theme/theme";
   .sidebar-chart /deep/ {
-    margin-top: 5px;
     .not-login {
       padding: 16px 10px 16px 20px;
       background-color: white;

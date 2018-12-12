@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 登录 ~~~
 export function loginByUsername(data) {
   return request({
-    url: '/api/v1/token/login',
+    url: '/api/v1/token/login_t',
     method: 'post',
     data
   })

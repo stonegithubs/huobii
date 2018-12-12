@@ -41,7 +41,7 @@ export default {
   @import "../../../assets/custom-theme/theme";
 
   .coin-detail {
-    width: 1136px;
+    // width: 1136px;
     min-height: 424px;
 
     .cd-title {

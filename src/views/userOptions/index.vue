@@ -12,6 +12,8 @@ export default {
   created() {
     if(!this.$store.state.user.token){
       this.$router.push({ name: 'index'})
+    }else{
+      this.$store.dispatch('GetUserInfo')
     }
   }
 }

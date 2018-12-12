@@ -15,7 +15,7 @@
               {{ scope.row.close }}
             </template>
           </el-table-column>
-          <el-table-column :label="$t('index.tradeShow.change')">
+          <el-table-column width='120px' :label="$t('index.tradeShow.change')">
             <template slot-scope="scope">
               <span v-if="scope.row.rate>0" class="green-rate" > +{{ scope.row.rate.toFixed(2) }}% </span>
               <span v-if="scope.row.rate<0" class="red-rate"> {{ scope.row.rate.toFixed(2) }}% </span>
@@ -23,7 +23,7 @@
           </el-table-column>
           <el-table-column :label="$t('index.tradeShow.high')" prop="high" width="170"/>
           <el-table-column :label="$t('index.tradeShow.low')" prop="low" min-width="170"/>
-          <el-table-column :label="$t('index.tradeShow.vol24h')" prop="amount" min-width="135" />
+          <el-table-column  width='240px' :label="$t('index.tradeShow.vol24h')" prop="amount" min-width="135" />
         </el-table>
       </el-tab-pane>
     </el-tabs>

@@ -5,24 +5,32 @@
     </el-card>
     <el-card class="box-card head-card">
       <el-form ref="addressForm" :model="addressForm" :inline="true" label-position="top">
-        <el-form-item :rules="[{ required: true, message: $t('wallet.chooseCoin'), trigger: 'blur' }]" :label="币种" prop="abbr">
+        <el-form-item :rules="[{ required: true, message: $t('withDraw.coinRequire'), trigger: 'blur' }]" :label="$t('withDraw.coin')" prop="abbr">
           <el-select v-model="addressForm.abbr">
-            <el-option v-for="(item, id) in coinList" :key="id" :value="item.abbr">{{ item.abbr }}</el-option>
+            <el-option v-for="(item, id) in coinList" :key="id" :value="item.abbr">{{ item.abbr.toUpperCase() }}</el-option>
           </el-select>
         </el-form-item>
-        <el-form-item :rules="[{ required: true, message: '请填写地址', trigger: 'blur' }]" label="地址" prop="address" class="address">
+        <el-form-item :rules="[{ required: true, message:  $t('withDraw.addRequire'), trigger: 'blur' }]" :label="$t('withDraw.address')" prop="address" class="address">
           <el-input v-model="addressForm.address"/>
         </el-form-item>
-        <el-form-item label="备注" class="remarks">
+        <el-form-item :label="$t('withDraw.remark')" :rules="[{ required: true, message:  $t('withDraw.remarkRequire'), trigger: 'blur' }]" class="remarks">
           <el-input v-model="addressForm.remarks"/>
         </el-form-item>
-        <el-button class="address-btn" type="primary" @click="submit">添加</el-button>
+        <el-button class="address-btn" type="primary" @click="submit">{{ $t('withDraw.add')}}</el-button>
       </el-form>
     </el-card>
     <el-card class="box-card body-card">
       <div slot="header" class="clearfix">
-        <span class="font16">地址列表</span>
+        <span class="font16">{{ $t('withDraw.addressList')}}</span>
       </div>
+      <el-table
+      :data="addressData"
+      stripe
+      style="width: 100%">
+        <el-table-column prop="date" label="日期" width="180">
+        </el-table-column>
+
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -40,13 +48,15 @@ export default {
         abbr: '',
         address: '',
         remarks: ''
-      }
+      },
+      addressData: []
     }
   },
   created(){
     this.$store.dispatch('getSupportCoin').then(_ => {
       this.coinList = _.content.records
-    }).catch(_ => {})  },
+    }).catch(_ => {})  
+    },
   computed: {},
   methods: {
     submit() {

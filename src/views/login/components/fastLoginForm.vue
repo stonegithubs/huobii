@@ -1,12 +1,16 @@
 <template>
   <el-form ref="loginForm" :model="loginForm" label-position="top" status-icon label-width="100px" class="login-form">
     <el-form-item :label="$t('login.country')" :rules="[{ required: true, message:$t('login.countryIsRequired'), trigger: 'blur' }]" prop="region">
-      <el-select v-model="loginForm.region" :placeholder="$t('login.countryTip')">
+      <el-select @change="countryChange" v-model="loginForm.region" :placeholder="$t('login.countryTip')">
         <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" :key="item.id"/>
       </el-select>
     </el-form-item>
     <el-form-item :label="$t('login.account')" :rules="[{ required: true, message: $t('login.accountIsRequired'), trigger: 'blur' }]" prop="phone">
       <el-input v-model="loginForm.phone" :placeholder="$t('login.phoneNumber')" type="text" autocomplete="off">
+         <template slot="prepend">
+          {{ cuntryCode }}
+        </template>
+
         <template slot="suffix">
           <el-button :class="buttonColor" :disabled="timeRest === 60? false:true" class="send-code" @click="msendCode">{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
         </template>
@@ -58,8 +62,9 @@ export default {
       isDisable: false,
       isVerify: false,
       mycode: '',
-      cacheVerifyCode: null
+      cacheVerifyCode: null,
       // dialogTableVisible: false,
+       cuntryCode: '+86',
     }
   },
   mounted() {
@@ -182,6 +187,9 @@ export default {
           this.isDisable = false
         }
       }, 1000)
+    },
+    countryChange(val){
+      this.cuntryCode = this.getCountryCodeByAbbr(val)
     }
   }
 }

@@ -17,7 +17,8 @@ export default {
   @import "../../../assets/custom-theme/theme";
 
   .market-depth {
-    width: 681px;
+    // width: 681px;
+    width: 100%;
     height: 520px;
     .md-title {
       height: 48px;

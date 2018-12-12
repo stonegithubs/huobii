@@ -5,48 +5,49 @@
         <!-- <span class="about">≈ 1516.60 cny</span> -->
       </div>
     </div>
-    <div class="inner">
-      <el-table v-loading="this.buyDepthList.length == 0" :data="buyDepthList" :cell-class-name="cellClassName" :default-sort="{prop: 'accumulative'}" style="width: 100%" height="204" class="topTable">
-        <el-table-column :label="$t('exchange.main.buy')+'/'+$t('exchange.main.sell')" width="60">
-          <template slot-scope="scope">
-            <span style="color:#03c087">  {{ $t('exchange.main.buy') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('exchange.main.price')+this.$store.state.coinData.mainCoin.toUpperCase()" prop="price"/>
-        <el-table-column :label="$t('exchange.main.amount')+this.$store.state.coinData.targetCoin.toUpperCase()" prop="amount"/>
-        <el-table-column :label="$t('exchange.main.total')+this.$store.state.coinData.targetCoin.toUpperCase()">
-          <template slot-scope="scope">
-            {{ scope.row.accumulative.toFixed(6) }}
-          </template>
-        </el-table-column>
-      </el-table>
-      <div style="height:3px;padding:0 14px">
-        <div style="background-color:#f2f3f8;height:5px"/>
+    <div class="inner"  v-loading="this.buyDepthList.length == 0">
+      <div class="inner-wrapper">
+        <el-table :data="buyDepthList" :cell-class-name="cellClassName" :default-sort="{prop: 'accumulative'}" height="204" class="topTable">
+          <el-table-column :label="$t('exchange.main.buy')+'/'+$t('exchange.main.sell')" >
+            <template slot-scope="scope">
+              <span style="color:#03c087">  {{ $t('exchange.main.buy') }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column :label="$t('exchange.main.price')+this.$store.state.coinData.mainCoin.toUpperCase()" prop="price"/>
+          <el-table-column :label="$t('exchange.main.amount')+this.$store.state.coinData.targetCoin.toUpperCase()" prop="amount"/>
+          <el-table-column :label="$t('exchange.main.total')+this.$store.state.coinData.targetCoin.toUpperCase()">
+            <template slot-scope="scope">
+              {{ scope.row.accumulative.toFixed(6) }}
+            </template>
+          </el-table-column>
+        </el-table>
+        <div style="height:3px;padding:0 14px">
+          <div style="background-color:#f2f3f8;height:5px"/>
+        </div>
+        <el-table
+          v-loading="this.sellDepthList.length == 0"
+          :data="sellDepthList"
+          :show-header="false"
+          :default-sort = "{prop: 'accumulative'}"
+          height="235"
+          cell-class-name="cellClassName">
+
+          <el-table-column :label="$t('exchange.main.buy')+'/'+$t('exchange.main.sell')">
+            <template slot-scope="scope">
+              <span style="color:#f55858">{{ $t('exchange.main.sell') }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column :label="$t('exchange.main.price')+ this.$store.state.coinData.mainCoin.toUpperCase()" prop="price"/>
+
+          <el-table-column :label="$t('exchange.main.amount')+this.$store.state.coinData.targetCoin.toUpperCase()" prop="amount"/>
+          <el-table-column :label="$t('exchange.main.total')+this.$store.state.coinData.targetCoin.toUpperCase()">
+            <template slot-scope="scope">
+              {{ scope.row.accumulative.toFixed(6) }}
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
-      <el-table
-        v-loading="this.sellDepthList.length == 0"
-        :data="sellDepthList"
-        :show-header="false"
-        :default-sort = "{prop: 'accumulative'}"
-        height="235"
-        style="width: 100%"
-        cell-class-name="cellClassName">
-
-        <el-table-column :label="$t('exchange.main.buy')+'/'+$t('exchange.main.sell')" width="60">
-          <template slot-scope="scope">
-            <span style="color:#f55858">{{ $t('exchange.main.sell') }}</span>
-          </template>
-        </el-table-column>
-
-        <el-table-column :label="$t('exchange.main.price')+ this.$store.state.coinData.mainCoin.toUpperCase()" prop="price"/>
-
-        <el-table-column :label="$t('exchange.main.amount')+this.$store.state.coinData.targetCoin.toUpperCase()" prop="amount"/>
-        <el-table-column :label="$t('exchange.main.total')+this.$store.state.coinData.targetCoin.toUpperCase()">
-          <template slot-scope="scope">
-            {{ scope.row.accumulative.toFixed(6) }}
-          </template>
-        </el-table-column>
-      </el-table>
     </div>
   </div>
 </template>
@@ -151,9 +152,14 @@ export default {
 <style lang="scss" scoped>
   @import "../../../assets/custom-theme/theme";
   .order-book /deep/ {
-    width: 356px;
+    // width: 100%;
     height: 490px;
-    background-color: #fff;
+    padding-left: 10px;
+    width: 33%;
+    @media only screen and (max-width: 1400px) {
+        // margin-left: 285px;
+        width: unset;
+      }
     .cell {
       font-size: 12px;
       white-space: nowrap;
@@ -168,7 +174,10 @@ export default {
       }
     }
     .inner {
-      padding-left:10px;
+      background: #fff;
+      .inner-wrapper{
+        margin-left: 10px;
+      }
       .el-table th,
       .el-table tr {
         // background-color: #1b1e2a;
@@ -179,8 +188,8 @@ export default {
       .el-table /deep/{
         height: 441px;
         .has-gutter {
-          height: 40px;
-          display: inline-table;
+          // height: 40px;
+          // display: inline-table;
         }
         // background-color: #1b1e2a;
       }

@@ -59,3 +59,16 @@ a {
 button:focus{
     outline: none;
 }
+.fl {
+    float: left;
+}
+.fr {
+    float: right
+}
+.clear_after:after {
+    display: block;
+    visibility: hidden;
+    height: 0;
+    clear: both;
+    content: "";
+}

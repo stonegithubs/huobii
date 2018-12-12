@@ -14,7 +14,6 @@ export default {
   .main-body {
     min-height: 800px;
     background-color:#f2f3f8;
-
   }
 
   /*.main-body > div {*/

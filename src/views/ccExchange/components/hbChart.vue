@@ -41,6 +41,7 @@ export default {
   mounted() {
     const symbol = this.$store.state.coinData.targetCoin + '' + this.$store.state.coinData.mainCoin
     this.initChart(symbol)
+
   },
   methods: {
     calculateMA(dayCount, data) {
@@ -329,6 +330,7 @@ export default {
             }),
             true
           )
+          window.onresize = myChart.resize;
           // console.log(myChart);
           if (option && typeof option === 'object') {
             myChart.setOption(option, true)
@@ -349,7 +351,7 @@ export default {
 
 .hb-chart {
   height: 528px;
-  width: 1136px;
+  width: 100%;
    .hc-inner {
     height: 480px;
   }

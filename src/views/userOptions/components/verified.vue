@@ -73,7 +73,7 @@ export default {
   },
   computed: {},
   created() {
-    if (this.$store.state.verifyInfo === null) {
+    // if (this.$store.state.verifyInfo === null) {
       this.$store.dispatch('GetVerifyInfo').then(responese => {
         if (responese.content === null) {
           this.auditFlag = -1
@@ -84,7 +84,7 @@ export default {
       }).catch(_ => {
         this.$notify.error(_.message)
       })
-    }
+    // }
   },
   methods: {
     beforeSubmit(formName) {

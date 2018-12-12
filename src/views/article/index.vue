@@ -1,0 +1,36 @@
+<template>
+    <div class="article-wrapper">
+      <div class="article-inner">
+        <router-view></router-view>
+      </div>
+    </div>
+</template>
+
+<script>
+
+export default {
+  name: 'article',
+  data() {
+    return {
+      
+    }
+  },
+  created() {
+    this.$store.dispatch('getArticleCategory')
+    this.$store.dispatch('getArticleList')
+    // console.log(this.$route.params.article_id === undefined)
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+    .article-wrapper {
+      min-height: 800px;
+      background: #fff;
+      padding: 50px 0;
+      .article-inner {
+      margin: auto;
+      width: 1200px;
+      }
+    }
+</style>

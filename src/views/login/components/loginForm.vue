@@ -1,12 +1,16 @@
 <template>
   <el-form ref="loginForm" :model="loginForm" label-position="top" status-icon label-width="100px" class="login-form">
     <el-form-item :label="$t('login.country')" :rules="[{ required: true, message: $t('login.countryIsRequired'), trigger: 'blur' }]" prop="region">
-      <el-select v-model="loginForm.region" :placeholder="$t('login.countryTip')">
+      <el-select @change="countryChange"  v-model="loginForm.region" :placeholder="$t('login.countryTip')">
         <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" :key="item.id"/>
       </el-select>
     </el-form-item>
     <el-form-item :label="$t('login.account')" :rules="[{ required: true, message: $t('login.accountIsRequired'), trigger: 'blur' }]" prop="username">
-      <el-input v-model="loginForm.username" :placeholder="$t('login.phoneNumber')" type="text" autocomplete="off" />
+      <el-input v-model="loginForm.username" :placeholder="$t('login.phoneNumber')" type="text" autocomplete="off">
+        <template slot="prepend">
+          {{ cuntryCode }}
+        </template>
+      </el-input>
     </el-form-item>
     <el-form-item :label="$t('login.password')" :rules="[{ required: true, message: $t('login.pwdIsRequired') , trigger: 'blur' }]" prop="password">
       <el-input v-model="loginForm.password" :placeholder="$t('login.pwdTip')" type="password" autocomplete="off" />
@@ -16,7 +20,7 @@
       <vue-recaptcha ref="invisibleRecaptcha" :sitekey="getSiteKey" size="Invisible" @verify="getVerify"/>
     </el-form-item>
     <el-form-item>
-      <el-button class="login-btn" type="primary" @click="getVerify">{{ $t('login.login') }}</el-button>
+      <el-button class="login-btn" type="primary" @click="submitLogin()">{{ $t('login.login') }}</el-button>
       <div style="float:right;margin-top: 24px;margin-right: 116px;">
         <router-link :to="{ name: 'forget_password'}">{{ $t('login.forgetPwd') }}</router-link>
       </div>
@@ -41,6 +45,7 @@ export default {
         password: '',
         captcha: ''
       },
+      cuntryCode: '+86',
       timeRest: 60,
       counter: {},
       isDisable: false,
@@ -68,20 +73,24 @@ export default {
   methods: {
     getVerify(verifyCode) {
       let myCode = verifyCode
+      this.cacheVerifyCode = verifyCode
+      // if(Object.prototype.toString.call(myCode) === '[object MouseEvent]'){
+      //   // 点击按钮 
+      //   console.log('点击按钮')
+      //   if(this.cacheVerifyCode === null){
+      //   console.log(this.cacheVerifyCode)
+      //     this.$notify.error(this.$t('googleCaptchaNeed'))
+      //     return false
+      //   }else{
+      //     console.log(myCode)
+      //     myCode = this.cacheVerifyCode
+      //   }
 
-      if(Object.prototype.toString.call(myCode) === '[object MouseEvent]'){
-        // 点击按钮 
-        if(this.cacheVerifyCode === null){
-          this.$notify.error(this.$t('googleCaptchaNeed'))
-          return false
-        }else{
-          myCode = this.cacheVerifyCode
-        }
-
-      }else if(Object.prototype.toString.call(this.cacheVerifyCode) === '[object String]'){
-        // 不是点击按钮
-         this.cacheVerifyCode =  myCode 
-      }
+      // }else if(Object.prototype.toString.call(this.cacheVerifyCode) === '[object String]'){
+      //   // 不是点击按钮
+      //   console.log(myCode)
+      //    this.cacheVerifyCode =  myCode 
+      // }
       // if (Object.prototype.toString.call(myCode) === '[object MouseEvent]' && Object.prototype.toString.call(this.cacheVerifyCode) === '[object String]') {
       //   // 如果点击按钮并且拿到上一次的缓存谷歌验证码 则把上一次的有效验证码提交
       //   myCode = this.cacheVerifyCode
@@ -130,7 +139,52 @@ export default {
           this.cacheVerifyCode = verifyCode
         }
       })
+    },
+    countryChange(val){
+      this.cuntryCode = this.getCountryCodeByAbbr(val)
+    },
+    submitLogin(){
+      if(this.cacheVerifyCode === null){
+        this.$notify.warning('测试版不检查验证码')
+      }
+       this.$refs['loginForm'].validate(valid => {
+        if (valid) {
+          const formData = new FormData()
+          formData.append('username', this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.username)
+          formData.append('password', this.loginForm.password)
+          formData.append('country', this.loginForm.region)
+          formData.append('captcha', this.cacheVerifyCode)
+          this.$store.dispatch('LoginByUsername', formData).then(responese => {
+            if (responese.code === '200') {
+              this.$router.push({
+                name: 'index'
+              })
+              this.$message.success(this.$t('login.success'))
+            } else {
+              console.log(responese)
+              this.$alert(responese.message, this.$t('login.failed'), {
+                confirmButtonText: this.$t('confirm'),
+                callback: action => {
+                  window.location.reload()
+                }
+              })
+            }
+          }).catch(err => {
+            this.$alert(err.message, this.$t('login.failed'), {
+              confirmButtonText: this.$t('confirm'),
+              callback: action => {
+                window.location.reload()
+              }
+            })
+          })
+        } else {
+          this.cacheVerifyCode = verifyCode
+        }
+      })
     }
+  },
+  watch: {
+
   }
 }
 </script>

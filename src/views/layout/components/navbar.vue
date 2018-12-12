@@ -1,12 +1,16 @@
 <template>
   <div class="nav">
+
     <div class="logo-wrapper">
-      <router-link to="/">
-        <img :src="LOGO" class="logo">
-      </router-link>
+        <h1>
+          <router-link to="/">
+            <img :src="LOGO" class="logo" :alt="$t('siteName')">
+          </router-link>
+        </h1>
     </div>
-    <div style="width: 81%">
+
       <el-menu
+        
         :default-active="$route.path"
         background-color="#243445"
 
@@ -86,7 +90,7 @@
           </el-dropdown>
         </div>
       </el-menu>
-    </div>
+
   </div>
 </template>
 <script>
@@ -145,12 +149,15 @@ export default {
   height: 60px;
   overflow: hidden;
   background-color: $navbarColor;
- color: $navbarFontColor;
+  color: $navbarFontColor;
+  padding: 0 20px;
+  display: block;
 
   .logo-wrapper {
+    float: left;
+    height: 100%;
     display: flex;
     align-items: center;
-    margin: 0 20px;
     width: 217px;
 
     .logo {
@@ -159,6 +166,7 @@ export default {
       overflow: hidden;
     }
   }
+  
 
   .el-submenu /deep/ {
     .el-submenu__title {
@@ -171,7 +179,6 @@ export default {
 
   .el-menu /deep/ {
     border: none;
-    width: 100%;
     display: flex;
     background-color: $navbarColor;
     color: $navbarFontColor;

@@ -1,12 +1,15 @@
 <template>
   <el-form ref="registryForm" :model="registryForm" :rules="rules" class="registry-form" status-icon label-width="100px">
     <el-form-item :label="$t('login.country')">
-      <el-select v-model="registryForm.region" :placeholder="$t('login.countryTip')">
+      <el-select @change="countryChange" v-model="registryForm.region" :placeholder="$t('login.countryTip')">
         <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" :key="item.id"/>
       </el-select>
     </el-form-item>
     <el-form-item :label="$t('login.account')" prop="phone">
       <el-input v-model="registryForm.phone" :placeholder="$t('login.phoneNumber')" type="text" autocomplete="off">
+       <template slot="prepend">
+          {{ cuntryCode }}
+        </template>
         <template slot="suffix">
           <el-button :class="buttonColor" :disabled="timeRest === 60? false:true" class="send-code" @click="sendCode">{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
         </template>
@@ -89,6 +92,7 @@ export default {
       isDisable: false,
       counter: {},
       checked: false,
+      cuntryCode: '+86',
       registryForm: {
         phone: '',
         password: '',
@@ -128,7 +132,8 @@ export default {
     ...mapGetters([
       // 'getCountry',
       // 'getCountryCodeByAbbr',
-      'getSiteKey'
+      'getSiteKey',
+      'getCountryCodeByAbbr'
     ]),
     buttonInner() {
       if (this.isDisable === true) {
@@ -158,6 +163,9 @@ export default {
     }
   },
   methods: {
+     countryChange(val){
+      this.cuntryCode = this.getCountryCodeByAbbr(val)
+    },
     sendCode() {
       if (this.registryForm.region === '') {
         this.$notify.error(this.$t('login.countryIsRequired'))

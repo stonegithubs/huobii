@@ -145,7 +145,7 @@ export default {
 <style lang="scss">
   @import "../../../assets/custom-theme/theme";
   .open-orders {
-    width: 1136px;
+    // width: 1136px;
     min-height: 190px;
     /*background-color: darkgoldenrod;*/
     .title {
