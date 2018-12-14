@@ -16,8 +16,10 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('getArticleCategory')
-    this.$store.dispatch('getArticleList')
+    if(this.$store.state.siteCMS.articles.length === 0){
+      this.$store.dispatch('getArticleCategory')
+      this.$store.dispatch('getArticleList')
+    }
     // console.log(this.$route.params.article_id === undefined)
   }
 }

@@ -83,12 +83,12 @@ export default {
     return {
       directionOption: [
         {
-          direction: "0",
-          name: this.$t('exchange.main.buy')
+          direction: "1",
+          name: this.$t('buy')
         },
         {
-          name: this.$t('exchange.main.sell'),
-          direction: "1"
+          name: this.$t('sell'),
+          direction: "0"
         }
       ],
       

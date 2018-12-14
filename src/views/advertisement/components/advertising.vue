@@ -168,8 +168,10 @@ export default {
               this.$notify.success(this.$t('order.submitSuccess'));
               this.$router.push({ name: "advList" });
             } else {
-              this.$notify.notify(this.$t('order.submitFailed'));
+              this.$notify.error(this.$t('order.submitFailed'));
             }
+          }).catch(_=>{
+            this.$notify.error(this.$t('order.submitFailed'));
           });
         }
       });

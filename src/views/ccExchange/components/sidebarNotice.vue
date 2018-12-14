@@ -5,7 +5,7 @@
     </div>
     <div class="in ">
       <ul id="notice_list">
-        <li v-for="(item, index) in getterBanner" :key="index">
+        <li v-for="(item, index) in noticeList" :key="index">
           <a :href="item.link" class="notice-inner">{{ item.title }} </a>
           <div class="notice-time">{{ parseTime(item.updateDate,'{y}-{m}-{d} {h}:{i}:{s}') }}</div>
         </li>
@@ -29,12 +29,29 @@ export default {
   computed:{
     ...mapGetters([
         'getterBanner'
-    ])
+    ]),
+    noticeList(){
+      let notice = []
+      // return this.
+      for(let item of this.$store.state.siteCMS.articles){
+        if(item.categoryId == '02508d648dd5462db978c1c71a90413c'){
+          notice.push(item)
+        }
+      }
+      return notice
+    }
   },
   created() {
-    if(this.getterBanner.length === 0){
-      this.$store.dispatch('getBanners')
+    this.$nextTick(()=>{
+     if(this.$store.state.siteCMS.articles.length === 0){
+      this.$store.dispatch('getArticleCategory')
+      this.$store.dispatch('getArticleList')
     }
+    })
+
+    // if(this.getterBanner.length === 0){
+    //   this.$store.dispatch('getBanners')
+    // }
   },
   methods: {
     parseTime(time, cFormat) {

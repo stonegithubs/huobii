@@ -155,6 +155,7 @@ export default {
 @import '../../../assets/custom-theme/theme';
 .el-menu-item {
       color: $navbarFontColor;
+          line-height: 60px;
     }
 .nav {
   height: 60px;

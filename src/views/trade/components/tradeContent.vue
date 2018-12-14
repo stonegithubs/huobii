@@ -19,7 +19,7 @@
       <el-table-column :label="$t('fb.merchant')" width="180">
         <template slot-scope="scope">
           <div :class="getAvatarColor(scope.row.id)" class="avatar-container">
-            <em class="name">{{ scope.row.user.name.slice(0,1).toUpperCase() }}</em>
+            <em class="name">{{ scope.row.user.name.slice(0,1) === undefined? '':scope.row.user.name.slice(0,1).toUpperCase() }}</em>
           </div>
           <div>
             <router-link :to="{ name: 'trader', params: {id: scope.row.id}}">
@@ -37,7 +37,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column :label="$t('order.limit')">
+      <el-table-column :label="$t('fb.limit')">
         <template slot-scope="scope">
           <span>{{ scope.row.min }}-{{ scope.row.max }}  {{getCashNameById(scope.row.cashId)}}</span>
         </template>
@@ -52,7 +52,35 @@
       <!-- TODO: 支付方式需要从后端拿icon 这里写法应急 -->
       <el-table-column prop="payment_list" width="200" :label="$t('order.payways')">
         <template slot-scope="scope">
-          <el-tooltip
+          <b v-if="scope.row.paywayIds === 'all'">
+            <el-tooltip 
+            content="alipay"
+            style="margin:0 3px"
+            class="item"
+            effect="dark"
+            placement="bottom">
+            <!-- <i class="'iconfont icon-ziyuan'"/> -->
+            <embed :src="require('../../../assets/svg/alipay.svg')" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+          </el-tooltip>
+          <el-tooltip 
+            content="wechat"
+            style="margin:0 3px"
+            class="item"
+            effect="dark"
+            placement="bottom">
+            <embed :src="require('../../../assets/svg/weChat.svg')" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+          </el-tooltip>
+          <el-tooltip 
+            content="bankCard"
+            style="margin:0 3px"
+            class="item"
+            effect="dark"
+            placement="bottom">
+            <embed :src="require('../../../assets/svg/ic_bankcard.svg')" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+          </el-tooltip>
+          </b>
+          <b v-else>
+          <el-tooltip 
             v-for="(item,index) in scope.row.paywayIds.split(',')"
             :key="index"
             :content="getPaynameById(item)"
@@ -60,8 +88,10 @@
             class="item"
             effect="dark"
             placement="bottom">
-            <i :class="'iconfont icon-'+getPaynameById(item)"/>
+            <embed :src="require('../../../assets/svg/'+getIcon(item)+'.svg+')" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
           </el-tooltip>
+          </b>
+
         </template>
       </el-table-column>
 
@@ -85,7 +115,7 @@
               <el-form-item
                 :rules="[{ required: true, message: $t('amountErr'), trigger: 'blur' },
                          { type: 'number', message: $t('amountErr'), trigger: ['blur', 'change'] }]"
-                :label="$store.getters.getCoinNameByID(scope.row.coinId).toUpperCase()"
+                :label="$store.getters.getCoinNameByIDUp(scope.row.coinId)"
                 prop="amount">
                 <el-input v-model.number="tradeForm.amount" :placeholder="$t('exchange.main.amount')"/>
               </el-form-item>
@@ -129,14 +159,14 @@
 
 <script>
 import {
-  getAvatarColor
+  getAvatarColor, sendUserCode
 } from '../../../utils/index'
 import fbChoice  from '../../../components/fbChoice'
 import paymentIcon from './paymentIcon'
 import {
   fbList, fbTrade
 } from '../../../api/coin_trade'
-import { sendCaptcha1, getCaptcha } from '../../../api/user'
+// import { sendCaptcha1, getCaptcha } from '../../../api/user'
 import { mapGetters } from 'vuex'
 export default {
   name: 'TradeContent',
@@ -228,8 +258,8 @@ export default {
     },
     getPaynameById(id) {
       switch (id) {
-        case '1': return 'wechat'
-        case '2': return 'bankCard'
+        case '1': return 'weChat'
+        case '2': return 'ic_bankcard'
         case '9fe2dcef18e94c85adb3ff6da9c2a78d': return 'alipay'
       }
     },
@@ -277,18 +307,19 @@ export default {
       this.$refs['tradeForm'].validate(valid => {
         if (valid) {
           // 发送验证码吗
-          const country = this.$store.state.user.userInfo.countryCode
-          const phone = this.$store.state.user.userInfo.mobile
-          sendCaptcha1(phone, country).then(res => {
-            if (res.code === '200') {
-              this.smsDialog = true
-              getCaptcha(phone, country).then(res => {
-                this.$notify.success(res.content)
-              })
-            } else {
-              this.$notify.error(this.$t('shitHappens'))
-            }
-          }).catch(_ => {})
+          sendUserCode(this);
+          // const country = this.$store.state.user.userInfo.countryCode
+          // const phone = this.$store.state.user.userInfo.mobile
+          // sendCaptcha1(phone, country).then(res => {
+          //   if (res.code === '200') {
+          //     this.smsDialog = false
+          //     getCaptcha(phone, country).then(res => {
+          //       this.$notify.success(res.content)
+          //     })
+          //   } else {
+          //     this.$notify.error(this.$t('shitHappens'))
+          //   }
+          // }).catch(_ => {})
         }
       })
     },
@@ -346,7 +377,8 @@ export default {
     ...mapGetters([
       'getCountry',
       'getCountryCodeByAbbr',
-      'getCashNameById'
+      'getCashNameById',
+      'getCoinNameByIDUp'
     ])
   },
   watch: {
@@ -443,18 +475,6 @@ export default {
       }
     }
 
-    .iconfont {
-      font-size: 18px;
-    }
-    .icon-alipay {
-      color: deepskyblue;
-    }
-    .icon-wechat {
-      color: forestgreen;
-    }
-    .icon-yinhangqia {
-      color: yellowgreen;
-    }
     .price {
       color: #489972;
       font-size: 16px;

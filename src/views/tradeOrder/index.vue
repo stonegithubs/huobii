@@ -7,8 +7,8 @@
       </div>
 
       <div class="adv-table">
-        <el-table height='600px' :data="orderData" stripe style="width: 100%">
-          <el-table-column width="200px" :label="$t('order.orderNo')">
+        <el-table height="600px" :data="orderData" stripe style="width: 100%">
+          <el-table-column width="150px" :label="$t('order.orderNo')">
             <template slot-scope="scope">
               <span class="order-no">
                 <router-link
@@ -17,24 +17,28 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column prop="date" label="订单类型">
-            <template slot-scope="scope">{{ scope.row.direction === '0'? '买入': '卖出' }}</template>
+          <el-table-column width="180px" prop="date" label="交易类型">
+            <template slot-scope="scope">{{ scope.row.direction === '0'? '买入': '卖出' }} {{ scope.row.amount }} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
           </el-table-column>
-          <el-table-column prop="name" label="币种">
-            <template slot-scope="scope">{{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]).toUpperCase() }}</template>
+          <el-table-column width="130px" prop="name" label="总价">
+            <template slot-scope="scope">{{ scope.row.dealPrice }}{{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
           </el-table-column>
-          <el-table-column prop="address" label="数量">
-            <template slot-scope="scope">{{ scope.row.amount }}</template>
+          <el-table-column width="130px" prop="address" label="单价">
+            <template slot-scope="scope">{{ scope.row.dealPrice }} {{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
           </el-table-column>
-          <el-table-column prop="address" label="法币币种">
-            <template slot-scope="scope">{{ getCashNameById(scope.row.coinId.split('_')[1]).toUpperCase() }}</template>
+          <el-table-column width="130px" prop="address" label="手续费">
+            <template slot-scope="scope">{{scope.row.fee}} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
+          </el-table-column>
+          <el-table-column width="180px" prop="address" label="创建时间">
+            <template slot-scope="scope">{{parseTime(scope.row.updateDate) }}</template>
           </el-table-column>
           <el-table-column prop="address" label="状态">
             <template slot-scope="scope">{{ getState(scope.row.status) }}</template>
           </el-table-column>
-          <el-table-column prop="address" label="创建时间" width="200px">
-            <template slot-scope="scope">{{parseTime(scope.row.updateDate) }}</template>
+          <el-table-column prop="address" label="交易对象">
+            <template slot-scope="scope">{{ scope.row.user.name }}</template>
           </el-table-column>
+          <!--           
           <el-table-column width="250px" prop="address" label="操作">
             <template slot-scope="scope">
               <el-button size="mini" type="warning" @click="appeal(scope.row)">申诉</el-button>
@@ -48,7 +52,7 @@
                 >放行</el-button>
               </div>
             </template>
-          </el-table-column>
+          </el-table-column>-->
         </el-table>
       </div>
     </div>
@@ -71,7 +75,7 @@
       <el-form v-model="appealForm">
         <!-- <el-form-item label="过程编号">
           <el-input v-model="appealForm.processId"></el-input>
-        </el-form-item> -->
+        </el-form-item>-->
         <el-form-item label="申诉理由">
           <el-input v-model="appealForm.reason"></el-input>
         </el-form-item>
@@ -90,11 +94,12 @@
     <div class="mpagination">
       <el-pagination
         :page-count="Math.ceil(total/10)"
-        :current-page.sync ="page"
-        class=""
+        :current-page.sync="page"
+        class
         background
         layout="prev, pager, next"
-        @current-change="pageChange"/>
+        @current-change="pageChange"
+      />
     </div>
   </div>
 </template>
@@ -141,7 +146,7 @@ export default {
       ],
       total: 0,
       page: 0,
-       chooseForm: {
+      chooseForm: {
         direction: "10",
         page: 0,
         size: 10,
@@ -149,7 +154,7 @@ export default {
         coinId: "2",
         cashId: "3",
         state: "10",
-        time: '',
+        time: "",
         start: "2018-10-10",
         end: "2019-10-10",
         order: "0"
@@ -160,11 +165,11 @@ export default {
     this.init();
   },
   methods: {
-    pageChange(a){
-      console.log(a)
+    pageChange(a) {
+      console.log(a);
     },
-    newDirection(s){
-      this.chooseForm = s
+    newDirection(s) {
+      this.chooseForm = s;
       fbJdOrders(
         0,
         10,
@@ -194,7 +199,7 @@ export default {
         this.chooseForm.end,
         this.chooseForm.order
       ).then(res => {
-        this.total = res.content.total
+        this.total = res.content.total;
         this.orderData = [];
         if (res.content.records instanceof Array) {
           this.orderData = res.content.records;
@@ -213,7 +218,7 @@ export default {
           return "已撤销";
         case "4":
           return "买家已付款";
-        case "5": 
+        case "5":
           return "买家已撤销";
         case "8":
           return "历史纪录";
@@ -264,9 +269,12 @@ export default {
     },
     pass(order) {
       // if(order.direction)
-      if(order.direction == "0"){
-        this.$router.push({ name: 'orderDetail', params: { id:order.id,direction: order.direction} })
-      }else{
+      if (order.direction == "0") {
+        this.$router.push({
+          name: "orderDetail",
+          params: { id: order.id, direction: order.direction }
+        });
+      } else {
         this.currentOrder = order;
         sendUserCode(this);
       }
@@ -328,7 +336,7 @@ export default {
     }
   },
   watch: {
-    page(page){
+    page(page) {
       let s = this.chooseForm;
       fbJdOrders(
         page,
@@ -341,7 +349,7 @@ export default {
         s.time[1],
         1
       ).then(res => {
-        this.total = res.content.total
+        this.total = res.content.total;
         this.orderData = [];
         if (res.content.records instanceof Array) {
           this.orderData = res.content.records;

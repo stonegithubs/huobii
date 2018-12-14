@@ -8,6 +8,14 @@ export function getUserInfo() {
   })
 }
 
+// 是否绑定了谷歌验证码
+export function isBindGoogle() {
+  return request({
+    url: '/api/v1/user/google_auth/isBind',
+    method: 'get'
+  })
+}
+
 // 提交实名认证
 export function normalVerify(data) {
   return request({
@@ -29,6 +37,15 @@ export function getVerifyInfo() {
 export function addPay(data) {
   return request({
     url: '/api/v1/pay/add',
+    method: 'post',
+    data
+  })
+}
+
+// 上传二维码
+export function upLoadQrcode(data) {
+  return request({
+    url: '/api/v1/pay/qrcode',
     method: 'post',
     data
   })

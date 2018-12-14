@@ -90,6 +90,7 @@ export default {
         if (valid) {
           bindGoogleAuth(this.googleForm.code).then(res => {
             this.$notify.success('绑定成功')
+            // this.rou
             location.reload()
           }).catch(err => {
             this.$notify.error('绑定失败' + err.message)
