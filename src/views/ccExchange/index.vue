@@ -21,12 +21,12 @@
 
       <div class="market-wrap">
       <!--深度图-->
-            <market-depth/>
+            <!-- <market-depth/> -->
+          <coin-detail/>
             <!--实时成交-->
             <market-trades/>
       </div>
       <!--币种资料-->
-      <coin-detail/>
     </div>
   </div>
 </template>
@@ -134,7 +134,7 @@
         }
       }
       .coin-detail {
-        margin-top: 10px;
+        // margin-top: 10px;
         margin-bottom: 20px;
       }
     }

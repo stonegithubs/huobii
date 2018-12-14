@@ -1,40 +1,27 @@
 <template>
   <div class="adv-list">
     <div class="adv-inner">
-      <div class="adv-title">我的订单</div>
-      <!-- <order-choice></order-choice> -->
-      <el-select v-model="direction" placeholder="交易方向">
-        <el-option
-          v-for="item in directionOption"
-          :key="item.name"
-          :label="item.name"
-          :value="item.direction"
-        >{{ item.name}}</el-option>
-      </el-select>
-      <el-select v-model="coinId" placeholder="货币类型">
-        <el-option
-          v-for="item in getSupportCoin"
-          :key="item.abbr"
-          :label="item.abbr"
-          :value="item.id"
-        >{{ item.abbr}}</el-option>
-      </el-select>
-      <el-select v-model="cashId" placeholder="法币类型">
-        <el-option
-          v-for="item in getSupportCash"
-          :key="item.abbr"
-          :label="item.abbr"
-          :value="item.id"
-        >{{ item.abbr}}</el-option>
-      </el-select>
+      <div style="display:flex; justify-content: space-between;">
+        <div class="adv-title">我的广告</div>
+        <order-choice @directionChange="newDirection"></order-choice>
+      </div>
 
       <div class="adv-table">
-        <el-table :data="orderData" stripe style="width: 100%">
-          <el-table-column prop="date" label="广告类型" width="180">
+        <el-table height='600px' :data="orderData" stripe style="width: 100%">
+          <el-table-column width="200px" :label="$t('order.orderNo')">
+            <template slot-scope="scope">
+              <span class="order-no">
+                <router-link
+                  :to="{ name:'orderDetail', params: { id: scope.row.id},direction: scope.row.direction}"
+                >{{ scope.row.id }}</router-link>
+              </span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="date" label="广告类型">
             <template slot-scope="scope">{{ scope.row.direction === '0'? '买入': '卖出' }}</template>
           </el-table-column>
-          <el-table-column prop="name" label="币种" width="180">
-            <template slot-scope="scope">{{ getCoinNameByID(scope.row.coinId).toUpperCase() }}</template>
+          <el-table-column prop="name" label="币种">
+            <template slot-scope="scope">{{ getCoinNameByIDUp(scope.row.coinId).toUpperCase() }}</template>
           </el-table-column>
           <el-table-column prop="address" label="数量">
             <template slot-scope="scope">{{ scope.row.amount }}</template>
@@ -53,76 +40,78 @@
           </el-table-column>
           <el-table-column width="200px" prop="address" label="操作">
             <template slot-scope="scope">
-              <el-button
-                v-if="scope.row.status ==0 || scope.row.status==1 "
-                @click="repeal(scope.row.id)"
-              >撤销</el-button>
-              <el-button
-                v-if="scope.row.status ==9  "
-                type="warning"
-                @click="appeal(scope.row.id)"
-              >申诉</el-button>
-              <el-button v-if="scope.row.status ==9  " type="primary" @click="pass(scope.row.id)">放行</el-button>
+              <el-button size="mini" type="warning" @click="appeal(scope.row)">申诉</el-button>
+              <el-button type="primary" size="mini" @click="pass(scope.row)" v-if="scope.row.direction == '0' && scope.row.status == '9'">放行</el-button>
+              <el-button v-if="scope.row.status ==0|| scope.row.status == 9" @click="repeal(scope.row)" size="mini">撤销</el-button>
+
+              <!-- <el-button v-if="scope.row.status !=0 " @click="repeal(scope.row)" size="mini">撤销</el-button> -->
+              <div style="display:inline-block" v-if="scope.row.status ==4">
+                <el-button 
+                  v-if="scope.row.direction == '1'"
+                  type="primary" size="mini"
+                  @click="pass(scope.row)"
+                >放行</el-button>
+              </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
-    <el-dialog
-      title="订单放行"
-      :visible.sync="passFormVisible"
-      width="400px"
-      :before-close="handleClose"
-    >
+    <el-dialog title="订单放行" :visible.sync="smsDialog" width="400px" :before-close="handleClose">
       <el-form>
-        <el-form-item label="过程编号">
+        <!-- <el-form-item label="过程编号">
           <el-input v-model="processId"></el-input>
-        </el-form-item>
+        </el-form-item>-->
         <el-form-item label="验证码">
           <el-input v-model="code"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="passFormVisible = false">取 消</el-button>
+        <el-button @click="smsDialog = false">取 消</el-button>
         <el-button type="primary" @click="confirm()">确 定</el-button>
       </span>
     </el-dialog>
 
-
-      <el-dialog
-      title="订单申訴"
-      :visible.sync="appealVisible"
-      width="400px"
-      :before-close="handleClose"
-    >
+    <el-dialog title="订单申訴" :visible.sync="appealVisible" width="400px" :before-close="handleClose">
       <el-form v-model="appealForm">
-        <el-form-item label="过程编号">
-          <el-input v-model="appealForm.processId"></el-input>
-        </el-form-item>
         <el-form-item label="申诉理由">
           <el-input v-model="appealForm.reason"></el-input>
         </el-form-item>
         <el-form-item label="申诉类型">
-    <el-select v-model="appealForm.type" placeholder="请选择申诉类型">
-      <el-option label="对方不放行" value="0"></el-option>
-      <el-option label="交易数量不正确" value="1"></el-option>
-    </el-select>
-  </el-form-item>
+          <el-select v-model="appealForm.type" placeholder="请选择申诉类型">
+            <el-option label="对方不放行" value="0"></el-option>
+            <el-option label="交易数量不正确" value="1"></el-option>
+          </el-select>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="appealVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitAppeal()">确 定</el-button>
       </span>
     </el-dialog>
+    <div class="mpagination">
+      <el-pagination
+        :page-count="Math.ceil(total/10)"
+        :current-page.sync ="page"
+        class=""
+        background
+        layout="prev, pager, next"
+        @current-change="pageChange"/>
+    </div>
   </div>
 </template>
 
 <script>
-import { fbOrders, fbCancel, fbAppeal,fbConfirm } from "../../../api/coin_trade";
+import {
+  fbOrders,
+  fbCancel,
+  fbAppeal,
+  fbConfirm,
+  fbFinish
+} from "../../../api/coin_trade";
 import { mapGetters, mapState } from "vuex";
-import { parseTime } from "../../../utils";
+import { parseTime, sendUserCode } from "../../../utils";
 import orderChoice from "../../../components/orderChoice";
-import { sendCaptcha1, getCaptcha } from "../../../api/user";
 
 export default {
   name: "AdvList",
@@ -130,45 +119,83 @@ export default {
   data() {
     return {
       orderData: [],
-      passFormVisible: false,
+      smsDialog: false,
       appealVisible: false,
-      processId: null,
-      id: null,
       code: null,
       appealForm: {
-        id:'',
-        processId: '',
-        reason: '',
-        type: 0
+        id: "",
+        processId: "",
+        reason: "",
+        type: '0'
       },
+      currentOrder: {
+        id: "-1",
+        direction: "-1"
+      },
+      stateList: [
+        { id: "0", name: "挂单中" },
+        { id: "1", name: "部分完成" },
+        { id: "3", name: "用户撤销" },
+        { id: "8", name: "历史纪录" },
+        { id: "9", name: "交易中" },
+        { id: "10", name: "全部" }
+      ],
+      total: 0,
       page: 0,
-      size: 100,
-      direction: 10,
-      coinId: 2,
-      cashId: 3,
-      state: 10,
-      start: "2018-10-10",
-      end: "2019-10-10",
-      order: "0"
+       chooseForm: {
+        direction: "10",
+        page: 0,
+        size: 10,
+        direction: "10",
+        coinId: "2",
+        cashId: "3",
+        state: "10",
+        time: '',
+        start: "2018-10-10",
+        end: "2019-10-10",
+        order: "0"
+      }
     };
   },
   created() {
     this.init();
   },
-  computed: {},
   methods: {
+    pageChange(a){
+      console.log(a)
+    },
+    newDirection(s){
+      this.chooseForm = s
+      fbOrders(
+        0,
+        10,
+        s.direction,
+        s.coinId,
+        s.cashId,
+        s.state,
+        s.time[0],
+        s.time[1],
+        1
+      ).then(res => {
+        this.orderData = [];
+        if (res.content.records instanceof Array) {
+          this.orderData = res.content.records;
+        }
+      });
+    },
     init() {
       fbOrders(
-        this.page,
-        this.size,
-        this.direction,
-        this.coinId,
-        this.cashId,
-        this.state,
-        this.start,
-        this.end,
-        this.order
+        this.chooseForm.page,
+        this.chooseForm.size,
+        this.chooseForm.direction,
+        this.chooseForm.coinId,
+        this.chooseForm.cashId,
+        this.chooseForm.state,
+        this.chooseForm.start,
+        this.chooseForm.end,
+        this.chooseForm.order
       ).then(res => {
+        this.total = res.content.total
         this.orderData = [];
         if (res.content.records instanceof Array) {
           this.orderData = res.content.records;
@@ -185,6 +212,10 @@ export default {
           return "已完成";
         case "3":
           return "已撤销";
+        case "4":
+          return "买家已付款";
+        case "5": 
+          return "买家已撤销";
         case "8":
           return "历史纪录";
         case "9":
@@ -194,47 +225,74 @@ export default {
     parseTime(timeStamp) {
       return parseTime(timeStamp);
     },
-    repeal(id) {
+    repeal(order) {
       this.$alert("确定要撤销吗", "广告撤销", {
         confirmButtonText: "确定",
+        cancelButtonText: "取消",
         callback: action => {
-          fbCancel(id).then(res => {
-            if (res.code === "200") {
-              this.$notify.success("撤销成功");
-            } else {
-              this.$notify.success("撤销失败");
-            }
-            window.location.reload();
-          });
+          if (action == "confirm") {
+            fbCancel(order.id).then(res => {
+              if (res.code === "200") {
+                this.$notify.success("撤销成功");
+              } else {
+                this.$notify.success("撤销失败");
+              }
+              this.init();
+            });
+          } else if (action == "cancel") {
+            return false;
+          }
         }
       });
     },
-    appeal(id){
-      console.log(id)
-      this.id = id
-      this.appealVisible = true
+    appeal(order) {
+      this.currentOrder = order;
+      this.appealVisible = true;
     },
-    submitAppeal(){
-      fbAppeal(this.id, this.appealForm.processId,this.appealForm.reason, this.appealForm.type)
-      .then(res=>{
-        if(res.code === '200'){
-          this.$notify.success('申诉成功')
-        }else{
-          this.$notify.error('申诉失败')          
+    submitAppeal() {
+      fbAppeal(
+        this.currentOrder.orderId,
+        this.currentOrder.id,
+        this.appealForm.reason,
+        this.appealForm.type
+      ).then(res => {
+        if (res.code === "200") {
+          this.$notify.success("申诉成功");
+        } else {
+          this.$notify.error("申诉失败");
         }
-      })
+      });
     },
-    pass(id) {
-      this.passFormVisible = true;
-      this.id = id;
-      this.sendCode()
+    pass(order) {
+      // if(order.direction)
+      if(order.direction == "0"){
+        this.confirm();
+        // this.$router.push({ name: 'orderDetail', params: { id:order.id,direction: order.direction} })
+      }else{
+        this.currentOrder = order;
+        sendUserCode(this);
+      }
     },
     confirm() {
-      if (this.processId === null) {
-        this.$message.error("请输入交易号");
-      } else {
-        fbConfirm(this.id, this.processId, this.code).then(res => {
-          console.log(res);
+      if (this.currentOrder.direction === "-1") {
+        return;
+      } else if (this.currentOrder.direction === "0") {
+        // 此单为买入单
+        fbConfirm(this.currentOrder.id, this.code).then(res => {
+          if (res.code === "200") {
+            this.$notify.success("交易完成");
+          } else {
+            console.log(res);
+          }
+        });
+      } else if (this.currentOrder.direction === "1") {
+        // 此单为卖出单
+        fbFinish(this.currentOrder.id, this.code).then(res => {
+          if (res.code === "200") {
+            this.$notify.success("交易完成");
+          } else {
+            console.log(res);
+          }
         });
       }
     },
@@ -244,27 +302,11 @@ export default {
           done();
         })
         .catch(_ => {});
-    },
-    sendCode() {
-      const country = this.$store.state.user.userInfo.countryCode;
-      const phone = this.$store.state.user.userInfo.mobile;
-      sendCaptcha1(phone, country)
-        .then(res => {
-          if (res.code === "200") {
-            this.smsDialog = true;
-            getCaptcha(phone, country).then(res => {
-              this.$notify.success(res.content);
-            });
-          } else {
-            this.$notify.error(this.$t("shitHappens"));
-          }
-        })
-        .catch(_ => {});
-    },
+    }
   },
   computed: {
     ...mapGetters([
-      "getCoinNameByID",
+      "getCoinNameByIDUp",
       "getCashNameById",
       "getSupportCoin",
       "getSupportCash"
@@ -288,15 +330,39 @@ export default {
     }
   },
   watch: {
-    direction() {
-      this.init();
-    },
-    coinId() {
-      this.init();
-    },
-    cashId() {
-      this.init();
+    page(page){
+      let s = this.chooseForm;
+      fbOrders(
+        page,
+        10,
+        s.direction,
+        s.coinId,
+        s.cashId,
+        s.state,
+        s.time[0],
+        s.time[1],
+        1
+      ).then(res => {
+        if(res){
+        this.total = res.content.total
+        this.orderData = [];
+        if (res.content.records instanceof Array) {
+          this.orderData = res.content.records;
+        }}
+      });
     }
+    // direction() {
+    //   this.init();
+    // },
+    // coinId() {
+    //   this.init();
+    // },
+    // cashId() {
+    //   this.init();
+    // },
+    // state() {
+    //   this.init();
+    // }
   }
 };
 </script>
@@ -306,6 +372,10 @@ export default {
   background-color: #fff;
   min-height: 800px;
   padding: 50px 0;
+  .mpagination {
+    margin-top: 30px;
+    text-align: center;
+  }
   .adv-inner {
     width: 1200px;
     margin: auto;
@@ -318,8 +388,12 @@ export default {
       // background-color: #1b1e2e;
       .cell {
         white-space: pre;
-        overflow: unset;
+        overflow: hidden;
         font-size: 14px;
+        a:hover {
+          color: #357ce1;
+          opacity: 0.8;
+        }
       }
     }
   }

@@ -91,7 +91,7 @@ export default {
           trade_pwd(formData).then(response => {
             if (response.content) {
               this.$notify.success(response.message)
-              this.$router.goBack()
+              this.$router.go(-1)
             } else {
               alert(response.message)
             }
@@ -111,7 +111,7 @@ export default {
             // TODO: 接收验证码需要删除
             getCaptcha(phone, country).then(res => {
               this.$notify.success(res.content)
-              this.$router.go(-1)
+              // this.$router.go(-1)
             })
           })
           // console.log()

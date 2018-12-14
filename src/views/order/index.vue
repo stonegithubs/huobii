@@ -7,9 +7,9 @@
       <el-tab-pane label="委托历史" name="second">
         <history-order/>
       </el-tab-pane>
-      <el-tab-pane label="成交明细" name="third">
+      <!-- <el-tab-pane label="成交明细" name="third">
         <detail-order/>
-      </el-tab-pane>
+      </el-tab-pane> -->
     </el-tabs>
   </div>
 </template>

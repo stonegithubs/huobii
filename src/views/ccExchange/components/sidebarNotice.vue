@@ -5,8 +5,8 @@
     </div>
     <div class="in ">
       <ul id="notice_list">
-        <li v-for="(item, index) in notice" :key="index">
-          <router-link :to="{ name: 'index'}" class="notice-inner">{{ item.description }} </router-link>
+        <li v-for="(item, index) in getterBanner" :key="index">
+          <a :href="item.link" class="notice-inner">{{ item.title }} </a>
           <div class="notice-time">{{ parseTime(item.updateDate,'{y}-{m}-{d} {h}:{i}:{s}') }}</div>
         </li>
       </ul>
@@ -18,20 +18,22 @@
 import {
   parseTime
 } from '../../../utils/index'
+import { mapGetters } from 'vuex';
 export default {
   name: 'SidebarNotice',
   data() {
     return {
-      notice: []
+      // notice: []
     }
   },
+  computed:{
+    ...mapGetters([
+        'getterBanner'
+    ])
+  },
   created() {
-    if (this.$store.state.siteCMS.notice.length === 0) {
-      this.$store.dispatch('getNoticeRemote').then(() => {
-        this.notice = this.$store.state.siteCMS.notice
-      })
-    } else {
-      this.notice = this.$store.state.siteCMS.notice
+    if(this.getterBanner.length === 0){
+      this.$store.dispatch('getBanners')
     }
   },
   methods: {

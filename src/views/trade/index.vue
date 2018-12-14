@@ -215,7 +215,7 @@ export default {
     background-color: #fff;
 
     .trade-wrapper {
-      width: 1400px;
+      width: 1200px;
       min-height: 800px;
       margin: auto;
     }

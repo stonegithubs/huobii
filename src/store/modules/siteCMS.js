@@ -1,11 +1,13 @@
 // 网站CMS功能数据
 
-import { getNotice, articleCategory, articles } from '../../api/cms'
+import { getNotice, articleCategory, articles, getBanner } from '../../api/cms'
 
 const siteCMS = {
   state: {
     // 网站公告
     notice: [],
+
+    bannerList: [],
 
     // 文章分类
     articleCategory: [],
@@ -23,6 +25,9 @@ const siteCMS = {
     },
     SET_ARTICLE: (state, list) => {
       state.articles = list
+    },
+    SET_BANNER: (state, list) => {
+      state.bannerList = list
     }
   },
   actions: {
@@ -55,9 +60,22 @@ const siteCMS = {
           reject(err)
         })
       })
+    },
+    getBanners({ commit }) {
+      return new Promise((resolve, reject) => {
+        getBanner(0, 5).then(response => {
+          commit('SET_BANNER', response.content.records)
+          resolve(response)
+        }).catch(err => {
+          reject(err)
+        })
+      })
     }
   },
   getters: {
+    getterBanner(state) {
+      return state.bannerList
+    },
     getMyNotice: (state) => (n) => {
       // 传入需要的个数,判断一下防止越界 按权重由高到低排序
       const compare = function (x, y) {

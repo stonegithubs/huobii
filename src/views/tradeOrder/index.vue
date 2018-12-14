@@ -1,305 +1,398 @@
 <template>
-  <div class="trade-order">
-    <div class="trade-inner">
-      <h2>{{$t('order.myOrders')}}</h2>
-      <el-select v-model="direction" placeholder="交易方向">
-        <el-option v-for="item in directionOption" :key="item.name" :label="item.name" :value="item.direction">
-          {{ item.name}}
-        </el-option>
-      </el-select>
-      <el-select v-model="coinId" placeholder="货币类型">
-        <el-option v-for="item in getSupportCoin" :key="item.abbr" :label="item.abbr" :value="item.id">
-          {{ item.abbr}}
-        </el-option>
-      </el-select>
-      <el-select v-model="cashId" placeholder="法币类型">
-        <el-option v-for="item in getSupportCash" :key="item.abbr" :label="item.abbr" :value="item.id">
-          {{ item.abbr}}
-        </el-option>
-      </el-select>
-      <el-table v-loading='isLoading' :data="order_list" :default-sort="{prop: 'timeStamp', order: 'descending'}" style="width: 100%" class="hidden-xs-only">
-        <el-table-column :label="$t('order.orderNo')">
-          <template slot-scope="scope">
+  <div class="adv-list">
+    <div class="adv-inner">
+      <div style="display:flex; justify-content: space-between;">
+        <div class="adv-title">我的订单</div>
+        <order-choice @directionChange="newDirection"></order-choice>
+      </div>
+
+      <div class="adv-table">
+        <el-table height='600px' :data="orderData" stripe style="width: 100%">
+          <el-table-column width="200px" :label="$t('order.orderNo')">
+            <template slot-scope="scope">
               <span class="order-no">
-                <router-link :to="{ name:'orderDetail', params: { id: scope.row.id}}">{{ scope.row.id }}</router-link>
+                <router-link
+                  :to="{ name:'orderDetail', params: { id: scope.row.orderId, direction: scope.row.direction}}"
+                >{{ scope.row.orderId }}</router-link>
               </span>
-</template>
-        </el-table-column>
+            </template>
+          </el-table-column>
+          <el-table-column prop="date" label="订单类型">
+            <template slot-scope="scope">{{ scope.row.direction === '0'? '买入': '卖出' }}</template>
+          </el-table-column>
+          <el-table-column prop="name" label="币种">
+            <template slot-scope="scope">{{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]).toUpperCase() }}</template>
+          </el-table-column>
+          <el-table-column prop="address" label="数量">
+            <template slot-scope="scope">{{ scope.row.amount }}</template>
+          </el-table-column>
+          <el-table-column prop="address" label="法币币种">
+            <template slot-scope="scope">{{ getCashNameById(scope.row.coinId.split('_')[1]).toUpperCase() }}</template>
+          </el-table-column>
+          <el-table-column prop="address" label="状态">
+            <template slot-scope="scope">{{ getState(scope.row.status) }}</template>
+          </el-table-column>
+          <el-table-column prop="address" label="创建时间" width="200px">
+            <template slot-scope="scope">{{parseTime(scope.row.updateDate) }}</template>
+          </el-table-column>
+          <el-table-column width="250px" prop="address" label="操作">
+            <template slot-scope="scope">
+              <el-button size="mini" type="warning" @click="appeal(scope.row)">申诉</el-button>
+              <el-button type="primary" size="mini" @click="pass(scope.row)" v-if="scope.row.direction == '0' && scope.row.status == '9'">付款</el-button>
 
-        <el-table-column :label="$t('order.orderType')">
-<template slot-scope="scope">
-  <span :class="scope.row.direction === 1? 'sell': 'buy'">{{ scope.row.direction ==='1'? '卖出': '买入' }} </span>
-  {{ scope.row.amount.toFixed(6) }} {{ getCoinNameByID(scope.row.coinId).toUpperCase() }}
-</template>
-        </el-table-column>
+              <div style="display:inline-block" v-if="scope.row.status ==4">
+                <el-button 
+                  v-if="scope.row.direction == '1'"
+                  type="primary" size="mini"
+                  @click="pass(scope.row)"
+                >放行</el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </div>
+    <el-dialog title="订单放行" :visible.sync="smsDialog" width="400px" :before-close="handleClose">
+      <el-form>
+        <!-- <el-form-item label="过程编号">
+          <el-input v-model="processId"></el-input>
+        </el-form-item>-->
+        <el-form-item label="验证码">
+          <el-input v-model="code"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="smsDialog = false">取 消</el-button>
+        <el-button type="primary" @click="confirm()">确 定</el-button>
+      </span>
+    </el-dialog>
 
-        <el-table-column :label="$t('order.orderTotal')">
-<template slot-scope="scope">
-   {{ (scope.row.price*scope.row.amount).toFixed(6) }}{{ getCashNameById(scope.row.cashId).toUpperCase() }}
-</template>
-        </el-table-column>
-
-        <el-table-column :label="$t('exchange.main.price')">
-<template slot-scope="scope">
-   {{ scope.row.price.toFixed(6) }} {{ getCashNameById(scope.row.cashId).toUpperCase() }}
-</template>
-        </el-table-column>
-
-        <el-table-column :label="$t('order.fee')">
-<template slot-scope="scope">
-   {{ scope.row.fee.toFixed(6) }} {{ getCoinNameByID(scope.row.coinId).toUpperCase() }}
-</template>
-        </el-table-column>
-
-        <el-table-column width='200px' :label="$t('exchange.main.time')" prop="timeStamp">
-<template slot-scope="scope">
-  <!-- {{ parseTime(scope.row.updateDate,'{y}-{m}-{d} {h}:{i}') }} -->
-  {{scope.row.updateDate}}
-</template>
-        </el-table-column>
-
-        <el-table-column :label="$t('exchange.main.status')">
-<template slot-scope="scope">
-  <span> <i :class="getStatusLogo(scope.row.status)"/> {{ getStatusInfo(scope.row.status) }}</span>
-</template>
-        </el-table-column>
-
-        <el-table-column :label="$t('order.orderUser')">
-<template slot-scope="scope">
-  <router-link :to="{ name: 'trader', params: { id: scope.row.userId }}">
-    {{ scope.row.user=== null? 'null':scope.row.user.name }}
-  </router-link>
-</template>
-        </el-table-column>
-      </el-table>
-      <!-- <div class="m-order-list hidden-sm-and-up">
-        <span style="margin: 30px; font-size: 30px">{{$t('exchange.main.status')}}</span>
-        <div v-for="item in order_list" class="order-list">
-          <div class="order-list-label">
-            <span class="m-text-info">订单号</span>
-            <span><router-link :to="{ name:'orderDetail', params: { id: item.id}}">{{ item.id }}</router-link></span>
-          </div>
-          <div class="order-list-label">
-            <span class="m-text-info">交易类型</span>
-            <span :class="getSellTypeClass(item.type)">{{ item.type }} </span> {{ item.number }} {{ item.coinType }}
-          </div>
-          <div class="order-list-label">
-            <span class="m-text-info">交易数量</span>
-            <span>{{ item.number }} {{ item.coinType }}</span>
-          </div>
-          <div class="order-list-label">
-            <span class="m-text-info">总价</span>
-            <span>{{ item.id }} {{ item.currencyType }}</span>
-          </div>
-          <div class="order-list-label">
-            <span class="m-text-info">单价</span>
-            <span>{{ item.id }} {{ item.currencyType }}</span>
-          </div>
-          <div class="order-list-label">
-            <span class="m-text-info">手续费</span>
-            <span>{{ item.id }} {{ item.coinType }}</span>
-          </div>
-          <div class="order-list-label">
-            <span class="m-text-info">时间</span>
-            <span>{{ parseTime(item.id,'{y}-{m}-{d} {h}:{i}') }}</span>
-          </div>
-          <div class="order-list-label">
-            <span class="m-text-info">状态</span>
-            <span> <i :class="getStatusLogo(item.status)"/> {{ getStatusInfo(item.status) }}</span>
-          </div>
-          <div class="order-list-label">
-            <span class="m-text-info">交易对象</span>
-            <router-link :to="{ name: 'trader', params: { id: item.target_user.id }}">
-              {{ item.target_user.name }}
-            </router-link>
-          </div>
-        </div>
-      </div> -->
+    <el-dialog title="订单申訴" :visible.sync="appealVisible" width="400px" :before-close="handleClose">
+      <el-form v-model="appealForm">
+        <!-- <el-form-item label="过程编号">
+          <el-input v-model="appealForm.processId"></el-input>
+        </el-form-item> -->
+        <el-form-item label="申诉理由">
+          <el-input v-model="appealForm.reason"></el-input>
+        </el-form-item>
+        <el-form-item label="申诉类型">
+          <el-select v-model="appealForm.type" placeholder="请选择申诉类型">
+            <el-option label="对方不放行" value="0"></el-option>
+            <el-option label="交易数量不正确" value="1"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="appealVisible = false">取 消</el-button>
+        <el-button type="primary" @click="submitAppeal()">确 定</el-button>
+      </span>
+    </el-dialog>
+    <div class="mpagination">
+      <el-pagination
+        :page-count="Math.ceil(total/10)"
+        :current-page.sync ="page"
+        class=""
+        background
+        layout="prev, pager, next"
+        @current-change="pageChange"/>
     </div>
   </div>
 </template>
 
 <script>
-  import {
-    parseTime
-  } from '../../utils/index'
-  import {
-    fbOrders
-  } from '../../api/coin_trade'
-  import {
-    mapGetters
-  } from 'vuex';
-  export default {
-    name: 'TradeOrder',
-    data() {
-      return {
-        order_list: [],
-        isLoading: true,
+import {
+  // fbOrders,
+  fbCancel,
+  fbAppeal,
+  fbConfirm,
+  fbFinish,
+  fbJdOrders
+} from "../../api/coin_trade";
+import { mapGetters, mapState } from "vuex";
+import { parseTime, sendUserCode } from "../../utils";
+import orderChoice from "../../components/orderChoice";
+
+export default {
+  name: "AdvList",
+  components: { orderChoice },
+  data() {
+    return {
+      orderData: [],
+      smsDialog: false,
+      appealVisible: false,
+      code: null,
+      appealForm: {
+        id: "",
+        processId: "",
+        reason: "",
+        type: 0
+      },
+      currentOrder: {
+        id: "-1",
+        direction: "-1"
+      },
+      stateList: [
+        { id: "0", name: "挂单中" },
+        { id: "1", name: "部分完成" },
+        { id: "3", name: "用户撤销" },
+        { id: "8", name: "历史纪录" },
+        { id: "9", name: "交易中" },
+        { id: "10", name: "全部" }
+      ],
+      total: 0,
+      page: 0,
+       chooseForm: {
+        direction: "10",
         page: 0,
-        size: 100,
-        direction: 10,
-        coinId: 2,
-        cashId: 3,
-        state: 10,
+        size: 10,
+        direction: "10",
+        coinId: "2",
+        cashId: "3",
+        state: "10",
+        time: '',
         start: "2018-10-10",
         end: "2019-10-10",
         order: "0"
       }
+    };
+  },
+  created() {
+    this.init();
+  },
+  methods: {
+    pageChange(a){
+      console.log(a)
     },
-    created() {
-      this.init()
+    newDirection(s){
+      this.chooseForm = s
+      fbJdOrders(
+        0,
+        10,
+        s.direction,
+        s.coinId,
+        s.cashId,
+        s.state,
+        s.time[0],
+        s.time[1],
+        1
+      ).then(res => {
+        this.orderData = [];
+        if (res.content.records instanceof Array) {
+          this.orderData = res.content.records;
+        }
+      });
     },
-    methods: {
-      init() {
-        this.isLoading = true
-        this.$store.dispatch('getSupportCoin')
-        fbOrders(this.page,
-            this.size,
-            this.direction,
-            this.coinId,
-            this.cashId,
-            this.state,
-            this.start,
-            this.end,
-            this.order)
-          .then(res => {
-            this.order_list = []
-            if (res.content.records instanceof Array) {
-              this.order_list = res.content.records
-            }
-            this.isLoading = false
-          }).catch(_ => {
-            this.isLoading = false
-            console.log(_)
-          })
-      },
-      getSellTypeClass(type) {
-        if (type === '1') {
-          return 'type-sell'
+    init() {
+      fbJdOrders(
+        this.chooseForm.page,
+        this.chooseForm.size,
+        this.chooseForm.direction,
+        this.chooseForm.coinId,
+        this.chooseForm.cashId,
+        this.chooseForm.state,
+        this.chooseForm.start,
+        this.chooseForm.end,
+        this.chooseForm.order
+      ).then(res => {
+        this.total = res.content.total
+        this.orderData = [];
+        if (res.content.records instanceof Array) {
+          this.orderData = res.content.records;
+        }
+      });
+    },
+    getState(state) {
+      switch (state) {
+        case "0":
+          return "挂单中";
+        case "1":
+          return "部分成交";
+        case "2":
+          return "已完成";
+        case "3":
+          return "已撤销";
+        case "4":
+          return "买家已付款";
+        case "5": 
+          return "买家已撤销";
+        case "8":
+          return "历史纪录";
+        case "9":
+          return "交易中";
+      }
+    },
+    parseTime(timeStamp) {
+      return parseTime(timeStamp);
+    },
+    repeal(order) {
+      this.$alert("确定要撤销吗", "广告撤销", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        callback: action => {
+          if (action == "confirm") {
+            fbCancel(order.id).then(res => {
+              if (res.code === "200") {
+                this.$notify.success("撤销成功");
+              } else {
+                this.$notify.success("撤销失败");
+              }
+              this.init();
+            });
+          } else if (action == "cancel") {
+            return false;
+          }
+        }
+      });
+    },
+    appeal(order) {
+      this.currentOrder = order;
+      this.appealVisible = true;
+    },
+    submitAppeal() {
+      fbAppeal(
+        this.currentOrder.orderId,
+        this.currentOrder.id,
+        this.appealForm.reason,
+        this.appealForm.type
+      ).then(res => {
+        if (res.code === "200") {
+          this.$notify.success("申诉成功");
         } else {
-          return 'type-buy'
+          this.$notify.error("申诉失败");
         }
-      },
-      parseTime(time, obj) {
-        return parseTime(time, obj)
-      },
-      getStatusLogo(i) {
-        if (i === '3') {
-          return 'order-cancel el-icon-circle-close'
-        } else if (i === '2') {
-          return 'order-success el-icon-circle-check\n'
-        } else if (i === '9') {
-          return 'order-pending el-icon-loading'
-        }
-      },
-      getStatusInfo(i) {
-        if (i === '3') {
-          return this.$t('order.canceled')
-        } else if (i === '2') {
-          return this.$t('order.passed')
-        } else if (i === '9') {
-          return this.$t('order.pending')
-        }
+      });
+    },
+    pass(order) {
+      // if(order.direction)
+      if(order.direction == "0"){
+        this.$router.push({ name: 'orderDetail', params: { id:order.id,direction: order.direction} })
+      }else{
+        this.currentOrder = order;
+        sendUserCode(this);
       }
     },
-    computed: {
-      ...mapGetters([
-        'getCoinNameByID',
-        'getCashNameById',
-        'getSupportCoin',
-        'getSupportCash'
-      ]),
-      directionOption() {
-        let option = [{
-          direction: '0',
-          name: '买入'
-        }, {
-          name: '卖出',
-          direction: '1'
-        }, {
-          name: '全部',
-          direction: '10'
-        }]
-        return option
-      },
-    },
-    watch: {
-      direction() {
-        this.init()
-      },
-      coinId() {
-        this.init()
-      },
-      cashId() {
-        this.init()
+    confirm() {
+      if (this.currentOrder.direction === "-1") {
+        return;
+      } else if (this.currentOrder.direction === "0") {
+        // 此单为买入单
+        fbConfirm(this.currentOrder.orderId, this.code).then(res => {
+          if (res.code === "200") {
+            this.$notify.success("交易完成");
+          } else {
+            console.log(res);
+          }
+        });
+      } else if (this.currentOrder.direction === "1") {
+        // 此单为卖出单
+        fbFinish(this.currentOrder.orderId, this.code).then(res => {
+          if (res.code === "200") {
+            this.$notify.success("交易完成");
+          } else {
+            console.log(res);
+          }
+        });
       }
+    },
+    handleClose(done) {
+      this.$confirm("确认关闭？")
+        .then(_ => {
+          done();
+        })
+        .catch(_ => {});
     }
+  },
+  computed: {
+    ...mapGetters([
+      "getCoinNameByIDUp",
+      "getCashNameById",
+      "getSupportCoin",
+      "getSupportCash"
+    ]),
+    directionOption() {
+      let option = [
+        {
+          direction: "0",
+          name: "买入"
+        },
+        {
+          name: "卖出",
+          direction: "1"
+        },
+        {
+          name: "全部",
+          direction: "10"
+        }
+      ];
+      return option;
+    }
+  },
+  watch: {
+    page(page){
+      let s = this.chooseForm;
+      fbJdOrders(
+        page,
+        10,
+        s.direction,
+        s.coinId,
+        s.cashId,
+        s.state,
+        s.time[0],
+        s.time[1],
+        1
+      ).then(res => {
+        this.total = res.content.total
+        this.orderData = [];
+        if (res.content.records instanceof Array) {
+          this.orderData = res.content.records;
+        }
+      });
+    }
+    // direction() {
+    //   this.init();
+    // },
+    // coinId() {
+    //   this.init();
+    // },
+    // cashId() {
+    //   this.init();
+    // },
+    // state() {
+    //   this.init();
+    // }
   }
+};
 </script>
 
 <style lang="scss" scoped>
-  .trade-order {
-    // width: 90%;
-    // width: 1200px;
-    // margin: auto;
-    // padding-top: 40px;
-    background-color: #fff;
-    min-height: 800px;
-    .order-no {}
-    .trade-inner {
-      width: 1200px;
-      margin: auto;
-      padding-top: 40px;
-      h2 {
-        font-size: 24px;
-      }
-      .el-table {
-        margin-top: 40px;
-      }
+.adv-list /deep/ {
+  background-color: #fff;
+  min-height: 800px;
+  padding: 50px 0;
+  .mpagination {
+    margin-top: 30px;
+    text-align: center;
+  }
+  .adv-inner {
+    width: 1200px;
+    margin: auto;
+    .adv-title {
+      font-size: 28px;
+      font-weight: 500;
+      margin-bottom: 30px;
     }
-    .type-sell {
-      color: rgb(103, 201, 154);
-      font-weight: 600;
-    }
-    .type-buy {
-      color: #638BD4;
-      font-weight: 600;
-    }
-    .order-cancel {
-      color: #d6453c
-    }
-    .order-success {
-      color: #55a532;
-    }
-    .order-pending {
-      color: #7a98f7;
-    }
-    .el-table /deep/ {
-      a {
-        color: #638bd4;
-        text-decoration: none;
-        transition: color .2s ease;
-      }
-    }
-    .m-order-list {
-      .order-list {
-        padding-top: 24px;
-        padding-bottom: 24px;
-        border-bottom: 1px solid #dddee1;
-        .order-list-label {
-          font-size: 14px;
-          display: flex;
-          line-height: 2.4;
-          a {
-            color: #7a98f7;
-          }
-          .m-text-info {
-            width: 100px;
-            margin-right: 80px;
-            color: #999;
-          }
+    .el-table {
+      // background-color: #1b1e2e;
+      .cell {
+        white-space: pre;
+        overflow: hidden;
+        font-size: 14px;
+        a:hover {
+          color: #357ce1;
+          opacity: 0.8;
         }
       }
     }
   }
+}
 </style>

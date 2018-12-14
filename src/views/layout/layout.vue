@@ -27,6 +27,7 @@ export default {
       this.$store.dispatch('getSupportCash')
       this.$store.dispatch('getSupportCoin')
       this.$store.dispatch('getSupportedPayway')
+      this.$store.dispatch('GetUserInfo').catch(_=>{})
     })
   }
 }

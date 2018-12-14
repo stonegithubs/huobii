@@ -4,60 +4,19 @@
 
       <!-- 币种 方向筛选 -->
       <div class="choice-filter">
-        <el-radio-group v-model="coinId" style="margin: 30px 30px 30px 0;">
-          <el-radio-button
-            v-for="item in this.$store.state.coinData.supportedCoin"
-            :label="item.id"
-            :key="item.id"
-            :value="item.id">
-            {{ item.abbr.toUpperCase() }}
-          </el-radio-button>
-        </el-radio-group>
-        <el-radio-group v-model="direction" style="margin: 30px 30px 30px 0">
-          <el-radio-button :label="0" value="0">买入</el-radio-button>
-          <el-radio-button :label="1" value="1">卖出</el-radio-button>
-        </el-radio-group>
+       
+        <!-- <router-link :to="{ 'name': 'advertising' }"><h2>发布广告</h2></router-link>  -->
       </div>
 
       <!-- 右侧选项 -->
       <div class="coin-choice">
-        <el-popover popper-class="m-popover" placement="bottom" width="328" trigger="click">
-          <el-form v-model="searchForm" class="select-from" label-width="120">
-            <el-form-item label="支付方式" >
-              <el-select v-model="searchForm.payments" placeholder="选择支付方式">
-                <el-option
-                  v-for="item in this.$store.state.Common.supportPayway"
-                  :key="item.id"
-                  :label="item.payName"
-                  :value="item.id"/>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="现金种类">
-              <el-select v-model="searchForm.cashId" placeholder="选择现金种类">
-                <el-option
-                  v-for="item in mockPaymentList"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"/>
-              </el-select>
-            </el-form-item>
-
-            <!-- <el-form-item> -->
-            <div class="search-box">
-              <el-button type="primary" @click="search()">搜索</el-button>
-            </div>
-            <!-- </el-form-item> -->
-          </el-form>
-          <el-input slot="reference">
-            <template slot="suffix">
-              <img :src="require('../../../assets/imgs/search.png')">
-            </template>
-          </el-input>
-        </el-popover>
+         <el-button @click="goToAdv()" type="primary" round>{{$t('fb.pubAdv')}}</el-button>
+        <el-button @click="checkMyAdv()" type="primary" round>{{$t('fb.myAdv')}}</el-button>
+        <fbChoice @orderChange="ChangeOrder"></fbChoice>
       </div>
     </div>
     <el-table :data="merchantList" style="width: 100%">
-      <el-table-column label="商家(订单数|完成率)" width="180">
+      <el-table-column :label="$t('fb.merchant')" width="180">
         <template slot-scope="scope">
           <div :class="getAvatarColor(scope.row.id)" class="avatar-container">
             <em class="name">{{ scope.row.user.name.slice(0,1).toUpperCase() }}</em>
@@ -72,27 +31,26 @@
         </template>
       </el-table-column>
 
-      <el-table-column sortable label="数量" width="180">
+      <el-table-column sortable :label="$t('order.amount')" width="180">
         <template slot-scope="scope">
           <span>{{ scope.row.amount }} </span>
         </template>
       </el-table-column>
 
-      <!--TODO:这里限额单价等需要单位 需要和后端协商-->
-      <el-table-column label="限额">
+      <el-table-column :label="$t('order.limit')">
         <template slot-scope="scope">
-          <span>{{ scope.row.min }}-{{ scope.row.max }}</span>
+          <span>{{ scope.row.min }}-{{ scope.row.max }}  {{getCashNameById(scope.row.cashId)}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column sortable prop="price" width="180" label="单价" >
+      <el-table-column sortable prop="price" width="180" :label="$t('price')" >
         <template slot-scope="scope">
-          <span class="price">{{ scope.row.price }}</span>
+          <span class="price">{{ scope.row.price }} {{getCashNameById(scope.row.cashId)}}</span>
         </template>
       </el-table-column>
 
       <!-- TODO: 支付方式需要从后端拿icon 这里写法应急 -->
-      <el-table-column prop="payment_list" width="200" label="支付方式">
+      <el-table-column prop="payment_list" width="200" :label="$t('order.payways')">
         <template slot-scope="scope">
           <el-tooltip
             v-for="(item,index) in scope.row.paywayIds.split(',')"
@@ -107,7 +65,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="id" label="下单" width="100">
+      <el-table-column prop="id" :label="$t('placeOrder')" width="100">
         <template slot-scope="scope">
           <el-popover
             placement="bottom"
@@ -116,27 +74,27 @@
             <el-form ref="tradeForm" :inline="false" :model="tradeForm">
 
               <el-form-item
-                :rules="[{ required: true, message: '请输入正确的数量', trigger: 'blur' },
-                         { type: 'number', message: '请输入正确的数量', trigger: ['blur', 'change'] }]"
+                :rules="[{ required: true, message: $t('amountErr'), trigger: 'blur' },
+                         { type: 'number', message: $t('amountErr'), trigger: ['blur', 'change'] }]"
                 prop="currency"
-                label="现金">
+                :label="$t('fb.currency')">
 
-                <el-input v-model.number="tradeForm.currency" placeholder="现金数量"/>
+                <el-input v-model.number="tradeForm.currency" :placeholder="$t('fb.cashAmount')"/>
               </el-form-item>
 
               <el-form-item
-                :rules="[{ required: true, message: '请输入正确的数量', trigger: 'blur' },
-                         { type: 'number', message: '请输入正确的数量', trigger: ['blur', 'change'] }]"
+                :rules="[{ required: true, message: $t('amountErr'), trigger: 'blur' },
+                         { type: 'number', message: $t('amountErr'), trigger: ['blur', 'change'] }]"
                 :label="$store.getters.getCoinNameByID(scope.row.coinId).toUpperCase()"
                 prop="amount">
-                <el-input v-model.number="tradeForm.amount" placeholder="货币数量"/>
+                <el-input v-model.number="tradeForm.amount" :placeholder="$t('exchange.main.amount')"/>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" style="width: 100%" @click="handleOrder(scope.row.id)">下单</el-button>
+                <el-button type="primary" style="width: 100%" @click="handleOrder(scope.row.id)">{{$t('placeOrder')}}</el-button>
               </el-form-item>
             </el-form>
             <!-- </el-card> -->
-            <el-button slot="reference" type="primary" @click="chooseOrder(scope.row)">购买</el-button>
+            <el-button slot="reference" type="primary" @click="chooseOrder(scope.row)">{{scope.row.direction == 0? $t('sell'): $t('buy')}}</el-button>
           </el-popover>
         </template>
       </el-table-column>
@@ -159,11 +117,11 @@
     <el-dialog
       :visible.sync="smsDialog"
       :before-close="handleClose"
-      title="请输入您收到的验证码"
+      :title="$t('smsTip')"
       width="300px">
-      <el-input v-model="tradeForm.code" placeholder="请输入您收到的验证码"/>
+      <el-input v-model="tradeForm.code" :placeholder="$t('smsCode')"/>
       <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="doTrade()">确定</el-button>
+        <el-button type="primary" @click="doTrade()">{{$t('confirm')}}</el-button>
       </span>
     </el-dialog>
   </div>
@@ -173,6 +131,7 @@
 import {
   getAvatarColor
 } from '../../../utils/index'
+import fbChoice  from '../../../components/fbChoice'
 import paymentIcon from './paymentIcon'
 import {
   fbList, fbTrade
@@ -182,7 +141,8 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'TradeContent',
   components: {
-    paymentIcon
+    paymentIcon,
+    fbChoice
   },
   data() {
     return {
@@ -190,20 +150,21 @@ export default {
       currentCoin: 'usdt',
       page: 0,
       total: 0,
-      direction: 0,
-      onePageNum: 10, // 一页显示10个
       payments: 'all',
-      coinId: '1',
-      cashId: 'all',
-      mockPaymentList: [
-        { name: 'USD', id: '0' },
-        { name: 'CNY', id: '1' },
-        { name: 'VND', id: '2' }
-      ],
+      onePageNum: 10, // 一页显示10个
+      chooseForm: {
+        page:0,
+        size: 10,
+        direction: '1', 
+        payments: 'all', 
+        coinId: '2', 
+        cashId: '3'
+      },
       searchForm: { // 安排
         payments: 'all',
         cashId: 'all'
       },
+      direction: '1',
       tradeForm: {
         id: '',
         direction: this.direction,
@@ -216,34 +177,10 @@ export default {
       price: 1
     }
   },
-  watch: {
-    direction(curVal, oldVal) {
-      this.page = 0,
-      this.getMerchantList(this.page, this.onePageNum, this.direction, this.payments, this.coinId, this.cashId)
-    },
-    coinId(curVal, oldVal) {
-      this.page = 0,
-      this.getMerchantList(this.page, this.onePageNum, this.direction, this.payments, this.coinId, this.cashId)
-    },
-    //  tradeForm: {
-
-    //   // handler(curVal, oldVal){
-    //   //   curVal.amount =
-    //   // },
-    //   deep:true
-    // },
-    getAmount(newvalue, old) {
-      this.tradeForm.currency = newvalue * this.price
-    },
-    getCurrency(newvalue, old) {
-      this.tradeForm.amount = newvalue / this.price
-    }
-
-  },
   created() {
     // this.$router.push({ name: 'orderDetail', params: { id: '594f8c0ae4034fe79713cdafe4bcfd55', processId: '2bfeb0ea99bd49e9938a9952e9397295'} })
     // 拉取商家列表
-    this.getMerchantList(this.page, this.onePageNum, this.direction, this.payments, this.coinId, this.cashId)
+    this.getMerchantList(0, 10, 0, 'all', '2','3')
 
     // 拉取实名信息
     this.$store.dispatch('GetVerifyInfo').catch(_ => {})
@@ -253,6 +190,13 @@ export default {
     this.$store.dispatch('getSupportCoin').catch(_ => {})
   },
   methods: {
+    ChangeOrder(s){
+      // this.page = 0;
+      this.chooseForm = s;
+      this.direction = s.direction
+      this.getMerchantList(0, 10, s.direction, s.payments, s.coinId, s.cashId)
+      // console.log(form)
+    },
     getMerchantList(page, size, direction, payments, coinId, cashId) {
       this.merchantList = []
       fbList(page, size, direction, payments, coinId, cashId).then(res => {
@@ -277,7 +221,7 @@ export default {
     },
     pageChange(s) {
       // console.log('页数改变 ' + s)
-      this.getMerchantList(s, 10, this.direction, this.payments, this.coinId, this.payments)
+      this.getMerchantList(s, 10, this.direction, this.payments, this.coinId, this.cashId)
     },
     filter() {
 
@@ -296,7 +240,7 @@ export default {
       this.tradeForm.direction = this.direction
       this.$store.dispatch('GetUserInfo').then(res => {
         if (res.code !== '200') {
-          this.$notify.error('请先登录')
+          this.$notify.error('loginNeeded')
           return false
         } else {
 
@@ -352,17 +296,29 @@ export default {
       const form = this.tradeForm
       // console.log(form.id, form.direction, form.code, form.amount)
       fbTrade(form.id, form.direction, form.code, form.amount).then(res => {
-        this.dialogVisible = false
+        this.smsDialog = false
         if (res.code === '200') {
-          this.$notify.success('下单成功，交易编号:'+ res.content.id)
-          this.$router.push({ name: 'orderDetail', params: { id:res.content.orderId  , processId:res.content.id} })
-        } else {
-          this.$notify.error('下单失败' + res.content.message)
+          if(form.direction == '0'){    // 此单我为出售方 不获取对方付款信息 TODO: 后端接口错误 挂单方拿不到交易信息
+              this.$notify.success(this.$t('fb.orderSellTip'))
+              this.smsDialog=false
+              // this.$router.push({ name: 'orderDetail', params: { id:res.content.orderId,direction: form.direction} })
+          }else if(form.direction == '1'){    // 此单我为买入方 跳转到付款页面正常付款
+            this.$notify.success(this.$t('fb.orderBuyTip'))
+            this.$router.push({ name: 'orderDetail', params: { id:res.content.orderId,direction: form.direction} })
+          }
+          } else {
+          this.$notify.error(this.$t('fb.orderFailed') + res.content.message)
           // console.log(res)
         }
       }).catch(err => {
-        this.notify.error(err.message)
+        // this.$notify.error(err.message)
       })
+    },
+    goToAdv(){
+      this.$router.push({ name: 'advertising'})
+    },
+    checkMyAdv(){
+      this.$router.push({ name: 'tradeOrder'})
     },
     // 界面
     getIcon(iconName) {
@@ -372,7 +328,7 @@ export default {
       return getAvatarColor(id)
     },
     handleClose(done) {
-      this.$confirm('确认关闭？')
+      this.$confirm(this.$t('confirmToClose'))
         .then(_ => {
           done()
         })
@@ -389,8 +345,43 @@ export default {
     },
     ...mapGetters([
       'getCountry',
-      'getCountryCodeByAbbr'
+      'getCountryCodeByAbbr',
+      'getCashNameById'
     ])
+  },
+  watch: {
+    coinId(curVal, oldVal) {
+      this.page = 0,
+      this.getMerchantList(this.page, this.onePageNum, this.direction, this.payments, this.coinId, this.cashId)
+    },
+    //  tradeForm: {
+
+    //   // handler(curVal, oldVal){
+    //   //   curVal.amount =
+    //   // },
+    //   deep:true
+    // },
+    getAmount(newvalue, old) {
+      this.tradeForm.currency = newvalue * this.price
+    },
+    getCurrency(newvalue, old) {
+      this.tradeForm.amount = newvalue / this.price
+    },
+    page(page){
+      let s = this.chooseForm;
+      this.merchantList = []
+      fbList(page, 10, s.direction, s.payments, s.coinId, s.cashId).then(res => {
+        if (res.code === '200') {
+          const content = res.content
+          this.total = content.total
+          if (content.records instanceof Array) {
+            this.merchantList = content.records
+            
+          }
+          // console.log(this.merchantList)
+        }
+      }).catch(_ => {})
+    }
   }
 
 }
@@ -419,7 +410,7 @@ export default {
       }
     }
     .choice-filter  {
-      display: flex;
+      // display: flex;
       // flex-direction: column;
 
     }
@@ -427,6 +418,10 @@ export default {
       display: flex;
       justify-content: space-between;
       .coin-choice /deep/ {
+        display: flex;
+        .el-button {
+          margin: 0 20px 0 0;
+        }
         margin: 30px 0;
         .el-input__suffix {
           top: 5px;
@@ -550,6 +545,6 @@ export default {
     padding: 35px 23px 15px 26px;
   }
   .choice-filter .el-radio-group {
-         margin: 40px 20px 0 0 !important;
+        //  margin: 40px 20px 0 0 !important;
       }
 </style>

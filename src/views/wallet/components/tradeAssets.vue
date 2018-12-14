@@ -7,32 +7,35 @@
           <router-link :to="{ name: 'withdraw_address'}" class="to-withdraw" style="color: #638bd4!important;">{{ $t('wallet.withDrawAddr') }}</router-link>
         </el-button>
       </div>
-      <div v-for="item in getBalance" :key="item.coinId" class="list-wrapper">
-        <div class="coin-list">
-          <div class="coin-avatar">
-            <i :class="'iconfont icon-'+ item.coinName.toUpperCase()" style="font-size: 24px !important;"/>
-            <p>{{ item.coinName.toUpperCase() }}</p>
-          </div>
-          <div class="account-detail">
-            <p class="account-title">{{ $t('wallet.cashBalance') }}</p>
-            <div class="asset-list">
-              <p><span class="font-gray">{{ $t('wallet.available') }}:</span> {{ item.currencyBalance.toFixed(6) }}</p>
-              <p><span class="font-gray">{{ $t('wallet.frozen') }}:</span> {{ item.currencyFrozen.toFixed(6) }}</p>
+      <!-- <div v-for="wallet of getSupportCoin" :key="wallet.id"> -->
+        <div v-for="item in getCoinBalance" v-if="shi(item.coinId)" :key="item.coinId" class="list-wrapper">
+          <div class="coin-list" >
+            <div class="coin-avatar">
+              <i :class="'iconfont icon-'+ item.coinName.toUpperCase()" style="font-size: 24px !important;"/>
+              <p>{{ item.coinName.toUpperCase() }}</p>
             </div>
-          </div>
-          <div class="account-detail">
-            <p class="account-title">{{ $t('wallet.coinBalance') }}</p>
-            <div class="asset-list">
-              <p><span class="font-gray">{{ $t('wallet.available') }}:</span> {{ item.coinBalance.toFixed(6) }}</p>
-              <p><span class="font-gray">{{ $t('wallet.frozen') }}:</span> {{ item.coinFrozen.toFixed(6) }}</p>
+            <div class="account-detail">
+              <p class="account-title">{{ $t('wallet.cashBalance') }}</p>
+              <div class="asset-list">
+                <p><span class="font-gray">{{ $t('wallet.available') }}:</span> {{ item.currencyBalance.toFixed(6) }}</p>
+                <p><span class="font-gray">{{ $t('wallet.frozen') }}:</span> {{ item.currencyFrozen.toFixed(6) }}</p>
+              </div>
             </div>
-          </div>
-          <div class="account-option">
-            <el-button @click="handleTransfer(item)">{{ $t('wallet.getStronger') }}</el-button>
-            <el-button type="primary" @click="handleDeposit(item)">{{ $t('wallet.deposit') }}</el-button>
+            <div class="account-detail">
+              <p class="account-title">{{ $t('wallet.coinBalance') }}</p>
+              <div class="asset-list">
+                <p><span class="font-gray">{{ $t('wallet.available') }}:</span> {{ item.coinBalance.toFixed(6) }}</p>
+                <p><span class="font-gray">{{ $t('wallet.frozen') }}:</span> {{ item.coinFrozen.toFixed(6) }}</p>
+              </div>
+            </div>
+            <div class="account-option">
+              <el-button @click="handleTransfer(item)">{{ $t('wallet.getStronger') }}</el-button>
+              <el-button type="primary" @click="handleDeposit(item)">{{ $t('wallet.deposit') }}</el-button>
+            </div>
           </div>
         </div>
-      </div>
+      <!-- </div>s -->
+     
     </el-card>
     <el-dialog :title="$t('wallet.getStronger')+ currentCoin.coinName.toUpperCase()" :modal-append-to-body="false" :visible.sync="transferDiaVisible" width="500px">
       <div class="d-content">
@@ -47,12 +50,15 @@
         <li>{{ $t('wallet.info') }}{{ currentCoin.coinName.toUpperCase() }}{{ $t('wallet.info1') }}</li>
         <li>{{ $t('wallet.finishTip') }}</li>
       </div>
+      <span  slot="footer">
+        <el-button style="width:455px" type="primary" @click="submitIIn()">确认完成充值</el-button>
+      </span>
     </el-dialog>
     <el-dialog :title="$t('wallet.transfer')" :modal-append-to-body="false" :visible.sync="depositDiaVisible" :before-close="handledepositClose" width="500px">
       <el-form ref="depositForm" :model="depositForm" label-position="top" label-width="80px">
         <el-form-item label="币种">
           <el-select v-model="depositForm.coinId" :placeholder="$t('wallet.chooseCoin')" style="width: 100%">
-            <el-option v-for="item in getBalance" :key="item.id" :label="item.coinName.toUpperCase()" :value="item.id"/>
+            <el-option v-for="item in  getSupportCoin" :key="item.id" :label="item.abbr ===undefined? '':item.abbr.toUpperCase()" :value="item.id"/>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('wallet.from')">
@@ -63,8 +69,8 @@
         </el-form-item>
         <el-form-item :label="$t('wallet.to')">
           <el-select v-model="depositForm.depositType" :placeholder="$t('wallet.chooseWallet')" style="width: 100%">
-            <el-option :label="$t('wallet.coinBalance')" value="1"/>
-            <el-option :label="$t('wallet.cashBalance')" value="0"/>
+            <el-option :label="$t('wallet.coinBalance')" value="0"/>
+            <el-option :label="$t('wallet.cashBalance')" value="1"/>
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('exchange.main.amount')" style="width: 100%">
@@ -82,14 +88,15 @@
 <script>
 import qrCode from 'qrcodejs2'
 import { setTimeout } from 'timers'
-import { coin2currency, currency2coin } from '../../../api/wallet'
+import { coin2currency, currency2coin, submitIn } from '../../../api/wallet'
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'TradeAssets',
   data() {
     return {
       loading: true,
-      currentCoin: { coinName: 'BTC', address: '' },
+      currentCoin: { coinName: 'BTC', address: '',coinId: '' },
       transferDiaVisible: false,
       depositDiaVisible: false,
       QRCODE: '',
@@ -101,9 +108,27 @@ export default {
     }
   },
   computed: {
-    getBalance() {
-      return this.$store.state.wallet.coinBalance
-    }
+    ...mapGetters([
+      'getSupportCoin',
+      'getCoinBalance',
+      'getSupportCash'
+    ]),
+    ...mapState([
+      'wallet'
+    ])
+    // getBalance() {
+    //   return 
+    //   let all = this.$store.state.wallet.coinBalance 
+    //   let list = []  
+    //     for(let coin of all){
+    //       for(let item of this.getSupportCoin){
+    //         if(item.coinId === coin.coinId){
+    //           list.push(coin)
+    //         }
+    //       }
+    //     }
+    //   return list
+    // }
   },
   created() {
     this.loading = true
@@ -112,6 +137,29 @@ export default {
     }).catch(_ => {})
   },
   methods: {
+    submitIIn(){
+      this.$prompt('请输入您的交易密码', '确认完成充值?', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(({ value }) => {
+          submitIn(this.currentCoin.coinId, value).then(res=>{
+            if(res.code === '200'){
+              this.$notify.success("核验请求已提交")
+            }else{
+              this.$notify.success("核验失败")              
+            }
+            this.transferDiaVisible = false
+          })
+        }).catch(_=>{console.log(_)})
+    },
+    shi(id){
+      for(let item of this.getSupportCash){
+        if(item.id === id){
+          return false
+        }
+      }
+      return true
+    },
     handleMyshit(type) {
       if (type == 1) {
         // console.log("币币到法币")
@@ -121,6 +169,8 @@ export default {
           } else {
             this.$notify.error(this.$t('wallet.transferFailed'))
           }
+          this.depositDiaVisible = false
+          this.$store.dispatch('GetCoinBalanceBoth')
         }).catch(_ => {})
       }
       if (type == 0) {
@@ -131,16 +181,13 @@ export default {
           } else {
             this.$notify.error(this.$t('wallet.transferFailed'))
           }
+          this.depositDiaVisible = false
+          this.$store.dispatch('GetCoinBalanceBoth')
         }).catch(_ => {})
       }
       // console.log(type+' '+this.depositForm.coinId +" "+ this.depositForm.amount)
     },
     handleTransfer(item) {
-      if (this.QRCODE instanceof Object) {
-        // this.QRCODE.clear()
-        // console.log(document.getElementById('qrcode').innerHTML = '')
-        // document.getElementById('qrcode').html('')
-      }
       this.currentCoin = item
       setTimeout(() => {
         this.qrcode()
@@ -149,7 +196,7 @@ export default {
     },
     handleDeposit(item) {
       this.depositDiaVisible = true
-      this.depositForm.coinID = item.coinId
+      this.depositForm.coinId = item.coinId
     },
     handledepositClose(done) {
       this.$confirm('确认关闭？')
@@ -160,6 +207,7 @@ export default {
     },
     qrcode() {
       // console.log(this.currentCoin.address)
+      document.getElementById('qrcode').innerHTML =''
       this.QRCODE = new qrCode('qrcode', {
         width: 130, // 设置宽度，单位像素
         height: 130, // 设置高度，单位像素

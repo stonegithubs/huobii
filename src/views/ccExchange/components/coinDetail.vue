@@ -22,7 +22,7 @@
           <li><span>发行总量</span><p>9631.15 万</p></li>
           <li><span>流通总量</span><p>9631.15 万</p></li>
           <li><span>众筹价格</span><p>$0.31</p></li>
-          <li><span>白皮书</span><p><a href="https://github.com/ethereum/wiki/wiki/%5BEnglish%5D-White-Paper">https://github.com/ethereum/wiki/wiki/%5BEnglish%5D-White-Paper</a></p></li>
+          <!-- <li><span>白皮书</span><p><a href="https://github.com/ethereum/wiki/wiki/%5BEnglish%5D-White-Paper">https://github.com/ethereum/wiki/wiki/%5BEnglish%5D-White-Paper</a></p></li> -->
           <li><span>官网</span><p><a href="https://www.ethereum.org/">https://www.ethereum.org/</a></p></li>
           <li><span>区块查询</span><p><a href="https://www.ethereum.org/">https://www.ethereum.org/</a></p></li>
         </ul>
@@ -37,12 +37,15 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import "../../../assets/custom-theme/theme";
 
   .coin-detail {
     // width: 1136px;
+    // width:802px;
+    width: 77.7%;
     min-height: 424px;
+    // margin-top: 0;
 
     .cd-title {
       height: 48px;
@@ -53,13 +56,18 @@ export default {
       padding-left: 20px;
     }
     .cd-inner {
-      height: 400px;
+      height: 470px;
       background-color: #FFF;
       overflow: hidden;
       padding: 10px 30px 30px;
+      display: flex;
+      justify-content: space-between;
       .cd-left {
-        float: left;
-        width: 370px;
+        // float: left;
+        // width: 160px;
+        padding-right: 30px; 
+        // width: 350px;
+        max-width: 400px;
         h3 {
           font-size: 16px;
           span {
@@ -70,7 +78,7 @@ export default {
         }
         .cd-line {
           height: 1px;
-          width: 90%;
+          // width: 90%;
           // background-color: $hbBackgroundColor;
           margin: 20px 0;
         }
@@ -82,8 +90,10 @@ export default {
 
       }
       .cd-right {
-        float: right;
-        width: 570px;
+        padding-left: 5px; 
+        width: 40%;
+        // float: right;
+        // width: 570px;
         ul li {
           height: 48px;
           line-height: 48px;
@@ -94,7 +104,7 @@ export default {
             width: 70%;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: nowrap;
+            // white-space: nowrap;
             // color: #c7cce6;
             a {
               color : $hbHoverColor

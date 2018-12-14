@@ -46,7 +46,7 @@ import { articleDetail } from '../../../api/cms'
 
 <style lang="scss" scoped>
 .article-content {
-    padding-left:127px;
+    padding:0 60px;
     .content-title{
             font-size: 32px;font-weight: 400;margin-bottom: 40px;
     }

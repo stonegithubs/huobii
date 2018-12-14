@@ -61,7 +61,7 @@ const coinTrade = {
         })
 
       // 查询open订单到openlist
-      getOrderBySymbolName(0, 500, 10, symbolName, 9, '2018-12-08', '2038-12-08', 1)
+      getOrderBySymbolName(0, 500, 10, symbolName, 10, '2018-12-08', '2038-12-08', 1)
         .then(response => {
           commit('SET_OEPEN', response.content.records)
         })

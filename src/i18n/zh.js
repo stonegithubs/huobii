@@ -5,7 +5,16 @@ module.exports = {
   confirm: '确定',
   canceled: '取消',
   captcha: '验证码',
+  smsCode: '短信验证码',    //
+  smsTip: '请输入您收到的验证码',   //
   submit: '提交',
+  search: '搜索',     //
+  price: '单价',      //
+  placeOrder: '下单', //
+  loginNeeded: '请先登录',  //
+  sell: '出售',
+  buy: '购买',
+  amountErr: '请输入正确的数量',
   info: '提示',
   appeal: '申诉',
   appealReason: '申诉理由',
@@ -23,6 +32,7 @@ module.exports = {
     sendAvd: '发布广告',
     trade: '法币交易',
     exchange: '币币交易',
+    article: '文章中心',
     c2c: 'C2C交易',
     signIn: '登录',
     signUp: '注册',
@@ -145,7 +155,7 @@ module.exports = {
     agreementTitle: '用户协议',
     signUp: '注册',
     confirmAgreement: '您必须同意用户协议',
-    pwdRule: '密码不能低于8位且由字符、数字、字母构成',
+    pwdRule: '密码不能低于8位且由数字、字母构成',    //去掉了‘字符’
     pwdNotConsistent: '两次输入的密码不一致',
     signUpTip1: '国籍信息注册后不可修改，请务必如实选择。',
     signUpTip2: '验证邮件可能会被误判为垃圾邮件，请注意查收。',
@@ -289,5 +299,18 @@ module.exports = {
     articleCenter: '文章中心',
     articleDetail: '文章详情',
   },
-  
+  fb: {     // 以下  
+    direction: '交易方向',
+    cashType: '现今种类',
+    coinType: '货币类型',
+    pubAdv: '发布广告',
+    myAdv: '我的广告',
+    merchange: '商家(订单数|完成率)',
+    limit: '限额',
+    cashAmount: '现金数',
+    currency: '现金',
+    orderBuyTip: '下单成功，请尽快付款',
+    orderSellTip: '下单成功，请耐心等待对方付款',
+    orderFailed: '下单失败',
+  }
 }

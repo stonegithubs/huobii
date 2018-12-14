@@ -12,8 +12,10 @@
         <el-tab-pane
           v-for="item in getArticlesByCategoryId(category_id)"
           :key="item.id"
-          :label="item.title"
         >
+        <template slot="label">
+          <span class="tltle-list" v-html="item.title"></span>
+        </template>
           <article-content :article_id="item.id"></article-content>
         </el-tab-pane>
       </el-tabs>
@@ -62,6 +64,9 @@ export default {
     background-color: rgba(71, 78, 112, 1);
     color: #ffffff!important;
   }
-  
+  .tltle-list {
+    // display:inline-block;
+    width: 160px;
+  }
 }
 </style>

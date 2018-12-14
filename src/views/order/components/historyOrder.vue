@@ -37,7 +37,7 @@
       <el-table-column
         :label="$t('exchange.main.total')+'('+this.$store.state.coinData.mainCoin.toUpperCase()+')'">
         <template slot-scope="scope">
-          <span>{{ (scope.row.price*scope.row.amount).toFixed(6) }}</span>
+          <span>{{ (scope.row.amount).toFixed(6) }}</span>
         </template>
       </el-table-column>
 
@@ -53,15 +53,16 @@
         :label="$t('exchange.main.notClosed')"
         prop="">
         <template slot-scope="scope">
-          <span>{{ (scope.row.price*scope.row.amount - Number(scope.row.tradeAmount)).toFixed(6) }}</span>
+          <span>{{ (scope.row.amount - Number(scope.row.tradeAmount)).toFixed(6) }}</span>
         </template>
       </el-table-column>
 
       <el-table-column
         :label="$t('exchange.main.status')">
         <template slot-scope="scope">
-          <span v-if="(scope.row.price*scope.row.amount - Number(scope.row.tradeAmount)) === 0"> {{ $t('exchange.main.finished') }}</span>
-          <span v-else>{{ $t('exchange.main.userCanceled') }} </span>
+          <span>  {{getStatus(scope.row.status)}}</span>
+             <!-- TODO: Zhuangtai fan yi -->          
+          <!-- <span v-else>{{ $t('exchange.main.userCanceled') }} </span> -->
         </template>
       </el-table-column>
 
@@ -75,6 +76,7 @@ import { mapGetters } from 'vuex'
 import {
   getOrderBySymbolName
 } from '../../../api/coin_trade'
+import { getStatus } from '../../../utils'
 export default {
   name: 'CurrentOrder',
   data() {
@@ -111,6 +113,9 @@ export default {
   methods: {
     parseTime(timeStamp) {
       return parseTime(timeStamp)
+    },
+    getStatus(status){
+      return getStatus(status)
     }
   },
   computed: {

@@ -166,7 +166,7 @@ export const constantRouterMap = [
           },
           {
             path: '/ads/advList',
-            name: 'advList',
+            name: 'tradeOrder',
             component: () => import('@/views/advertisement/components/advList')
           },
           {
@@ -248,7 +248,7 @@ export const constantRouterMap = [
     component: layout,
     children: [
       {
-        path: 'order_detail/:id/:processId',
+        path: '/order_detail/:id/:direction',
         name: 'orderDetail',
         component: () => import('@/views/orderDetail/index')
       }
@@ -285,7 +285,7 @@ export const constantRouterMap = [
     children: [
       {
         path: '',
-        name: 'tradeOrder',
+        name: 'advList',
         component: () => import('@/views/tradeOrder/index')
       }
     ]

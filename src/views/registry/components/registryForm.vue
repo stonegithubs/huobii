@@ -71,7 +71,8 @@ export default {
     }
     const checkPasswrod = (rule, value, callback) => {
       const reg = new RegExp(
-        "^(?:(?=.*[0-9].*)(?=.*[A-Za-z].*)(?=.*[,\\.#%'\\+\\*\\-:;^_`].*))[,\\.#%'\\+\\*\\-:;^_`0-9A-Za-z]{8,30}$"
+        // "^(?:(?=.*[0-9].*)(?=.*[A-Za-z].*)(?=.*[,\\.#%'\\+\\*\\-:;^_`].*))[,\\.#%'\\+\\*\\-:;^_`0-9A-Za-z]{8,30}$"
+        '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$'
       )
       if (!reg.test(value)) {
         callback(this.$t('login.pwdRule'))

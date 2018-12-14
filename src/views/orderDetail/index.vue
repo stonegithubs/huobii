@@ -2,46 +2,41 @@
   <div class="trade-order-wrapper">
     <div class="trade-order">
       <div class="to-info">
-        <span class="font12 font-gray">订单：{{ this.orderInfo.order_id }}</span>
-        <div
-          class="ti-order-message"
-        >您向测试用户购买 测试数据 测试币种</div>
+        <span class="font12 font-gray">订单：{{ this.orderInfo.id }}</span>
+        <div class="ti-order-message">您向 {{orderInfo.userId}}
+           <span v-if="isBuyer">购买</span>
+            <span v-else>出售</span>
+             {{orderInfo.amount}} {{getCoinNameByIDUp(orderInfo.coinId)}}</div>
         <div class="order-info">
           <div>
             <span>单价:</span>
-            {{ orderInfo.price }} {{ orderInfo.coinType }}
+            {{ orderInfo.price }} {{ getCashNameById(orderInfo.cashId) }}
           </div>
           <div>
             <span>总价:</span>
-            {{ orderInfo.total }}
+            {{ orderInfo.amount*orderInfo.price }}{{ getCashNameById(orderInfo.cashId) }}
           </div>
         </div>
       </div>
-      <div class="to-payment">
-        <div class="tp-tip">
+      <div  class="to-payment">
+        <div v-if="orderInfo.status == 9" class="tp-tip">
           <div style="font-size:22px;margin:20px 0;">卖方收款方式</div>
           <div v-for="item in payment_list" :key="item.id" class="payment-item">
             <!-- <i class="el-icon-success"/> -->
             <div>
               <i style="margin:0 4px;" :class="'iconfont icon-'+getIcon(item.paywayId)"></i>
-              {{ getPaywayById(item.paywayId).payName }}
+              {{ getPaywayById(item.paywayId) === undefined? '' :getPaywayById(item.paywayId).payName }}
             </div>
             <div>
-              <span>{{ item.pram1 }}</span>
-              
-              <span>{{ item.pram2 }}</span>
-              <span>{{ item.pram3 }}</span>
+              <span>{{ item.pram1 === 'null'? '': item.pram1 }}</span>
+              <span>{{ item.pram2 === 'null'? '': item.pram2 }}</span>
+              <span>{{ item.pram3 === 'null'? '': item.pram3 }}</span>
             </div>
             <!-- 认证 -->
           </div>
         </div>
-        <!-- <div v-if="orderInfo.isPending" class="tp-list">
-          <div v-for="item in orderInfo.target_user.payment_list">
-            <span>{{ item.name }}</span> {{ item.payname }}{{ item.cardNo }}
-          </div>
-        </div>
-        <p v-if="orderInfo.isCanceled" class="payment-canceled">订单已失效 支付方式无法查看</p>
-        <p v-if="orderInfo.isSuccess" class="payment-success">订单已放行</p>-->
+        <!-- <p v-if="orderInfo.status == 9" class="font20">交易已经完成</p> -->
+        <p class="font20">订单状态: {{ getStatus(orderInfo.status)}}</p>
       </div>
       <!-- <div class="to-service">
         <div class="ts-tip">
@@ -56,11 +51,9 @@
       </div>-->
       <div class="to-pay">
         <p>
-          待支付，请于{{ orderInfo.timeLeft }}秒内向测试用户支付
-          <span class="tp-price">
-            测试数据
-            </span> ,付款参考号:
-          <span class="tp-flag">{{ this.$route.params.processId }}</span>
+          待支付，请于{{ orderInfo.expire }}分钟内向测试用户支付
+          <span class="tp-price">{{ orderInfo.amount*orderInfo.price }}{{ getCashNameById(orderInfo.cashId) }}</span> ,付款参考号:
+          <span class="tp-flag">{{ orderInfo.processId }}</span>
         </p>
         <div class="tp-pay">
           <el-button type="primary" @click="handlePay">支付完成</el-button>
@@ -98,18 +91,36 @@
 </template>
 
 <script>
-import { fbGetPayment, fbConfirm } from "../../api/coin_trade";
-import { sendCaptcha1, getCaptcha } from "../../api/user";
+import { fbGetPayment, fbConfirm,fbOrderDetail } from "../../api/coin_trade";
 import { mapGetters } from "vuex";
+import { sendUserCode, getStatus } from "../../utils/index";
 export default {
   name: "OrderDetail",
   data() {
     return {
       orderInfo: {
-        // 订单信息
-        order_id: this.$route.params.id, // 订单号
-        timeLeft: 900 // 订单剩余时间 写死！
-      },
+    "expire": 32,
+    "userId": "12e6386528494763850c00ab65ae1489",
+    "id": "c6994c2b045b446ea891a3473eb9f67d",
+    "amount": 23,
+    "tradeTime": null,
+    "coinId": "2",
+    "updateDate": 1544722272000,
+    "tradeAmount": 2,
+    "direction": "0",
+    "fee": 0,
+    "price": 12,
+    "max": 222,
+    "message": "dddd",
+    "min": 1,
+    "paywayIds": "all",
+    "user": null,
+    "processId": "d4788c85b7344156ab3c226609090003",
+    "status": "9",
+    "remarks": "通过api在线下单",
+    "cashId": "3",
+    "type": "1"
+  },
       question_list: [
         {
           id: 1,
@@ -143,15 +154,26 @@ export default {
     };
   },
   created() {
-    console.log(this.$route.params);
-    fbGetPayment(this.$route.params.id, this.$route.params.processId).then(
-      res => {
-        this.payment_list = res.content;
-      }
-    );
+    // console.log(this.getPaywayById(2).payName);
+    if (this.$route.params.direction == 0) {
+      // 付款方点进来拉取对方付款信息
+      fbGetPayment(this.$route.params.id, this.$route.params.processId).then(
+        res => {
+          this.payment_list = res.content;
+        }
+      );
+      fbOrderDetail(this.$route.params.id).then(res=>{
+        this.orderInfo = res.content
+      })
+    }else if(this.$route.params.direction == 1){
+      console.log("我是收款方")
+    }
   },
   computed: {
-    ...mapGetters(["getPaywayById"])
+    ...mapGetters(["getSupportCoin", "getSupportCash", "getPayway",'getCoinNameByIDUp','getCashNameById','getPaywayById']),
+    isBuyer(){
+      return this.$route.params.direction == 0
+    }
   },
   mounted() {
     setInterval(() => {
@@ -159,15 +181,19 @@ export default {
     }, 1000);
   },
   methods: {
+    getStatus(a){
+      return getStatus(a)
+    },
     finishTrade() {
       if (this.sms !== "") {
         fbConfirm(
           this.$route.params.id,
-          this.$route.params.processId,
+          // this.$route.params.processId,
           this.sms
         ).then(res => {
           if (res.code === "200") {
-            this.$notify.success("已确认，等待卖家确认订单");
+            this.$notify.success("订单已确认!");
+            this.smsDialog = false;
           } else {
             console.log(res);
           }
@@ -186,20 +212,7 @@ export default {
         .catch(_ => {});
     },
     sendCode() {
-      const country = this.$store.state.user.userInfo.countryCode;
-      const phone = this.$store.state.user.userInfo.mobile;
-      sendCaptcha1(phone, country)
-        .then(res => {
-          if (res.code === "200") {
-            this.smsDialog = true;
-            getCaptcha(phone, country).then(res => {
-              this.$notify.success(res.content);
-            });
-          } else {
-            this.$notify.error(this.$t("shitHappens"));
-          }
-        })
-        .catch(_ => {});
+      sendUserCode(this);
     },
     handleCancel() {},
     getIcon(id) {
@@ -242,6 +255,7 @@ export default {
     }
   }
   .tp-tip {
+    min-height: 140px;
     &:span {
       font-size: 24px;
     }

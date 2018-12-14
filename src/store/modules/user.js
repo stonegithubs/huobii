@@ -99,11 +99,11 @@ const user = {
     // 登出
     LogOut({ commit }) {
       return new Promise((resolve, reject) => {
-        logout(sessionStorage.getItem('Authorization')).then(response => {
-          resolve(response.message)
-        }).catch(err => {
-          reject(err)
-        })
+        // logout(sessionStorage.getItem('Authorization')).then(response => {
+        //   resolve(response.message)
+        // }).catch(err => {
+        //   reject(err)
+        // })
         commit('SET_USERINFO', null)
         commit('SET_TOKEN', null)
         commit('SET_VERIFYINFO', null)

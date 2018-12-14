@@ -15,7 +15,9 @@ export function fbOrders(page, size, direction, coinId, cashId, state, start, en
   return request({
     url: '/api/v1/currency_trade/orders',
     method: 'post',
-    params: { page, size, direction, coinId, cashId, state, start, end, order }
+    params: { page, size,
+      //  direction, coinId, cashId, state, start, end, order 
+      }
   })
 }
 
@@ -38,12 +40,32 @@ export function fbGetPayment(id, processId) {
   })
 }
 
+// 法币 接单方查询订单
+
+export function fbJdOrders(page, size, direction, coinId, cashId, state, start, end, order) {
+  return request({
+    url: '/api/v1/currency_trade/trades',
+    method: 'post',
+    params: { page, size }
+  })
+}
+
 // 法币 接单方确认付款
-export function fbConfirm(id , processId , code) {
+export function fbConfirm(id, code) {
   return request({
     url: '/api/v1/currency_trade/confirm',
     method: 'post',
-    params: { id ,processId ,code }
+    params: { id, code }
+  })
+}
+
+// 法币 确认收款完成订单
+
+export function fbFinish(id, code) {
+  return request({
+    url: '/api/v1/currency_trade/finish_trade',
+    method: 'post',
+    params: { id, code }
   })
 }
 
@@ -147,7 +169,7 @@ export function submitAppeals(id, reason, type) {
   })
 }
 
-// 获取实施成交记录
+// 币币 撤销订单
 export function submitRpeal(id) {
   return request({
     url: '/api/v1/coin_trade/cancel',

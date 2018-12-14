@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 登录 ~~~
 export function loginByUsername(data) {
   return request({
-    url: '/api/v1/token/login_t',
+    url: '/api/v1/token/login',
     method: 'post',
     data
   })
@@ -11,7 +11,7 @@ export function loginByUsername(data) {
 // 快速登录 ~~~
 export function fastLogin(data) {
   return request({
-    url: '/api/v1/token/fast_login_t',
+    url: '/api/v1/token/fast_login',
     method: 'post',
     data
   })

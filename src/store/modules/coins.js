@@ -50,8 +50,8 @@ const coinData = {
     supportedCoin: [],
 
     supportedCash: [
-      { id: '1', name: 'USD' },
-      { id: '2', name: 'CNY' }
+      // { id: '1', name: 'USD' },
+      // { id: '2', name: 'CNY' }
     ]
   },
   mutations: {
@@ -59,6 +59,9 @@ const coinData = {
       state.rateList = list
     },
     SET_CASH: (state, list) => {
+      for (let item of list) {
+        // item.coinName = item.coinName.toUpperCase()
+      }
       state.supportedCash = list
     },
     SET_SYMBOLS: (state, content) => {
@@ -256,12 +259,13 @@ const coinData = {
       return state.supportedCoin
     },
     getSupportCash: (state) => {
+
       return state.supportedCash
     },
     getCashNameById: (state) => (id) => {
       for (let item of state.supportedCash) {
         if (id == item.id) {
-          return item.name
+          return item.name.toUpperCase()
         }
       }
     },
@@ -292,6 +296,13 @@ const coinData = {
       for (const item of state.supportedCoin) {
         if (item.id == ID) {
           return item.abbr
+        }
+      }
+    },
+    getCoinNameByIDUp: (state) => (ID) => {
+      for (const item of state.supportedCoin) {
+        if (item.id == ID) {
+          return item.abbr.toUpperCase()
         }
       }
     },

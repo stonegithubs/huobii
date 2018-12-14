@@ -19,12 +19,23 @@
         mode="horizontal"
       >
         <slot name="nav-item">
+            <router-link :to="{ name: 'trade', params:{ option: 'buy', coin: 'btc' } }">
           <el-menu-item index="1">
-            <router-link :to="{ name: 'trade', params:{ option: 'buy', coin: 'btc' } }">{{ $t("navbar.trade") }}</router-link>
+              {{ $t("navbar.trade") }}
           </el-menu-item>
+              </router-link>
+
+            <router-link :to="{ name: 'ccExchange'}">
           <el-menu-item index="2">
-            <router-link :to="{ name: 'ccExchange'}">{{ $t("navbar.exchange") }}</router-link>
+              {{ $t("navbar.exchange") }}
           </el-menu-item>
+              </router-link>
+
+            <router-link :to="{ name: 'article_list'}">
+           <el-menu-item index="3">
+              {{ $t("navbar.article") }}
+          </el-menu-item>
+              </router-link>
           <!-- <el-menu-item index="3">
             <router-link :to="{ name: 'ccMargin'}">{{$t("navbar.c2c")}}</router-link>
           </el-menu-item> -->
@@ -67,7 +78,7 @@
             <router-link :to="{ name: 'verify'}">
               <el-menu-item index="5-3">{{ $t("navbar.user.verify") }}</el-menu-item>
             </router-link>
-            <router-link :to="{ name: 'advList'}">
+            <router-link :to="{ name: 'tradeOrder'}">
               <el-menu-item index="5-4">{{ $t("navbar.myAdv") }}</el-menu-item>
             </router-link>
             <router-link :to="{ name: 'advertising'}">

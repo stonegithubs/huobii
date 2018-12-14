@@ -95,7 +95,7 @@ export default {
   @import "../../../assets/custom-theme/theme";
 
   .market-trades /deep/{
-    width: 445px;
+    width: 33.3%;
     height: 520px;
     /*background-color: lemonchiffon;*/
     // .mt-title {

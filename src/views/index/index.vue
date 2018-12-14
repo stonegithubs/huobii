@@ -1,7 +1,7 @@
 <template>
   <div>
     <banner/>
-    <indexNotice/>
+    <!-- <indexNotice/> -->
     <tradeShow/>
     <feature/>
     <client/>

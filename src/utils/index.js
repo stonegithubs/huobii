@@ -1,4 +1,7 @@
 
+import { sendCaptcha1, getCaptcha } from '../api/user'
+import { submitRpeal } from '../api/coin_trade'
+
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
     return null
@@ -81,4 +84,49 @@ export function getAvatarColor(id) {
     case 8: return 'nine'
     case 9: return 'ten'
   }
+}
+
+export function sendUserCode(vm) {
+  const that = vm
+  const country = that.$store.state.user.userInfo.countryCode
+  const phone = that.$store.state.user.userInfo.mobile
+  sendCaptcha1(phone, country)
+    .then(res => {
+      if (res.code === '200') {
+        that.smsDialog = true
+        getCaptcha(phone, country).then(res => {
+          that.$notify.success(res.content)
+        })
+      } else {
+        that.$notify.error(that.$t('shitHappens'))
+      }
+    })
+    .catch(_ => { })
+}
+
+export function getStatus(status) {
+  switch (status) {
+    case '0': return '挂单中'
+    case '1': return '部分成交'
+    case '2': return '完成交易'
+    case '3': return '用户撤销'
+    case '8': return '历史纪录'
+    case '9': return '交易锁定中'
+    case '10': return '全部'
+    case '11': return '交易中'
+  }
+}
+
+// 撤销币币订单
+export function confirmReppelCoinTrade(vm, id) {
+  vm.$alert('确定撤销币币订单吗', '币币订单撤销', {
+    confirmButtonText: '确定',
+    callback: action => {
+      submitRpeal(id).then(res => {
+        if (res.code === '200') {
+          vm.$notify.success('撤销成功')
+        }
+      })
+    }
+  })
 }

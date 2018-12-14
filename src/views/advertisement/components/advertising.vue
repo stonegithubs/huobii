@@ -7,6 +7,7 @@
           :label="coin.abbr.toUpperCase()"
           :name="coin.id"
           :key="coin.id"
+          :value="coin.abbr"
         >
           <div>
             <h3>{{$t('order.submitTip1')}}{{coin.abbr.toUpperCase()}}{{$t('order.submitTip1_1')}}</h3>
@@ -27,8 +28,8 @@
             :rules="[{ required: true, message: $t('order.directionTip'), trigger: 'blur' }]"
           >
             <el-radio-group v-model="tradeForm.direction">
-              <el-radio label="0">{{$t('order.buyOnline')}}{{coin.abbr.toUpperCase()}}</el-radio>
-              <el-radio label="1">{{$t('order.sellOnline')}}{{coin.abbr.toUpperCase()}}</el-radio>
+              <el-radio label="0">{{$t('order.buyOnline')}}{{getCoinNameByIDUp(tradeForm.coinId)}}</el-radio>
+              <el-radio label="1">{{$t('order.sellOnline')}}{{getCoinNameByIDUp(tradeForm.coinId)}}</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item
@@ -130,12 +131,12 @@ export default {
         message: "",
         expire: "",
         payways: [],
-        type: "0"
+        type: 0
       }
     };
   },
   computed: {
-    ...mapGetters(["getSupportCoin", "getSupportCash", "getPayway"]),
+    ...mapGetters(["getSupportCoin", "getSupportCash", "getPayway",'getCoinNameByIDUp']),
     ...mapState(["user"]),
   },
   mounted() {},

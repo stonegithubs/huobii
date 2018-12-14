@@ -7,7 +7,7 @@
     </div>
     <div class="inner">
       <el-table :data="this.$store.state.coinTrade.historyOrders" max-height="600" style="width: 100%">
-        <el-table-column :label="$t('exchange.main.time')">
+        <el-table-column width="120px" :label="$t('exchange.main.time')">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.updateDate===null?0: scope.row.updateDate) }}</span>
           </template>
@@ -46,15 +46,14 @@
 
         <el-table-column :label="$t('exchange.main.notClosed')">
           <template slot-scope="scope">
-            <span>{{ (scope.row.price*scope.row.amount - Number(scope.row.tradeAmount)).toFixed(6) }}</span>
+            <span>{{ (scope.row.amount - Number(scope.row.tradeAmount)).toFixed(6) }}</span>
           </template>
         </el-table-column>
 
         <el-table-column
           :label="$t('exchange.main.status')">
           <template slot-scope="scope">
-            <span v-if="(scope.row.price*scope.row.amount - Number(scope.row.tradeAmount)) === 0"> {{ $t('exchange.main.finished') }}</span>
-            <span v-else>{{ $t('exchange.main.userCanceled') }} </span>
+            <span>{{ getStatus(scope.row.status) }}</span>
           </template>
         </el-table-column>
       </el-table>
@@ -85,7 +84,7 @@
 </template>
 
 <script>
-import { parseTime } from '../../../utils'
+import { parseTime, getStatus } from '../../../utils'
 import { mapGetters } from 'vuex'
 import {
   getOrderBySymbolName, submitAppeals
@@ -113,10 +112,12 @@ export default {
 
   },
   created() {
-    console.log(this.getHistoryOrder)
+    // console.log(this.getHistoryOrder)
   },
   methods: {
-
+    getStatus(status){
+      return getStatus(status)
+    },
     appeal(row) {
       this.appealVisible = true
       this.appealForm.id = row.id

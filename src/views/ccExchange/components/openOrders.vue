@@ -7,7 +7,7 @@
     </div>
     <div class="inner">
       <el-table :data="this.$store.state.coinTrade.openOrders" max-height="600" style="width: 100%">
-        <el-table-column :label="$t('exchange.main.time')">
+        <el-table-column width='120px' :label="$t('exchange.main.time')">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.updateDate===null?0: scope.row.updateDate) }}</span>
           </template>
@@ -59,7 +59,7 @@
           :label="$t('exchange.main.notClosed')"
           prop="">
           <template slot-scope="scope">
-            <span>{{ (scope.row.price*scope.row.amount - Number(scope.row.tradeAmount)).toFixed(6) }}</span>
+            <span>{{ (scope.row.amount - Number(scope.row.tradeAmount)).toFixed(6) }}</span>
           </template>
         </el-table-column>
 

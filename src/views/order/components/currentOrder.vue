@@ -37,7 +37,7 @@
       <el-table-column
         :label="$t('exchange.main.total')+'('+this.$store.state.coinData.mainCoin.toUpperCase()+')'">
         <template slot-scope="scope">
-          <span>{{ (scope.row.price*scope.row.amount).toFixed(6) }}</span>
+          <span>{{ (scope.row.amount).toFixed(6) }}</span>
         </template>
       </el-table-column>
 
@@ -53,14 +53,14 @@
         :label="$t('exchange.main.notClosed')"
         prop="">
         <template slot-scope="scope">
-          <span>{{ (scope.row.price*scope.row.amount - Number(scope.row.tradeAmount)).toFixed(6) }}</span>
+          <span>{{ (scope.row.amount - Number(scope.row.tradeAmount)).toFixed(6) }}</span>
         </template>
       </el-table-column>
 
       <el-table-column
         :label="$t('exchange.main.operation')">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="repeal(scope.row)">
+          <el-button size="mini" type="text" @click="mrepeal(scope.row.id)">
             {{ $t('repeal') }}</el-button>
             <!-- <el-button size="mini" type="text" @click="appeal(scope.row)">{{$t('appeal')}}</el-button> -->
         </template>
@@ -71,7 +71,7 @@
 
 <script>
 import {
-  parseTime
+  parseTime, confirmReppelCoinTrade
 } from '../../../utils'
 import {
   mapGetters
@@ -92,7 +92,7 @@ export default {
   created() {
     this.loading = true
     this.$store.dispatch('getSupportCoin').then(_ => {
-      getOrderBySymbolName(0, 10, 10, this.symbolName, 9, '2018-12-08', '2038-12-08', 1)
+      getOrderBySymbolName(0, 10, 10, this.symbolName, 11, '2018-12-08', '2038-12-08', 1)
         .then(response => {
           this.loading = false
           if (response.content.records instanceof Array) {
@@ -102,7 +102,7 @@ export default {
     }).catch(_ => {})
   },
   methods: {
-    update() {
+     update() {
       this.loading = true
       this.page++
       getOrderBySymbolName(page, 10, 10, this.symbolName, 9, '2018-12-08', '2038-12-08', 1)
@@ -112,9 +112,10 @@ export default {
             this.currentOrderData = response.content.records
           }
         })
-    }
-  },
-  methods: {
+    },
+    mrepeal(id){
+      confirmReppelCoinTrade(this,id)
+    },
     parseTime(timeStamp) {
       return parseTime(timeStamp)
     }

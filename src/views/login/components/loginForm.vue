@@ -74,79 +74,49 @@ export default {
     getVerify(verifyCode) {
       let myCode = verifyCode
       this.cacheVerifyCode = verifyCode
-      // if(Object.prototype.toString.call(myCode) === '[object MouseEvent]'){
-      //   // 点击按钮 
-      //   console.log('点击按钮')
-      //   if(this.cacheVerifyCode === null){
-      //   console.log(this.cacheVerifyCode)
-      //     this.$notify.error(this.$t('googleCaptchaNeed'))
-      //     return false
-      //   }else{
-      //     console.log(myCode)
-      //     myCode = this.cacheVerifyCode
+      // this.$refs['loginForm'].validate(valid => {
+      //   if (valid) {
+      //     const formData = new FormData()
+      //     formData.append('username', this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.username)
+      //     formData.append('password', this.loginForm.password)
+      //     formData.append('country', this.loginForm.region)
+      //     formData.append('captcha', myCode)
+      //     this.$store.dispatch('LoginByUsername', formData).then(responese => {
+      //       if (responese.code === '200') {
+      //         this.$router.push({
+      //           name: 'index'
+      //         })
+      //         this.$message.success(this.$t('login.success'))
+      //       } else {
+      //         console.log(responese)
+      //         this.$alert(responese.message, this.$t('login.failed'), {
+      //           confirmButtonText: this.$t('confirm'),
+      //           callback: action => {
+      //             window.location.reload()
+      //           }
+      //         })
+      //       }
+      //     }).catch(err => {
+      //       this.$alert(err.message, this.$t('login.failed'), {
+      //         confirmButtonText: this.$t('confirm'),
+      //         callback: action => {
+      //           window.location.reload()
+      //         }
+      //       })
+      //     })
+      //   } else {
+      //     this.cacheVerifyCode = verifyCode
       //   }
-
-      // }else if(Object.prototype.toString.call(this.cacheVerifyCode) === '[object String]'){
-      //   // 不是点击按钮
-      //   console.log(myCode)
-      //    this.cacheVerifyCode =  myCode 
-      // }
-      // if (Object.prototype.toString.call(myCode) === '[object MouseEvent]' && Object.prototype.toString.call(this.cacheVerifyCode) === '[object String]') {
-      //   // 如果点击按钮并且拿到上一次的缓存谷歌验证码 则把上一次的有效验证码提交
-      //   myCode = this.cacheVerifyCode
-      //   // console.log('检测到先行点击 上一次的谷歌验证码'+ myCode)
-      // }
-      // if ((Object.prototype.toString.call(myCode) === '[object MouseEvent]') && this.cacheVerifyCode === null) {
-      //   // 如果没有正确显示验证码则返回值不是字符串 并且没有缓存到上一次的验证码
-      //   //  提示网络状况
-      //   this.$notify.error(this.$t('googleCaptchaNeed'))
-      //   // console.log('无法加载谷歌验证码，请检查您的网络状况'+ verifyCode)
-      //   return false
-      // }
-      
-      // this.dialogTableVisible = false
-      this.$refs['loginForm'].validate(valid => {
-        if (valid) {
-          const formData = new FormData()
-          formData.append('username', this.getCountryCodeByAbbr(this.loginForm.region) + this.loginForm.username)
-          formData.append('password', this.loginForm.password)
-          formData.append('country', this.loginForm.region)
-          formData.append('captcha', myCode)
-          this.$store.dispatch('LoginByUsername', formData).then(responese => {
-            if (responese.code === '200') {
-              this.$router.push({
-                name: 'index'
-              })
-              this.$message.success(this.$t('login.success'))
-            } else {
-              console.log(responese)
-              this.$alert(responese.message, this.$t('login.failed'), {
-                confirmButtonText: this.$t('confirm'),
-                callback: action => {
-                  window.location.reload()
-                }
-              })
-            }
-          }).catch(err => {
-            this.$alert(err.message, this.$t('login.failed'), {
-              confirmButtonText: this.$t('confirm'),
-              callback: action => {
-                window.location.reload()
-              }
-            })
-          })
-        } else {
-          this.cacheVerifyCode = verifyCode
-        }
-      })
+      // })
     },
     countryChange(val){
       this.cuntryCode = this.getCountryCodeByAbbr(val)
     },
     submitLogin(){
       if(this.cacheVerifyCode === null){
-        this.$notify.warning('测试版不检查验证码')
-      }
+        this.$notify.warning(this.$t('googleCaptchaNeed'))
+        return;
+      }else {
        this.$refs['loginForm'].validate(valid => {
         if (valid) {
           const formData = new FormData()
@@ -181,6 +151,7 @@ export default {
           this.cacheVerifyCode = verifyCode
         }
       })
+    }
     }
   },
   watch: {
