@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 export const constantRouterMap = [
   {
     path: '/',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '/',
@@ -19,7 +19,7 @@ export const constantRouterMap = [
   },
   {
     path: '/coin_coin/exchange',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '/coin_coin/exchange',
@@ -31,7 +31,7 @@ export const constantRouterMap = [
   },
   {
     path: '/articles',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '/articles',
@@ -56,7 +56,7 @@ export const constantRouterMap = [
   // 邀请模块暂时不开启
   // {
   //   path: '/invite',
-  //   component: layout,
+  //    component: () => import('@/views/layout/layout'),
   //   children: [
   //     {
   //       path: '',
@@ -67,7 +67,7 @@ export const constantRouterMap = [
   // },
   {
     path: '/coin_coin/margin',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',
@@ -79,7 +79,7 @@ export const constantRouterMap = [
   },
   {
     path: '/trade',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',
@@ -91,7 +91,7 @@ export const constantRouterMap = [
   },
   {
     path: '/login',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',
@@ -103,7 +103,7 @@ export const constantRouterMap = [
   },
   {
     path: '/registry',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',
@@ -116,7 +116,7 @@ export const constantRouterMap = [
 
   { // 币币订单
     path: '/order',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',
@@ -128,7 +128,7 @@ export const constantRouterMap = [
   },
   // {
   //   path: '/agreement',
-  //   component: layout,
+  //    component: () => import('@/views/layout/layout'),
   //   children: [
   //     {
   //       path: '',
@@ -140,19 +140,19 @@ export const constantRouterMap = [
   // },
   {
     path: '/user_center',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',
         name: 'user_center',
-        component: () => import('@/views/userCenter/index') 
+        component: () => import('@/views/userCenter/index')
       }
     ]
 
   },
   {
     path: '/ads',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: 'ads',
@@ -181,7 +181,7 @@ export const constantRouterMap = [
   },
   {
     path: '/userOptions',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: 'userOptions',
@@ -223,7 +223,7 @@ export const constantRouterMap = [
   },
   {
     path: '/guestOption',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: 'guestOption',
@@ -245,7 +245,7 @@ export const constantRouterMap = [
   },
   {
     path: '/order_detail/:id',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '/order_detail/:id/:direction',
@@ -257,7 +257,7 @@ export const constantRouterMap = [
   // 订单详情
   {
     path: '/trader/:id',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',
@@ -269,7 +269,7 @@ export const constantRouterMap = [
   // 用户信息
   // {
   //   path: '/trade_user_center',
-  //   component: layout,
+  //    component: () => import('@/views/layout/layout'),
   //   children: [
   //     {
   //       path: '',
@@ -281,7 +281,7 @@ export const constantRouterMap = [
   // 法币交易个人中心
   {
     path: '/trade_order', // 法币订单
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',
@@ -293,7 +293,7 @@ export const constantRouterMap = [
   // 法币交易订单列表
   {
     path: '/wallet',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',
@@ -304,7 +304,7 @@ export const constantRouterMap = [
   },
   {
     path: '/withdraw_address',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',
@@ -316,7 +316,7 @@ export const constantRouterMap = [
   // 法币交易个人资产
   {
     path: '/404',
-    component: layout,
+    component: () => import('@/views/layout/layout'),
     children: [
       {
         path: '',

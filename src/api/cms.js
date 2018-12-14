@@ -15,6 +15,14 @@ export function getCover() {
   })
 }
 
+// 客户端下载地址
+export function getClientLink() {
+  return request({
+    url: '/api/v1/public/common/client_dl',
+    method: 'post'
+  })
+}
+
 // 首页轮播图
 export function getBanner(page, size) {
   return request({

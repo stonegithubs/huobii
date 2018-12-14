@@ -764,7 +764,7 @@ export default {
               a {
                 color: #638bd4;
                 cursor: pointer;
-                width: 50px;
+                // width: 50px;
                 text-align: right;
               }
             }

@@ -1,37 +1,37 @@
 <template>
   <div class="google-code">
     <div class="mod_bd">
-      <div class="ga_detail">谷歌验证器是一款动态口令工具，工作原理类似短信动态验证。绑定后每30s生成一个动态验证码，验证码可用于登录、提现、修改安全设置等操作的安全验证。</div>
+      <div class="ga_detail">{{$t('userInfo.googleInfo1')}}</div>
       <hr>
-      <div class="ga_text"><label class="border-rad">1</label><span>&nbsp;下载谷歌验证器APP</span>
-        <p>iOS用户登录App Store搜索“Authenticator”下载。<br>安卓用户登录应用商店或使用手机浏览器搜索“谷歌验证器”下载。</p><a class="tag" rel="noopener noreferrer" target="_blank" href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8"><i class="hb_icon_apple"/> App Store</a>
+      <div class="ga_text"><label class="border-rad">1</label><span>&nbsp;{{$t('userInfo.info2')}}</span>
+        <p>{{$t('userInfo.info3')}}<br>{{$t('userInfo.info4')}}</p><a class="tag" rel="noopener noreferrer" target="_blank" href="https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8"><i class="hb_icon_apple"/> App Store</a>
         <a class="tag" target="_blank" href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2"><i class="hb_icon_googleplay"/> Google Play</a>
       </div>
       <hr>
       <div id="ga_qr" class="ga_qr form_set m_30" data-msg="复制成功">
-        <div class="ga_text m_0"><label class="border-rad">2</label><span>&nbsp;在谷歌验证器中添加密钥并备份</span>
-          <p>打开谷歌验证器，扫描下方二维码或手动输入下述密钥添加验证令牌。<br><em>密钥用于手机更换或遗失时找回谷歌验证器，绑定前请务必将下述密钥备份保存。</em></p>
+        <div class="ga_text m_0"><label class="border-rad">2</label><span>&nbsp;{{$t('userInfo.info5')}}</span>
+          <p>{{$t('userInfo.info6')}}<br><em>{{$t('userInfo.info7')}}</em></p>
         </div>
         <div class="qr_code">
           <div id="qrcode" ref="qrcode"/>
-          <p>密钥</p>
+          <p>{{$t('userInfo.info8')}}</p>
           <span id="copy_ga_code" :value="qrCode" class="link">{{ qrCode }}</span>
-          <a class="cp" style="color:#357ce1" data-clipboard-target="#copy_ga_code" @click="copy">复制</a>
+          <a class="cp" style="color:#357ce1" data-clipboard-target="#copy_ga_code" @click="copy">{{$t('userInfo.info9')}}</a>
         </div>
       </div>
       <hr>
       <div class="ga_text m_0">
-        <form id="form_ga_bind" method="post" onsubmit="return!1" action="" class="form_set m_30" autocomplete="off"><label class="border-rad">3</label><span>&nbsp;输入谷歌验证器中6位验证码</span>
-          <div id="verify_ga" class="group group_ga"><label class="label p_t_30">谷歌验证码</label>
+        <form id="form_ga_bind" method="post" onsubmit="return!1" action="" class="form_set m_30" autocomplete="off"><label class="border-rad">3</label><span>&nbsp;{{$t('userInfo.info11')}}</span>
+          <div id="verify_ga" class="group group_ga"><label class="label p_t_30">{{$t('userInfo.googleCaptcha')}}</label>
             <div class="content">
               <el-form ref="googleForm" :model="googleForm" class="demo-dynamic">
-                <el-form-item :rules="[{ required: true, message: '请输入谷歌验证码', trigger: 'blur' }]" label-position="top" prop="code">
+                <el-form-item :rules="[{ required: true, message: $t('userInfo.info10'), trigger: 'blur' }]" label-position="top" prop="code">
                   <el-input v-model="googleForm.code"/>
                 </el-form-item>
               </el-form>
             </div>
           </div>
-          <div class="submit"><button type="submit" class="btn btn_submit" @click="handleSubmit">绑定</button></div>
+          <div class="submit"><button type="submit" class="btn btn_submit" @click="handleSubmit">{{$t('userInfo.bind')}}</button></div>
         </form>
       </div>
     </div>
@@ -47,6 +47,7 @@ import {
   bindGoogleAuth,
   getGoogleUrl
 } from '../../../api/user'
+import { setTimeout } from 'timers';
 export default {
   name: 'GoogleCode',
   data() {
@@ -76,11 +77,14 @@ export default {
   },
   methods: {
     qrcode() {
-      const qrcode = new qrCode('qrcode', {
+      setTimeout(()=>{
+        const qrcode = new qrCode('qrcode', {
         width: 130, // 设置宽度，单位像素
         height: 130, // 设置高度，单位像素
         text: this.qrCodeUrl // 设置二维码内容或跳转地址
       })
+      },1)
+      
     },
     copy() {
       const clipboard = new Clipboard('.cp')
@@ -89,11 +93,11 @@ export default {
       this.$refs['googleForm'].validate((valid) => {
         if (valid) {
           bindGoogleAuth(this.googleForm.code).then(res => {
-            this.$notify.success('绑定成功')
+            this.$notify.success($t('userInfo.info12'))
             // this.rou
             location.reload()
           }).catch(err => {
-            this.$notify.error('绑定失败' + err.message)
+            this.$notify.error($t('userInfo.info13') + err.message)
           })
         }
       })

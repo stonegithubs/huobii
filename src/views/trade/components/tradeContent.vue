@@ -33,7 +33,7 @@
 
       <el-table-column sortable :label="$t('order.amount')" width="180">
         <template slot-scope="scope">
-          <span>{{ scope.row.amount }} </span>
+          <span>{{ scope.row.amount }} {{getCoinNameByIDUp(scope.row.coinId)}}</span>
         </template>
       </el-table-column>
 
@@ -60,7 +60,7 @@
             effect="dark"
             placement="bottom">
             <!-- <i class="'iconfont icon-ziyuan'"/> -->
-            <embed :src="require('../../../assets/svg/alipay.svg')" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+            <embed :src="alipay" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
           </el-tooltip>
           <el-tooltip 
             content="wechat"
@@ -68,7 +68,7 @@
             class="item"
             effect="dark"
             placement="bottom">
-            <embed :src="require('../../../assets/svg/weChat.svg')" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+            <embed :src="wechat" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
           </el-tooltip>
           <el-tooltip 
             content="bankCard"
@@ -76,7 +76,7 @@
             class="item"
             effect="dark"
             placement="bottom">
-            <embed :src="require('../../../assets/svg/ic_bankcard.svg')" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+            <embed :src="bankCard" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
           </el-tooltip>
           </b>
           <b v-else>
@@ -176,6 +176,9 @@ export default {
   },
   data() {
     return {
+      // alipay: require('../../../assets/svg/alipay.svg'),
+      // wechat: require('../../../assets/svg/weChat.svg'),
+      // bankCard: require('../../../assets/svg/ic_bankcard.svg'),
       merchantList: [],
       currentCoin: 'usdt',
       page: 0,
@@ -368,6 +371,15 @@ export default {
 
   },
   computed: {
+    alipay(){
+      return require('../../../assets/svg/alipay.svg')
+    },
+    wechat(){
+      return require('../../../assets/svg/weChat.svg');
+    },
+    bankCard(){
+      return require('../../../assets/svg/ic_bankcard.svg')
+    },
     getAmount() {
       return this.tradeForm.amount
     },
