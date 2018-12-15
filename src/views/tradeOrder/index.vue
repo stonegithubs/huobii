@@ -11,7 +11,7 @@
       </div>
 
       <div class="adv-table">
-        <el-table height="600px" :data="orderData" stripe style="width: 100%">
+        <el-table v-loading="isLoading" height="600px" :data="orderData" stripe style="width: 100%">
           <el-table-column width="150px" :label="$t('order.orderNo')">
             <template slot-scope="scope">
               <span class="order-no">
@@ -126,6 +126,7 @@ export default {
   components: { orderChoice },
   data() {
     return {
+      isLoading: false,
       orderData: [],
       smsDialog: false,
       appealVisible: false,
@@ -184,6 +185,7 @@ export default {
       });
     },
     init() {
+        this.isLoading = true
       fbJdOrders(
         this.chooseForm.page,
         this.chooseForm.size,
@@ -195,11 +197,14 @@ export default {
         this.chooseForm.end,
         this.chooseForm.order
       ).then(res => {
+        this.isLoading = false
         this.total = res.content.total;
         this.orderData = [];
         if (res.content.records instanceof Array) {
           this.orderData = res.content.records;
         }
+      }).catch(_=>{
+        this.isLoading = false
       });
     },
     getState(state) {
@@ -284,18 +289,32 @@ export default {
         fbConfirm(this.currentOrder.orderId, this.code).then(res => {
           if (res.code === "200") {
             this.$notify.success(this.$t('fb.dealFinished'));
+            this.smsDialog = false
+            this.init();
           } else {
             console.log(res);
+            this.smsDialog = false
+            this.init();
           }
+        }).catch(_=>{
+          this.smsDialog = false
+            this.init();
         });
       } else if (this.currentOrder.direction === "1") {
         // 此单为卖出单
         fbFinish(this.currentOrder.orderId, this.code).then(res => {
           if (res.code === "200") {
             this.$notify.success(this.$t('fb.dealFinished'));
+            this.smsDialog = false
+            this.init();
           } else {
             console.log(res);
+            this.smsDialog = false
+            this.init();
           }
+        }).catch(_=>{
+          this.smsDialog = false
+            this.init();
         });
       }
     },
@@ -321,6 +340,7 @@ export default {
   watch: {
     page(page) {
       let s = this.chooseForm;
+        this.isLoading = true
       fbJdOrders(
         page,
         10,
@@ -332,11 +352,14 @@ export default {
         s.time[1],
         1
       ).then(res => {
+        this.isLoading = false
         this.total = res.content.total;
         this.orderData = [];
         if (res.content.records instanceof Array) {
           this.orderData = res.content.records;
         }
+      }).catch(_=>{
+        this.isLoading = false
       });
     }
     // direction() {

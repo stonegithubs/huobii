@@ -1,7 +1,7 @@
 <template>
   <div :style="{ background: 'url('+ BackgroundURL +') center no-repeat'}" class="login">
     <div class="lg-form">
-      <h1>欢迎注册</h1>
+      <h1>{{ $t('login.welcomeToRegist')}}</h1>
       <registry-form/>
     </div>
     <div class="lg-text">

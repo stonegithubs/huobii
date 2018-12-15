@@ -2,6 +2,7 @@
   <div class="hb-chart">
     <div class="hb-tab hc-title">
       <span style="font-size: 20px;font-weight: 700;">{{ this.$store.state.coinData.targetCoin.toUpperCase() }}/{{ this.$store.state.coinData.mainCoin.toUpperCase() }}  {{ this.$store.state.coinData.symbolDetail.close }}</span>
+     
       <div style="float:right">
         <!-- <span class="dis-item">涨幅 -96.20%</span> -->
         <span class="dis-item">{{ $t('index.tradeShow.high') }} {{ this.$store.state.coinData.symbolDetail.high }}</span>
@@ -9,14 +10,19 @@
         <span class="dis-item">{{ $t('index.tradeShow.vol24h') }} {{ this.$store.state.coinData.symbolDetail.vol }}</span>
       </div>
     </div>
+     <kLineChooser class="chooser" @periodChange="periodChange"></kLineChooser>  
     <div v-loading="this.loading" id="chart" class="hc-inner"/>
   </div>
 </template>
 <script>
 import { getKlineBySymbolName } from '../../../api/coins'
+import kLineChooser from '@/components/kLineChooser'
 // import echarts from "echarts";
 export default {
   name: 'HbChart',
+  components: {
+    kLineChooser
+  },
   data() {
     return {
       currentCoin: this.$store.state.coinData.symbolShow || 'btcsudt',
@@ -35,7 +41,7 @@ export default {
       const symbol = this.$store.state.coinData.targetCoin + '' + this.$store.state.coinData.mainCoin
       this.symbol = symbol
       this.initChart(symbol)
-      console.log(symbol)
+      // console.log(symbol)
     }
   },
   mounted() {
@@ -44,6 +50,11 @@ export default {
 
   },
   methods: {
+    periodChange(period){
+      const symbol = this.$store.state.coinData.targetCoin + '' + this.$store.state.coinData.mainCoin
+      this.initChart(symbol,period)
+      // console.log(period)
+    },
     calculateMA(dayCount, data) {
       var result = []
       for (var i = 0, len = data.values.length; i < len; i++) {
@@ -93,27 +104,32 @@ export default {
         .replace(/:\d{1,2}$/, ' ')
     },
     putSymbol() {
-      console.log(this.$store.state.coinData.targetCoin + '' + this.$store.state.coinData.mainCoin)
+      // console.log(this.$store.state.coinData.targetCoin + '' + this.$store.state.coinData.mainCoin)
     },
-    initChart(symbol) {
-      var echarts = require('echarts')
+    initChart(symbol,period) {
+      if(period === undefined){
+        period = '15min'
+      }
+
+      // var echarts = require('echarts')
 
       const dom = document.getElementById('chart')
-      const myChart = this.$echarts.init(dom)
+      // const myChart = this.$echarts.init(dom)
+      const myChart = echarts.init(dom)
       const app = {}
       let option = null
       const upColor = '#f55858'
       const downColor = '#03c087'
 
       // TODO: 修改为可变
-      getKlineBySymbolName(symbol, '15min', 150)
+      getKlineBySymbolName(symbol, period, 500)
         .then(res => {
           const rawData = res.content.data
           var data = this.splitData(rawData)
           myChart.setOption(
             (option = {
               backgroundColor: '#fff',
-              animation: false,
+              animation: true,
               legend: {
                 bottom: 10,
                 left: 'center',
@@ -339,7 +355,7 @@ export default {
           this.loading = false
         })
         .catch(err => {
-          console.log(err)
+          // console.log(err)
         })
     }
   }
@@ -352,6 +368,12 @@ export default {
 .hb-chart {
   height: 528px;
   width: 100%;
+  background: #fff;
+    .chooser {
+      margin-left: 20px;
+      margin-top: 10px;
+      // float: right;
+    }
    .hc-inner {
     height: 480px;
   }

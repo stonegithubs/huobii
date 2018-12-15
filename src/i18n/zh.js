@@ -157,6 +157,7 @@ module.exports = {
     signUp: '注册',
     confirmAgreement: '您必须同意用户协议',
     pwdRule: '密码不能低于8位且由数字、字母构成',    //去掉了‘字符’
+    welcomeToRegist: '欢迎登录',            //
     pwdNotConsistent: '两次输入的密码不一致',
     signUpTip1: '国籍信息注册后不可修改，请务必如实选择。',
     signUpTip2: '验证邮件可能会被误判为垃圾邮件，请注意查收。',

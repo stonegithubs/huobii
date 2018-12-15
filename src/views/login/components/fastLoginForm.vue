@@ -210,12 +210,16 @@ export default {
                 }
               })
               .catch(err => {
-                this.$alert(err.message, this.$t("login.failed"), {
-                  confirmButtonText: this.$t("confirm"),
-                  callback: action => {
-                    window.location.reload();
-                  }
-                });
+
+                setTimeout(()=>{
+                  window.location.reload();
+                },3000)
+                // this.$alert(err.message, this.$t("login.failed"), {
+                  // confirmButtonText: this.$t("confirm"),
+                  // callback: action => {
+                    // window.location.reload();
+                  // }
+                // });
               });
           } else {
             this.cacheVerifyCode = verifyCode;

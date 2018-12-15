@@ -7,24 +7,19 @@
       <el-form-item :label="$t('login.account')" :rules="[{ required: true, message: 'This field is required', trigger: 'blur' }]" prop="phone">
         <el-input v-model="forgetForm.phone" type="text" autocomplete="off"/>
       </el-form-item>
-      <el-form-item :label="$t('userOptions.idNo')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="idcode">
-        <el-input v-model="forgetForm.idcode" type="text" autocomplete="off" />
-      </el-form-item>
-      <el-form-item :label="$t('userOptions.familyName')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="familyName">
-        <el-input v-model="forgetForm.familyName " type="text" autocomplete="off" />
-      </el-form-item>
-      <el-form-item :label="$t('userOptions.givenName')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="givenName">
-        <el-input v-model="forgetForm.givenName " type="text" autocomplete="off" />
-      </el-form-item>
+     
+ 
       <el-form-item :label="$t('userOptions.newPwd')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="newpwd">
         <el-input v-model="forgetForm.newpwd " type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item :label="$t('userOptions.confirmNewPwd')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="confirm">
         <el-input v-model="forgetForm.confirm " type="password" autocomplete="off" />
       </el-form-item>
-      <el-form-item :label="$t('login.country')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="country">
-        <el-input v-model="forgetForm.country " type="text" autocomplete="off" />
-      </el-form-item>
+      <el-form-item :label="$t('login.country')">
+      <el-select @change="countryChange" v-model="registryForm.region" :placeholder="$t('login.countryTip')">
+        <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" :key="item.id"/>
+      </el-select>
+    </el-form-item>
       <el-form-item>
         <el-button class="forget-button" type="primary" @click="beforeSubmit('forget-form')" >{{ $t('confirm') }}</el-button>
       </el-form-item>
@@ -42,6 +37,9 @@ import {
   forget
 } from '../../../api/security'
 import {
+  getCountry
+} from '../../../api/common'
+import {
   sendCaptcha1,
   getCaptcha,
 } from '../../../api/user'
@@ -52,6 +50,7 @@ export default {
       timeRest: 60,
       isDisable: false,
       counter: {},
+      cuntryCode: '+86',
       forgetForm: {
         phone: '',
         idcode: '',
@@ -68,7 +67,11 @@ export default {
   computed: {
 
   },
-  created() {},
+  created() {
+     if (getCountry.length === 0) {
+      this.$store.dispatch('getCountryList')
+    }
+  },
   methods: {
     beforeSubmit(formName) {
       this.$refs[formName].validate((valid) => {
@@ -87,16 +90,18 @@ export default {
         }
       })
     },
+    countryChange(VAL){
+      this.cuntryCode = this.getCountryCodeByAbbr(val)
+    },
     handleSubmit(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           const formData = new FormData()
-          formData.append('idcode', this.forgetForm.idcode)
-          formData.append('familyName', this.forgetForm.familyName)
-          formData.append('givenName', this.forgetForm.givenName)
+          formData.append('country', this.forgetForm.country)
+          formData.append('phone', this.forgetForm.phone)                   
           formData.append('newpwd', this.forgetForm.newpwd)
           formData.append('confirm', this.forgetForm.confirm)
-          formData.append('captcha', this.forgetForm.captcha)
+          // formData.append('captcha', this.forgetForm.captcha)
           forget(formData).then(response => {
             if (response.content) {
               // todo:验证码修复后继续
@@ -145,6 +150,12 @@ export default {
           done()
         })
         .catch(_ => {})
+    },
+    computed: {
+       ...mapGetters([
+      'getCountryCodeByAbbr',
+      'getCountry'
+      ]),
     }
   }
 }

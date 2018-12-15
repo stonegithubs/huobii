@@ -11,7 +11,7 @@
       </div>
 
       <div class="adv-table">
-        <el-table height='600px' :data="orderData" stripe style="width: 100%">
+        <el-table v-loading ="isLoading" height='600px' :data="orderData" stripe style="width: 100%">
           <el-table-column width="200px" :label="$t('fb.advNo')">
             <template slot-scope="scope">
               <span class="order-no"><!-- <router-link :to="{ name:'orderDetail', params: { id: scope.row.id,direction: scope.row.direction}}">{{ scope.row.id }}</router-link> -->{{ scope.row.id }}</span>
@@ -21,7 +21,7 @@
             <template slot-scope="scope">{{ scope.row.direction === '0'? '求购': '出售' }}</template>
           </el-table-column>
           <el-table-column prop="name" :label="$t('fb.coinType')">
-            <template slot-scope="scope">{{ getCoinNameByIDUp(scope.row.coinId).toUpperCase() }}</template>
+            <template slot-scope="scope">{{ getCoinNameByIDUp(scope.row.coinId) }}</template>
           </el-table-column>
           <el-table-column prop="address" :label="$t('exchange.main.amount')">
             <template slot-scope="scope">{{ scope.row.amount }}</template>
@@ -30,7 +30,7 @@
             <template slot-scope="scope">{{ scope.row.min }}-{{ scope.row.max }}</template>
           </el-table-column>
           <el-table-column prop="address" :label="$t('fb.cashType')">
-            <template slot-scope="scope">{{ getCashNameById(scope.row.cashId).toUpperCase() }}</template>
+            <template slot-scope="scope">{{ getCashNameById(scope.row.cashId) }}</template>
           </el-table-column>
           <el-table-column prop="address" :label="$t('exchange.main.status')">
             <template slot-scope="scope">{{ getState(scope.row.status) }}</template>
@@ -115,6 +115,7 @@ export default {
   components: { orderChoice },
   data() {
     return {
+      isLoading: true,
       orderData: [],
       smsDialog: false,
       appealVisible: false,
@@ -151,7 +152,7 @@ export default {
   },
   methods: {
     pageChange(a){
-      console.log(a)
+      // console.log(a)
     },
     newDirection(s){
       this.chooseForm = s
@@ -173,6 +174,7 @@ export default {
       });
     },
     init() {
+      this.isLoading = true
       fbOrders(
         this.chooseForm.page,
         this.chooseForm.size,
@@ -189,6 +191,9 @@ export default {
         if (res.content.records instanceof Array) {
           this.orderData = res.content.records;
         }
+        this.isLoading = false
+      }).catch(_=>{
+        this.isLoading = false        
       });
     },
     getState(state) {
@@ -221,6 +226,7 @@ export default {
         callback: action => {
           if (action == "confirm") {
             fbCancel(order.id).then(res => {
+              // this.
               if (res.code === "200") {
                 this.$notify.success(this.$t('repealSuccess'));
               } else {
@@ -273,20 +279,32 @@ export default {
         fbConfirm(this.currentOrder.id, this.code).then(res => {
           if (res.code === "200") {
             this.$notify.success($t('fb.dealFinished'));
+            this.smsDialog = false
+            this.init();
           } else {
-            console.log(res);
+            this.smsDialog = false
+            this.init();
+            // console.log(res);
           }
         }).catch(_=>{
-
+            this.smsDialog = false
+            this.init();
         });
       } else if (this.currentOrder.direction === "1") {
         // 此单为卖出单
         fbFinish(this.currentOrder.id, this.code).then(res => {
           if (res.code === "200") {
             this.$notify.success($t('fb.dealFinished'));
+            this.smsDialog = false
+            this.init();
           } else {
             console.log(res);
+            this.smsDialog = false
+            this.init();
           }
+        }).catch(_=>{
+          this.smsDialog = false
+            this.init();
         });
       }
     },
@@ -312,6 +330,7 @@ export default {
   watch: {
     page(page){
       let s = this.chooseForm;
+      this.isLoading = true
       fbOrders(
         page,
         10,
@@ -323,12 +342,15 @@ export default {
         s.time[1],
         1
       ).then(res => {
+        this.isLoading = false
         if(res){
         this.total = res.content.total
         this.orderData = [];
         if (res.content.records instanceof Array) {
           this.orderData = res.content.records;
         }}
+      }).catch(_=>{
+        this.isLoading = false
       });
     }
     // direction() {

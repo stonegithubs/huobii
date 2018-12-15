@@ -132,20 +132,25 @@ export default {
               this.$message.success(this.$t('login.success'))
             } else {
               console.log(responese)
-              this.$alert(responese.message, this.$t('login.failed'), {
+              this.$alert(this.$t('shitHappens'),this.$t('login.failed'), {
                 confirmButtonText: this.$t('confirm'),
                 callback: action => {
                   window.location.reload()
                 }
               })
             }
-          }).catch(err => {
-            this.$alert(err.message, this.$t('login.failed'), {
-              confirmButtonText: this.$t('confirm'),
-              callback: action => {
-                window.location.reload()
-              }
-            })
+          }).catch(
+            err => {
+               setTimeout(()=>{
+                  window.location.reload();
+                },3000)
+              // window.location.reload();
+            // this.$alert(this.$t('shitHappens'), this.$t('login.failed'), {
+              // confirmButtonText: this.$t('confirm'),
+              // callback: action => {
+                // window.location.reload()
+              // }
+            // })
           })
         } else {
           this.cacheVerifyCode = verifyCode

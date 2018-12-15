@@ -76,7 +76,7 @@ service.interceptors.response.use(
     const res = error.response
     // console.log(res)
 
-    if (res.data.code === '403') {
+    if (res && res.data.code === '403') {
       Message({
         showClose: true,
         message: res.statusText + res.data.message,
@@ -88,7 +88,7 @@ service.interceptors.response.use(
 
     // }
 
-    if (res.code === '404') {
+    if (res && res.code === '404') {
       router.push({ name: '404' })
       return Promise.reject(res)
     }

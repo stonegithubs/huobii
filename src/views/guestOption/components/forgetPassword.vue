@@ -7,15 +7,6 @@
       <el-form-item :label="$t('login.account')" :rules="[{ required: true, message: 'This field is required', trigger: 'blur' }]" prop="phone">
         <el-input v-model="forgetForm.phone" type="text" autocomplete="off"/>
       </el-form-item>
-      <el-form-item :label="$t('userOptions.idNo')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="idcode">
-        <el-input v-model="forgetForm.idcode" type="text" autocomplete="off" />
-      </el-form-item>
-      <el-form-item :label="$t('userOptions.familyName')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="familyName">
-        <el-input v-model="forgetForm.familyName " type="text" autocomplete="off" />
-      </el-form-item>
-      <el-form-item :label="$t('userOptions.givenName')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="givenName">
-        <el-input v-model="forgetForm.givenName " type="text" autocomplete="off" />
-      </el-form-item>
       <el-form-item :label="$t('userOptions.newPwd')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="newpwd">
         <el-input v-model="forgetForm.newpwd " type="password" autocomplete="off" />
       </el-form-item>
@@ -23,7 +14,7 @@
         <el-input v-model="forgetForm.confirm " type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item  :label="$t('login.country')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="country">
-        <el-select v-model="forgetForm.country"> 
+        <el-select style="width:100%" v-model="forgetForm.country"> 
         <el-option v-for="item in this.$store.state.Common.countryList" :key="item.id" :label="item.name" :value="item.abbr"></el-option>
     </el-select>
       </el-form-item>
@@ -32,7 +23,7 @@
       </el-form-item>
     </el-form>
     <el-dialog :before-close="handleClose" :title="$t('userOptions.yourCaptcha')" :visible.sync="captchaVisible" width="300px">
-      <el-input v-model="forgetForm.captcha" type="text" autocomplete="off"/>
+      <el-input v-model="captcha" type="text" autocomplete="off"/>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="handleSubmit('forget-form')">{{ $t('confirm') }}</el-button>
       </span>
@@ -43,6 +34,9 @@
 import {
   forget
 } from '../../../api/security'
+import {
+  getCountry
+} from '../../../api/common'
 import { mapGetters } from 'vuex'
 import {
   sendCaptcha1,
@@ -55,6 +49,7 @@ export default {
       timeRest: 60,
       isDisable: false,
       counter: {},
+      captcha: '',
       forgetForm: {
         phone: '',
         idcode: '',
@@ -63,7 +58,6 @@ export default {
         givenName: '',
         newpwd: '',
         confirm: '',
-        captcha: ''
       },
       captchaVisible: false
     }
@@ -96,17 +90,14 @@ export default {
       })
     },
     handleSubmit(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
           const formData = new FormData()
-          formData.append('idcode', this.forgetForm.idcode)
-          formData.append('familyName', this.forgetForm.familyName)
-          formData.append('givenName', this.forgetForm.givenName)
+          formData.append('phone', this.forgetForm.phone)
           formData.append('newpwd', this.forgetForm.newpwd)
           formData.append('confirm', this.forgetForm.confirm)
-          formData.append('captcha', this.forgetForm.captcha)
+          formData.append('country', this.forgetForm.countrys)
+          formData.append('captcha', this.captcha)
           forget(formData).then(response => {
-            if (response.content) {
+            if (response && response.code === '200') {
               // todo:验证码修复后继续
               this.$notify.success(response.message)
               this.$router.go(-1)
@@ -116,8 +107,6 @@ export default {
           }).catch(error => {
             // console.log(error)
           })
-        }
-      })
     },
     sendCode() {
       // console.log('已经发送')

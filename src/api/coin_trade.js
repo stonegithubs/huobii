@@ -15,9 +15,8 @@ export function fbOrders(page, size, direction, coinId, cashId, state, start, en
   return request({
     url: '/api/v1/currency_trade/orders',
     method: 'post',
-    params: { page, size,
-      //  direction, coinId, cashId, state, start, end, order 
-      }
+    params: { page, size, order: '1'//  direction, coinId, cashId, state, start, end, order 
+    }
   })
 }
 

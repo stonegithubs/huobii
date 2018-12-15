@@ -92,7 +92,7 @@
         margin-left: 285px;
       } // margin-top: 10px;
       .trade-wrap {
-        margin-top: 15px; // width: 1136px;
+        margin-top: 60px; // width: 1136px;
         width: 100%;
         height: 490px;
         position: relative;
