@@ -10,8 +10,8 @@
 
       <!-- 右侧选项 -->
       <div class="coin-choice">
-         <el-button @click="goToAdv()" type="primary" round>{{$t('fb.pubAdv')}}</el-button>
-        <el-button @click="checkMyAdv()" type="primary" round>{{$t('fb.myAdv')}}</el-button>
+         <el-button @click="goToAdv()"  round>{{$t('fb.pubAdv')}}</el-button>
+        <el-button @click="checkMyAdv()" round>{{$t('fb.myAdv')}}</el-button>
         <fbChoice @orderChange="ChangeOrder"></fbChoice>
       </div>
     </div>
@@ -60,7 +60,8 @@
             effect="dark"
             placement="bottom">
             <!-- <i class="'iconfont icon-ziyuan'"/> -->
-            <embed :src="alipay" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+            <!-- <embed :src="alipay" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" /> -->
+            <img :src="alipay">
           </el-tooltip>
           <el-tooltip 
             content="wechat"
@@ -68,7 +69,9 @@
             class="item"
             effect="dark"
             placement="bottom">
-            <embed :src="wechat" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+            <img :src="wechat">
+
+            <!-- <embed :src="wechat" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" /> -->
           </el-tooltip>
           <el-tooltip 
             content="bankCard"
@@ -76,7 +79,9 @@
             class="item"
             effect="dark"
             placement="bottom">
-            <embed :src="bankCard" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+            <!-- <embed :src="bankCard" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" /> -->
+            <img :src="bankCard">
+          
           </el-tooltip>
           </b>
           <b v-else>
@@ -88,7 +93,8 @@
             class="item"
             effect="dark"
             placement="bottom">
-            <embed :src="require('../../../assets/svg/'+getIcon(item)+'.svg+')" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" />
+            <img :src="getIcon(item)">
+            <!-- <embed :src="require('../../../assets/svg/'+getIcon(item)+'.svg+')" width="16" height="16" type="image/svg+xml" pluginspage="http://www.adobe.com/svg/viewer/install/" /> -->
           </el-tooltip>
           </b>
 
@@ -188,7 +194,7 @@ export default {
       chooseForm: {
         page:0,
         size: 10,
-        direction: '1', 
+        direction: '0', 
         payments: 'all', 
         coinId: '2', 
         cashId: '3'
@@ -197,7 +203,7 @@ export default {
         payments: 'all',
         cashId: 'all'
       },
-      direction: '1',
+      direction: '0',
       tradeForm: {
         id: '',
         direction: this.direction,
@@ -335,7 +341,7 @@ export default {
           if(form.direction == '0'){    // 此单我为出售方 不获取对方付款信息 TODO: 后端接口错误 挂单方拿不到交易信息
               this.$notify.success(this.$t('fb.orderSellTip'))
               this.smsDialog=false
-              // this.$router.push({ name: 'orderDetail', params: { id:res.content.orderId,direction: form.direction} })
+              this.$router.push({ name: 'orderDetail', params: { id:res.content.orderId,direction: form.direction} })
           }else if(form.direction == '1'){    // 此单我为买入方 跳转到付款页面正常付款
             this.$notify.success(this.$t('fb.orderBuyTip'))
             this.$router.push({ name: 'orderDetail', params: { id:res.content.orderId,direction: form.direction} })
@@ -367,7 +373,8 @@ export default {
           done()
         })
         .catch(_ => {})
-    }
+    },
+   
 
   },
   computed: {
@@ -576,6 +583,7 @@ export default {
   .el-popover {
     padding: 35px 23px 15px 26px;
   }
+  
   .choice-filter .el-radio-group {
         //  margin: 40px 20px 0 0 !important;
       }

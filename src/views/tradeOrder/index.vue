@@ -2,8 +2,12 @@
   <div class="adv-list">
     <div class="adv-inner">
       <div style="display:flex; justify-content: space-between;">
-        <div class="adv-title">我的订单</div>
-        <order-choice @directionChange="newDirection"></order-choice>
+        <div class="adv-title">{{$t('fb.myOrder')}}</div>
+        <div class="adv-group">
+          <el-button @click="goToAdv()"  round>{{$t('fb.myAdv')}}</el-button>
+
+        <!-- <order-choice @directionChange="newDirection"></order-choice> -->
+        </div>
       </div>
 
       <div class="adv-table">
@@ -17,42 +21,42 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column width="180px" prop="date" label="交易类型">
-            <template slot-scope="scope">{{ scope.row.direction === '0'? '买入': '卖出' }} {{ scope.row.amount }} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
+          <el-table-column width="120px" prop="date" :label="$t('fb.tradeType')">
+            <template slot-scope="scope">{{ scope.row.direction === '0'? $t('buy'): $t('sell') }} {{ scope.row.amount }} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
           </el-table-column>
-          <el-table-column width="130px" prop="name" label="总价">
-            <template slot-scope="scope">{{ scope.row.dealPrice }}{{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
+          <el-table-column width="120px" prop="name" :label="$t('fb.total')">
+            <template slot-scope="scope">{{ (scope.row.dealPrice*scope.row.amount).toFixed(2) }}{{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
           </el-table-column>
-          <el-table-column width="130px" prop="address" label="单价">
-            <template slot-scope="scope">{{ scope.row.dealPrice }} {{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
+          <el-table-column width="120px" prop="address" :label="$t('price')">
+            <template slot-scope="scope">{{ scope.row.dealPrice.toFixed(2) }} {{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
           </el-table-column>
-          <el-table-column width="130px" prop="address" label="手续费">
-            <template slot-scope="scope">{{scope.row.fee}} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
+          <el-table-column width="120px" prop="address" :label="$t('order.fee')">
+            <template slot-scope="scope">{{scope.row.fee.toFixed(2)}} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
           </el-table-column>
-          <el-table-column width="180px" prop="address" label="创建时间">
+          <el-table-column width="180px" prop="address" :label="$t('createTime')">
             <template slot-scope="scope">{{parseTime(scope.row.updateDate) }}</template>
           </el-table-column>
-          <el-table-column prop="address" label="状态">
+          <el-table-column prop="address" :label="$t('exchange.main.status')">
             <template slot-scope="scope">{{ getState(scope.row.status) }}</template>
           </el-table-column>
-          <el-table-column prop="address" label="交易对象">
+          <el-table-column prop="address" :label="$t('fb.tradeTarget')">
             <template slot-scope="scope">{{ scope.row.user.name }}</template>
           </el-table-column>
-          <!--           
-          <el-table-column width="250px" prop="address" label="操作">
+                    
+          <el-table-column  prop="address" width="220px" :label="$t('exchange.main.operation')">
             <template slot-scope="scope">
-              <el-button size="mini" type="warning" @click="appeal(scope.row)">申诉</el-button>
-              <el-button type="primary" size="mini" @click="pass(scope.row)" v-if="scope.row.direction == '0' && scope.row.status == '9'">付款</el-button>
-
-              <div style="display:inline-block" v-if="scope.row.status ==4">
-                <el-button 
-                  v-if="scope.row.direction == '1'"
+              <el-button size="mini" type="warning" @click="appeal(scope.row)">{{$t('fb.repeal')}}</el-button>
+            <!-- 我是买家 我接了单 还未付款 我可以撤销、付款 -->
+              <el-button v-if="scope.row.status ==0|| scope.row.status == 9" @click="repeal(scope.row)" size="mini">{{$t('repeal')}}</el-button>
+              <el-button type="primary" size="mini" @click="pass(scope.row)" v-if="scope.row.direction == '0' && scope.row.status == '9'">{{$t('fb.pay')}}</el-button>
+              <!-- 我是卖家 我接了单 等对方付款 我可以撤销、申诉 或者等时间到期 -->
+                  <!-- 我是买家 我接了单 对方已付款  -->
+                <el-button v-if="scope.row.direction == '1' && scope.row.status ==4"
                   type="primary" size="mini"
                   @click="pass(scope.row)"
-                >放行</el-button>
-              </div>
+                >{{$t('fb.pass')}}</el-button>
             </template>
-          </el-table-column>-->
+          </el-table-column>
         </el-table>
       </div>
     </div>
@@ -61,34 +65,34 @@
         <!-- <el-form-item label="过程编号">
           <el-input v-model="processId"></el-input>
         </el-form-item>-->
-        <el-form-item label="验证码">
+        <el-form-item :label="$t('captcha')">
           <el-input v-model="code"></el-input>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="smsDialog = false">取 消</el-button>
-        <el-button type="primary" @click="confirm()">确 定</el-button>
+        <el-button @click="smsDialog = false">{{$t('cancel')}}</el-button>
+        <el-button type="primary" @click="confirm()">{{$t('confirm')}}</el-button>
       </span>
     </el-dialog>
 
-    <el-dialog title="订单申訴" :visible.sync="appealVisible" width="400px" :before-close="handleClose">
+    <el-dialog :title="$t('fb.appealTitle')" :visible.sync="appealVisible" width="400px" :before-close="handleClose">
       <el-form v-model="appealForm">
         <!-- <el-form-item label="过程编号">
           <el-input v-model="appealForm.processId"></el-input>
         </el-form-item>-->
-        <el-form-item label="申诉理由">
+        <el-form-item :label="$t('fb.appReason')">
           <el-input v-model="appealForm.reason"></el-input>
         </el-form-item>
-        <el-form-item label="申诉类型">
-          <el-select v-model="appealForm.type" placeholder="请选择申诉类型">
-            <el-option label="对方不放行" value="0"></el-option>
-            <el-option label="交易数量不正确" value="1"></el-option>
+        <el-form-item :label="$t('fb.appType')">
+          <el-select v-model="appealForm.type" :placeholder="$t('fb.appTip')">
+            <el-option :label="$t('fb.app0')" value="0"></el-option>
+            <el-option :label="$t('fb.app1')" value="1"></el-option>
           </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="appealVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitAppeal()">确 定</el-button>
+        <el-button @click="appealVisible = false">{{$t('cancel')}}</el-button>
+        <el-button type="primary" @click="submitAppeal()">{{$t('fb.confirm')}}</el-button>
       </span>
     </el-dialog>
     <div class="mpagination">
@@ -136,14 +140,6 @@ export default {
         id: "-1",
         direction: "-1"
       },
-      stateList: [
-        { id: "0", name: "挂单中" },
-        { id: "1", name: "部分完成" },
-        { id: "3", name: "用户撤销" },
-        { id: "8", name: "历史纪录" },
-        { id: "9", name: "交易中" },
-        { id: "10", name: "全部" }
-      ],
       total: 0,
       page: 0,
       chooseForm: {
@@ -209,37 +205,37 @@ export default {
     getState(state) {
       switch (state) {
         case "0":
-          return "挂单中";
+          return this.$t('fb.status0');
         case "1":
-          return "部分成交";
+          return this.$t('fb.status1');
         case "2":
-          return "已完成";
+          return this.$t('fb.status2');
         case "3":
-          return "已撤销";
+          return this.$t('fb.status3');
         case "4":
-          return "买家已付款";
+          return this.$t('fb.status4');
         case "5":
-          return "买家已撤销";
+          return this.$t('fb.status5');
         case "8":
-          return "历史纪录";
+          return this.$t('fb.status8');
         case "9":
-          return "交易中";
+          return this.$t('fb.status9');
       }
     },
     parseTime(timeStamp) {
       return parseTime(timeStamp);
     },
     repeal(order) {
-      this.$alert("确定要撤销吗", "广告撤销", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
+      this.$alert(this.$t('fb.confirmToRepealAdv'), this.$t('fb.advCancel'), {
+        confirmButtonText: this.$t('confirm'),
+        cancelButtonText: this.$t('cancel'),
         callback: action => {
           if (action == "confirm") {
             fbCancel(order.id).then(res => {
               if (res.code === "200") {
-                this.$notify.success("撤销成功");
+                this.$notify.success(this.$t('repealSuccess'));
               } else {
-                this.$notify.success("撤销失败");
+                this.$notify.success(this.$t('repealFailed'));
               }
               this.init();
             });
@@ -261,18 +257,19 @@ export default {
         this.appealForm.type
       ).then(res => {
         if (res.code === "200") {
-          this.$notify.success("申诉成功");
+          this.$notify.success(this.$t('fb.appealSuccess'));
         } else {
-          this.$notify.error("申诉失败");
+          this.$notify.error(this.$t('fb.appealSuccess'));
         }
-      });
+      }).catch(_=>{this.$notify.error(this.$t('fb.appealSuccess'));});;
     },
     pass(order) {
       // if(order.direction)
+      // 我是买家
       if (order.direction == "0") {
         this.$router.push({
           name: "orderDetail",
-          params: { id: order.id, direction: order.direction }
+          params: { id: order.orderId, direction:  order.direction =='0'?'1':'0' }
         });
       } else {
         this.currentOrder = order;
@@ -286,7 +283,7 @@ export default {
         // 此单为买入单
         fbConfirm(this.currentOrder.orderId, this.code).then(res => {
           if (res.code === "200") {
-            this.$notify.success("交易完成");
+            this.$notify.success(this.$t('fb.dealFinished'));
           } else {
             console.log(res);
           }
@@ -295,7 +292,7 @@ export default {
         // 此单为卖出单
         fbFinish(this.currentOrder.orderId, this.code).then(res => {
           if (res.code === "200") {
-            this.$notify.success("交易完成");
+            this.$notify.success(this.$t('fb.dealFinished'));
           } else {
             console.log(res);
           }
@@ -303,11 +300,14 @@ export default {
       }
     },
     handleClose(done) {
-      this.$confirm("确认关闭？")
+      this.$confirm(this.$t('fb.confirmToClose'))
         .then(_ => {
           done();
         })
         .catch(_ => {});
+    },
+    goToAdv(){
+      this.$router.push({ name: 'tradeOrder'})
     }
   },
   computed: {
@@ -317,23 +317,6 @@ export default {
       "getSupportCoin",
       "getSupportCash"
     ]),
-    directionOption() {
-      let option = [
-        {
-          direction: "0",
-          name: "买入"
-        },
-        {
-          name: "卖出",
-          direction: "1"
-        },
-        {
-          name: "全部",
-          direction: "10"
-        }
-      ];
-      return option;
-    }
   },
   watch: {
     page(page) {
@@ -377,6 +360,13 @@ export default {
   background-color: #fff;
   min-height: 800px;
   padding: 50px 0;
+  .adv-group {
+    display: flex;
+    .el-button {
+      margin: 0 20px;
+      height: 40px;
+    }
+  }
   .mpagination {
     margin-top: 30px;
     text-align: center;
@@ -394,7 +384,7 @@ export default {
       .cell {
         white-space: pre;
         overflow: hidden;
-        font-size: 14px;
+        font-size: 12px;
         a:hover {
           color: #357ce1;
           opacity: 0.8;

@@ -1,8 +1,8 @@
 <template>
   <div class="trade-order-wrapper">
-    <div class="trade-order">
+    <div v-if="!isSelf" class="trade-order">
       <div class="to-info">
-        <span class="font12 font-gray">订单：{{ this.orderInfo.id }}</span>
+        <span class="font12 font-gray">订单：{{ this.$route.params.id }}</span>
         <div class="ti-order-message">您向 {{orderInfo.userId}}
            <span v-if="isBuyer">购买</span>
             <span v-else>出售</span>
@@ -36,7 +36,7 @@
           </div>
         </div>
         <!-- <p v-if="orderInfo.status == 9" class="font20">交易已经完成</p> -->
-        <p class="font20">订单状态: {{ getStatus(orderInfo.status)}}</p>
+        <p class="font18 order-status">订单状态: {{ getStatus(orderInfo.status)}}</p>
       </div>
       <!-- <div class="to-service">
         <div class="ts-tip">
@@ -76,6 +76,9 @@
         </el-collapse>
       </div>
     </div>
+    <div v-else>
+      测试页面 这个页面用来查看自己的广告详情~
+    </div>
     <el-dialog
       :visible.sync="smsDialog"
       :before-close="handleClose"
@@ -99,28 +102,8 @@ export default {
   data() {
     return {
       orderInfo: {
-    "expire": 32,
-    "userId": "12e6386528494763850c00ab65ae1489",
-    "id": "c6994c2b045b446ea891a3473eb9f67d",
-    "amount": 23,
-    "tradeTime": null,
-    "coinId": "2",
-    "updateDate": 1544722272000,
-    "tradeAmount": 2,
-    "direction": "0",
-    "fee": 0,
-    "price": 12,
-    "max": 222,
-    "message": "dddd",
-    "min": 1,
-    "paywayIds": "all",
-    "user": null,
-    "processId": "d4788c85b7344156ab3c226609090003",
-    "status": "9",
-    "remarks": "通过api在线下单",
-    "cashId": "3",
-    "type": "1"
-  },
+
+      },
       question_list: [
         {
           id: 1,
@@ -150,30 +133,59 @@ export default {
       activeNames: ["1"],
       payment_list: [],
       sms: "",
-      smsDialog: false
+      smsDialog: false,
+      isBuyer: false,
+      isSelf: false
     };
   },
   created() {
+    if(this.$store.state.user.userInfo.id === this.$route.params.id){
+      this.isSelf = true
+      console.log("这个单是我挂出去的")
+    }
     // console.log(this.getPaywayById(2).payName);
-    if (this.$route.params.direction == 0) {
+    if (this.$route.params.direction == '1') {
+      this.isBuyer = true;
+      console.log('我是付款方 ')
       // 付款方点进来拉取对方付款信息
       fbGetPayment(this.$route.params.id, this.$route.params.processId).then(
         res => {
-          this.payment_list = res.content;
+          if(res.code === '200'){
+            console.log("我可以通过orderId:"+this.$route.params.id+"查询对方的支付宝账户")
+            this.payment_list = res.content;
+          }else{
+            console.log("无法获取对方的支付宝账户")            
+          }
         }
       );
       fbOrderDetail(this.$route.params.id).then(res=>{
-        this.orderInfo = res.content
+        if(res.code === '200'){
+          console.log("并且可以获取此订单的详细信息")
+          this.orderInfo = res.content
+        }else{
+            console.log("但是无法获取订单的详细信息")            
+        }
+      }).catch(res=>{
+   console.log("但是无法获取订单的详细信息")   
       })
-    }else if(this.$route.params.direction == 1){
-      console.log("我是收款方")
+    }else if(this.$route.params.direction == '0'){
+      console.log("我是出售方,orderId:"+ this.$route.params.id)
+       fbOrderDetail(this.$route.params.id).then(res=>{
+         if(res.code === '200'){
+           this.orderInfo = res.content
+           console.log("查询到此订单的详细信息")
+         }else{
+           console.log("无法查询到到此订单的详细信息")
+         }
+      }).catch(res=>{
+                console.log("无法查询到到此订单的详细信息")
+   
+      })
+      this.isBuyer = false;
     }
   },
   computed: {
     ...mapGetters(["getSupportCoin", "getSupportCash", "getPayway",'getCoinNameByIDUp','getCashNameById','getPaywayById']),
-    isBuyer(){
-      return this.$route.params.direction == 0
-    }
   },
   mounted() {
     setInterval(() => {
@@ -233,6 +245,9 @@ export default {
 .trade-order-wrapper {
   background-color: #fff;
   padding: 50px 0;
+}
+.order-status {
+  margin: 20px 0;
 }
 .trade-order {
   width: 1200px;
