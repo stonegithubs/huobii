@@ -55,13 +55,13 @@ const coinTrade = {
     // 主页委托使用 初始化两栏交易
     initOrdersByName({ commit }, symbolName) {
     // 查询历史订单到history
-      getOrderBySymbolName(0, 500, 10, symbolName, 8, '2018-12-08', '2038-12-08', 1)
+      getOrderBySymbolName(0, 10, 10, symbolName, 8, '2018-12-08', '2038-12-08', 1)
         .then(response => {
           commit('SET_HISTORY', response.content.records)
         })
 
       // 查询open订单到openlist
-      getOrderBySymbolName(0, 500, 10, symbolName, 10, '2018-12-08', '2038-12-08', 1)
+      getOrderBySymbolName(0, 10, 10, symbolName, 11, '2018-12-08', '2038-12-08', 1)
         .then(response => {
           commit('SET_OEPEN', response.content.records)
         })

@@ -36,11 +36,29 @@ export function currency2coin(coinId, amount) {
 }
 
 // 添加提币地址
-export function addressAdd(abbr, address, remarks) {
+export function addressAdd(coinId, address, remarks) {
   return request({
     url: '/api/v1/wallet/coin/address/add',
     method: 'post',
-    params: { abbr: abbr, address: address, remarks: remarks }
+    params: { coinId, address, remarks }
+  })
+}
+
+// 删除提币地址
+export function addressDel(id) {
+  return request({
+    url: '/api/v1/wallet/coin/address/delete',
+    method: 'post',
+    params: { id }
+  })
+}
+
+// 查询单一币种下的地址
+export function address(page, size, coinId) {
+  return request({
+    url: '/api/v1/wallet/coin/address',
+    method: 'post',
+    params: { page, size, coinId }
   })
 }
 

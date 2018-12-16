@@ -138,15 +138,15 @@ export default {
   },
   methods: {
     submitIIn(){
-      this.$prompt('请输入您的交易密码', '确认完成充值?', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+      this.$prompt(this.$t('userOptions.tradePwdRequire'), this.$t('wallet.confirm'), {
+          confirmButtonText: this.$t('confirm'),
+          cancelButtonText: this.$t('canceled'),
         }).then(({ value }) => {
           submitIn(this.currentCoin.coinId, value).then(res=>{
             if(res.code === '200'){
-              this.$notify.success("核验请求已提交")
+              this.$notify.success(this.$t('wallet.submited'))
             }else{
-              this.$notify.success("核验失败")              
+              this.$notify.success(this.$t('wallet.failed'))              
             }
             this.transferDiaVisible = false
           })
@@ -199,7 +199,7 @@ export default {
       this.depositForm.coinId = item.coinId
     },
     handledepositClose(done) {
-      this.$confirm('确认关闭？')
+      this.$confirm(this.$t('confirmToClose'))
         .then(_ => {
           done()
         })

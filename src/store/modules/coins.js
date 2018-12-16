@@ -125,8 +125,10 @@ const coinData = {
     getSupportCoin({ commit }) {
       return new Promise((resolve, reject) => {
         getSupportedCoin().then(response => {
-          commit('SET_SUPPORTED_COIN', response.content.records)
-          resolve(response)
+          if (response && response.code === '200') {
+            commit('SET_SUPPORTED_COIN', response.content.records)
+            resolve(response)
+          }
         }).catch(err => {
           reject(err)
         })

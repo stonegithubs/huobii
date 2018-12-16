@@ -108,7 +108,7 @@ const user = {
         commit('SET_TOKEN', null)
         commit('SET_VERIFYINFO', null)
         sessionStorage.clear()
-        Vue.$router.push({ name: 'login'})
+        Vue.$router.push({ name: 'login' })
       })
     },
 
@@ -129,7 +129,13 @@ const user = {
     }
   },
   getters: {
-    // getUserPayway: (state)
+    getVerifyInfo: (state) => {
+      if (state.verifyInfo === null) {
+        return false
+      } else {
+        return state.verifyInfo
+      }
+    }
   }
 }
 

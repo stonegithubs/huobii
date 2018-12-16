@@ -24,8 +24,10 @@ const Common = {
         formData.append('page', 1)
         formData.append('size', 100)
         getPayway(formData).then(response => {
-          commit('SET_PAYWAY', response.content.records)
-          resolve()
+          if (response && response.code === '200') {
+            commit('SET_PAYWAY', response.content.records)
+            resolve()
+          }
         }).catch(err => {
           reject(err)
         })

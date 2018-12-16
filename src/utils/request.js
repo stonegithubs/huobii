@@ -47,7 +47,10 @@ service.interceptors.response.use(
     // if (res.code === '200') {
     //   return res
     // }
-
+    if (!res) {
+      console.log('接口未返回')
+      return Promise.reject(res.data)
+    }
     // return res
     if (res.data && res.data.code !== '200') {
       // console.log(res)

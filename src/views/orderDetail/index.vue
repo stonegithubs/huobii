@@ -3,10 +3,12 @@
     <div v-if="!isSelf" class="trade-order">
       <div class="to-info">
         <span class="font12 font-gray">订单：{{ this.$route.params.id }}</span>
-        <div class="ti-order-message">您向 {{orderInfo.userId}}
-           <span v-if="isBuyer">购买</span>
-            <span v-else>出售</span>
-             {{orderInfo.amount}} {{getCoinNameByIDUp(orderInfo.coinId)}}</div>
+        <div class="tip-message">
+          您向 {{orderInfo.userId}}
+          <span v-if="isBuyer">购买</span>
+          <span v-else>出售</span>
+          {{orderInfo.amount}} {{getCoinNameByIDUp(orderInfo.coinId)}}
+        </div>
         <div class="order-info">
           <div>
             <span>单价:</span>
@@ -18,13 +20,14 @@
           </div>
         </div>
       </div>
-      <div  class="to-payment">
-        <div v-if="orderInfo.status == 9" class="tp-tip">
-          <div style="font-size:22px;margin:20px 0;">卖方收款方式</div>
+      <div class="to-payment">
+        <div v-if="isBuyer" class="tp-tip">
+          <div class="tip-message">卖方收款方式</div>
           <div v-for="item in payment_list" :key="item.id" class="payment-item">
             <!-- <i class="el-icon-success"/> -->
             <div>
-              <i style="margin:0 4px;" :class="'iconfont icon-'+getIcon(item.paywayId)"></i>
+              <img :src="getPayIcon(item.paywayId)" style="margin-right:5px;">
+              <!-- <i style="margin:0 4px;" :class="'iconfont icon-'+getIcon(item.paywayId)"></i> -->
               {{ getPaywayById(item.paywayId) === undefined? '' :getPaywayById(item.paywayId).payName }}
             </div>
             <div>
@@ -36,7 +39,9 @@
           </div>
         </div>
         <!-- <p v-if="orderInfo.status == 9" class="font20">交易已经完成</p> -->
-        <p class="font18 order-status">订单状态: {{ getStatus(orderInfo.status)}}</p>
+        <div class="tip-message">
+          <p>订单状态: {{ getStatus(orderInfo.status)}}</p>
+        </div>
       </div>
       <!-- <div class="to-service">
         <div class="ts-tip">
@@ -52,7 +57,9 @@
       <div class="to-pay">
         <p>
           待支付，请于{{ orderInfo.expire }}分钟内向测试用户支付
-          <span class="tp-price">{{ orderInfo.amount*orderInfo.price }}{{ getCashNameById(orderInfo.cashId) }}</span> ,付款参考号:
+          <span
+            class="tp-price"
+          >{{ orderInfo.amount*orderInfo.price }}{{ getCashNameById(orderInfo.cashId) }}</span> ,付款参考号:
           <span class="tp-flag">{{ orderInfo.processId }}</span>
         </p>
         <div class="tp-pay">
@@ -61,7 +68,7 @@
         </div>
       </div>
       <div class="to-question">
-        <div class="tq-title">
+        <div class="tip-message">
           <span>常见问题</span>
         </div>
         <el-collapse v-model="activeNames">
@@ -76,9 +83,7 @@
         </el-collapse>
       </div>
     </div>
-    <div v-else>
-      测试页面 这个页面用来查看自己的广告详情~
-    </div>
+    <div v-else>测试页面 这个页面用来查看自己的广告详情~</div>
     <el-dialog
       :visible.sync="smsDialog"
       :before-close="handleClose"
@@ -94,16 +99,14 @@
 </template>
 
 <script>
-import { fbGetPayment, fbConfirm,fbOrderDetail } from "../../api/coin_trade";
+import { fbGetPayment, fbConfirm, fbOrderDetail } from "../../api/coin_trade";
 import { mapGetters } from "vuex";
 import { sendUserCode, getStatus } from "../../utils/index";
 export default {
   name: "OrderDetail",
   data() {
     return {
-      orderInfo: {
-
-      },
+      orderInfo: {},
       question_list: [
         {
           id: 1,
@@ -129,7 +132,7 @@ export default {
           des: "测试问题hvgujb9809题测试问题",
           link: "www.baidu.com"
         }
-      ], // 常见问题列表
+      ],
       activeNames: ["1"],
       payment_list: [],
       sms: "",
@@ -139,53 +142,76 @@ export default {
     };
   },
   created() {
-    if(this.$store.state.user.userInfo.id === this.$route.params.id){
-      this.isSelf = true
-      console.log("这个单是我挂出去的")
+    if (this.$store.state.user.userInfo.id === this.$route.params.id) {
+      this.isSelf = true;
+      console.log("这个单是我挂出去的");
     }
     // console.log(this.getPaywayById(2).payName);
-    if (this.$route.params.direction == '1') {
+    if (this.$route.params.direction == "1") {
       this.isBuyer = true;
-      console.log('我是付款方 ')
+      console.log("我是付款方 ");
       // 付款方点进来拉取对方付款信息
       fbGetPayment(this.$route.params.id, this.$route.params.processId).then(
         res => {
-          if(res.code === '200'){
-            console.log("我可以通过orderId:"+this.$route.params.id+"查询对方的支付宝账户")
+          if (res.code === "200") {
+            console.log(
+              "我可以通过orderId:" +
+                this.$route.params.id +
+                "查询对方的支付宝账户"
+            );
             this.payment_list = res.content;
-          }else{
-            console.log("无法获取对方的支付宝账户")            
+          } else {
+            console.log("无法获取对方的支付宝账户");
           }
         }
       );
-      fbOrderDetail(this.$route.params.id).then(res=>{
-        if(res.code === '200'){
-          console.log("并且可以获取此订单的详细信息")
-          this.orderInfo = res.content
-        }else{
-            console.log("但是无法获取订单的详细信息")            
-        }
-      }).catch(res=>{
-   console.log("但是无法获取订单的详细信息")   
-      })
-    }else if(this.$route.params.direction == '0'){
-      console.log("我是出售方,orderId:"+ this.$route.params.id)
-       fbOrderDetail(this.$route.params.id).then(res=>{
-         if(res.code === '200'){
-           this.orderInfo = res.content
-           console.log("查询到此订单的详细信息")
-         }else{
-           console.log("无法查询到到此订单的详细信息")
-         }
-      }).catch(res=>{
-                console.log("无法查询到到此订单的详细信息")
-   
-      })
+      fbOrderDetail(this.$route.params.id)
+        .then(res => {
+          if (res.code === "200") {
+            console.log("并且可以获取此订单的详细信息");
+            this.orderInfo = res.content;
+          } else {
+            console.log("但是无法获取订单的详细信息");
+          }
+        })
+        .catch(res => {
+          console.log("但是无法获取订单的详细信息");
+        });
+    } else if (this.$route.params.direction == "0") {
+      console.log("我是出售方,orderId:" + this.$route.params.id);
+      fbOrderDetail(this.$route.params.id)
+        .then(res => {
+          if (res.code === "200") {
+            this.orderInfo = res.content;
+            console.log("查询到此订单的详细信息");
+          } else {
+            console.log("无法查询到到此订单的详细信息");
+          }
+        })
+        .catch(res => {
+          console.log("无法查询到到此订单的详细信息");
+        });
       this.isBuyer = false;
     }
   },
   computed: {
-    ...mapGetters(["getSupportCoin", "getSupportCash", "getPayway",'getCoinNameByIDUp','getCashNameById','getPaywayById']),
+    ...mapGetters([
+      "getSupportCoin",
+      "getSupportCash",
+      "getPayway",
+      "getCoinNameByIDUp",
+      "getCashNameById",
+      "getPaywayById"
+    ]),
+    alipay() {
+      return require("@/assets/svg/alipay.svg");
+    },
+    wechat() {
+      return require("@/assets/svg/weChat.svg");
+    },
+    bankCard() {
+      return require("@/assets/svg/ic_bankcard.svg");
+    }
   },
   mounted() {
     setInterval(() => {
@@ -193,8 +219,18 @@ export default {
     }, 1000);
   },
   methods: {
-    getStatus(a){
-      return getStatus(a)
+    getStatus(a) {
+      return getStatus(a);
+    },
+    getPayIcon(id) {
+      switch (id) {
+        case "1":
+          return this.wechat;
+        case "2":
+          return this.bankCard;
+        case "9fe2dcef18e94c85adb3ff6da9c2a78d":
+          return this.alipay;
+      }
     },
     finishTrade() {
       if (this.sms !== "") {
@@ -217,7 +253,7 @@ export default {
       this.smsDialog = true;
     },
     handleClose(done) {
-      this.$confirm("确认关闭？")
+      this.$confirm(this.$t('confirmToClose'))
         .then(_ => {
           done();
         })
@@ -246,6 +282,11 @@ export default {
   background-color: #fff;
   padding: 50px 0;
 }
+.tip-message {
+  font-size: 30px;
+  font-weight: normal;
+  margin: 20px 0;
+}
 .order-status {
   margin: 20px 0;
 }
@@ -253,11 +294,11 @@ export default {
   width: 1200px;
   margin: auto;
   .to-info {
-    .ti-order-message {
-      font-size: 30px;
-      font-weight: normal;
-      margin: 20px 0;
-    }
+    // .ti-order-message {
+    //   font-size: 30px;
+    //   font-weight: normal;
+    //   margin: 20px 0;
+    // }
     .order-info {
       font-size: 16px;
       height: 90px;

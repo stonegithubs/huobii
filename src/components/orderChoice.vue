@@ -124,7 +124,7 @@ export default {
 };
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
   .choice-filter {
     width: 200px;
   }

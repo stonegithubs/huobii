@@ -4,7 +4,7 @@
       <span>{{ $t('navbar.user.verify') }}</span>
     </div>
     <!-- v-if="auditFlag === 2||auditFlag === null" -->
-    <el-form v-if="auditFlag === 2||auditFlag === null" ref="verifyForm" :model="verifyForm" label-position="top" label-width="80px">
+    <el-form v-if="getVerifyInfo === false||auditFlag === '2'" ref="verifyForm" :model="verifyForm" label-position="top" label-width="80px">
       <el-form-item :label="$t('userOptions.familyName')" :rules="[{ required: true, message: 'this field is required', trigger: 'blur' }]" prop="familyName">
         <el-input v-model="verifyForm.familyName"/>
       </el-form-item>
@@ -25,22 +25,23 @@
       </el-form-item>
     </el-form>
     <div v-else class="ct">
-      <h3 v-if=" auditFlag === 1|| auditFlag >2"><i style="color: #55a532" class="el-icon-success"/> {{ $t('userOptions.verifyPassed') }}</h3>
-      <h3 v-if=" auditFlag === 0"><i style="color: dodgerblue" class="el-icon-info"/> {{ $t('userOptions.verifing') }}</h3>
-      <h3 v-if=" auditFlag === 2"><i style="color: red" class="el-icon-warning"/>{{ $t('userOptions.verifyFailed') }} </h3>
+      <h3 v-if=" auditFlag === '1'|| auditFlag >'2'"><i style="color: #55a532" class="el-icon-success"/> {{ $t('userOptions.verifyPassed') }}</h3>
+      <h3 v-if=" auditFlag === '0'"><i style="color: dodgerblue" class="el-icon-info"/> {{ $t('userOptions.verifing') }}</h3>
+      <h3 v-if=" auditFlag === '2'"><i style="color: red" class="el-icon-warning"/>{{ $t('userOptions.verifyFailed') }} </h3>
       <div class="vd-inner">
         <div class="verify-info">
-          <span>{{ $t('userOptions.givenName') }}</span><span>{{ this.$store.state.user.verifyInfo.name }}</span>
+          <span>{{ $t('userOptions.givenName') }}</span><span>
+            {{ getVerifyInfo.name }}</span>
         </div>
         <div class="verify-info">
-          <span>{{ $t('userOptions.familyName') }}</span><span>{{ this.$store.state.user.verifyInfo.surName }}</span>
+          <span>{{ $t('userOptions.familyName') }}</span><span>{{ getVerifyInfo.surName }}</span>
         </div>
         <div class="verify-info">
-          <span>{{ $t('userOptions.idNo') }}</span><span>{{ this.$store.state.user.verifyInfo.cardNo }}</span>
+          <span>{{ $t('userOptions.idNo') }}</span><span>{{ getVerifyInfo.cardNo }}</span>
         </div>
       </div>
     </div>
-    <el-dialog :before-close="handleClose" :title="$t('userOptions.yourCaptcha')" :visible.sync="captchaVisible" width="300px">
+    <el-dialog :before-close="handleClose" :title="$t('userOptions.yourCaptcha')" :visible.sync="smsDialog" width="300px">
       <el-input v-model="verifyForm.captcha"/>
       <span slot="footer" class="dialog-footer">
         <!-- <el-button style="" @click="dialogVisible = false">取 消</el-button> -->
@@ -55,12 +56,14 @@ import {
   sendCaptcha1,
   getCaptcha
 } from '../../../api/user'
+import {sendUserCode} from '@/utils'
+import { mapGetters } from 'vuex'
 export default {
   name: 'Verified',
   data() {
     return {
-      auditFlag: Number(this.$store.state.user.verifyInfo.auditFlag),
-      verifiedDiaVible: true,
+      // auditFlag: 0,
+      smsDialog: false,
       verifyForm: {
         familyName: '',
         givenName: '',
@@ -71,36 +74,25 @@ export default {
       captchaVisible: false
     }
   },
-  computed: {},
+  computed: {
+     ...mapGetters(["getVerifyInfo"]),
+    auditFlag() {
+      if (this.getVerifyInfo === false) {
+        return "0";
+      } else {
+        return this.getVerifyInfo.auditFlag;
+      }
+    },
+  },
+  
   created() {
-    // if (this.$store.state.verifyInfo === null) {
-      this.$store.dispatch('GetVerifyInfo').then(responese => {
-        if (responese.content === null) {
-          this.auditFlag = -1
-          this.verifiedDiaVible = true
-        } else {
-          this.auditFlag = Number(responese.content.auditFlag)
-        }
-      }).catch(_ => {
-        this.$notify.error(_.message)
-      })
-    // }
+      this.$store.dispatch('GetVerifyInfo').then(responese => {}).catch(_ => {})
   },
   methods: {
     beforeSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          this.captchaVisible = true
-          const phone = this.$store.state.user.userInfo.mobile
-          const country = this.$store.state.user.userInfo.country
-          sendCaptcha1(phone, country).then(res => {
-            // TODO: 接收验证码需要删除
-            getCaptcha(phone, country)
-              .then(res => {
-                this.$notify.success(res.content)
-              })
-          })
-          // console.log()
+          sendUserCode(this)
         }
       })
     },
@@ -115,12 +107,11 @@ export default {
           formData.append('captcha', this.verifyForm.captcha),
           normalVerify(formData).then(responese => {
             if (responese.code === '200') {
-              this.$notify.info(responese.message)
+              this.$notify.success(responese.message)
               this.$router.go(-1)
             }
           }).catch(err => {
             this.$notify.error(err.message)
-            alert(err.messages)
           })
         } else {}
       })

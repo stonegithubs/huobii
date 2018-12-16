@@ -31,7 +31,7 @@
               <p>{{ $t('exchange.main.tradeTotalPrice') }} <span>{{ Number(this.xj_buyForm.amount*this.xj_buyForm.price).toFixed(8) }} {{ this.getMainCoin.toUpperCase() }}</span></p>
             </div>
           </div>
-          <el-button :disabled="!isAuth" :class="isAuth? '':'disabled-button'" class="buy-button" @click="handle_xj_buy">买入 <span>{{ this.getTargetCoin.toUpperCase() }}</span></el-button>
+          <el-button :disabled="!isAuth" :class="isAuth? '':'disabled-button'" class="buy-button" @click="handle_xj_buy">{{$t('exchange.main.buy')}} <span>{{ this.getTargetCoin.toUpperCase() }}</span></el-button>
           </div>
         </div>
         <div class="hb-sell">
@@ -63,7 +63,7 @@
               <p>{{ $t('exchange.main.tradeTotalPrice') }} <span>{{ Number(this.xj_sellForm.amount*this.xj_sellForm.price).toFixed(8) }} {{ this.getMainCoin.toUpperCase() }}</span></p>
             </div>
           </div>
-          <el-button :disabled="!isAuth" :class="isAuth? '':'disabled-button'" class="sell-button" @click="handle_xj_sell">卖出 <span>{{ this.getTargetCoin.toUpperCase() }}</span></el-button>
+          <el-button :disabled="!isAuth" :class="isAuth? '':'disabled-button'" class="sell-button" @click="handle_xj_sell">{{$t('exchange.main.sell')}} <span>{{ this.getTargetCoin.toUpperCase() }}</span></el-button>
           </div>
         </div>
       </el-tab-pane>

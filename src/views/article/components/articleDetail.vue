@@ -111,7 +111,7 @@ export default {
     width: 1200px;
     margin: auto;
     min-height: 800px;
-    padding: 30px 0;
+    padding: 70px 0 150px 0;
   }
 }
 

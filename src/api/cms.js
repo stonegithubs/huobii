@@ -15,6 +15,15 @@ export function getCover() {
   })
 }
 
+// 获取币种资料
+export function getCoinDetail(id) {
+  return request({
+    url: '/api/v1/public/common/coin_detail',
+    method: 'post',
+    params: { id }
+  })
+}
+
 // 客户端下载地址
 export function getClientLink() {
   return request({

@@ -124,7 +124,16 @@ module.exports = {
       notClosed: '未成交',
       operation: '操作',
       depth: '深度图',
-      realtimeTrade: '实施成交'
+      realtimeTrade: '实施成交',
+      coinDetail: '币种资料',     //
+      coinDesc: '币种简介',         //
+      pubDate: '发行时间',      //  
+      pubAmount: '发行总量',      //
+      tradeAmount: '流通总量',    //
+      nowPrice: '众筹价格',       //
+      webSite: '官网',          //
+      block: '区块查询',          //
+      whitepaper: '白皮书',        //
     }
   },
   login: {
@@ -233,8 +242,11 @@ module.exports = {
     to: '转至',
     transfer: '资产互转',
     transferSuccess: '转账成功',
-    transferFailed: '转账失败'
-  },
+    transferFailed: '转账失败',
+    confirm: '确认完成充值?',           //
+    submited: '核验请求已提交',         //
+    failed: '核验请求提交失败'            //
+  },  
   currency: { // 以下
 
   },
@@ -408,6 +420,12 @@ module.exports = {
     info11: '输入谷歌验证器中6位验证码',
     info12: '绑定成功',
     info13: '绑定失败',
-  }
+    verifyInfo: '请上传两张身份证照片和一段手持身份证的视频'
+
+  },
+  nofound: {      // 以下
+    t1: '您访问的页面不存在',
+    t2: '带我回主页',
+  },
 
 }

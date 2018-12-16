@@ -88,8 +88,8 @@ export default {
     qrcode(url,client) {
       setTimeout(()=>{
         const qrcode = new qrCode(client, {
-        width: 125, // 设置宽度，单位像素
-        height: 125, // 设置高度，单位像素
+        width: 150, // 设置宽度，单位像素
+        height: 150, // 设置高度，单位像素
         text: url // 设置二维码内容或跳转地址
       })
       },1)

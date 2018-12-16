@@ -117,14 +117,27 @@ export function getStatus(status) {
   }
 }
 
+export function getStatusG(vm, status) {
+  switch (status) {
+    case '0': return '挂单中'
+    case '1': return '部分成交'
+    case '2': return '完成交易'
+    case '3': return '用户撤销'
+    case '8': return '历史纪录'
+    case '9': return '交易锁定中'
+    case '10': return '全部'
+    case '11': return '交易中'
+  }
+}
+
 // 撤销币币订单
 export function confirmReppelCoinTrade(vm, id) {
-  vm.$alert('确定撤销币币订单吗', '币币订单撤销', {
-    confirmButtonText: '确定',
+  vm.$alert(vm.$t('confirmToRepal'), vm.$t('repeal'), {
+    confirmButtonText: vm.$t('confirm'),
     callback: action => {
       submitRpeal(id).then(res => {
         if (res.code === '200') {
-          vm.$notify.success('撤销成功')
+          vm.$notify.success(vm.$t('repealSuccess'))
         }
       })
     }

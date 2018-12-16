@@ -169,26 +169,34 @@
                 <p class="list-desc">
                   <span class="desc-name m-desc-name">{{$t('userInfo.verify')}}</span>
                   <span
-                    v-if="this.$store.state.user.verifyInfo.auditFlag ==='2'"
+                    v-if="auditFlag ==='2'"
                     class="auth-info m-auth-info"
                     style="color: rgb(153, 153, 153);"
                   >{{$t('userInfo.vFailed')}}</span>
                   <span
-                    v-if="this.$store.state.user.verifyInfo===null"
+                    v-if="getVerifyInfo===false"
                     class="auth-info m-auth-info"
                     style="color: rgb(153, 153, 153);"
                   >{{$t('userInfo.notVer')}}</span>
-                  <router-link
-                    v-if="this.$store.state.user.verifyInfo===null||this.$store.state.user.verifyInfo.auditFlag ==='2'"
-                    :to="{ name: 'verify' }"
-                    class="isActive m-button"
-                  >{{$t('userInfo.doVerify')}}</router-link>
+                   <span
+                    v-if="getVerifyInfo "
+                    class="auth-info m-auth-info"
+                    style="color:black">{{ getVerifyInfo? getVerifyInfo.surName+getVerifyInfo.name :'' }} {{ getVerifyInfo? getVerifyInfo.cardNo.slice(0,-4) +'****':'' }}</span>
                   <span
-                    v-if="this.$store.state.user.verifyInfo.auditFlag "
+                    v-if="getVerifyInfo===false||auditFlag ==='2'||auditFlag ==='0'"
                     class="auth-info m-auth-info"
                     style="color:black"
-                  >{{ this.$store.state.user.verifyInfo.surName }} {{ this.$store.state.user.verifyInfo.cardNo.slice(0,-4) }}****</span>
-                  <span v-if="hasVerify" class="isActive m-button">{{$t('userInfo.verified')}}</span>
+                  >
+                    <router-link
+                      :to="{ name: 'verify' }"
+                      class="isActive m-button"
+                      style="float: right;"
+                    >{{$t('userInfo.doVerify')}}</router-link>
+                  </span>
+                 <span
+                    v-if="!getVerifyInfo && auditFlag !=='2' && auditFlag !=='0'"
+                    class="isActive m-button"
+                  >{{$t('userInfo.verified')}}</span>
                 </p>
               </div>
             </div>
@@ -199,21 +207,44 @@
               <div class="info-wrapper">
                 <p class="list-desc">
                   <span class="desc-name m-desc-name">{{$t('userInfo.advVer')}}</span>
-                  <span
+                  <!-- <span
                     v-if=" auditFlag === '0' || auditFlag === '1' ||auditFlag === '2'"
                     class="auth-info m-auth-info"
                     style="color: rgb(153, 153, 153);"
-                  >{{$t('userInfo.notVer')}}</span>
+                  >{{$t('userInfo.notVer')}}</span> -->
                   <span
                     v-if="auditFlag === '4'"
                     class="auth-info m-auth-info"
                     style="color:black"
                   >{{$t('userInfo.verified')}}</span>
                   <span
+                    v-if="auditFlag < '3'"
+                    class="auth-info m-auth-info"
+                    style="color:black"
+                  >{{$t('userInfo.notVer')}}
+                  <!-- {{$t('userInfo.pending')}} -->
+                  </span>
+                  <span
                     v-if="auditFlag === '3'"
                     class="auth-info m-auth-info"
                     style="color:black"
-                  >{{$t('userInfo.pending')}}</span>
+                  >
+                  {{$t('userInfo.pending')}}
+                  </span>
+                   <!-- <span
+                    v-if="auditFlag === '4'"
+                    class="auth-info m-auth-info"
+                    style="color:black"
+                  >
+                  {{$t('userInfo.verified')}}
+                  </span> -->
+                   <span
+                    v-if="auditFlag === '5'"
+                    class="auth-info m-auth-info"
+                    style="color:black"
+                  >
+                  {{$t('userInfo.vFailed')}}
+                  </span>
                   <a
                     v-if="auditFlag !== '4'"
                     class="isActive m-button"
@@ -405,6 +436,7 @@ import {
   isBindGoogle
 } from "../../api/user";
 import { unBindEmail } from "../../api/verify_code";
+import { mapGetters } from "vuex";
 export default {
   name: "TradeUserCenter",
   components: {
@@ -417,7 +449,7 @@ export default {
       AddPaymentdialogVisible: false,
       adv_verifyDialogVisible: false,
       targetPaywayID: "",
-      auditFlag: this.$store.state.user.verifyInfo.auditFlag,
+      // auditFlag: this.$store.state.user.verifyInfo===null? '':auditFlag,
       adv_fileList: [],
       googleVisiable: false,
       currentPayway: {
@@ -441,6 +473,14 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["getVerifyInfo"]),
+    auditFlag() {
+      if (this.getVerifyInfo === false) {
+        return "0";
+      } else {
+        return this.getVerifyInfo.auditFlag;
+      }
+    },
     safeLevel() {
       return "中";
     },
@@ -463,19 +503,17 @@ export default {
     hasTradePwd() {
       return this.$store.state.trade.hasTradePwd;
     },
-    hasVerify() {
-      const flag = this.$store.state.user.verifyInfo.auditFlag;
-      if (flag === "0" || flag === "2") {
-        return false;
-      }
-      return true;
-    },
+    
     parseTime(a) {
       return parseTime(a);
     },
     hasAdvVerify() {
-      if (this.$store.state.user.verifyInfo.auditFlag === "4") {
-        return true;
+      if (this.verifyInfo == false) {
+        return false;
+      } else {
+        if (this.verifyInfo["auditFlag"] === "4") {
+          return true;
+        }
       }
     },
     getID() {
@@ -487,12 +525,12 @@ export default {
   },
   created() {
     this.$store.dispatch("GetUserInfo");
+    this.$store.dispatch("GetVerifyInfo");
     this.$nextTick(() => {
       this.$store.dispatch("GetUserPayway");
-      this.$store.dispatch("GetVerifyInfo");
       this.$store.dispatch("GetTradePwd");
       isBindGoogle().then(res => {
-        if (res.code === "200") {
+        if (res && res.code === "200") {
           this.isBind = res.content;
         }
       });
@@ -587,7 +625,7 @@ export default {
           })
           .catch(_ => {});
       } else {
-        this.$notify.error("请上传两张身份证照片和一段手持身份证的视频");
+        this.$notify.error(this.$t('userInfo.verifyInfo'));
       }
     },
     handleChange(file) {
@@ -757,7 +795,7 @@ export default {
               }
               .auth-info {
                 display: inline-block;
-                width: 50%;
+                // width: 50%;
                 text-align: left;
                 flex-grow: 2;
               }
@@ -781,6 +819,9 @@ export default {
             display: inline-box;
           }
         }
+        }
+      }
+    }
         .upload-demo {
           display: flex;
           align-items: center;
@@ -789,9 +830,6 @@ export default {
           .el-upload--picture-card {
             width: 100%;
           }
-        }
-      }
-    }
   }
 }
 </style>

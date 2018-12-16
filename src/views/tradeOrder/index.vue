@@ -84,7 +84,7 @@
           <el-input v-model="appealForm.reason"></el-input>
         </el-form-item>
         <el-form-item :label="$t('fb.appType')">
-          <el-select v-model="appealForm.type" :placeholder="$t('fb.appTip')">
+          <el-select style="width:100%" v-model="appealForm.type" :placeholder="$t('fb.appTip')">
             <el-option :label="$t('fb.app0')" value="0"></el-option>
             <el-option :label="$t('fb.app1')" value="1"></el-option>
           </el-select>
