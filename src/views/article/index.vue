@@ -93,7 +93,7 @@ export default {
   methods: {
     handleClick(val) {
       let categoryId = this.getCategory[val.index].id;
-      getArticleByCategoryId(categoryId, 0, 5).then(res => {
+      getArticleByCategoryId(categoryId, 0, 20).then(res => {
         console.log(res);
         this.article_list = res.content.records;
       });

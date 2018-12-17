@@ -82,6 +82,9 @@ export default {
     };
   },
   created() {
+    if(!this.$store.state.user.token){
+      this.$router.push({ name: 'login'})
+    }
     if (this.getSupportCoin.length === 0) {
       this.$store
         .dispatch("getSupportCoin")

@@ -33,6 +33,11 @@ export default {
     assetsDetail,
     tradeAssets
   },
+  created(){
+    if(!this.$store.state.user.token){
+      this.$router.push({ name: 'login'})
+    }
+  },
   data() {
     return {
       estimatedValue: 0.00000, // 折合虚拟货币

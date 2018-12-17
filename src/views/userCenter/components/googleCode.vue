@@ -168,6 +168,7 @@ export default {
                     background-color: #357ce1;
                     color: #fff;
                     width: 100%;
+                    height: 35px;
                 }
             }
             .group .label {

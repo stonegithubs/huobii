@@ -1,7 +1,7 @@
 <template>
   <div class="orders-list">
     <div class="order-inner">
-      <h1>币币订单</h1>
+      <h1>{{$t('navbar.user.exchangeOrder')}}</h1>
       <div class="fliter-inner">
         <coin-fliter @makeChange="changeOrder"></coin-fliter>
       </div>
@@ -120,6 +120,9 @@ export default {
     };
   },
   created() {
+    if(!this.$store.state.user.token){
+      this.$router.push({ name: 'login'})
+    }
     this.loading = true;
     this.$store.dispatch("getSupportCoin").then(_ => {
       this.init();

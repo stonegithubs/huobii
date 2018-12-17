@@ -134,6 +134,7 @@ module.exports = {
       webSite: '官网',          //
       block: '区块查询',          //
       whitepaper: '白皮书',        //
+      checkAll: '查看全部'          //
     }
   },
   login: {
@@ -356,9 +357,7 @@ module.exports = {
     advNo: '广告编号',
     advType: '类型',
     coinTyp: '币种',
-    passTitle: '订单放行',
-
-
+    passTitle: '订单放行'
   },
   userInfo: {
     binded: '已绑定',
@@ -420,8 +419,13 @@ module.exports = {
     info11: '输入谷歌验证器中6位验证码',
     info12: '绑定成功',
     info13: '绑定失败',
-    verifyInfo: '请上传两张身份证照片和一段手持身份证的视频'
-
+    verifyInfo: '请上传两张身份证照片和一段手持身份证的视频',
+    nickNameTip: '请输入您的交易昵称',
+    changeSuccess: '修改成功',
+    changeFailed: '修改失败',
+    changeRule: '长度为3至6个字符',
+    changeTip1: '您必须先设置昵称才能进行交易',
+    clickToChangeName: '点击修改昵称'
   },
   nofound: {      // 以下
     t1: '您访问的页面不存在',

@@ -103,7 +103,7 @@ export default {
           formData.append('confirm', this.forgetForm.confirm)
           // formData.append('captcha', this.forgetForm.captcha)
           forget(formData).then(response => {
-            if (response.content) {
+            if (response && response.content === true) {
               // todo:验证码修复后继续
               this.$notify.success(response.message)
               this.$router.go(-1)

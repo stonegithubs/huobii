@@ -324,17 +324,15 @@ export default {
 
 <style lang="scss" scoped>
   .trader{
-    margin: auto;
-    @media (min-width: 768px) {
-      min-width: 800px;
-      width: 70%;
-
-    }
+    background-color: #fff;
+    padding: 50px 0;
     .wrapper {
+      width: 1200px;
+      margin: auto;
       .base-info {
-        margin-top: 80px;
+        // margin-top: 80px;
         .top-info {
-          padding-bottom: 20px;
+          // padding-bottom: 20px;
           border-bottom: 1px solid hsla(0,0%,85%,.5);
           display: flex;
           flex-direction: row;
@@ -431,6 +429,7 @@ export default {
     .m-wrapper {
       padding: 0 24px;
       margin: auto;
+      
       .m-user-info {
         margin-top: 56px;
         display: flex;

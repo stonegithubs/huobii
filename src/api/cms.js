@@ -35,9 +35,9 @@ export function getClientLink() {
 // 分类下文章获取
 export function getArticleByCategoryId(category, page, size) {
   return request({
-    url: '/api/v1/public/cms/{category}/articles',
+    url: `/api/v1/public/cms/${category}/articles`,
     method: 'post',
-    params: { category, page, size }
+    params: { page, size }
   })
 }
 

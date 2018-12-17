@@ -21,7 +21,7 @@
       <el-tabs v-model="activeName" class="trade-bar" type="border-card" @tab-click="handleClick">
         <el-tab-pane v-for="symbol in symbols" :key="symbol.id" :name="symbol">
           <span slot="label">{{ symbol.toUpperCase() }}</span>
-          <el-table v-loading="symbolList.length == 0" :data="symbolList" :default-sort="{prop: 'close', order: 'descending'}" class="mini-trade" height="600" max-height="800" style="width: 100%" @row-click="handleRowClick">
+          <el-table v-loading="isLoading" :data="symbolList" :default-sort="{prop: 'close', order: 'descending'}" class="mini-trade" height="600" max-height="800" style="width: 100%" @row-click="handleRowClick">
             <el-table-column :label="$t('index.tradeShow.pair')" prop="symbolName" sortable >
               <template slot-scope="scope">
                 {{ scope.row.target.toUpperCase() }}
@@ -52,16 +52,17 @@ export default {
       activeName: 'usdt',
       currentSymbol: 'usdt',
       sidebarInterval: {},
-      symbols: ['usdt', 'btc', 'eth', 'tc']
+      symbols: ['usdt', 'btc', 'eth', 'tc'],
+      isLoading: false,
     }
   },
   computed: {
     symbolList() {
       return this.$store.getters.getCoinList(this.currentSymbol)
     },
-    isLoading() {
-      return this.$store.getters.getCoinList(this.currentSymbol).length === 0
-    }
+    // isLoading() {
+    //   return this.$store.getters.getCoinList(this.currentSymbol).length === 0
+    // }
   },
   created() {
     this.$store.dispatch('getSymbolList').catch(_ => {})

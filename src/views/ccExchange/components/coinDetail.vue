@@ -16,7 +16,9 @@
             style="color: #61688a;font-size: 14px;margin-bottom: 10px;display: inline-block"
           >{{$t('exchange.main.coinDesc')}}</span>
 
-          <p v-html="coinData.content"></p>
+          <div class="text-wrapper" v-html="html_decode(coinData.content)"></div>
+          <!-- {{ html_decode(coinData.content) }}  -->
+          <!-- <div>{{{ coinData.content }}}</div> -->
         </div>
       </div>
       <div class="cd-right">
@@ -109,6 +111,18 @@ export default {
           this.coinData = res.content.data;
         });
       }, 1000);
+    },
+    html_decode(str) {
+      let s = "";
+      if (str.length == 0) return "";
+      s = str.replace(/&amp;/g, "&");
+      s = s.replace(/&lt;/g, "<");
+      s = s.replace(/&gt;/g, ">");
+      s = s.replace(/&nbsp;/g, " ");
+      s = s.replace(/&#39;/g, "'");
+      s = s.replace(/&quot;/g, '"');
+      s = s.replace(/<br\/>/g, "\n");
+      return s;
     }
   },
   watch: {
@@ -148,6 +162,12 @@ export default {
       // float: left;
       // width: 160px;
       padding-right: 30px;
+      .text-wrapper {
+      max-height:   260px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      }
       // width: 350px;
       max-width: 400px;
       h3 {

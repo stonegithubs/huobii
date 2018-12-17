@@ -4,7 +4,7 @@
       <div class="mod-name">
         <span>{{ $t('exchange.main.historyBook') }}</span>
         <span style="float:right;font-size:12px;margin-right:40px;">
-          <router-link :to="{ name: 'order'}">查看全部</router-link>
+          <router-link :to="{ name: 'order'}">{{$t('exchange.main.checkAll')}}</router-link>
           </span>
       </div>
     </div>
@@ -14,7 +14,7 @@
         max-height="600"
         style="width: 100%"
       >
-        <el-table-column width="120px" :label="$t('exchange.main.time')">
+        <el-table-column width="150px" :label="$t('exchange.main.time')">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.updateDate===null?0: scope.row.updateDate) }}</span>
           </template>

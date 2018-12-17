@@ -51,12 +51,12 @@
         <li>{{ $t('wallet.finishTip') }}</li>
       </div>
       <span  slot="footer">
-        <el-button style="width:455px" type="primary" @click="submitIIn()">确认完成充值</el-button>
+        <el-button style="width:455px" type="primary" @click="submitIIn()">{{$t('wallet.confirm')}}</el-button>
       </span>
     </el-dialog>
     <el-dialog :title="$t('wallet.transfer')" :modal-append-to-body="false" :visible.sync="depositDiaVisible" :before-close="handledepositClose" width="500px">
       <el-form ref="depositForm" :model="depositForm" label-position="top" label-width="80px">
-        <el-form-item label="币种">
+        <el-form-item :label="$t('fb.coinTyp')">
           <el-select v-model="depositForm.coinId" :placeholder="$t('wallet.chooseCoin')" style="width: 100%">
             <el-option v-for="item in  getSupportCoin" :key="item.id" :label="item.abbr ===undefined? '':item.abbr.toUpperCase()" :value="item.id"/>
           </el-select>
@@ -142,8 +142,13 @@ export default {
           confirmButtonText: this.$t('confirm'),
           cancelButtonText: this.$t('canceled'),
         }).then(({ value }) => {
+          console.log(value)
+          if(value == ''){
+            this.$alert(this.$t('userOptions.tradePwdRequire'))
+            return false
+          }
           submitIn(this.currentCoin.coinId, value).then(res=>{
-            if(res.code === '200'){
+            if(res && res.code === '200'){
               this.$notify.success(this.$t('wallet.submited'))
             }else{
               this.$notify.success(this.$t('wallet.failed'))              

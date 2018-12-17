@@ -142,6 +142,9 @@ export default {
     };
   },
   created() {
+    if(!this.$store.state.user.token){
+      this.$router.push({ name: 'login'})
+    }
     if (this.$store.state.user.userInfo.id === this.$route.params.id) {
       this.isSelf = true;
       console.log("这个单是我挂出去的");

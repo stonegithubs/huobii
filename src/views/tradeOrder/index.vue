@@ -21,19 +21,19 @@
               </span>
             </template>
           </el-table-column>
-          <el-table-column width="120px" prop="date" :label="$t('fb.tradeType')">
+          <el-table-column width="110px" prop="date" :label="$t('fb.tradeType')">
             <template slot-scope="scope">{{ scope.row.direction === '0'? $t('buy'): $t('sell') }} {{ scope.row.amount }} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
           </el-table-column>
-          <el-table-column width="120px" prop="name" :label="$t('fb.total')">
+          <el-table-column width="110px" prop="name" :label="$t('fb.total')">
             <template slot-scope="scope">{{ (scope.row.dealPrice*scope.row.amount).toFixed(2) }}{{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
           </el-table-column>
-          <el-table-column width="120px" prop="address" :label="$t('price')">
+          <el-table-column width="110px" prop="address" :label="$t('price')">
             <template slot-scope="scope">{{ scope.row.dealPrice.toFixed(2) }} {{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
           </el-table-column>
-          <el-table-column width="120px" prop="address" :label="$t('order.fee')">
+          <el-table-column width="110px" prop="address" :label="$t('order.fee')">
             <template slot-scope="scope">{{scope.row.fee.toFixed(2)}} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
           </el-table-column>
-          <el-table-column width="180px" prop="address" :label="$t('createTime')">
+          <el-table-column width="150px" prop="address" :label="$t('createTime')">
             <template slot-scope="scope">{{parseTime(scope.row.updateDate) }}</template>
           </el-table-column>
           <el-table-column prop="address" :label="$t('exchange.main.status')">
@@ -43,7 +43,7 @@
             <template slot-scope="scope">{{ scope.row.user.name }}</template>
           </el-table-column>
                     
-          <el-table-column  prop="address" width="220px" :label="$t('exchange.main.operation')">
+          <el-table-column  prop="address" width="250px" :label="$t('exchange.main.operation')">
             <template slot-scope="scope">
               <el-button size="mini" type="warning" @click="appeal(scope.row)">{{$t('fb.repeal')}}</el-button>
             <!-- 我是买家 我接了单 还未付款 我可以撤销、付款 -->
@@ -60,7 +60,7 @@
         </el-table>
       </div>
     </div>
-    <el-dialog title="订单放行" :visible.sync="smsDialog" width="400px" :before-close="handleClose">
+    <el-dialog :title="$t('fb.passTitle')" :visible.sync="smsDialog" width="400px" :before-close="handleClose">
       <el-form>
         <!-- <el-form-item label="过程编号">
           <el-input v-model="processId"></el-input>
@@ -159,6 +159,9 @@ export default {
     };
   },
   created() {
+    if(!this.$store.state.user.token){
+      this.$router.push({ name: 'login'})
+    }
     this.init();
   },
   methods: {

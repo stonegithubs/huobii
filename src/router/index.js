@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import layout from '../views/layout/layout'
+
 // import tradeLayout from '../views/tradeLayout/index'
 
 Vue.use(VueRouter)
@@ -35,11 +35,35 @@ export const constantRouterMap = [
     children: [
       {
         path: '/articles',
+        name: 'article_test',
+        component: () => import('@/views/testArticle/index'),
+        children: [
+          {
+            path: '/articles',
+            name: 'article_list_test',
+            component: () => import('@/views/testArticle/components/articleList')
+          },
+          {
+            path: '/articles/:category_id/:article_id',
+            name: 'article_detail_test',
+            component: () => import('@/views/testArticle/components/articleDetail')
+          }
+        ]
+      }
+    ]
+
+  },
+  {
+    path: '/articles_t',
+    component: () => import('@/views/layout/layout'),
+    children: [
+      {
+        path: '/articles_t',
         name: 'article',
         component: () => import('@/views/article/index')
       },
       {
-        path: '/articles/:article_id',
+        path: '/articles_t/:article_id',
         name: 'article_detail',
         component: () => import('@/views/article/components/articleDetail')
       }
@@ -59,6 +83,7 @@ export const constantRouterMap = [
     ]
 
   },
+
   // 邀请模块暂时不开启
   // {
   //   path: '/invite',

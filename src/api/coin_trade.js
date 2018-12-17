@@ -4,7 +4,7 @@ import request from '@/utils/request'
 // 查询法币商家
 export function fbList(page, size, direction, payments, coinId, cashId) {
   return request({
-    url: '/api/v1/currency_trade/trade_orders',
+    url: '/api/v1/public/currency_trade/trade_orders',
     method: 'post',
     params: { page, size, direction, payments, coinId, cashId }
   })

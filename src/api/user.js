@@ -1,6 +1,15 @@
 import request from '@/utils/request'
 
 // 拉取基础个人信息 ~~~
+export function change_nickname(nickName) {
+  return request({
+    url: '/api/v1/user/change_nickname',
+    method: 'post',
+    params: { nickName }
+  })
+}
+
+// 拉取基础个人信息 ~~~
 export function getUserInfo() {
   return request({
     url: '/api/v1/security/account',

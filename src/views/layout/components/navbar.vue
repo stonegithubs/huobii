@@ -24,7 +24,7 @@
           <el-menu-item index="2">{{ $t("navbar.exchange") }}</el-menu-item>
         </router-link>
 
-        <router-link :to="{ name: 'article'}">
+        <router-link :to="{ name: 'article_list_test'}">
           <el-menu-item index="3">{{ $t("navbar.article") }}</el-menu-item>
         </router-link>
         <!-- <el-menu-item index="3">

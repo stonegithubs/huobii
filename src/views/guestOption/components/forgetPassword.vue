@@ -91,18 +91,20 @@ export default {
     },
     handleSubmit(formName) {
           const formData = new FormData()
-          formData.append('phone', this.forgetForm.phone)
+          const phone = this.getCountryCodeByAbbr(this.forgetForm.country)+this.forgetForm.phone
+          formData.append('phone', phone)
           formData.append('newpwd', this.forgetForm.newpwd)
           formData.append('confirm', this.forgetForm.confirm)
-          formData.append('country', this.forgetForm.countrys)
+          formData.append('country', this.forgetForm.country)
           formData.append('captcha', this.captcha)
           forget(formData).then(response => {
-            if (response && response.code === '200') {
+            if (response && response.content) {
               // todo:验证码修复后继续
               this.$notify.success(response.message)
               this.$router.go(-1)
             } else {
               // console.log(response)
+              this.$notify.error(this.$t('userInfo.changeFailed'))
             }
           }).catch(error => {
             // console.log(error)

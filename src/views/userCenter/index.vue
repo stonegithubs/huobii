@@ -9,9 +9,10 @@
               <p class/>
             </div>
           </div>
-          <div class="avatar-desc">
-            <span class="font16">{{ userInfo.name }}</span>
-            <p class="font-gray">UID：{{ userInfo.id }}</p>
+          <div class="avatar-desc" @click="changeNickname()">
+            <span class="font16" v-if="userInfo.name !== '-'">{{ userInfo.name }}</span>
+            <span class="font16" v-else>{{$t('userInfo.clickToChangeName')}}</span>
+            <p class="font-gray">UID:{{ userInfo.id }}</p>
           </div>
         </div>
         <div class="trade-times">
@@ -33,9 +34,9 @@
             <span>0 %</span>
           </p>
         </div>
-        <div class="font-gray">
-          <span>{{$t('userInfo.tip1')}}{{ userInfo.updateDate || parseTime(userInfo.updateDate) }}{{$t('userInfo.tip1_1')}} , {{$t('userInfo.tip2')}}{{ userInfo.loginDate || parseTime(userInfo.loginDate) }}</span>
-        </div>
+        <!-- <div class="font-gray">
+          <span>{{$t('userInfo.tip1')}}{{ userInfo.updateDate === null?"":parseTime(userInfo.updateDate/10000) }}{{$t('userInfo.tip1_1')}} , {{$t('userInfo.tip2')}}{{ userInfo.loginDate || parseTime(userInfo.loginDate/10000) }}</span>
+        </div> -->
       </div>
       <div class="user-right">
         <div class="user-info-container">
@@ -178,10 +179,11 @@
                     class="auth-info m-auth-info"
                     style="color: rgb(153, 153, 153);"
                   >{{$t('userInfo.notVer')}}</span>
-                   <span
+                  <span
                     v-if="getVerifyInfo "
                     class="auth-info m-auth-info"
-                    style="color:black">{{ getVerifyInfo? getVerifyInfo.surName+getVerifyInfo.name :'' }} {{ getVerifyInfo? getVerifyInfo.cardNo.slice(0,-4) +'****':'' }}</span>
+                    style="color:black"
+                  >{{ getVerifyInfo? getVerifyInfo.surName+getVerifyInfo.name :'' }} {{ getVerifyInfo? getVerifyInfo.cardNo.slice(0,-4) +'****':'' }}</span>
                   <span
                     v-if="getVerifyInfo===false||auditFlag ==='2'||auditFlag ==='0'"
                     class="auth-info m-auth-info"
@@ -193,7 +195,7 @@
                       style="float: right;"
                     >{{$t('userInfo.doVerify')}}</router-link>
                   </span>
-                 <span
+                  <span
                     v-if="!getVerifyInfo && auditFlag !=='2' && auditFlag !=='0'"
                     class="isActive m-button"
                   >{{$t('userInfo.verified')}}</span>
@@ -211,40 +213,33 @@
                     v-if=" auditFlag === '0' || auditFlag === '1' ||auditFlag === '2'"
                     class="auth-info m-auth-info"
                     style="color: rgb(153, 153, 153);"
-                  >{{$t('userInfo.notVer')}}</span> -->
+                  >{{$t('userInfo.notVer')}}</span>-->
                   <span
                     v-if="auditFlag === '4'"
                     class="auth-info m-auth-info"
                     style="color:black"
                   >{{$t('userInfo.verified')}}</span>
-                  <span
-                    v-if="auditFlag < '3'"
-                    class="auth-info m-auth-info"
-                    style="color:black"
-                  >{{$t('userInfo.notVer')}}
-                  <!-- {{$t('userInfo.pending')}} -->
+                  <span v-if="auditFlag < '3'" class="auth-info m-auth-info" style="color:black">
+                    {{$t('userInfo.notVer')}}
+                    <!-- {{$t('userInfo.pending')}} -->
                   </span>
                   <span
                     v-if="auditFlag === '3'"
                     class="auth-info m-auth-info"
                     style="color:black"
-                  >
-                  {{$t('userInfo.pending')}}
-                  </span>
-                   <!-- <span
+                  >{{$t('userInfo.pending')}}</span>
+                  <!-- <span
                     v-if="auditFlag === '4'"
                     class="auth-info m-auth-info"
                     style="color:black"
                   >
                   {{$t('userInfo.verified')}}
-                  </span> -->
-                   <span
+                  </span>-->
+                  <span
                     v-if="auditFlag === '5'"
                     class="auth-info m-auth-info"
                     style="color:black"
-                  >
-                  {{$t('userInfo.vFailed')}}
-                  </span>
+                  >{{$t('userInfo.vFailed')}}</span>
                   <a
                     v-if="auditFlag !== '4'"
                     class="isActive m-button"
@@ -433,7 +428,8 @@ import {
   submitAdvanceVerify,
   addPay,
   getPayway,
-  isBindGoogle
+  isBindGoogle,
+  change_nickname
 } from "../../api/user";
 import { unBindEmail } from "../../api/verify_code";
 import { mapGetters } from "vuex";
@@ -503,7 +499,7 @@ export default {
     hasTradePwd() {
       return this.$store.state.trade.hasTradePwd;
     },
-    
+
     parseTime(a) {
       return parseTime(a);
     },
@@ -524,6 +520,9 @@ export default {
     }
   },
   created() {
+    if(!this.$store.state.user.token){
+      this.$router.push({ name: 'login'})
+    }
     this.$store.dispatch("GetUserInfo");
     this.$store.dispatch("GetVerifyInfo");
     this.$nextTick(() => {
@@ -548,6 +547,30 @@ export default {
         payName: "unknown",
         statusFlag: "0"
       };
+    },
+    changeNickname() {
+      this.$prompt(this.$t("userInfo.nickNameTip"), {
+        confirmButtonText: this.$t("confirm"),
+        cancelButtonText: this.$t("canceled"),
+        inputPattern: /^.{3,6}$/,
+        inputErrorMessage: this.$t("userInfo.changeRule")
+      }).then(nickName => {
+        if (nickName.action === "confirm") {
+          change_nickname(nickName.value)
+            .then(res => {
+              this.$store.dispatch("GetUserInfo");
+              if (res && res.code === "200") {
+                this.$message({
+                  type: "success",
+                  message: this.$t("changeSuccess")
+                });
+              }
+            })
+            .catch(_ => {
+              this.$notify.error(this.$t("changeFailed"));
+            });
+        }
+      });
     },
     getUserPaywayByID(id) {
       for (const item of this.$store.state.user.payway) {
@@ -625,7 +648,7 @@ export default {
           })
           .catch(_ => {});
       } else {
-        this.$notify.error(this.$t('userInfo.verifyInfo'));
+        this.$notify.error(this.$t("userInfo.verifyInfo"));
       }
     },
     handleChange(file) {
@@ -750,6 +773,7 @@ export default {
         margin-left: 16px;
         font-size: 14px;
         color: #333;
+        cursor: pointer;
       }
     }
     .trade-times {
@@ -819,17 +843,17 @@ export default {
             display: inline-box;
           }
         }
-        }
       }
     }
-        .upload-demo {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          align-content: center;
-          .el-upload--picture-card {
-            width: 100%;
-          }
+  }
+  .upload-demo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
+    .el-upload--picture-card {
+      width: 100%;
+    }
   }
 }
 </style>

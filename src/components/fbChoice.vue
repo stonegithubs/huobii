@@ -1,9 +1,9 @@
 <template>
   <div class="choice-filter">
-    <el-popover popper-class="m-popover" placement="bottom" width="375" trigger="click">
-      <el-form label-position="top" v-model="newChoose" class="select-from" label-width="120">
+    <!-- <el-popover popper-class="m-popover" placement="bottom" width="375" trigger="click"> -->
+      <el-form :inline="true" v-model="newChoose" class="select-from">
         <el-form-item :label="$t('exchange.main.direction')">
-          <el-select style="width:100%" v-model="newChoose.direction" :placeholder="$t('exchange.main.direction')">
+          <el-select v-model="newChoose.direction" :placeholder="$t('exchange.main.direction')">
             <el-option
               v-for="item in directionOption"
               :key="item.name"
@@ -23,7 +23,7 @@
           </el-select>
         </el-form-item> -->
         <el-form-item :label="$t('fb.cashType')">
-          <el-select style="width:100%" v-model="newChoose.cashId">
+          <el-select  v-model="newChoose.cashId">
             <el-option
               v-for="item in getSupportCash"
               :key="item.abbr"
@@ -33,7 +33,7 @@
           </el-select>
         </el-form-item>
         <el-form-item :label="$t('fb.coinType')">
-          <el-select style="width:100%" v-model="newChoose.coinId">
+          <el-select  v-model="newChoose.coinId">
             <el-option
               v-for="item in getSupportCoin"
               :key="item.abbr"
@@ -50,19 +50,19 @@
               :label="getCashNameById(item.id)"
               :value="item.id"
             ></el-option>
-          </el-select>
-        </el-form-item> -->
-        <div class="search-box">
-          <el-button style="width:100%" type="primary" @click="search()">{{$t('search')}}</el-button>
-        </div>
+          </el-select> -->
+         <el-form-item>
+          <el-button  type="primary" @click="search()">{{$t('search')}}</el-button>
+        </el-form-item> 
+
         <!-- </el-form-item> -->
       </el-form>
-      <el-input slot="reference">
+      <!-- <el-input slot="reference">
         <template slot="suffix">
           <img style="margin-top: 6px;width: 32px;" :src="require('../assets/imgs/search.png')">
         </template>
-      </el-input>
-    </el-popover>
+      </el-input> -->
+    <!-- </el-popover> -->
   </div>
 </template>
 
@@ -94,7 +94,7 @@ export default {
       
       newChoose: {
         direction: "1",
-        coinId: "2",
+        coinId: "4",
         cashId: "3",
         payments: "all",
       },
@@ -110,9 +110,11 @@ export default {
 
 <style lang='scss' scoped >
 .choice-filter {
-  width: 200px;
+  // width: 200px;
+  margin-top: 15px;
+  text-align: right;
   .el-button {
-      width: 100%;
+      // width: 100%;
   }
 }
 </style>
