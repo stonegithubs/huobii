@@ -2,7 +2,7 @@
   <div class="choice-filter">
       <el-form label-position='top' :inline="true" v-model="newChoose" class="select-from">
         <el-form-item style="width:140px" :label="$t('fb.direction')" :placeholder="$t('main.exchange.direction')">
-          <el-select style="width:100%" v-model="newChoose.direction" :placeholder="$t('fb.direction')">
+          <el-select style="width:100%" v-model="newChoose.direction" placeholder="交易方向">
             <el-option
               v-for="item in directionOption"
               :key="item.name"
@@ -22,7 +22,7 @@
           </el-select>
         </el-form-item>
         <el-form-item style="width:140px" :label="$t('fb.cashType')">
-          <el-select style="width:100%" v-model="newChoose.cashId" :placeholder="$t('fb.coinTyp')">
+          <el-select style="width:100%" v-model="newChoose.cashId" placeholder="法币类型">
             <el-option
               v-for="item in getSupportCash"
               :key="item.abbr"
@@ -40,9 +40,9 @@
           <el-date-picker 
             v-model="newChoose.time"
             type="daterange"
-            :range-separator="$t('fb.to')"
-            :start-placeholder="$t('fb.startDate')"
-            :end-placeholder="$t('fb.endDate')"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
             align="left"
             value-format="yyyy-MM-dd"
             :default-time="['2018-12-14', '2030-12-12']"
@@ -57,7 +57,7 @@
 
 <script type="text/ecmascript-6" scoped>
 import { mapGetters, mapState } from "vuex";
-import { orderStateList } from '@/utils'
+import { advStateList } from '@/utils'
 
 export default {
   name: "choicer",
@@ -70,7 +70,7 @@ export default {
       "getSupportCash"
     ]),
     stateList(){
-      return orderStateList(this)
+      return advStateList(this)
     }
   },
   data() {

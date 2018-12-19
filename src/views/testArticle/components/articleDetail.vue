@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="article-nav">
+    <div class="article-nav animated bounceInLeft">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ name: 'index' }">{{$t('notice.index')}}</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ name: 'article_list_test' }">{{$t('notice.articleCenter')}}</el-breadcrumb-item>
@@ -16,9 +16,17 @@
           :name="item.id"
         >
         <template slot="label">
-          <span class="tltle-list" v-html="item.title"></span>
+          <div class="animated bounceInLeft title-wrapper">
+          <!-- <span class="tltle-list" v-html="item.title"> -->
+            <!-- <span class="title-wrapper">   -->
+            <span>
+            {{html_decode(item.title)}}
+            </span>
+            <!-- </span> -->
+          <!-- </span> -->
+          </div>
         </template>
-          <article-content :article_id="item.id"></article-content>
+          <article-content  class="animated bounceInRight" :article_id="item.id"></article-content>
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -44,6 +52,22 @@ export default {
     this.category_id = this.$route.params.category_id;
     this.article_id = this.$route.params.article_id;
   },
+  methods:{
+     html_decode(str) {
+      let s = "";
+      if (str.length == 0) return "";
+      s = str.replace(/&amp;/g, "&");
+      s = s.replace(/&lt;/g, "");
+      s = s.replace(/&gt;/g, "");
+      s = s.replace(/&nbsp;/g, "");
+      s = s.replace(/&#39;/g, "");
+      s = s.replace(/&quot;/g, '"');
+      s = s.replace(/<br\/>/g, "");
+      s = s.replace(/&ldquo;/g,'')
+      s = s.replace(/&rdquo;/g,'')
+      return s;
+    }
+  },
   computed: {
     ...mapGetters([
       "getCategory",
@@ -66,9 +90,25 @@ export default {
     background-color: rgba(71, 78, 112, 1);
     color: #ffffff!important;
   }
-  .tltle-list {
+  .title-wrapper {
+    white-space: normal;
+    width: 180px;
+    word-break: normal;
+    text-align: left;
+    span {
+      white-space: normal;
+      word-break: break-all;
+    }
+  }
+  .el-tabs__item{
+    height: unset;
+  }
+  .tltle-list  {
     // display:inline-block;
-    width: 160px;
+    width: 10px;
+    // span {
+    //   width: 20px;
+    // }
   }
 }
 </style>

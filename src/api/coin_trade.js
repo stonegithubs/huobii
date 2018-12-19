@@ -10,12 +10,16 @@ export function fbList(page, size, direction, payments, coinId, cashId) {
   })
 }
 
-// 查询法币订单列表
-export function fbOrders(page, size, direction, coinId, cashId, state, start, end, order) {
+// 查询 挂单方法币订单列表
+export function fbOrders(page, size, direction, coinId, cashId, states, start, end, order) {
+  // if (states === '10') {
+  //   states = [0, 1, 2, 3, 9]
+  // }
   return request({
     url: '/api/v1/currency_trade/orders',
     method: 'post',
-    params: { page, size, order: '1'//  direction, coinId, cashId, state, start, end, order 
+    params: {
+      page, size, direction, coinId, cashId, states, start, end, order: '1'
     }
   })
 }
@@ -41,11 +45,14 @@ export function fbGetPayment(id, processId) {
 
 // 法币 接单方查询订单
 
-export function fbJdOrders(page, size, direction, coinId, cashId, state, start, end, order) {
+export function fbJdOrders(page, size, direction, coinId, cashId, states, start, end, order) {
+  if (states === '10') {
+    states = [0, 1, 3, 9]
+  }
   return request({
     url: '/api/v1/currency_trade/trades',
     method: 'post',
-    params: { page, size }
+    params: { page, size, direction, coinId, cashId, states, start, end, order: '1' }
   })
 }
 
@@ -86,14 +93,23 @@ export function fbTrade(id, direction, code, amount) {
   })
 }
 
-// // 法币 挂单方确定
-// export function fbOwnerConfirm(id, processId, code) {
-//   return request({
-//     url: '/api/v1/currency_trade/confirm',
-//     method: 'post',
-//     params: { id, processId, code }
-//   })
-// }
+// 法币 接单方查询订单详情
+export function order_accept(id) {
+  return request({
+    url: '/api/v1/currency_trade/order_accept',
+    method: 'post',
+    params: { id }
+  })
+}
+
+// 法币 挂单方查询订单详情
+export function order_publish(id) {
+  return request({
+    url: '/api/v1/currency_trade/order_publish',
+    method: 'post',
+    params: { id }
+  })
+}
 
 // 法币 发布买卖信息
 export function fbSubmit(direction, amount, price, coinId, cashId, min, max, message, expire, payways, type) {

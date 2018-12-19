@@ -72,7 +72,7 @@
     // margin-left:10px; 
     padding: 10px;
     .sidebar {
-      @media only screen and (max-width: 1920px) and (min-width: 1400px) {
+      @media only screen and (min-width: 1400px) {
         width: 360px;
       }
       @media only screen and (max-width: 1400px) {
@@ -84,7 +84,7 @@
       font-size: 14px;
     }
     .cc-content {
-      @media only screen and (max-width: 1920px) and (min-width: 1400px) {
+      @media only screen and  (min-width: 1400px) {
         // width: 1136px;
         margin-left: 370px;
       }
@@ -92,14 +92,15 @@
         margin-left: 285px;
       } // margin-top: 10px;
       .trade-wrap {
-        margin-top: 60px; // width: 1136px;
-        width: 100%;
+        margin-top: 10px; // width: 1136px;
+        // width: 100%;
         height: 490px;
         position: relative;
         display: flex;
         justify-content: space-between;
         .trade-panel {
           // position: absolute;
+          width: 70%;
           // top: 0;
           // left: 0;
           // display: table-cell;

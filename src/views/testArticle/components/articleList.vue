@@ -1,7 +1,7 @@
 <template>
     <div class="article-list">
         <el-row :gutter="20">
-            <el-col v-for="category in getCategory" :key="category.id" :span="12">
+            <el-col class='animated bounceInUp' v-for="category in getCategory" :key="category.id" :span="12">
                 <h3>
                     {{ category.name }}
                 </h3>
@@ -33,6 +33,9 @@
         name: 'article-list',
         data() {
             return {
+                aninmate:{
+
+                }
                 // articleCategory: [],
                 // articles: [],
             }

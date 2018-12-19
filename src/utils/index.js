@@ -88,20 +88,41 @@ export function getAvatarColor(id) {
 
 export function sendUserCode(vm) {
   const that = vm
-  const country = that.$store.state.user.userInfo.countryCode
-  const phone = that.$store.state.user.userInfo.mobile
-  sendCaptcha1(phone, country)
-    .then(res => {
-      if (res.code === '200') {
-        that.smsDialog = true
-        getCaptcha(phone, country).then(res => {
-          that.$notify.success(res.content)
+  // 调用验证码接口前需要判断是否有个人信息（国家 手机号）没有则拉取
+  if (vm.$store.state.user.userInfo === null) {
+    vm.$store.dispatch('GetUserInfo').then(_ => {
+      const country = that.$store.state.user.userInfo.countryCode
+      const phone = that.$store.state.user.userInfo.mobile
+      sendCaptcha1(phone, country)
+        .then(res => {
+          if (res.code === '200') {
+            that.smsDialog = true
+            getCaptcha(phone, country).then(res => {
+              that.$notify.success(res.content)
+            })
+          } else {
+            that.$notify.error(that.$t('shitHappens'))
+          }
         })
-      } else {
-        that.$notify.error(that.$t('shitHappens'))
-      }
-    })
-    .catch(_ => { })
+        .catch(_ => { })
+    }).catch(_ => { })
+  } else {
+    // 存在用户信息在则直接发送验证码
+    const country = that.$store.state.user.userInfo.countryCode
+    const phone = that.$store.state.user.userInfo.mobile
+    sendCaptcha1(phone, country)
+      .then(res => {
+        if (res.code === '200') {
+          that.smsDialog = true
+          getCaptcha(phone, country).then(res => {
+            that.$notify.success(res.content)
+          })
+        } else {
+          that.$notify.error(that.$t('shitHappens'))
+        }
+      })
+      .catch(_ => { })
+  }
 }
 
 export function getStatus(status) {
@@ -115,6 +136,70 @@ export function getStatus(status) {
     case '10': return '全部'
     case '11': return '交易中'
   }
+}
+export function advStateList(vm) {
+  return [
+    {
+      status: '0', name: '挂单中'
+    },
+    {
+      status: '1', name: '部分成交'
+    },
+    {
+      status: '2', name: '已完成'
+    },
+    {
+      status: '3', name: '已撤销'
+    },
+    // {
+    //   status: '4', name: '买家已付款'
+    // },
+    // {
+    //   status: '5', name: '买家已撤销'
+    // },
+    // {
+    //   status: '8', name: '历史纪录'
+    // },
+    {
+      status: '9', name: '交易中'
+    },
+    {
+      status: '10', name: '全部'
+    }
+  ]
+}
+
+// 用户订单筛选
+export function orderStateList(vm) {
+  return [
+    // {
+    //   status: '0', name: '挂单中'
+    // },
+    // {
+    //   status: '1', name: '部分成交'
+    // },
+    {
+      status: '2', name: '已完成'
+    },
+    {
+      status: '3', name: '已撤销'
+    },
+    {
+      status: '4', name: '买家已付款'
+    },
+    // {
+    //   status: '5', name: '买家已撤销'
+    // },
+    // {
+    //   status: '8', name: '历史纪录'
+    // },
+    {
+      status: '9', name: '交易中'
+    },
+    {
+      status: '10', name: '全部'
+    }
+  ]
 }
 
 export function getStatusG(vm, status) {
@@ -143,3 +228,35 @@ export function confirmReppelCoinTrade(vm, id) {
     }
   })
 }
+
+export function isImage(qrCodeFile) {
+  if (
+    qrCodeFile.type != "image/bmg" &&
+    qrCodeFile.type != "image/jpg" &&
+    qrCodeFile.type != "image/jpeg" &&
+    qrCodeFile.type != "image/png" &&
+    qrCodeFile.type != "image/gif"
+  ) {
+    return false;
+  }
+  return true;
+}
+
+
+export function isMp4(file) {
+  if (file.type.split('/')[0] !== 'video') {
+    return false
+  }
+  return true
+  // if (
+  //   file.type != "image/bmg" &&
+  //   file.type != "image/jpg" &&
+  //   file.type != "image/jpeg" &&
+  //   file.type != "image/png" &&
+  //   file.type != "image/gif"
+  // ) {
+  //   return false;
+  // }
+  // return true;
+}
+

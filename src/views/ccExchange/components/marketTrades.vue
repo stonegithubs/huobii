@@ -5,12 +5,12 @@
     </div>
     <div class="mt-inner">
       <el-table :data="marketHistory" cell-class-name="market-table" height="468" style="width: 100%">
-        <el-table-column label="时间">
+        <el-table-column :label="$t('exchange.main.time')">
           <template slot-scope="scope">
             {{ parseTime(scope.row.data[0].ts,'{h}:{i}:{s}') }}
           </template>
         </el-table-column>
-        <el-table-column label="方向">
+        <el-table-column :label="$t('exchange.main.direction')">
           <template slot-scope="scope">
             <span v-if="scope.row.data[0].direction == 'sell'" style="color:#03c087">
               {{ $t('exchange.main.buy') }}
@@ -28,7 +28,7 @@
         </el-table-column>
         <el-table-column :label="$t('exchange.main.amount')+'('+this.$store.state.coinData.mainCoin.toUpperCase()+')'">
           <template slot-scope="scope">
-            {{ scope.row.data[0].amount.toFixed(6) }}
+            {{ scope.row.data[0].amount.toFixed(4) }}
           </template>
         </el-table-column>
       </el-table>

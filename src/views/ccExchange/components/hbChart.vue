@@ -366,7 +366,7 @@ export default {
 @import "../../../assets/custom-theme/theme";
 
 .hb-chart {
-  height: 528px;
+  height: 570px;
   width: 100%;
   background: #fff;
     .chooser {

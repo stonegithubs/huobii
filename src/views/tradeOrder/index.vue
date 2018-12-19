@@ -1,37 +1,47 @@
 <template>
-  <div class="adv-list">
+  <div class="adv-list" v-loading="pageLoading">
     <div class="adv-inner">
       <div style="display:flex; justify-content: space-between;">
         <div class="adv-title">{{$t('fb.myOrder')}}</div>
         <div class="adv-group">
-          <el-button @click="goToAdv()"  round>{{$t('fb.myAdv')}}</el-button>
+          <el-button @click="goToAdv()" round>{{$t('fb.myAdv')}}</el-button>
 
-        <!-- <order-choice @directionChange="newDirection"></order-choice> -->
+          <!-- <order-choice @directionChange="newDirection"></order-choice> -->
         </div>
       </div>
+      <orderChoice @orderChange="orderChange"></orderChoice>
 
       <div class="adv-table">
         <el-table v-loading="isLoading" height="600px" :data="orderData" stripe style="width: 100%">
           <el-table-column width="150px" :label="$t('order.orderNo')">
             <template slot-scope="scope">
               <span class="order-no">
-                <router-link
-                  :to="{ name:'orderDetail', params: { id: scope.row.orderId, direction: scope.row.direction}}"
+                <router-link v-if="scope.row.status === '4' || scope.row.status === '9'"
+                  :to="{ name:'orderDetail', params: { id: scope.row.orderId, publish: '0'}}"
                 >{{ scope.row.orderId }}</router-link>
+                <span v-else>{{ scope.row.orderId }}</span>
               </span>
             </template>
           </el-table-column>
           <el-table-column width="110px" prop="date" :label="$t('fb.tradeType')">
-            <template slot-scope="scope">{{ scope.row.direction === '0'? $t('buy'): $t('sell') }} {{ scope.row.amount }} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
+            <template
+              slot-scope="scope"
+            >{{ scope.row.direction === '0'? $t('buy'): $t('sell') }} {{ scope.row.amount }} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
           </el-table-column>
           <el-table-column width="110px" prop="name" :label="$t('fb.total')">
-            <template slot-scope="scope">{{ (scope.row.dealPrice*scope.row.amount).toFixed(2) }}{{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
+            <template
+              slot-scope="scope"
+            >{{ (scope.row.dealPrice*scope.row.amount).toFixed(2) }}{{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
           </el-table-column>
           <el-table-column width="110px" prop="address" :label="$t('price')">
-            <template slot-scope="scope">{{ scope.row.dealPrice.toFixed(2) }} {{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
+            <template
+              slot-scope="scope"
+            >{{ scope.row.dealPrice.toFixed(2) }} {{ getCashNameById(scope.row.coinId.split('_')[1]) }}</template>
           </el-table-column>
           <el-table-column width="110px" prop="address" :label="$t('order.fee')">
-            <template slot-scope="scope">{{scope.row.fee.toFixed(2)}} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
+            <template
+              slot-scope="scope"
+            >{{scope.row.fee.toFixed(2)}} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
           </el-table-column>
           <el-table-column width="150px" prop="address" :label="$t('createTime')">
             <template slot-scope="scope">{{parseTime(scope.row.updateDate) }}</template>
@@ -40,27 +50,43 @@
             <template slot-scope="scope">{{ getState(scope.row.status) }}</template>
           </el-table-column>
           <el-table-column prop="address" :label="$t('fb.tradeTarget')">
-            <template slot-scope="scope">{{ scope.row.user.name }}</template>
+            <template slot-scope="scope">{{ scope.row.order.user.name }}</template>
           </el-table-column>
-                    
-          <el-table-column  prop="address" width="250px" :label="$t('exchange.main.operation')">
+
+          <el-table-column prop="address" width="250px" :label="$t('exchange.main.operation')">
             <template slot-scope="scope">
               <el-button size="mini" type="warning" @click="appeal(scope.row)">{{$t('fb.repeal')}}</el-button>
-            <!-- 我是买家 我接了单 还未付款 我可以撤销、付款 -->
-              <el-button v-if="scope.row.status ==0|| scope.row.status == 9" @click="repeal(scope.row)" size="mini">{{$t('repeal')}}</el-button>
-              <el-button type="primary" size="mini" @click="pass(scope.row)" v-if="scope.row.direction == '0' && scope.row.status == '9'">{{$t('fb.pay')}}</el-button>
+              <!-- 我是买家 我接了单 还未付款 我可以撤销、付款 -->
+              <el-button
+                v-if="scope.row.status === '0'|| scope.row.status === '9'"
+                @click="repeal(scope.row)"
+                size="mini"
+              >{{$t('repeal')}}</el-button>
+              <el-button
+                type="primary"
+                size="mini"
+                @click="pass(scope.row)"
+                v-if="scope.row.direction == '0' && scope.row.status === '9'"
+              >{{$t('fb.pay')}}</el-button>
               <!-- 我是卖家 我接了单 等对方付款 我可以撤销、申诉 或者等时间到期 -->
-                  <!-- 我是买家 我接了单 对方已付款  -->
-                <el-button v-if="scope.row.direction == '1' && scope.row.status ==4"
-                  type="primary" size="mini"
-                  @click="pass(scope.row)"
-                >{{$t('fb.pass')}}</el-button>
+              <!-- 我是买家 我接了单 对方已付款  -->
+              <el-button
+                v-if="scope.row.direction === '1' && scope.row.status ==='4'"
+                type="primary"
+                size="mini"
+                @click="pass(scope.row)"
+              >{{$t('fb.pass')}}</el-button>
             </template>
           </el-table-column>
         </el-table>
       </div>
     </div>
-    <el-dialog :title="$t('fb.passTitle')" :visible.sync="smsDialog" width="400px" :before-close="handleClose">
+    <el-dialog
+      :title="$t('fb.passTitle')"
+      :visible.sync="smsDialog"
+      width="400px"
+      :before-close="handleClose"
+    >
       <el-form>
         <!-- <el-form-item label="过程编号">
           <el-input v-model="processId"></el-input>
@@ -75,7 +101,12 @@
       </span>
     </el-dialog>
 
-    <el-dialog :title="$t('fb.appealTitle')" :visible.sync="appealVisible" width="400px" :before-close="handleClose">
+    <el-dialog
+      :title="$t('fb.appealTitle')"
+      :visible.sync="appealVisible"
+      width="400px"
+      :before-close="handleClose"
+    >
       <el-form v-model="appealForm">
         <!-- <el-form-item label="过程编号">
           <el-input v-model="appealForm.processId"></el-input>
@@ -91,8 +122,8 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="appealVisible = false">{{$t('cancel')}}</el-button>
-        <el-button type="primary" @click="submitAppeal()">{{$t('fb.confirm')}}</el-button>
+        <el-button @click="appealVisible = false">{{$t('canceled')}}</el-button>
+        <el-button type="primary" @click="submitAppeal()">{{$t('confirm')}}</el-button>
       </span>
     </el-dialog>
     <div class="mpagination">
@@ -120,14 +151,16 @@ import {
 import { mapGetters, mapState } from "vuex";
 import { parseTime, sendUserCode } from "../../utils";
 import orderChoice from "../../components/orderChoice";
+import fbChoice from "@/components/fbChoice";
 
 export default {
   name: "AdvList",
-  components: { orderChoice },
+  components: { orderChoice, fbChoice },
   data() {
     return {
       isLoading: false,
       orderData: [],
+      pageLoading: false,
       smsDialog: false,
       appealVisible: false,
       code: null,
@@ -135,7 +168,7 @@ export default {
         id: "",
         processId: "",
         reason: "",
-        type: 0
+        type: '0'
       },
       currentOrder: {
         id: "-1",
@@ -144,10 +177,9 @@ export default {
       total: 0,
       page: 0,
       chooseForm: {
-        direction: "10",
         page: 0,
         size: 10,
-        direction: "10",
+        direction: "",
         coinId: "2",
         cashId: "3",
         state: "10",
@@ -159,36 +191,46 @@ export default {
     };
   },
   created() {
-    if(!this.$store.state.user.token){
-      this.$router.push({ name: 'login'})
+    if (!this.$store.state.user.token) {
+      this.$router.push({ name: "login" });
     }
     this.init();
   },
   methods: {
+    // orderChange(s){
+    //   console.log(s)
+    // },
     pageChange(a) {
       console.log(a);
     },
-    newDirection(s) {
+    orderChange(s) {
       this.chooseForm = s;
-      fbJdOrders(
-        0,
-        10,
-        s.direction,
-        s.coinId,
-        s.cashId,
-        s.state,
-        s.time[0],
-        s.time[1],
-        1
-      ).then(res => {
-        this.orderData = [];
-        if (res.content.records instanceof Array) {
-          this.orderData = res.content.records;
-        }
-      });
+      this.orderData = [];
+      (this.pageLoading = true),
+        fbJdOrders(
+          0,
+          10,
+          s.direction,
+          s.coinId,
+          s.cashId,
+          s.state,
+          s.time[0],
+          s.time[1],
+          1
+        )
+          .then(res => {
+            if (res.content.records instanceof Array) {
+              this.orderData = res.content.records;
+            }
+            this.pageLoading = false;
+          })
+          .catch(_ => {
+            this.pageLoading = false;
+          });
     },
     init() {
-        this.isLoading = true
+      this.isLoading = true;
+
       fbJdOrders(
         this.chooseForm.page,
         this.chooseForm.size,
@@ -199,51 +241,53 @@ export default {
         this.chooseForm.start,
         this.chooseForm.end,
         this.chooseForm.order
-      ).then(res => {
-        this.isLoading = false
-        this.total = res.content.total;
-        this.orderData = [];
-        if (res.content.records instanceof Array) {
-          this.orderData = res.content.records;
-        }
-      }).catch(_=>{
-        this.isLoading = false
-      });
+      )
+        .then(res => {
+          this.isLoading = false;
+          this.total = res.content.total;
+          this.orderData = [];
+          if (res.content.records instanceof Array) {
+            this.orderData = res.content.records;
+          }
+        })
+        .catch(_ => {
+          this.isLoading = false;
+        });
     },
     getState(state) {
       switch (state) {
         case "0":
-          return this.$t('fb.status0');
+          return this.$t("fb.status0");
         case "1":
-          return this.$t('fb.status1');
+          return this.$t("fb.status1");
         case "2":
-          return this.$t('fb.status2');
+          return this.$t("fb.status2");
         case "3":
-          return this.$t('fb.status3');
+          return this.$t("fb.status3");
         case "4":
-          return this.$t('fb.status4');
+          return this.$t("fb.status4");
         case "5":
-          return this.$t('fb.status5');
+          return this.$t("fb.status5");
         case "8":
-          return this.$t('fb.status8');
+          return this.$t("fb.status8");
         case "9":
-          return this.$t('fb.status9');
+          return this.$t("fb.status9");
       }
     },
     parseTime(timeStamp) {
       return parseTime(timeStamp);
     },
     repeal(order) {
-      this.$alert(this.$t('fb.confirmToRepealAdv'), this.$t('fb.advCancel'), {
-        confirmButtonText: this.$t('confirm'),
-        cancelButtonText: this.$t('cancel'),
+      this.$alert(this.$t("fb.confirmToRepealAdv"), this.$t("fb.advCancel"), {
+        confirmButtonText: this.$t("confirm"),
+        cancelButtonText: this.$t("cancel"),
         callback: action => {
           if (action == "confirm") {
-            fbCancel(order.id).then(res => {
+            fbCancel(order.orderId).then(res => {
               if (res.code === "200") {
-                this.$notify.success(this.$t('repealSuccess'));
+                this.$notify.success(this.$t("repealSuccess"));
               } else {
-                this.$notify.success(this.$t('repealFailed'));
+                this.$notify.success(this.$t("repealFailed"));
               }
               this.init();
             });
@@ -263,73 +307,77 @@ export default {
         this.currentOrder.id,
         this.appealForm.reason,
         this.appealForm.type
-      ).then(res => {
-        if (res.code === "200") {
-          this.$notify.success(this.$t('fb.appealSuccess'));
-        } else {
-          this.$notify.error(this.$t('fb.appealSuccess'));
-        }
-      }).catch(_=>{this.$notify.error(this.$t('fb.appealSuccess'));});;
+      )
+        .then(res => {
+          this.appealVisible = false;
+          if (res.code === "200") {
+            this.$notify.success(this.$t("fb.appealSuccess"));
+          } else {
+            this.$notify.error(this.$t("fb.appealSuccess"));
+          }
+        })
+        .catch(_ => {
+          this.$notify.error(this.$t("fb.appealSuccess"));
+        });
     },
     pass(order) {
       // if(order.direction)
       // 我是买家
-      if (order.direction == "0") {
-        this.$router.push({
-          name: "orderDetail",
-          params: { id: order.orderId, direction:  order.direction =='0'?'1':'0' }
-        });
-      } else {
-        this.currentOrder = order;
-        sendUserCode(this);
-      }
+      this.$router.push({
+        name: "orderDetail",
+        params: { id: order.orderId, publish: "0" }
+      });
     },
     confirm() {
-      if (this.currentOrder.direction === "-1") {
-        return;
-      } else if (this.currentOrder.direction === "0") {
-        // 此单为买入单
-        fbConfirm(this.currentOrder.orderId, this.code).then(res => {
-          if (res.code === "200") {
-            this.$notify.success(this.$t('fb.dealFinished'));
-            this.smsDialog = false
-            this.init();
-          } else {
-            console.log(res);
-            this.smsDialog = false
-            this.init();
-          }
-        }).catch(_=>{
-          this.smsDialog = false
-            this.init();
-        });
-      } else if (this.currentOrder.direction === "1") {
-        // 此单为卖出单
-        fbFinish(this.currentOrder.orderId, this.code).then(res => {
-          if (res.code === "200") {
-            this.$notify.success(this.$t('fb.dealFinished'));
-            this.smsDialog = false
-            this.init();
-          } else {
-            console.log(res);
-            this.smsDialog = false
-            this.init();
-          }
-        }).catch(_=>{
-          this.smsDialog = false
-            this.init();
-        });
-      }
+      this.$router.push({
+        name: "orderDetail",
+        params: { id: order.orderId, publish: "0" }
+      });
+      // if (this.currentOrder.direction === "-1") {
+      //   return;
+      // } else if (this.currentOrder.direction === "0") {
+      //   // 此单为买入单
+      //   fbConfirm(this.currentOrder.orderId, this.code).then(res => {
+      //     if (res.code === "200") {
+      //       this.$notify.success(this.$t('fb.dealFinished'));
+      //       this.smsDialog = false
+      //       this.init();
+      //     } else {
+      //       console.log(res);
+      //       this.smsDialog = false
+      //       this.init();
+      //     }
+      //   }).catch(_=>{
+      //     this.smsDialog = false
+      //       this.init();
+      //   });
+      // } else if (this.currentOrder.direction === "1") {
+      //   // 此单为卖出单
+      //   fbFinish(this.currentOrder.orderId, this.code).then(res => {
+      //     if (res.code === "200") {
+      //       this.$notify.success(this.$t('fb.dealFinished'));
+      //       this.smsDialog = false
+      //       this.init();
+      //     } else {
+      //       console.log(res);
+      //       this.smsDialog = false
+      //       this.init();
+      //     }
+      //   }).catch(_=>{
+      //     this.smsDialog = false
+      //       this.init();
+      //   });
+      // }
     },
     handleClose(done) {
-      this.$confirm(this.$t('fb.confirmToClose'))
+      this.$confirm(this.$t("confirmToClose"))
         .then(_ => {
           done();
         })
         .catch(_ => {});
     },
-    goToAdv(){
-      this.$router.push({ name: 'tradeOrder'})
+    goToAdv() {
+      this.$router.push({ name: "tradeOrder" });
     }
   },
   computed: {
@@ -338,12 +386,12 @@ export default {
       "getCashNameById",
       "getSupportCoin",
       "getSupportCash"
-    ]),
+    ])
   },
   watch: {
     page(page) {
       let s = this.chooseForm;
-        this.isLoading = true
+      this.isLoading = true;
       fbJdOrders(
         page,
         10,
@@ -354,16 +402,18 @@ export default {
         s.time[0],
         s.time[1],
         1
-      ).then(res => {
-        this.isLoading = false
-        this.total = res.content.total;
-        this.orderData = [];
-        if (res.content.records instanceof Array) {
-          this.orderData = res.content.records;
-        }
-      }).catch(_=>{
-        this.isLoading = false
-      });
+      )
+        .then(res => {
+          this.isLoading = false;
+          this.total = res.content.total;
+          this.orderData = [];
+          if (res.content.records instanceof Array) {
+            this.orderData = res.content.records;
+          }
+        })
+        .catch(_ => {
+          this.isLoading = false;
+        });
     }
     // direction() {
     //   this.init();

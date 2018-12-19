@@ -139,7 +139,7 @@ export default {
 .coin-detail {
   // width: 1136px;
   // width:802px;
-  width: 77.7%;
+  width: 66.3%;
   min-height: 424px;
   // margin-top: 0;
 

@@ -121,7 +121,7 @@ export default {
           formData.append('captcha', this.passwordForm.captcha)
           login_pwd(formData).then(response => {
             if (response.content) {
-              this.$notify.success(response.message)
+              // this.$notify.success(response.message)
               this.$store.dispatch('LogOut')
               this.$router.push({ name: 'login' })
             } else {

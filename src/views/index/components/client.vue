@@ -1,9 +1,9 @@
 <template>
-  <div
+  <div 
     :style="{ background: 'url('+ require('../../../assets/imgs/wrap_download.png') +') center no-repeat' }"
     class="client"
   >
-    <div class="wrap-in">
+    <div class="wrap-in" :class="animateClass">
       <h3>{{ $t('index.client.title') }}</h3>
       <p>{{ $t('index.client.dsc') }}</p>
       <div class="wrap-bg">
@@ -71,6 +71,7 @@ export default {
   name: "Client",
   data() {
     return {
+      animateClass:'',
       linkList: []
     };
   },
@@ -84,7 +85,20 @@ export default {
     });
     
   },
+  mounted(){
+    window.addEventListener("scroll", this.handleScroll);
+  },
   methods:{
+    handleScroll() {
+      var scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      if(scrollTop > 2500){
+          this.animateClass = 'animated rubberBand'
+      }
+      // console.log(scrollTop);
+    },
     qrcode(url,client) {
       setTimeout(()=>{
         const qrcode = new qrCode(client, {

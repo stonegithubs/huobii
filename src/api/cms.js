@@ -15,6 +15,33 @@ export function getCover() {
   })
 }
 
+// 二维码文件上传接口
+export function qrCodeUpLoad(data) {
+  return request({
+    url: '/api/v1/upload/pay_qrcode',
+    method: 'post',
+    data
+  })
+}
+
+// 普通图片上传接口
+export function imgsUpload(data) {
+  return request({
+    url: '/api/v1/upload/verify_images',
+    method: 'post',
+    data
+  })
+}
+
+// 视频文件上传接口
+export function videoUpLoad(data) {
+  return request({
+    url: '/api/v1/upload/verify_video',
+    method: 'post',
+    data
+  })
+}
+
 // 获取币种资料
 export function getCoinDetail(id) {
   return request({
@@ -28,6 +55,14 @@ export function getCoinDetail(id) {
 export function getClientLink() {
   return request({
     url: '/api/v1/public/common/client_dl',
+    method: 'post'
+  })
+}
+
+// 客户端下载地址
+export function siderNotice() {
+  return request({
+    url: '/api/v1/public/cms/notice',
     method: 'post'
   })
 }

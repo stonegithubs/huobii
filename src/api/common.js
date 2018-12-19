@@ -6,7 +6,8 @@ export function getPayway(data) {
   return request({
     url: '/api/v1/public/common/payway',
     method: 'post',
-    data
+    data,
+    params: { page: 0, size: 20 }
   })
 }
 

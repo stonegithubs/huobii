@@ -1,22 +1,16 @@
 <template>
-  <div class="trade-content">
+  <div class="trade-content" v-loading="buyLoading">
     <div class="trade-nav">{{this.$t('navbar.trade')}}</div>
     <div class="trade-selects">
-      <!-- 币种 方向筛选 -->
-      <!-- <div class="choice-filter"> -->
-      <!-- <router-link :to="{ 'name': 'advertising' }"><h2>发布广告</h2></router-link>  -->
-      <!-- </div> -->
-      <!-- 右侧选项 -->
       <div class="coin-choice">
-        <div style="text-align:right;">
+        <fbChoice class="temp-choicer" @orderChange="ChangeOrder"></fbChoice>
+        <div class="bottom-groups">
           <el-button @click="goToAdv()" round>{{$t('fb.pubAdv')}}</el-button>
           <el-button @click="checkMyAdv()" round>{{$t('fb.myAdv')}}</el-button>
         </div>
-
-        <fbChoice @orderChange="ChangeOrder"></fbChoice>
       </div>
     </div>
-    <el-table :data="merchantList" style="width: 100%">
+    <el-table :class="animateClass" :data="merchantList" style="width: 100%">
       <el-table-column :label="$t('fb.merchant')" width="180">
         <template slot-scope="scope">
           <div :class="getAvatarColor(scope.row.id)" class="avatar-container">
@@ -108,47 +102,45 @@
 
       <el-table-column prop="id" :label="$t('placeOrder')" width="100">
         <template slot-scope="scope">
-          <el-popover placement="bottom" width="900px" height="900px">
-            <el-form ref="tradeForm" :inline="false" :model="tradeForm">
-              <el-form-item
-                :rules="[{ required: true, message: $t('amountErr'), trigger: 'blur' },
-                         { type: 'number', message: $t('amountErr'), trigger: ['blur', 'change'] }]"
-                prop="currency"
-                :label="$t('fb.currency')"
-              >
-                <el-input v-model.number="tradeForm.currency" :placeholder="$t('fb.cashAmount')"/>
-              </el-form-item>
-
-              <el-form-item
-                :rules="[{ required: true, message: $t('amountErr'), trigger: 'blur' },
-                         { type: 'number', message: $t('amountErr'), trigger: ['blur', 'change'] }]"
-                :label="$store.getters.getCoinNameByIDUp(scope.row.coinId)"
-                prop="amount"
-              >
-                <el-input
-                  v-model.number="tradeForm.amount"
-                  :placeholder="$t('exchange.main.amount')"
-                />
-              </el-form-item>
-              <el-form-item>
-                <el-button
-                  type="primary"
-                  style="width: 100%"
-                  @click="handleOrder(scope.row.id)"
-                >{{$t('placeOrder')}}</el-button>
-              </el-form-item>
-            </el-form>
-            <!-- </el-card> -->
-            <el-button
-              slot="reference"
-              type="primary"
-              @click="chooseOrder(scope.row)"
-            >{{scope.row.direction == 0? $t('sell'): $t('buy')}}</el-button>
-          </el-popover>
+          <el-button
+            type="primary"
+            @click="chooseOrder(scope.row)"
+          >{{scope.row.direction == 0? $t('sell'): $t('buy')}}</el-button>
         </template>
       </el-table-column>
     </el-table>
+   
+    <el-dialog width="500px" :title="$t('fb.orderConfirm')" :visible.sync="tradePanelVisible">
+      <el-form ref="tradeForm" :model="tradeForm">
+        <el-form-item
+          :rules="[{ required: true, message: $t('amountErr'), trigger: 'blur' },
+                         { type: 'number', message: $t('amountErr'), trigger: ['blur', 'change'] }]"
+          prop="currency"
+          :label="$t('fb.currency')"
+        >
+          <el-input v-model.number="tradeForm.currency" :placeholder="$t('fb.cashAmount')"/>
+        </el-form-item>
 
+        <el-form-item
+          :rules="[{ required: true, message: $t('amountErr'), trigger: 'blur' },
+                         { type: 'number', message: $t('amountErr'), trigger: ['blur', 'change'] }]"
+          :label="$store.getters.getCoinNameByIDUp(this.currentOrder.coinId)"
+          prop="amount"
+        >
+          <el-input v-model.number="tradeForm.amount" :placeholder="$t('exchange.main.amount')"/>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" style="width: 100%" @click="handleOrder()">{{$t('placeOrder')}}</el-button>
+        </el-form-item>
+      </el-form>
+      <!-- </el-card> -->
+      <!-- <el-button
+        slot="reference"
+        type="primary"
+        @click="chooseOrder(this.currentOrder)"
+      >{{this.currentOrder.direction == 0? $t('sell'): $t('buy')}}</el-button>-->
+    </el-dialog>
+    
     <!-- 分页 -->
     <div class="mpagination">
       <el-pagination
@@ -189,10 +181,14 @@ export default {
   },
   data() {
     return {
+      animateClass: 'animated bounce',
+      buyLoading: false,
+      tradePanelVisible: false,
       // alipay: require('../../../assets/svg/alipay.svg'),
       // wechat: require('../../../assets/svg/weChat.svg'),
       // bankCard: require('../../../assets/svg/ic_bankcard.svg'),
       merchantList: [],
+      currentOrder: {},
       currentCoin: "usdt",
       page: 0,
       total: 0,
@@ -225,6 +221,7 @@ export default {
     };
   },
   created() {
+    // window.addEventListener("scroll", this.handleScroll);
     // this.$router.push({ name: 'orderDetail', params: { id: '594f8c0ae4034fe79713cdafe4bcfd55', processId: '2bfeb0ea99bd49e9938a9952e9397295'} })
     // 拉取商家列表
     this.getMerchantList(0, 10, 0, "all", "2", "3");
@@ -240,6 +237,16 @@ export default {
     this.$store.dispatch("getSupportCoin").catch(_ => {});
   },
   methods: {
+    // handleScroll() {
+    //   var scrollTop =
+    //     window.pageYOffset ||
+    //     document.documentElement.scrollTop ||
+    //     document.body.scrollTop;
+    //   if(scrollTop > 0){
+    //       this.animateClass = ''
+    //   }
+    //   // console.log(scrollTop);
+    // },
     changeNickname() {
       this.$prompt(this.$t("userInfo.changeTip1"), {
         confirmButtonText: this.$t("confirm"),
@@ -307,6 +314,7 @@ export default {
       }
     },
     chooseOrder(order) {
+      this.buyLoading = true;
       this.price = order.price;
       this.currentOrder = order;
       this.tradeForm.id = order.id;
@@ -323,60 +331,14 @@ export default {
           this.changeNickname();
         }
       }
-      // this.$store
-      //   .dispatch("GetUserInfo")
-      //   .then(res => {
-      //     if (res.code !== "200") {
-      //       this.$notify.error("loginNeeded");
-      //       return false;
-      //     } else {
-      //     }
-      //   })
-      //   .catch(_ => {});
-      // console.log(order)
+      this.tradePanelVisible = true;
+      this.buyLoading = false;
     },
-    // getCurrency() {
-    //   this.tradeForm.currency = this.tradeForm.number * this.currentOrder.price;
-    // },
-    // getNumber() {
-    //   this.tradeForm.number = this.tradeForm.currency / this.currentPrice;
-    // },
-    // handleTrade(row) {
-    //   this.currentTrade = row;
-    //   if (this.$store.state.user.token) {
-    //     //已登录
-    //     if (this.isVerified) {
-    //       //已普通验证
-    //       this.tradeInfoVisible = true;
-    //       this.currentPrice = row.price;
-    //     } else {
-    //       //未验证
-    //       this.verifyVisible = true;
-    //     }
-    //   } else {
-    //     //未登录
-    //     this.$router.push("/login");
-    //     this.$message.info("请先登录");
-    //   }
-    // },
-    handleOrder(id) {
-      // 拉取个人信息
+    handleOrder() {
       this.$refs["tradeForm"].validate(valid => {
         if (valid) {
           // 发送验证码吗
           sendUserCode(this);
-          // const country = this.$store.state.user.userInfo.countryCode
-          // const phone = this.$store.state.user.userInfo.mobile
-          // sendCaptcha1(phone, country).then(res => {
-          //   if (res.code === '200') {
-          //     this.smsDialog = false
-          //     getCaptcha(phone, country).then(res => {
-          //       this.$notify.success(res.content)
-          //     })
-          //   } else {
-          //     this.$notify.error(this.$t('shitHappens'))
-          //   }
-          // }).catch(_ => {})
         }
       });
     },
@@ -393,14 +355,14 @@ export default {
               this.smsDialog = false;
               this.$router.push({
                 name: "orderDetail",
-                params: { id: res.content.orderId, direction: form.direction }
+                params: { id: res.content.orderId, publish: "0" }
               });
             } else if (form.direction == "1") {
               // 此单我为买入方 跳转到付款页面正常付款
               this.$notify.success(this.$t("fb.orderBuyTip"));
               this.$router.push({
                 name: "orderDetail",
-                params: { id: res.content.orderId, direction: form.direction }
+                params: { id: res.content.orderId, publish: "0" }
               });
             }
           } else {
@@ -509,6 +471,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .search-box {
   text-align: right;
   display: flex;
@@ -535,24 +498,27 @@ export default {
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     }
   }
+  // .temp-choicer {
+  //   width: 800pxz;
+  // }
   .choice-filter {
     // flex-direction: column;
+  }
+  .coin-choice /deep/ {
+    display: flex;
+    justify-content: space-between;
+    margin: 30px 0 0 0;
+
+    .el-button {
+      // margin: 0 20px 0 0;
+    }
+    .el-input__suffix {
+      top: 5px;
+    }
   }
   .trade-select {
     // display: flex;
     // justify-content: space-between;
-    .coin-choice /deep/ {
-      display: flex;
-      justify-content: space-between;
-
-      .el-button {
-        // margin: 0 20px 0 0;
-      }
-      margin: 30px 0;
-      .el-input__suffix {
-        top: 5px;
-      }
-    }
   }
   .avatar-container {
     height: 40px;
@@ -568,6 +534,10 @@ export default {
     }
   }
 
+  .bottom-groups {
+    // display: flex;
+    vertical-align:bottom;
+  }
   .price {
     color: #489972;
     font-size: 16px;

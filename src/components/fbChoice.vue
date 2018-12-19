@@ -1,7 +1,7 @@
 <template>
   <div class="choice-filter">
     <!-- <el-popover popper-class="m-popover" placement="bottom" width="375" trigger="click"> -->
-      <el-form :inline="true" v-model="newChoose" class="select-from">
+      <el-form label-position="top" :inline="true" v-model="newChoose" class="select-from">
         <el-form-item :label="$t('exchange.main.direction')">
           <el-select v-model="newChoose.direction" :placeholder="$t('exchange.main.direction')">
             <el-option
@@ -51,7 +51,7 @@
               :value="item.id"
             ></el-option>
           </el-select> -->
-         <el-form-item>
+         <el-form-item :label="$t('confirm')">
           <el-button  type="primary" @click="search()">{{$t('search')}}</el-button>
         </el-form-item> 
 
@@ -112,7 +112,7 @@ export default {
 .choice-filter {
   // width: 200px;
   margin-top: 15px;
-  text-align: right;
+  // text-align: right;
   .el-button {
       // width: 100%;
   }

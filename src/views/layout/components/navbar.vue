@@ -117,7 +117,7 @@ export default {
           this.$message.success("logout success");
         })
         .catch(err => {
-          this.$message.error(err);
+          // this.$message.error(err);
         });
     },
     changeLanguage(command) {

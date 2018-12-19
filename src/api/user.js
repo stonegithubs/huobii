@@ -17,11 +17,10 @@ export function getUserInfo() {
   })
 }
 
-// 是否绑定了谷歌验证码
 export function isBindGoogle() {
   return request({
-    url: '/api/v1/user/google_auth/isBind',
-    method: 'get'
+    url: '/api/v1/user/google_auth/is_bind',
+    method: 'post'
   })
 }
 
@@ -65,7 +64,8 @@ export function getPayway(data) {
   return request({
     url: '/api/v1/pay/payway',
     method: 'post',
-    data
+    data,
+    params: { page: '0', size: '20' }
   })
 }
 

@@ -36,16 +36,16 @@
         </div>
         <!-- <div class="font-gray">
           <span>{{$t('userInfo.tip1')}}{{ userInfo.updateDate === null?"":parseTime(userInfo.updateDate/10000) }}{{$t('userInfo.tip1_1')}} , {{$t('userInfo.tip2')}}{{ userInfo.loginDate || parseTime(userInfo.loginDate/10000) }}</span>
-        </div> -->
+        </div>-->
       </div>
       <div class="user-right">
         <div class="user-info-container">
-          <el-card :body-style="{ padding: '30px'}" class="box-card">
+          <el-card :class="animate.one" :body-style="{ padding: '30px'}" class="box-card">
             <div slot="header" class="clearfix">
               <span style="font-size: 18px; font-weight:700">{{$t('userInfo.tip1_1')}}</span>
               <!-- <p style="float: right; ">{{$t('userInfo.tip1_1')}}{{ safeLevel }}</p> -->
             </div>
-            <div class="user-info-list">
+            <div  class="user-info-list">
               <p class="list-label">
                 <i class="iconfont icon-email"/>
               </p>
@@ -63,7 +63,7 @@
                 </p>
               </div>
             </div>
-            <div class="user-info-list">
+            <div  class="user-info-list">
               <p class="list-label">
                 <i class="iconfont icon-phone"/>
               </p>
@@ -77,7 +77,7 @@
                 </p>
               </div>
             </div>
-            <div class="user-info-list">
+            <div  class="user-info-list">
               <p class="list-label">
                 <i class="iconfont icon-GA"/>
               </p>
@@ -107,7 +107,7 @@
                 <span slot="footer" class="dialog-footer"/>
               </el-dialog>
             </div>
-            <div class="user-info-list">
+            <div  class="user-info-list">
               <p class="list-label">
                 <i class="iconfont icon-login_password"/>
               </p>
@@ -122,7 +122,7 @@
                 </p>
               </div>
             </div>
-            <div class="user-info-list">
+            <div  class="user-info-list">
               <p class="list-label">
                 <i class="iconfont icon-password-lock"/>
               </p>
@@ -154,7 +154,7 @@
             </div>
           </el-card>
 
-          <el-card :body-style="{ padding: '30px'}" class="box-card" width="500">
+          <el-card :class="animate.two" :body-style="{ padding: '30px'}" class="box-card" width="500">
             <div slot="header" class="clearfix">
               <span style="font-size: 18px; font-weight:700">{{$t('userInfo.verify')}}</span>
               <p
@@ -248,6 +248,7 @@
                   <!-- <span v-if="hasAdvVerify" class="isActive m-button">已认证</span> -->
                 </p>
                 <el-dialog
+                  v-loading="advLoading"
                   :modal="true"
                   :visible.sync="adv_verifyDialogVisible"
                   :lock-scroll="true"
@@ -261,12 +262,12 @@
                       <!-- <div style="margin: 20px 0;font-weight: 700;"><span>交易额超过单笔 {{ normalUserMax }}{{ this.currencyType }} 或累计 {{ normalUserTotal }}{{this.currencyType}} 需进行高级认证！</span></div> -->
                       <el-upload
                         ref="upload"
+                        action
                         :file-list="adv_fileList"
-                        :on-change="handleChange"
-                        :on-remove="handleRemove"
+                        :on-change="handleChangeas"
+                        :on-remove="handleRemovea"
                         :limit="3"
                         :auto-upload="false"
-                        action
                         list-type="picture"
                       >
                         <el-button
@@ -288,7 +289,7 @@
             </div>
           </el-card>
           <!-- todo:实名认证后才可以添加收款方式 -->
-          <el-card :body-style="{ padding: '30px'}" class="box-card user-payment">
+          <el-card :class="animate.three" :body-style="{ padding: '30px'}" class="box-card user-payment">
             <div slot="header" class="clearfix">
               <span style="font-size: 18px; font-weight:700">{{$t('userInfo.payment')}}</span>
               <p
@@ -380,15 +381,18 @@
                   >
                     <el-input v-model="addPaymenForm[id]" type="text"/>
                   </el-form-item>
+
+                  <!-- action="https://api.hextec.cn:8443/api/v1/pay/qrcode"
+                  :headers="{:'Bearer '+this.$store.state.user.token}"-->
                   <el-form-item v-if="this.hasQrCode" :label="$t('userInfo.qrCode')">
                     <el-upload
+                      action
                       :limit="1"
                       :auto-upload="false"
                       :on-change="handleChange"
                       :on-remove="handleRemove"
                       :file-list="this.qrFile"
                       class="upload-demo"
-                      action
                       list-type="picture-card"
                     >
                       <el-button
@@ -422,7 +426,7 @@
 import addPaymentForm from "./components/addPaymentForm";
 import googleCode from "./components/googleCode";
 import VueRecaptcha from "vue-recaptcha";
-import { parseTime } from "../../utils/index";
+import { parseTime, isImage, isMp4 } from "../../utils/index";
 import {
   changePaymentStatus,
   submitAdvanceVerify,
@@ -431,6 +435,7 @@ import {
   isBindGoogle,
   change_nickname
 } from "../../api/user";
+import { qrCodeUpLoad, imgsUpload, videoUpLoad } from "@/api/cms";
 import { unBindEmail } from "../../api/verify_code";
 import { mapGetters } from "vuex";
 export default {
@@ -441,6 +446,14 @@ export default {
   },
   data() {
     return {
+      animate:{
+        one:'animated bounceInRight',
+        two:'animated bounceInLeft',
+        three: '',
+        four: '',
+        five: ''
+      },
+      advLoading: false,
       isBind: false,
       AddPaymentdialogVisible: false,
       adv_verifyDialogVisible: false,
@@ -448,6 +461,11 @@ export default {
       // auditFlag: this.$store.state.user.verifyInfo===null? '':auditFlag,
       adv_fileList: [],
       googleVisiable: false,
+      advFrom: {
+        img1: null,
+        img2: null,
+        video: null
+      },
       currentPayway: {
         pram1: null,
         pram2: null,
@@ -467,6 +485,9 @@ export default {
       },
       qrFile: []
     };
+  },
+  mounted(){
+     window.addEventListener("scroll", this.handleScroll);
   },
   computed: {
     ...mapGetters(["getVerifyInfo"]),
@@ -520,8 +541,8 @@ export default {
     }
   },
   created() {
-    if(!this.$store.state.user.token){
-      this.$router.push({ name: 'login'})
+    if (!this.$store.state.user.token) {
+      this.$router.push({ name: "login" });
     }
     this.$store.dispatch("GetUserInfo");
     this.$store.dispatch("GetVerifyInfo");
@@ -537,6 +558,16 @@ export default {
     });
   },
   methods: {
+    handleScroll(){
+      var scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop;
+      if(scrollTop > 210){
+          this.animate.three = 'animated bounceInRight'
+      }
+      console.log(scrollTop)
+    },
     getPaywayByID(id) {
       for (const item of this.$store.state.Common.supportPayway) {
         if (item.id === id) {
@@ -613,11 +644,12 @@ export default {
         }
       );
     },
-    handleChange(file) {
-      this.adv_fileList.push(file);
+    // ============tools======================
+    isImage(qrCodeFile) {
+      return isImage(qrCodeFile);
     },
-    handleRemove(file, fileList) {
-      fileList.pop(file);
+    isMp4(file) {
+      return isMp4(file);
     },
     handleClose(done) {
       this.$confirm(this.$t("confirm"))
@@ -626,30 +658,170 @@ export default {
         })
         .catch(_ => {});
     },
+    // ============tools======================
+
+    //===================高级认证start==================
+
+    handleChangeas(file, fileList) {
+      if (!(this.isImage(file.raw) || this.isMp4(file.raw))) {
+        // console.log("格式错误");
+        fileList.pop();
+        this.$notify.error(this.$t("userInfo.wrongType"));
+        return false;
+      } else {
+        // 是图片或者视频
+        this.advLoading = true;
+        this.adv_fileList.push(file);
+        let rawFrom = new FormData();
+        rawFrom.append("m", file.raw);
+        if (this.isImage(file.raw)) {
+          // 是文件则调用文件接口
+          imgsUpload(rawFrom)
+            .then(res => {
+              this.advLoading = false;
+              if (res && res.code === "200") {
+                if (this.advFrom.img1 === null) {
+                  // 一号图片位置空缺
+                  this.advFrom.img1 = res.content;
+                } else {
+                  // 二号图片位置空缺
+                  this.advFrom.img2 = res.content;
+                }
+              } else {
+                // 返回失败 弹栈
+                this.$notify.error(this.$t("userInfo.upLoadFailed"));
+                this.adv_fileList.pop();
+                fileList.pop();
+              }
+            })
+            .catch(_ => {
+              // 异常 弹栈
+              this.advLoading = false;
+              fileList.pop();
+              this.adv_fileList.pop();
+              this.$notify.error(this.$t("userInfo.upLoadFailed"));
+            });
+        } else if (this.isMp4(file.raw)) {
+          // 是视频则调用视频接口
+          videoUpLoad(rawFrom).then(res => {
+            if (res && res.code === "200") {
+              this.advFrom.video = res.content;
+            } else {
+              this.$notify.error(this.$t("userInfo.upLoadFailed"));
+              this.adv_fileList.pop();
+              fileList.pop();
+            }
+          });
+        }
+
+        
+      }
+    },
+    handleRemovea(file, fileList) {
+      let index = 0;
+      for (let item of this.adv_fileList) {
+        console.log(item.url);
+        if (item.url == file.url) {
+          this.adv_fileList.splice(index, 1);
+        }
+        index++;
+      }
+    },
     handleAdvancedVerify() {
-      if (this.adv_fileList.length == 3) {
-        const reader1 = new FileReader();
-        reader1.readAsDataURL(this.adv_fileList[0].raw);
-        const reader2 = new FileReader();
-        reader2.readAsDataURL(this.adv_fileList[1].raw);
-        const reader3 = new FileReader();
-        reader3.readAsDataURL(this.adv_fileList[2].raw);
-        const formData = new FormData();
-        formData.append("img1", reader1.result);
-        formData.append("img2", reader2.result);
-        formData.append("video", reader3.result);
+      if (this.adv_fileList.length !== 3) {
+        this.$notify.error(this.$t("userInfo.verifyInfo"));
+        return false;
+      } else {
+        this.advLoading = true;
+        formData.append("img1", this.advFrom.img1);
+        formData.append("img2", this.advFrom.img2);
+        formData.append("video", this.advFrom.video);
         submitAdvanceVerify(formData)
           .then(response => {
-            if (response.code === "200") {
-              this.$notify.success(response.message);
+            this.advLoading = false;
+            if (response && response.code === "200") {
+              this.$notify.success(this.$t("userInfo.advSubmitSuc"));
             } else {
-              this.$notify.error(response.message);
+              this.$notify.error(this.$t("userInfo.advSubmitFailed"));
             }
           })
-          .catch(_ => {});
-      } else {
-        this.$notify.error(this.$t("userInfo.verifyInfo"));
+          .catch(_ => {
+            this.$notify.error(this.$t("userInfo.advSubmitFailed"));
+            this.advLoading = false;
+          });
       }
+      this.adv_verifyDialogVisible = false;
+    },
+
+    //===================高级认证end==================
+
+    // ================== 支付方式添加begin========================
+
+    handleAddPayment() {
+      console.log("1");
+      let qrCodeUrl = "";
+      if (this.hasQrCode) {
+        // 判断是否需要qrcpde
+        let qrCodeFile = this.qrFile[0].raw;
+        // 检查文件后缀
+        if (!this.isImage(qrCodeFile)) {
+          this.$notify.error("请添加图片");
+          return false;
+        }
+        // 上传文件 拉回地址
+        console.log("2");
+        let fileForm = new FormData();
+        fileForm.append("paymentImg", qrCodeFile);
+        qrCodeUpLoad(fileForm)
+          .then(res => {
+            console.log("3");
+
+            if (res && res.code === "200") {
+              qrCodeUrl = res.content;
+              // 拉回成功 添加到addform中
+              this.doAddPayment(qrCodeUrl);
+            } else {
+              // 文件上传失败
+              this.$notify.error(this.$t("userInfo.addFailed"));
+              return false;
+            }
+          })
+          .catch(_ => {
+            console.log("4");
+            this.$notify.error(this.$t("userInfo.addFailed"));
+            return false;
+          });
+      } else {
+        //  不需要qrcode直接上传
+        this.doAddPayment(qrCodeUrl);
+      }
+    },
+    doAddPayment(qrCodeUrl) {
+      const formData = new FormData();
+      formData.append("id", this.addPaymenForm.id);
+      formData.append("pram1", this.addPaymenForm.pram1);
+      formData.append("pram2", this.addPaymenForm.pram2);
+      formData.append("pram3", this.addPaymenForm.pram3);
+      formData.append("pram4", this.addPaymenForm.pram4);
+      if (this.hasQrCode) {
+        if (qrCodeUrl === "") {
+          return false;
+        }
+        formData.append("qrcode", qrCodeUrl);
+      }
+      addPay(formData)
+        .then(response => {
+          if (response && response.code === "200") {
+            this.$notify.success(this.$t("userInfo.addSuccess"));
+          } else {
+            this.$notify.success(this.$t("userInfo.addFailed"));
+          }
+          this.AddPaymentdialogVisible = false;
+          this.$store.dispatch("GetUserPayway");
+        })
+        .catch(_ => {
+          this.$notify.error(this.$t("shitHappens"));
+        });
     },
     handleChange(file) {
       this.qrFile.push(file);
@@ -665,31 +837,7 @@ export default {
       this.qrFile = [];
       // this.addPaymenForm.qrcode = ''
     },
-    handleAddPayment() {
-      const formData = new FormData();
-      formData.append("id", this.addPaymenForm.id);
-      formData.append("pram1", this.addPaymenForm.pram1);
-      formData.append("pram2", this.addPaymenForm.pram2);
-      formData.append("pram3", this.addPaymenForm.pram3);
-      formData.append("pram4", this.addPaymenForm.pram4);
-      if (this.qrFile.length === 1) {
-        const reader = new FileReader();
-        reader.readAsDataURL(this.qrFile[0].raw);
-        formData.append("qrcode", reader.result);
-      } else {
-        formData.append("qrcode", null);
-      }
-      addPay(formData)
-        .then(response => {
-          this.$notify.success(response.message);
-          this.AddPaymentdialogVisible = false;
-          this.$store.dispatch("GetUserPayway");
-        })
-        .catch(_ => {
-          this.$notify.error(_.message);
-        });
-      // console.log(formData.get('qrcode'))
-    },
+    // ================== 支付方式添加end========================
     handleClose(done) {
       this.$confirm(this.$t("confirm"))
         .then(_ => {
@@ -800,6 +948,9 @@ export default {
           align-items: center;
           padding: 14px 0 0;
           color: #999;
+          .dialog-info {
+            min-height: 400px;
+          }
           .list-label {
             margin-right: 10px;
             margin-bottom: 8px;

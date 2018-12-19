@@ -166,7 +166,7 @@ export default {
           ).then(res => {
             if (res.code === "200") {
               this.$notify.success(this.$t('order.submitSuccess'));
-              this.$router.push({ name: "advList" });
+              this.$router.push({ name: "tradeOrder" });
             } else {
               this.$notify.error(this.$t('order.submitFailed'));
             }
@@ -179,6 +179,11 @@ export default {
     // hasThisPayway(id){
     //   for()
     // }
+  },
+  beforeCreate(){
+    if(!this.$store.state.user.token){
+      this.$router.push({ name: 'login' })
+    }
   }
 };
 </script>

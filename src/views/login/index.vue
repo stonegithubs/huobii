@@ -66,6 +66,7 @@ export default {
     width: 1200px !important;
     margin: auto;
     height: 800px;
+    padding: 0 0 30px 0;
     // background-color: #fcfdfd!important;
     .el-tabs__item {
       // color: #c7cce6;

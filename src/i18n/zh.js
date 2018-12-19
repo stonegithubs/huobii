@@ -1,17 +1,17 @@
 module.exports = {
-  siteName: '通链数字资产交易所', //  1
-  googleCaptchaNeed: '请点击谷歌验证码，如果未加载请检查您的网络状况', // 1
+  siteName: '通链数字资产交易所',
+  googleCaptchaNeed: '请点击谷歌验证码，如果未加载请检查您的网络状况',
   lang: '简体中文',
   confirm: '确定',
   canceled: '取消',
   captcha: '验证码',
-  smsCode: '短信验证码',    //
-  smsTip: '请输入您收到的验证码',   //
+  smsCode: '短信验证码',
+  smsTip: '请输入您收到的验证码',
   submit: '提交',
-  search: '搜索',     //
-  price: '单价',      //
-  placeOrder: '下单', //
-  loginNeeded: '请先登录',  //
+  search: '搜索',
+  price: '单价',
+  placeOrder: '下单',
+  loginNeeded: '请先登录',
   sell: '出售',
   buy: '购买',
   createTime: '创建时间',
@@ -20,12 +20,12 @@ module.exports = {
   appeal: '申诉',
   appealReason: '申诉理由',
   appealType: '申诉类型',
-  appealSuccess: '申诉成功', // 1
-  appealFailed: '申诉失败', // 1
+  appealSuccess: '申诉成功',
+  appealFailed: '申诉失败',
   repeal: '撤销',
-  confirmToRepal: '确定撤销', // 1
-  repealSuccess: '撤销成功', //
-  repealFailed: '撤销失败', //
+  confirmToRepal: '确定撤销',
+  repealSuccess: '撤销成功',
+  repealFailed: '撤销失败',
   confirmToClose: '确认关闭?',
   shitHappens: '发生了未知错误',
   navbar: {
@@ -39,8 +39,8 @@ module.exports = {
     signUp: '注册',
     user: {
       order: '订单',
-      exchangeOrder: '币币订单', //
-      financeOrder: '法币订单', //
+      exchangeOrder: '币币订单',
+      financeOrder: '法币订单',
       finance: '资产',
       userProfile: '个人信息',
       userCenter: '个人信息',
@@ -88,9 +88,9 @@ module.exports = {
       notice: '公告'
     },
     main: {
-      userCanceled: '用户撤销', //
-      finished: '已完成', //
-      status: '状态', //
+      userCanceled: '用户撤销',
+      finished: '已完成',
+      status: '状态',
       notGet: '未收到',
       getWrong: '收到数量不正确',
       moneyWrong: '扣费不正确',
@@ -124,7 +124,7 @@ module.exports = {
       notClosed: '未成交',
       operation: '操作',
       depth: '深度图',
-      realtimeTrade: '实施成交',
+      realtimeTrade: '实时成交',
       coinDetail: '币种资料',     //
       coinDesc: '币种简介',         //
       pubDate: '发行时间',      //  
@@ -167,7 +167,7 @@ module.exports = {
     signUp: '注册',
     confirmAgreement: '您必须同意用户协议',
     pwdRule: '密码不能低于8位且由数字、字母构成',    //去掉了‘字符’
-    welcomeToRegist: '欢迎登录',            //
+    welcomeToRegist: '欢迎注册',                  //
     pwdNotConsistent: '两次输入的密码不一致',
     signUpTip1: '国籍信息注册后不可修改，请务必如实选择。',
     signUpTip2: '验证邮件可能会被误判为垃圾邮件，请注意查收。',
@@ -199,7 +199,7 @@ module.exports = {
     tradePwdRequire: '请输入交易密码',
     tradePwdTip: '长度在6到8个字符'
   },
-  advertisetment: { // 以下
+  advertisetment: {
     businessAuth: '商家申请',
     appNow: '立即申请',
     bussinessPrivilege: '成为我们的商家，享受更多交易特权',
@@ -211,7 +211,7 @@ module.exports = {
     o2oPri: '我们将向商家提供一对一专属服务'
 
   },
-  wallet: { // 以下
+  wallet: {
     myProperty: '我的资产',
     propertyDetail: '钱包明细',
     withDrawAddr: '提币地址管理',
@@ -221,20 +221,12 @@ module.exports = {
     available: '可用',
     getStronger: '充值',
     deposit: '划转提现',
-    //  注释: 下面两句话要拼接成一句话 比如请将 [BTC] 充值到如下地址（扫描二维码获取地址）
-    //  但是其中BTC是动态生成的 所以不能写死 一整个句子要拆开来 后面遇到拆开的句子都会注解
-    //  翻译君辛苦啦
     strongTip: '请将',
     strongTip1: '充值到如下地址（扫描二维码获取地址）',
-
-    // 拆分句
     share: '法币交易账户与币币交易账户共用一个',
     share1: '的充值地址',
-
-    // 拆分句
     info: '请勿向上述地址充值任何非',
     info1: '资产，否则资产将不可找回。',
-
     listTip: '充值到账后会在下面的币币交易账户显示，通过划转功能 转至 法币交易账户后即可进行法币买卖交易',
     finishTip: '您充值至上述地址后，需整个网络节点的确认，6次网络确认后可划转，到账时间一般为10分钟-60分钟。',
     chooseCoin: '请选择币种',
@@ -247,33 +239,29 @@ module.exports = {
     confirm: '确认完成充值?',           //
     submited: '核验请求已提交',         //
     failed: '核验请求提交失败'            //
-  },  
+  },
   currency: { // 以下
 
   },
-  order: {      //  以下
+  order: {      // 
     orderNo: '订单号',
     orderType: '交易类型',
     orderTotal: '总价',
     fee: '手续费',
-    orderUser: '交易对象',
+    orderUser: '交易对象',      // 
     myOrders: '我的订单',
     passed: '已放行',
     pending: '未付款',
     canceled: '已取消',
-    // 拆分句
     submitTip1: '发布一个',
     submitTip1_1: '交易广告',
-    // 拆分句
     submitTip2: '如果您经常交易',
     submitTip2_2: '可以发布自己的',
     submitTip2_3: '交易广告。如果您只想购买或出售一次，我们建议您直接从购买或出售列表中下单交易',
-
     submitTip4: '发布一则交易广告是免费的。',
     submitTip5: '发布交易广告的数字资产交易用户每笔完成的交易需要缴纳1%的费用 。',
     submitTip6: '您必须在交易广告或交易聊天中提供您的付款详细信息，发起交易后，价格会锁定，除非定价中有明显的错误',
     submitTip7: '所有交流必须在数字资产交易上进行，请注意高风险有欺诈风险的付款方式。',
-
     buyOnline: '在线购买',
     sellOnline: '在线出售',
     coinType: '货币类型',
@@ -297,7 +285,7 @@ module.exports = {
     submitSuccess: '发布成功',
     submitFailed: '发布失败',
   },
-  withDraw: {   //以下
+  withDraw: {
     title: '提币地址管理',
     coinRequire: '请选择币种',
     addRequire: '请填写地址',
@@ -308,13 +296,13 @@ module.exports = {
     add: '添加',
     addressList: '地址列表',
   },
-  notice: {   // 以下
+  notice: {
     checkAll: '查看所有文章',
     index: '首页',
     articleCenter: '文章中心',
     articleDetail: '文章详情',
   },
-  fb: {     // 以下  
+  fb: {
     direction: '交易方向',
     cashType: '现金种类',
     coinType: '货币类型',
@@ -327,13 +315,19 @@ module.exports = {
     orderBuyTip: '下单成功，请尽快付款',
     orderSellTip: '下单成功，请耐心等待对方付款',
     orderFailed: '下单失败',
-    myOrder: '我的订单',
+    myOrder: '我的订单',      // 以下
     tradeType: '交易类型',
+    tradeTotal: '交易金额',
+    startDate: '开始时间',
+    to: '至',
+    endDate: '结束时间',
+    contant: '联系方式',
     total: '总价',
     tradeTarget: '交易对象',
     repeal: '申诉',
     pay: '付款',
     pass: '放行',
+    checkTradeDetail: '查看成交明细',
     appealTitle: '订单申诉',
     appTip: '请选择申诉类型',
     appReason: '申诉理由',
@@ -357,7 +351,9 @@ module.exports = {
     advNo: '广告编号',
     advType: '类型',
     coinTyp: '币种',
-    passTitle: '订单放行'
+    orderList: '订单列表',
+    orderConfirm: '订单确认',
+    passTitle: '订单放行'       // 以上
   },
   userInfo: {
     binded: '已绑定',
@@ -370,10 +366,8 @@ module.exports = {
     times: '(次)',
     min: '(分钟)',
     finishRate: '完成率',
-    // 断句
     tip1: '本账号于',
     tip1_1: '注册',
-
     tip2: '最后一次登录在',
     secure: '账户与安全',
     email: '邮箱',
@@ -405,7 +399,7 @@ module.exports = {
     qrCode: '二维码',
     confirmUnbind: '确定解绑邮箱？',
     unbindEmail: '解绑邮箱',
-    emailSent: '邮件已发送，请注意查收',
+    emailSent: '邮件已发送，请注意查收',        // 以下
     googleInfo1: '谷歌验证器是一款动态口令工具，工作原理类似短信动态验证。绑定后每30s生成一个动态验证码，验证码可用于登录、提现、修改安全设置等操作的安全验证。',
     info2: '下载谷歌验证器APP',
     info3: 'iOS用户登录App Store搜索“Authenticator”下载。',
@@ -425,9 +419,15 @@ module.exports = {
     changeFailed: '修改失败',
     changeRule: '长度为3至6个字符',
     changeTip1: '您必须先设置昵称才能进行交易',
-    clickToChangeName: '点击修改昵称'
+    clickToChangeName: '点击修改昵称',
+    addSuccess: '支付方式添加成功',
+    addFailed: '支付添加失败',
+    advSubmitSuc: '高级认证已提交',
+    advSubmitFailed: '高级认证提交失败',
+    upLoadFailed: '文件上传失败.请检查您的网络环境',
+    wrongType: '仅支持图片和视频类型'
   },
-  nofound: {      // 以下
+  nofound: {                  // 以下
     t1: '您访问的页面不存在',
     t2: '带我回主页',
   },

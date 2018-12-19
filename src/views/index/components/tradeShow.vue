@@ -1,5 +1,5 @@
 <template>
-  <div class="trade-show">
+  <div class="animated bounce trade-show">
     <el-tabs v-model="activeName" class="trade-bar" type="border-card" @tab-click="handleClick">
       <el-tab-pane v-for="symbol in symbols" :name="symbol" :key="symbol.id" class="trade-show-panel">
         <span slot="label">
@@ -50,13 +50,13 @@ export default {
   },
   created() {
     this.mainTradeLoading = true
-    if (!localStorage.getItem('symbols')) {
-      this.$store.dispatch('getSymbols').then(() => {
-        this.$store.getters.getUniqueSymbol()
-      }).catch(err => {
-        // this.$message.error(err.message)
-      })
-    }
+    // if (!localStorage.getItem('symbols')) {
+    //   this.$store.dispatch('getSymbols').then(() => {
+    //     this.$store.getters.getUniqueSymbol()
+    //   }).catch(err => {
+    //     // this.$message.error(err.message)
+    //   })
+    // }
     this.$store.dispatch('getSymbolList').catch(() => {
       // this.$message.error("can't get coin information")
     })
