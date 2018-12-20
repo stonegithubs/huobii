@@ -124,7 +124,7 @@ export default {
         setTimeout(() => {
           getCaptcha(this.forgetForm.phone).then(responese1 => {
             this.$notify({
-              title: '验证码',
+              title: this.$t('captcha'),
               message: responese1.content,
               duration: 0
             })

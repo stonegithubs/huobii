@@ -101,6 +101,12 @@ export default {
       LOGO: require("../../../assets/LOGO/LOGO.png")
     };
   },
+  created() {
+    // let locale = localStorage.getItem('locale')
+    // if(locale){
+    // document.title = this.$t("siteName");
+    // }
+  },
   computed: {
     userInfo() {
       return this.$store.state.user.userInfo;
@@ -122,8 +128,9 @@ export default {
     },
     changeLanguage(command) {
       localStorage.setItem("locale", command);
-
+      document.title = this.$t("siteName");
       this.$i18n.locale = command;
+      window.location.reload()
       // console.log(command)
     }
   },
@@ -136,6 +143,7 @@ export default {
     } else {
       this.$i18n.locale = "th";
     }
+    document.title = this.$t("siteName");
   }
 };
 </script>
@@ -159,10 +167,10 @@ export default {
     height: 100%;
     display: flex;
     align-items: center;
-    width: 217px;
+    // width: 217px;
 
     .logo {
-      height: 25px;
+      height: 35px;
       width: auto;
       overflow: hidden;
     }

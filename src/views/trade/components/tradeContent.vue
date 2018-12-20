@@ -20,10 +20,10 @@
           </div>
           <div>
             <router-link :to="{ name: 'trader', params: {id: scope.row.id}}">
-              <span class="user-info" style="margin-left: 10px">
+              <div class="user-info" style="margin-left: 10px">
                 {{ scope.row.user.name }}
                 <!-- ({{scope.row.order_msg.finish}} | {{scope.row.order_msg.finish_rate}}) -->
-              </span>
+              </div>
             </router-link>
           </div>
         </template>
@@ -545,6 +545,10 @@ export default {
   }
   .user-info {
     color: #3b68bb;
+    max-width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .trade-tab {
     span {

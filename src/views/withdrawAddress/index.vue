@@ -41,19 +41,19 @@
         <span class="font16">{{ $t('withDraw.addressList')}}</span>
       </div>
       <el-table :data="addressData" stripe style="width: 100%">
-        <el-table-column prop="coinId" label="币种">
+        <el-table-column prop="coinId" :label="$t('withDraw.coin')">
           <template slot-scope="scope">{{ getCoinNameByIDUp(scope.row.coinId) }}</template>
         </el-table-column>
-        <el-table-column prop="address" label="地址">
+        <el-table-column prop="address" :label="$t('withDraw.address')">
           <template slot-scope="scope">{{ scope.row.address }}</template>
         </el-table-column>
-        <el-table-column prop="remarks" label="备注">
+        <el-table-column prop="remarks" :label="$t('withDraw.remark')">
           <template slot-scope="scope">{{ scope.row.name }}</template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column :label="$t('exchange.main.operation')">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="handleDeposit(scope.row.id)">提币</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+            <el-button size="mini" type="primary" @click="handleDeposit(scope.row.id)">{{$t('withdraw.withdraw')}}</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(scope.row.id)">{{$t('delete')}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -130,14 +130,14 @@ export default {
         .then(res => {
           this.initList(this.page, this.size, this.addressForm.coinId);
           if (res && res.code === "200") {
-            this.$notify.success("删除成功");
+            this.$notify.success(this.$t('deleteSuc'));
           } else {
-            this.$notify.error("删除失败");
+            this.$notify.error(this.$t('deleteFailde'));
           }
         })
         .catch(_ => {
          this.initList(this.page, this.size, this.addressForm.coinId);
-          this.$notify.error("删除失败");
+          this.$notify.error(this.$t('deleteFailde'));
         });
     },
     handleDeposit(id){

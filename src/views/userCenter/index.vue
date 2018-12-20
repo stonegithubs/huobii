@@ -583,7 +583,7 @@ export default {
       this.$prompt(this.$t("userInfo.nickNameTip"), {
         confirmButtonText: this.$t("confirm"),
         cancelButtonText: this.$t("canceled"),
-        inputPattern: /^.{3,6}$/,
+        inputPattern: /^.{3,10}$/,
         inputErrorMessage: this.$t("userInfo.changeRule")
       }).then(nickName => {
         if (nickName.action === "confirm") {

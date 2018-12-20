@@ -94,8 +94,8 @@ export default {
         window.pageYOffset ||
         document.documentElement.scrollTop ||
         document.body.scrollTop;
-      if(scrollTop > 2500){
-          this.animateClass = 'animated rubberBand'
+      if(scrollTop > 2250){
+          this.animateClass = 'animated  zoomIn'
       }
       // console.log(scrollTop);
     },

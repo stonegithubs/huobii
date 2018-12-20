@@ -40,13 +40,13 @@ export default {
       this.loading = true
       const symbol = this.$store.state.coinData.targetCoin + '' + this.$store.state.coinData.mainCoin
       this.symbol = symbol
-      this.initChart(symbol)
+      this.initChart(symbol, '15min')
       // console.log(symbol)
     }
   },
   mounted() {
     const symbol = this.$store.state.coinData.targetCoin + '' + this.$store.state.coinData.mainCoin
-    this.initChart(symbol)
+    this.initChart(symbol,'15min')
 
   },
   methods: {

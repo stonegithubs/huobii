@@ -95,9 +95,10 @@ export default {
     width: 180px;
     word-break: normal;
     text-align: left;
+    line-height: 25px;
     span {
       white-space: normal;
-      word-break: break-all;
+      // word-break: break-all;
     }
   }
   .el-tabs__item{

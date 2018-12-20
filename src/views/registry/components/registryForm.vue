@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="registryForm" :model="registryForm" :rules="rules" class="registry-form" status-icon label-width="100px">
+  <el-form ref="registryForm" :model="registryForm" :rules="rules" class="registry-form" status-icon label-width="140px">
     <el-form-item :label="$t('login.country')">
       <el-select @change="countryChange" v-model="registryForm.region" :placeholder="$t('login.countryTip')">
         <el-option v-for="item in getCountry" :label="item.enName+'    '+ item.name" :value="item.abbr" :key="item.id"/>

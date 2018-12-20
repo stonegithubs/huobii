@@ -9,6 +9,11 @@ module.exports = {
   smsTip: '请输入您收到的验证码',
   submit: '提交',
   search: '搜索',
+  delete: '删除',                         //
+  deleteSuc: '删除成功',                    //
+  deleteFailde: '删除失败',                   //
+
+
   price: '单价',
   placeOrder: '下单',
   loginNeeded: '请先登录',
@@ -49,13 +54,20 @@ module.exports = {
     }
   },
   index: {
+    help: '帮助',      //
+    needHelp: '需要帮助吗',      //
+    bestSuggestion: '最佳建议',   //
+    name: '姓名',               //
+    desc: '描述',             //
+    contactUs: '联系我们',        //
+    thx4msg: '感谢您的留言，我们会尽快回复！',     //
     tradeShow: {
       pair: '交易对',
       lastPrice: '最新价',
       change: '涨幅',
       high: '最高价',
       low: '最低价',
-      vol24h: '24H量'
+      vol24h: '24H量',
     },
     feature: {
       first: {
@@ -267,6 +279,12 @@ module.exports = {
     coinType: '货币类型',
     coinTip: '请选择交易的法币类型',
     priceTip: '请输入单价',
+    priceType: '价格必须大于0',         //
+    wrongType: '类型不正确',           //
+    maxTip1: '最高限额需要大于最低限额',  //
+    minTip1: '最低限额需要小于最高限额',    //
+    timeTip1: '时间长度需要大于0',         //
+    amountTip1: '数量需要大于0',        //
     min: '最低限额',
     minTip: '请输入最低限额',
     max: '最高限额',
@@ -281,6 +299,7 @@ module.exports = {
     messageTip: '请输入下单留言',
     direction: '选择广告类型',
     directionTip: '请选择广告类型',
+    numberTip: '请输入数字类型',      //
     submitNow: '立即发布',
     submitSuccess: '发布成功',
     submitFailed: '发布失败',
@@ -295,6 +314,7 @@ module.exports = {
     remark: '备注',
     add: '添加',
     addressList: '地址列表',
+    withdraw: '提币',             //
   },
   notice: {
     checkAll: '查看所有文章',
@@ -417,7 +437,7 @@ module.exports = {
     nickNameTip: '请输入您的交易昵称',
     changeSuccess: '修改成功',
     changeFailed: '修改失败',
-    changeRule: '长度为3至6个字符',
+    changeRule: '长度为3至10个字符',
     changeTip1: '您必须先设置昵称才能进行交易',
     clickToChangeName: '点击修改昵称',
     addSuccess: '支付方式添加成功',

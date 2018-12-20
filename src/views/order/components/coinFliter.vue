@@ -3,7 +3,7 @@
     <!-- <el-popover popper-class="m-popover" placement="bottom" width="375" trigger="click"> -->
       <el-form :inline="true" label-position='top' v-model="newChoose" class="select-from" label-width="120">
         <el-form-item >
-          <el-select style="width:200px" v-model="newChoose.direction" placeholder="交易方向">
+          <el-select style="width:200px" v-model="newChoose.direction" :placeholder="$t('fb.direction')">
             <el-option
               v-for="item in directionOption"
               :key="item.name"
@@ -47,9 +47,9 @@
           <el-date-picker
             v-model="newChoose.time"
             type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
+            :range-separator="$t('fb.to')"
+            :start-placeholder="$t('fb.startDate')"
+            :end-placeholder="$t('fb.endDate')"
             align="left"
             value-format="yyyy-MM-dd"
             :default-time="['2018-12-14', '2030-12-12']"
@@ -58,7 +58,7 @@
 
         <el-form-item>
         <div class="search-box">
-          <el-button type="primary" @click="search()">搜索</el-button>
+          <el-button type="primary" @click="search()">{{$t('search')}}</el-button>
         </div>
         </el-form-item>
       </el-form>
@@ -87,23 +87,23 @@ export default {
       directionOption: [
         {
           direction: "0",
-          name: "买入"
+          name: this.$t('buy')
         },
         {
-          name: "卖出",
+          name: this.$t('sell'),
           direction: "1"
         },
         {
-          name: "全部",
+          name: this.$t('fb.status10'),
           direction: "10"
         }
       ],
       stateList: [
-        { id: "0", name: "挂单中" },
-        { id: "1", name: "部分完成" },
-        { id: "2", name: "完成交易" },
-        { id: "3", name: "用户撤销" },
-        { id: "8", name: "历史纪录" },
+        { id: "0", name: this.$t('status0') },
+        { id: "1", name: this.$t('status1') },
+        { id: "2", name: this.$t('status2') },
+        { id: "3", name: this.$t('status3') },
+        { id: "8", name: this.$t('status8') },
         // { id: "9", name: "交易中" },
         // { id: "10", name: "全部" },
         // { id: "11", name: "交易中" }
