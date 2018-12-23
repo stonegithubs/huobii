@@ -2,9 +2,10 @@
   <el-container class="trade">
     <div class="trade-wrapper">
       <!-- <tradeSelect/> -->
-      <tradeContent/>
+      <!-- <tradeContent/> -->
+      <merchant-list></merchant-list>  
     </div>
-    <el-dialog :modal="false" :visible.sync="verifyVisible" :lock-scroll="true" :modal-append-to-body="false" title="设置昵称与交易密码">
+    <!-- <el-dialog :modal="false" :visible.sync="verifyVisible" :lock-scroll="true" :modal-append-to-body="false" title="设置昵称与交易密码">
       <div style="margin: 20px 0">为保证交易安全，请您耐心完善以下信息</div>
       <el-form ref="verifyForm" :model="verifyForm" :rules="verifyRule" background-color="#f2f3f8">
         <el-form-item label="昵称" prop="nick_name">
@@ -29,7 +30,7 @@
           <div style="margin: 20px 0"><span>通过高级认证可以进行大额交易</span></div>
           <el-button type="primary" @click="this.advancedVerifyVisible = true">高级认证</el-button>
           <el-button @click="verifySuccessVisible=false">跳过</el-button>
-          <!--todo:高级认证未完成-->
+          todo:高级认证未完成
         </div>
       </div>
     </el-dialog>
@@ -50,7 +51,7 @@
             :headers="{'token': this.$store.state.user.token}"
             :auto-upload="false"
             list-type="picture">
-            <!--todo:token名字在这里写死了-->
+            todo:token名字在这里写死了
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <el-button size="small" type="primary" @click="handleAdvancedVerify">点击上传</el-button>
             <div slot="tip" class="el-upload__tip">请上传身份证正反面照片</div>
@@ -59,20 +60,23 @@
         </div>
       </div>
     </el-dialog>
-    <!--高级认证需要测试 视频上传待定-->
-  </el-container>
+    高级认证需要测试 视频上传待定-->
+  </el-container> 
 </template>
 
 <script>
 import tradeContent from './components/tradeContent'
-import tradeSelect from './components/tradeSelect'
+import merchantList from './components/merchantList'
+
+// import tradeSelect from './components/tradeSelect'
 import ElContainer from 'element-ui/packages/container/src/main'
 export default {
   name: 'Trade',
   components: {
     ElContainer,
-    tradeSelect,
-    tradeContent
+    // tradeSelect,
+    tradeContent,
+    merchantList
   },
   data() {
     const validatePass2 = (rule, value, callback) => {

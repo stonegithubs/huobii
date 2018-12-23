@@ -99,11 +99,11 @@ export default {
         }
       ],
       stateList: [
-        { id: "0", name: this.$t('status0') },
-        { id: "1", name: this.$t('status1') },
-        { id: "2", name: this.$t('status2') },
-        { id: "3", name: this.$t('status3') },
-        { id: "8", name: this.$t('status8') },
+        { id: "0", name: this.$t('fb.status0') },
+        { id: "1", name: this.$t('fb.status1') },
+        { id: "2", name: this.$t('fb.status2') },
+        { id: "3", name: this.$t('fb.status3') },
+        { id: "8", name: this.$t('fb.status8') },
         // { id: "9", name: "交易中" },
         // { id: "10", name: "全部" },
         // { id: "11", name: "交易中" }

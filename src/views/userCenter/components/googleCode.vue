@@ -31,7 +31,7 @@
               </el-form>
             </div>
           </div>
-          <div class="submit"><button type="submit" class="btn btn_submit" @click="handleSubmit">{{$t('userInfo.bind')}}</button></div>
+          <div class="submit"><el-button type="submit" class="btn btn_submit" @click="handleSubmit">{{$t('userInfo.bind')}}</el-button></div>
         </form>
       </div>
     </div>
@@ -88,6 +88,7 @@ export default {
     },
     copy() {
       const clipboard = new Clipboard('.cp')
+      this.$notify.success(this.$t('userInfo.copySuccess'))
     },
     handleSubmit() {
       this.$refs['googleForm'].validate((valid) => {
@@ -163,7 +164,7 @@ export default {
                 font-weight: 150;
             }
             .m_30 .submit {
-                padding-top: 20px;
+                margin-top: 20px;
                 button {
                     background-color: #357ce1;
                     color: #fff;

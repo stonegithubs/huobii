@@ -10,7 +10,7 @@
        <template slot="prepend">
           {{ cuntryCode }}
         </template>
-        <template slot="suffix">
+        <template slot="append">
           <el-button :class="buttonColor" :disabled="timeRest === 60? false:true" class="send-code" @click="sendCode">{{ timeRest===60? '':timeRest }}{{ buttonInner }}</el-button>
         </template>
       </el-input>
@@ -70,16 +70,11 @@ export default {
       }
     }
     const checkPasswrod = (rule, value, callback) => {
-      const reg = new RegExp(
-        '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$'
-        // "^(?:(?=.*[0-9].*)(?=.*[A-Za-z].*)(?=.*[,\\.#%'\\+\\*\\-:;^_`].*))[,\\.#%'\\+\\*\\-:;^_`0-9A-Za-z]{8,30}$"
-        // '^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$'
-        // "^(?:(?=.*[0-9].*)(?=.*[A-Za-z].*)(?=.*[,\\.#%'\\+\\*\\-:;^_`].*))[,\\.#%'\\+\\*\\-:;^_`0-9A-Za-z]{8,30}$"
-        )
-      if (!reg.test(value)) {
-        callback(this.$t('login.pwdRule'))
-      } else {
+      if (value.search("^(?:(?=.*[0-9].*)(?=.*[A-Za-z].*)(?=.*[,\\.#%'\\+\\*\\-:;^_`].*))[,\\.#%'\\+\\*\\-:;^_`0-9A-Za-z]{8,30}$") !== -1
+      || value.search("^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{8,16}$") !== -1) {
         callback()
+        } else {
+        callback(this.$t('login.pwdRule'))
       }
     }
     const captchaCheck = (rule, value, callback) => {
@@ -265,14 +260,14 @@ export default {
       // border-color: #7a98f7;
       width: 180px;
     }
-    .send-code {
-      background: transparent;
-      border: none;
-      border-radius: 0%; // color: #7a98f7;
-       ::before {
-        content: "|";
-        margin-right: 30px; // color: #1e2235;
-      }
-    }
+    // .send-code {
+    //   background: transparent;
+    //   border: none;
+    //   border-radius: 0%; // color: #7a98f7;
+    //    ::before {
+    //     content: "|";
+    //     margin-right: 30px; // color: #1e2235;
+    //   }
+    // }
   }
 </style>

@@ -60,7 +60,29 @@ const wallet = {
         remarks: '',
         userId: ''
       }
-    }
+    },
+    
+    getCoinBalanceById: (state) => (id) => {
+      for (const item of state.coinBalance) {
+        // console.log(item)
+        // console.log(item.coinName)
+        if (item.coinId == id) {
+          return item
+        }
+      }
+      return {
+        address: '',
+        coinBalance: 0,
+        coinFrozen: 0,
+        coinId: '',
+        currencyBalance: 0,
+        currencyFrozen: 0,
+        id: '',
+        name: '',
+        remarks: '',
+        userId: ''
+      }
+    },
   }
 
 }

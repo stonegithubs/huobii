@@ -96,6 +96,8 @@ export default {
     word-break: normal;
     text-align: left;
     line-height: 25px;
+    padding: 10px 0;
+    // min-height: 40px;
     span {
       white-space: normal;
       // word-break: break-all;

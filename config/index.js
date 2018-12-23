@@ -10,12 +10,12 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {
-      '/api/v1': {
-        target: 'https://api.hextec.cn/api/v1',
-        changeOrigin: true,
-     }
-    },
+    // proxyTable: {
+    //   '/api/v1': {
+    //     target: 'https://api.hextec.cn/api/v1',
+    //     changeOrigin: true,
+    //  }
+    // },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -56,12 +56,12 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: './',
-    proxyTable: {
-      '/api': {
-        target: 'https://api.hextec.cn:8443',
-        changeOrigin: true,
-      }
-    },
+    // proxyTable: {
+    //   '/api': {
+    //     target: 'www.tonglian.co',
+    //     changeOrigin: true,
+    //   }
+    // },
 
     /**
      * Source Maps

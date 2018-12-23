@@ -24,7 +24,7 @@
             <el-slider
               v-model.number="xj_buyForm.amount"
               :step="0.00001"
-              :max="xj_buy_max"
+              :max="Number(this.getCoinBalanceByName(this.getMainCoin).coinBalance)"
               @mouseenter.native="xj_buy_max = xj_buyForm.amount"
             />
             <div class="total">
@@ -56,7 +56,7 @@
             <el-slider
               v-model.number="xj_sellForm.amount"
               :step="0.00001"
-              :max="xj_sell_max"
+              :max="Number(this.getCoinBalanceByName(this.getTargetCoin).coinBalance)"
               @mouseenter.native="xj_sell_max = xj_sellForm.amount"
             />
             <div class="total">
@@ -89,7 +89,7 @@
             <el-slider
               v-model.number="xj_buyForm.amount"
               :step="0.00001"
-              :max="xj_buy_max"
+              :max="Number(this.getCoinBalanceByName(this.getTargetCoin).coinBalance)"
               @mouseenter.native="xj_buy_max = xj_buyForm.amount"
             />
 
@@ -117,8 +117,7 @@
             <el-slider
               v-model.number="xj_sellForm.amount"
               :step="0.00001"
-              :max="xj_sell_max"
-              @mouseenter.native="xj_sell_max = xj_sellForm.amount"
+              :max="Number(this.getCoinBalanceByName(this.getTargetCoin).coinBalance)"
             />
 
           </div>

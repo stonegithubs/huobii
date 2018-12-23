@@ -44,10 +44,10 @@
             >{{scope.row.fee.toFixed(2)}} {{ getCoinNameByIDUp(scope.row.coinId.split('_')[0]) }}</template>
           </el-table-column>
           <el-table-column width="150px" prop="address" :label="$t('createTime')">
-            <template slot-scope="scope">{{parseTime(scope.row.updateDate) }}</template>
+            <template slot-scope="scope">{{parseTime(scope.row.order.updateDate) }}</template>
           </el-table-column>
           <el-table-column prop="address" :label="$t('exchange.main.status')">
-            <template slot-scope="scope">{{ getState(scope.row.status) }}</template>
+            <template slot-scope="scope">{{ getState(scope.row.order.status) }}</template>
           </el-table-column>
           <el-table-column prop="address" :label="$t('fb.tradeTarget')">
             <template slot-scope="scope">{{ scope.row.order.user.name }}</template>
@@ -283,7 +283,9 @@ export default {
         cancelButtonText: this.$t("cancel"),
         callback: action => {
           if (action == "confirm") {
-            fbCancel(order.orderId).then(res => {
+            // console.log(order)
+            // return 
+            fbCancel(order.order.processId).then(res => {
               if (res.code === "200") {
                 this.$notify.success(this.$t("repealSuccess"));
               } else {

@@ -12,9 +12,9 @@ export function fbList(page, size, direction, payments, coinId, cashId) {
 
 // 查询 挂单方法币订单列表
 export function fbOrders(page, size, direction, coinId, cashId, states, start, end, order) {
-  // if (states === '10') {
-  //   states = [0, 1, 2, 3, 9]
-  // }
+  if (states === '10') {
+    states = [0, 1, 2, 3, 9]
+  }
   return request({
     url: '/api/v1/currency_trade/orders',
     method: 'post',

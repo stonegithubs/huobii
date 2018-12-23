@@ -40,382 +40,9 @@
       </div>
       <div class="user-right">
         <div class="user-info-container">
-          <el-card :class="animate.one" :body-style="{ padding: '30px'}" class="box-card">
-            <div slot="header" class="clearfix">
-              <span style="font-size: 18px; font-weight:700">{{$t('userInfo.tip1_1')}}</span>
-              <!-- <p style="float: right; ">{{$t('userInfo.tip1_1')}}{{ safeLevel }}</p> -->
-            </div>
-            <div  class="user-info-list">
-              <p class="list-label">
-                <i class="iconfont icon-email"/>
-              </p>
-              <div class="info-wrapper">
-                <p class="list-desc">
-                  <span class="desc-name m-desc-name">{{$t('userInfo.email')}}</span>
-                  <span
-                    v-if="hasEmail"
-                    class="auth-info m-auth-info"
-                    style="color:black"
-                  >{{$t('userInfo.binded')}}</span>
-                  <a v-if="hasEmail" @click="unbindButton">{{$t('userInfo.disBind')}}</a>
-                  <span v-if="!hasEmail" class="auth-info m-auth-info">{{$t('userInfo.unbind')}}</span>
-                  <router-link v-if="!hasEmail" :to="{ name: 'bind_email'}">{{$t('userInfo.bind')}}</router-link>
-                </p>
-              </div>
-            </div>
-            <div  class="user-info-list">
-              <p class="list-label">
-                <i class="iconfont icon-phone"/>
-              </p>
-              <div class="info-wrapper">
-                <p class="list-desc">
-                  <span class="desc-name m-desc-name">{{$t('userInfo.phone')}}</span>
-                  <span
-                    class="auth-info m-auth-info"
-                    style="color:black"
-                  >{{this.$store.state.user.userInfo.mobile}}</span>
-                </p>
-              </div>
-            </div>
-            <div  class="user-info-list">
-              <p class="list-label">
-                <i class="iconfont icon-GA"/>
-              </p>
-              <div class="info-wrapper">
-                <p class="list-desc">
-                  <span class="desc-name m-desc-name">{{$t('userInfo.googleCaptcha')}}</span>
-                  <span
-                    class="auth-info m-auth-info"
-                    style="color: rgb(153, 153, 153);"
-                  >{{isBind?$t('userInfo.binded'):$t('userInfo.unbind')}}</span>
-                  <a
-                    v-if="!isBind"
-                    rel="noopener noreferrer"
-                    class="isActive m-button"
-                    @click="googleVisiable = true"
-                  >{{$t('userInfo.bind')}}</a>
-                </p>
-              </div>
-              <el-dialog
-                :modal-append-to-body="false"
-                :visible.sync="googleVisiable"
-                :before-close="handleClose"
-                :title="$t('userInfo.bindGoogle')"
-                width="650px"
-              >
-                <google-code/>
-                <span slot="footer" class="dialog-footer"/>
-              </el-dialog>
-            </div>
-            <div  class="user-info-list">
-              <p class="list-label">
-                <i class="iconfont icon-login_password"/>
-              </p>
-              <div class="info-wrapper">
-                <p class="list-desc">
-                  <span class="desc-name m-desc-name">{{$t('userInfo.password')}}</span>
-                  <span class="auth-info m-auth-info" style="color: rgb(153, 153, 153);">******</span>
-                  <router-link
-                    :to="{name: 'change_password'}"
-                    class="isActive m-button"
-                  >{{$t('userInfo.modify')}}</router-link>
-                </p>
-              </div>
-            </div>
-            <div  class="user-info-list">
-              <p class="list-label">
-                <i class="iconfont icon-password-lock"/>
-              </p>
-              <div class="info-wrapper">
-                <p class="list-desc">
-                  <span class="desc-name m-desc-name">{{$t('userInfo.tradePwd')}}</span>
-                  <span
-                    v-if="hasTradePwd"
-                    class="auth-info m-auth-info"
-                    style="color: rgb(153, 153, 153);"
-                  >******</span>
-                  <router-link
-                    v-if="hasTradePwd"
-                    :to="{ name: 'change_trade_password'}"
-                    class="isActive m-button"
-                  >{{$t('userInfo.modify')}}</router-link>
-                  <span
-                    v-if="!hasTradePwd"
-                    class="auth-info m-auth-info"
-                    style="color: rgb(153, 153, 153);"
-                  >{{$t('userInfo.doSet')}}</span>
-                  <router-link
-                    v-if="!hasTradePwd"
-                    :to="{ name: 'change_trade_password'}"
-                    class="isActive m-button"
-                  >{{$t('userInfo.notSet')}}</router-link>
-                </p>
-              </div>
-            </div>
-          </el-card>
-
-          <el-card :class="animate.two" :body-style="{ padding: '30px'}" class="box-card" width="500">
-            <div slot="header" class="clearfix">
-              <span style="font-size: 18px; font-weight:700">{{$t('userInfo.verify')}}</span>
-              <p
-                class="font14 font-gray"
-                style="margin-bottom: 0;margin-top: 15px;"
-              >{{$t('userInfo.verifyTip')}}</p>
-            </div>
-            <div class="user-info-list">
-              <p class="list-label">
-                <i class="iconfont icon-name_certification"/>
-              </p>
-              <div class="info-wrapper">
-                <p class="list-desc">
-                  <span class="desc-name m-desc-name">{{$t('userInfo.verify')}}</span>
-                  <span
-                    v-if="auditFlag ==='2'"
-                    class="auth-info m-auth-info"
-                    style="color: rgb(153, 153, 153);"
-                  >{{$t('userInfo.vFailed')}}</span>
-                  <span
-                    v-if="getVerifyInfo===false"
-                    class="auth-info m-auth-info"
-                    style="color: rgb(153, 153, 153);"
-                  >{{$t('userInfo.notVer')}}</span>
-                  <span
-                    v-if="getVerifyInfo "
-                    class="auth-info m-auth-info"
-                    style="color:black"
-                  >{{ getVerifyInfo? getVerifyInfo.surName+getVerifyInfo.name :'' }} {{ getVerifyInfo? getVerifyInfo.cardNo.slice(0,-4) +'****':'' }}</span>
-                  <span
-                    v-if="getVerifyInfo===false||auditFlag ==='2'||auditFlag ==='0'"
-                    class="auth-info m-auth-info"
-                    style="color:black"
-                  >
-                    <router-link
-                      :to="{ name: 'verify' }"
-                      class="isActive m-button"
-                      style="float: right;"
-                    >{{$t('userInfo.doVerify')}}</router-link>
-                  </span>
-                  <span
-                    v-if="!getVerifyInfo && auditFlag !=='2' && auditFlag !=='0'"
-                    class="isActive m-button"
-                  >{{$t('userInfo.verified')}}</span>
-                </p>
-              </div>
-            </div>
-            <div class="user-info-list">
-              <p class="list-label">
-                <i class="iconfont icon-certification"/>
-              </p>
-              <div class="info-wrapper">
-                <p class="list-desc">
-                  <span class="desc-name m-desc-name">{{$t('userInfo.advVer')}}</span>
-                  <!-- <span
-                    v-if=" auditFlag === '0' || auditFlag === '1' ||auditFlag === '2'"
-                    class="auth-info m-auth-info"
-                    style="color: rgb(153, 153, 153);"
-                  >{{$t('userInfo.notVer')}}</span>-->
-                  <span
-                    v-if="auditFlag === '4'"
-                    class="auth-info m-auth-info"
-                    style="color:black"
-                  >{{$t('userInfo.verified')}}</span>
-                  <span v-if="auditFlag < '3'" class="auth-info m-auth-info" style="color:black">
-                    {{$t('userInfo.notVer')}}
-                    <!-- {{$t('userInfo.pending')}} -->
-                  </span>
-                  <span
-                    v-if="auditFlag === '3'"
-                    class="auth-info m-auth-info"
-                    style="color:black"
-                  >{{$t('userInfo.pending')}}</span>
-                  <!-- <span
-                    v-if="auditFlag === '4'"
-                    class="auth-info m-auth-info"
-                    style="color:black"
-                  >
-                  {{$t('userInfo.verified')}}
-                  </span>-->
-                  <span
-                    v-if="auditFlag === '5'"
-                    class="auth-info m-auth-info"
-                    style="color:black"
-                  >{{$t('userInfo.vFailed')}}</span>
-                  <a
-                    v-if="auditFlag !== '4'"
-                    class="isActive m-button"
-                    @click="adv_verifyDialogVisible = true"
-                  >{{$t('userInfo.doVerify')}}</a>
-                  <!-- <span v-if="hasAdvVerify" class="isActive m-button">已认证</span> -->
-                </p>
-                <el-dialog
-                  v-loading="advLoading"
-                  :modal="true"
-                  :visible.sync="adv_verifyDialogVisible"
-                  :lock-scroll="true"
-                  :modal-append-to-body="false"
-                  width="500px"
-                  :title="$t('userInfo.advVer')"
-                  center
-                >
-                  <div style="text-align: center;">
-                    <div class="dialog-info">
-                      <!-- <div style="margin: 20px 0;font-weight: 700;"><span>交易额超过单笔 {{ normalUserMax }}{{ this.currencyType }} 或累计 {{ normalUserTotal }}{{this.currencyType}} 需进行高级认证！</span></div> -->
-                      <el-upload
-                        ref="upload"
-                        action
-                        :file-list="adv_fileList"
-                        :on-change="handleChangeas"
-                        :on-remove="handleRemovea"
-                        :limit="3"
-                        :auto-upload="false"
-                        list-type="picture"
-                      >
-                        <el-button
-                          slot="trigger"
-                          size="small"
-                          type="primary"
-                        >{{$t('userInfo.chooseFile')}}</el-button>
-                        <el-button
-                          size="small"
-                          type="primary"
-                          @click="handleAdvancedVerify"
-                        >{{$t('userInfo.clickToUpload')}}</el-button>
-                        <div slot="tip" class="el-upload__tip">{{$t('userInfo.advTip')}}</div>
-                      </el-upload>
-                    </div>
-                  </div>
-                </el-dialog>
-              </div>
-            </div>
-          </el-card>
-          <!-- todo:实名认证后才可以添加收款方式 -->
-          <el-card :class="animate.three" :body-style="{ padding: '30px'}" class="box-card user-payment">
-            <div slot="header" class="clearfix">
-              <span style="font-size: 18px; font-weight:700">{{$t('userInfo.payment')}}</span>
-              <p
-                class="font14 font-gray"
-                style="margin-bottom: 0;margin-top: 15px;"
-              >{{$t('userInfo.addPayTip')}}</p>
-            </div>
-            <div v-if="hasPayment">
-              <div v-for="(item, index) in userPayment" :key="index" class="user-info-list">
-                <p class="list-label"/>
-                <div class="info-wrapper">
-                  <p class="list-desc">
-                    <span
-                      class="desc-name m-desc-name"
-                    >{{ getPaywayByID(item.paywayId || '-1').payName }}</span>
-                    <span
-                      class="auth-info m-auth-info"
-                      style="color: rgb(153, 153, 153);"
-                    >{{ item.pram1 === "null"? '':item.pram1 }} {{ item.pram2 === "null"? '':item.pram2 }} {{ item.pram3=== "null"? '':item.pram3 }} {{ item.pram4 === "null"? '':item.pram4 }}</span>
-                    <span class="isActive m-button">
-                      <el-switch
-                        :id="item.paywayId"
-                        v-model="getUserPaywayByID(item.paywayId).statusFlag"
-                        active-text="ON"
-                        inactive-text="OFF"
-                        active-value="1"
-                        inactive-value="0"
-                        @click.native="init(item.paywayId)"
-                        @change="handleChangePayStatus"
-                      />
-                    </span>
-                  </p>
-                </div>
-              </div>
-              <div style="text-align:center;margin-top:30px">
-                <p>
-                  <a
-                    class="font14"
-                    style="color:#638bd4; "
-                    @click="AddPaymentdialogVisible=true"
-                  >{{$t('userInfo.clickToAddPay')}}</a>
-                </p>
-              </div>
-            </div>
-            <div v-else>
-              <div class="has-no-payment font14">
-                <p class="font-gray" style="margin-top:20px">{{$t('userInfo.noPayment')}}</p>
-                <p>
-                  <a
-                    style="color:#638bd4;"
-                    @click="AddPaymentdialogVisible=true"
-                  >{{$t('userInfo.clickToAddPay')}}</a>
-                </p>
-              </div>
-            </div>
-            <addPaymentForm :is-shown="AddPaymentdialogVisible"/>
-          </el-card>
-          <el-dialog
-            :visible.sync="AddPaymentdialogVisible"
-            :before-close="handleClose"
-            :modal-append-to-body="false"
-            :title="$t('userInfo.addPayment')"
-            width="472px"
-          >
-            <div class="add-payment-form">
-              <div class="payment-params">
-                <el-form
-                  :model="addPaymenForm"
-                  label-position="top"
-                  label-width="80px"
-                  style="width:100%"
-                >
-                  <el-form-item :label="$t('userInfo.payment')">
-                    <el-select v-model="addPaymenForm.id" style="width:100%">
-                      <el-option
-                        v-for="(item, id) in this.$store.state.Common.supportPayway"
-                        :label="item.payName"
-                        :value="item.id"
-                        :key="id"
-                      />
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item
-                    v-for="(item, id, index) in this.currentPayway"
-                    v-show="item !== null"
-                    :key="id"
-                    :label="item"
-                    :prop="'pram'+ (index+1)"
-                  >
-                    <el-input v-model="addPaymenForm[id]" type="text"/>
-                  </el-form-item>
-
-                  <!-- action="https://api.hextec.cn:8443/api/v1/pay/qrcode"
-                  :headers="{:'Bearer '+this.$store.state.user.token}"-->
-                  <el-form-item v-if="this.hasQrCode" :label="$t('userInfo.qrCode')">
-                    <el-upload
-                      action
-                      :limit="1"
-                      :auto-upload="false"
-                      :on-change="handleChange"
-                      :on-remove="handleRemove"
-                      :file-list="this.qrFile"
-                      class="upload-demo"
-                      list-type="picture-card"
-                    >
-                      <el-button
-                        v-if="this.qrFile.length ==0"
-                        size="small"
-                        type="primary"
-                      >{{$t('userInfo.clickToUpload')}}</el-button>
-                    </el-upload>
-                  </el-form-item>
-                  <!-- <el-form-item label="安全密码">
-                    <el-input type='password'></el-input>
-                  </el-form-item>-->
-                  <el-form-item>
-                    <el-button
-                      style="width:100%"
-                      type="primary"
-                      @click="handleAddPayment"
-                    >{{$t('userInfo.confirmAdd')}}</el-button>
-                  </el-form-item>
-                </el-form>
-              </div>
-            </div>
-          </el-dialog>
+          <secure-info></secure-info>
+          <verify-info></verify-info>
+          <payway-info></payway-info>
         </div>
       </div>
     </div>
@@ -423,8 +50,8 @@
 </template>
 
 <script>
-import addPaymentForm from "./components/addPaymentForm";
-import googleCode from "./components/googleCode";
+// import addPaymentForm from "./components/addPaymentForm";
+// import googleCode from "./components/googleCode";
 import VueRecaptcha from "vue-recaptcha";
 import { parseTime, isImage, isMp4 } from "../../utils/index";
 import {
@@ -438,108 +65,104 @@ import {
 import { qrCodeUpLoad, imgsUpload, videoUpLoad } from "@/api/cms";
 import { unBindEmail } from "../../api/verify_code";
 import { mapGetters } from "vuex";
+import secureInfo from './components/secureInfo'
+import verifyInfo from './components/verifyInfo'
+import paywayInfo from './components/paywayInfo'
 export default {
-  name: "TradeUserCenter",
+  name: "user-center",
   components: {
-    addPaymentForm,
-    googleCode
+    secureInfo,verifyInfo,paywayInfo
+    // googleCode
   },
-  data() {
-    return {
-      animate:{
-        one:'animated bounceInRight',
-        two:'animated bounceInLeft',
-        three: '',
-        four: '',
-        five: ''
-      },
-      advLoading: false,
-      isBind: false,
-      AddPaymentdialogVisible: false,
-      adv_verifyDialogVisible: false,
-      targetPaywayID: "",
-      // auditFlag: this.$store.state.user.verifyInfo===null? '':auditFlag,
-      adv_fileList: [],
-      googleVisiable: false,
-      advFrom: {
-        img1: null,
-        img2: null,
-        video: null
-      },
-      currentPayway: {
-        pram1: null,
-        pram2: null,
-        pram3: null,
-        pram4: null
-        // qrcode: null
-      },
-      hasQrCode: false,
-      // qrcode:'',
-      addPaymenForm: {
-        id: "", // bank表id
-        pram1: "",
-        pram2: "",
-        pram3: "",
-        pram4: ""
-        // qrcode: '',
-      },
-      qrFile: []
-    };
-  },
-  mounted(){
-     window.addEventListener("scroll", this.handleScroll);
-  },
-  computed: {
-    ...mapGetters(["getVerifyInfo"]),
-    auditFlag() {
-      if (this.getVerifyInfo === false) {
-        return "0";
-      } else {
-        return this.getVerifyInfo.auditFlag;
+  // data() {
+  //   return {
+      
+  //     animate:{
+  //       // one:'animated bounceInRight',
+  //       two:'animated bounceInLeft',
+  //       three: '',
+  //       four: '',
+  //       five: ''
+  //     },
+  //     advLoading: false,
+  //     isBind: false,
+  //     AddPaymentdialogVisible: false,
+  //     adv_verifyDialogVisible: false,
+  //     targetPaywayID: "",
+  //     // auditFlag: this.$store.state.user.verifyInfo===null? '':auditFlag,
+  //     adv_fileList: [],
+  //     googleVisiable: false,
+  //     advFrom: {
+  //       img1: null,
+  //       img2: null,
+  //       video: null
+  //     },
+  //     currentPayway: {
+  //       pram1: null,
+  //       pram2: null,
+  //       pram3: null,
+  //       pram4: null
+  //       // qrcode: null
+  //     },
+  //     hasQrCode: false,
+  //     // qrcode:'',
+  //     addPaymenForm: {
+  //       id: "", // bank表id
+  //       pram1: "",
+  //       pram2: "",
+  //       pram3: "",
+  //       pram4: ""
+  //       // qrcode: '',
+  //     },
+  //     qrFile: []
+  //   };
+  // },
+  // mounted(){
+  //    window.addEventListener("scroll", this.handleScroll);
+  // },
+  // computed: {
+  //   ...mapGetters(["getVerifyInfo"]),
+  //   hasPayment() {
+  //     return (
+  //       this.$store.state.user.payway.length == !0 ||
+  //       this.$store.state.user.payway !== {}
+  //     );
+  //   },
+    computed:{
+      userInfo() {
+        return this.$store.state.user.userInfo
       }
-    },
-    safeLevel() {
-      return "中";
-    },
-    userInfo() {
-      return this.$store.state.user.userInfo;
-    },
-    hasPayment() {
-      return (
-        this.$store.state.user.payway.length == !0 ||
-        this.$store.state.user.payway !== {}
-      );
-    },
-    userPayment() {
-      return this.$store.state.user.payway;
-    },
-    hasEmail() {
-      return !!this.$store.state.user.userInfo.email;
-      // return true
-    },
-    hasTradePwd() {
-      return this.$store.state.trade.hasTradePwd;
-    },
+},
+  //   userPayment() {
+  //     return this.$store.state.user.payway;
+  //   },
+  //   hasEmail() {
+  //     return !!this.$store.state.user.userInfo.email;
+  //     // return true
+  //   },
+  //   hasTradePwd() {
+  //     return this.$store.state.trade.hasTradePwd;
+  //   },
 
-    parseTime(a) {
-      return parseTime(a);
-    },
-    hasAdvVerify() {
-      if (this.verifyInfo == false) {
-        return false;
-      } else {
-        if (this.verifyInfo["auditFlag"] === "4") {
-          return true;
-        }
-      }
-    },
-    getID() {
-      return this.addPaymenForm.id;
-    },
-    hhshown() {
-      return this.AddPaymentdialogVisible;
-    }
-  },
+  //   parseTime(a) {
+  //     return parseTime(a);
+  //   },
+  //   hasAdvVerify() {
+  //     if (this.verifyInfo == false) {
+  //       return false;
+  //     } else {
+  //       if (this.verifyInfo["auditFlag"] === "4") {
+  //         return true;
+  //       }
+  //     }
+  //   },
+  //   getID() {
+  //     return this.addPaymenForm.id;
+  //   },
+  //   hhshown() {
+  //     return this.AddPaymentdialogVisible;
+  //   }
+  // },
   created() {
     if (!this.$store.state.user.token) {
       this.$router.push({ name: "login" });
@@ -549,331 +172,324 @@ export default {
     this.$nextTick(() => {
       this.$store.dispatch("GetUserPayway");
       this.$store.dispatch("GetTradePwd");
-      isBindGoogle().then(res => {
-        if (res && res.code === "200") {
-          this.isBind = res.content;
-        }
-      });
-      // console.log(this.getUserPaywayByID('2').paywayId)
     });
   },
-  methods: {
-    handleScroll(){
-      var scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop;
-      if(scrollTop > 210){
-          this.animate.three = 'animated bounceInRight'
-      }
-      console.log(scrollTop)
-    },
-    getPaywayByID(id) {
-      for (const item of this.$store.state.Common.supportPayway) {
-        if (item.id === id) {
-          return item;
-        }
-      }
-      return {
-        payName: "unknown",
-        statusFlag: "0"
-      };
-    },
-    changeNickname() {
-      this.$prompt(this.$t("userInfo.nickNameTip"), {
-        confirmButtonText: this.$t("confirm"),
-        cancelButtonText: this.$t("canceled"),
-        inputPattern: /^.{3,10}$/,
-        inputErrorMessage: this.$t("userInfo.changeRule")
-      }).then(nickName => {
-        if (nickName.action === "confirm") {
-          change_nickname(nickName.value)
-            .then(res => {
-              this.$store.dispatch("GetUserInfo");
-              if (res && res.code === "200") {
-                this.$message({
-                  type: "success",
-                  message: this.$t("changeSuccess")
-                });
-              }
-            })
-            .catch(_ => {
-              this.$notify.error(this.$t("changeFailed"));
-            });
-        }
-      });
-    },
-    getUserPaywayByID(id) {
-      for (const item of this.$store.state.user.payway) {
-        if (item.paywayId == id) {
-          return item;
-        }
-      }
-    },
-    init(id) {
-      // console.log('fuck')
-      this.targetPaywayID = id;
-    },
-    handleChangePayStatus(newValue) {
-      this.$nextTick(() => {
-        const formData = new FormData();
-        formData.append("payWayId", this.targetPaywayID);
-        formData.append("status", newValue);
-        changePaymentStatus(formData).then(response => {
-          this.$store.dispatch("GetUserPayway");
-        });
-      });
-    },
-    unbindButton() {
-      this.$alert(
-        this.$t("userInfo.confirmUnbind"),
-        this.$t("userInfo.unbindEmail"),
-        {
-          confirmButtonText: this.$t("userInfo.confirmUnbind"),
-          callback: action => {
-            if (action == "confirm") {
-              unBindEmail()
-                .then(response => {
-                  this.$notify.success(this.$t("userInfo.emailSent"));
-                })
-                .catch(_ => {});
-            } else {
-              return false;
-            }
-          }
-        }
-      );
-    },
-    // ============tools======================
-    isImage(qrCodeFile) {
-      return isImage(qrCodeFile);
-    },
-    isMp4(file) {
-      return isMp4(file);
-    },
-    handleClose(done) {
-      this.$confirm(this.$t("confirm"))
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
-    },
-    // ============tools======================
+  // methods: {
+  //   handleScroll(){
+  //     var scrollTop =
+  //       window.pageYOffset ||
+  //       document.documentElement.scrollTop ||
+  //       document.body.scrollTop;
+  //     if(scrollTop > 210){
+  //         this.animate.three = 'animated bounceInRight'
+  //     }
+  //   },
+  //   getPaywayByID(id) {
+  //     for (const item of this.$store.state.Common.supportPayway) {
+  //       if (item.id === id) {
+  //         return item;
+  //       }
+  //     }
+  //     return {
+  //       payName: "unknown",
+  //       statusFlag: "0"
+  //     };
+  //   },
+  //   changeNickname() {
+  //     this.$prompt(this.$t("userInfo.nickNameTip"), {
+  //       confirmButtonText: this.$t("confirm"),
+  //       cancelButtonText: this.$t("canceled"),
+  //       inputPattern: /^.{3,10}$/,
+  //       inputErrorMessage: this.$t("userInfo.changeRule")
+  //     }).then(nickName => {
+  //       if (nickName.action === "confirm") {
+  //         change_nickname(nickName.value)
+  //           .then(res => {
+  //             this.$store.dispatch("GetUserInfo");
+  //             if (res && res.code === "200") {
+  //               this.$message({
+  //                 type: "success",
+  //                 message: this.$t("changeSuccess")
+  //               });
+  //             }
+  //           })
+  //           .catch(_ => {
+  //             this.$notify.error(this.$t("changeFailed"));
+  //           });
+  //       }
+  //     });
+  //   },
+  //   getUserPaywayByID(id) {
+  //     for (const item of this.$store.state.user.payway) {
+  //       if (item.paywayId == id) {
+  //         return item;
+  //       }
+  //     }
+  //   },
+  //   init(id) {
+  //     // console.log('fuck')
+  //     this.targetPaywayID = id;
+  //   },
+  //   handleChangePayStatus(newValue) {
+  //     this.$nextTick(() => {
+  //       const formData = new FormData();
+  //       formData.append("payWayId", this.targetPaywayID);
+  //       formData.append("status", newValue);
+  //       changePaymentStatus(formData).then(response => {
+  //         this.$store.dispatch("GetUserPayway");
+  //       });
+  //     });
+  //   },
+  //   unbindButton() {
+  //     this.$alert(
+  //       this.$t("userInfo.confirmUnbind"),
+  //       this.$t("userInfo.unbindEmail"),
+  //       {
+  //         confirmButtonText: this.$t("userInfo.confirmUnbind"),
+  //         callback: action => {
+  //           if (action == "confirm") {
+  //             unBindEmail()
+  //               .then(response => {
+  //                 this.$notify.success(this.$t("userInfo.emailSent"));
+  //               })
+  //               .catch(_ => {});
+  //           } else {
+  //             return false;
+  //           }
+  //         }
+  //       }
+  //     );
+  //   },
+  //   // ============tools======================
+  //   isImage(qrCodeFile) {
+  //     return isImage(qrCodeFile);
+  //   },
+  //   isMp4(file) {
+  //     return isMp4(file);
+  //   },
+  //   handleClose(done) {
+  //     this.$confirm(this.$t("confirm"))
+  //       .then(_ => {
+  //         done();
+  //       })
+  //       .catch(_ => {});
+  //   },
+  //   // ============tools======================
 
-    //===================高级认证start==================
+  //   //===================高级认证start==================
 
-    handleChangeas(file, fileList) {
-      if (!(this.isImage(file.raw) || this.isMp4(file.raw))) {
-        // console.log("格式错误");
-        fileList.pop();
-        this.$notify.error(this.$t("userInfo.wrongType"));
-        return false;
-      } else {
-        // 是图片或者视频
-        this.advLoading = true;
-        this.adv_fileList.push(file);
-        let rawFrom = new FormData();
-        rawFrom.append("m", file.raw);
-        if (this.isImage(file.raw)) {
-          // 是文件则调用文件接口
-          imgsUpload(rawFrom)
-            .then(res => {
-              this.advLoading = false;
-              if (res && res.code === "200") {
-                if (this.advFrom.img1 === null) {
-                  // 一号图片位置空缺
-                  this.advFrom.img1 = res.content;
-                } else {
-                  // 二号图片位置空缺
-                  this.advFrom.img2 = res.content;
-                }
-              } else {
-                // 返回失败 弹栈
-                this.$notify.error(this.$t("userInfo.upLoadFailed"));
-                this.adv_fileList.pop();
-                fileList.pop();
-              }
-            })
-            .catch(_ => {
-              // 异常 弹栈
-              this.advLoading = false;
-              fileList.pop();
-              this.adv_fileList.pop();
-              this.$notify.error(this.$t("userInfo.upLoadFailed"));
-            });
-        } else if (this.isMp4(file.raw)) {
-          // 是视频则调用视频接口
-          videoUpLoad(rawFrom).then(res => {
-            if (res && res.code === "200") {
-              this.advFrom.video = res.content;
-            } else {
-              this.$notify.error(this.$t("userInfo.upLoadFailed"));
-              this.adv_fileList.pop();
-              fileList.pop();
-            }
-          });
-        }
+  //   handleChangeas(file, fileList) {
+  //     if (!(this.isImage(file.raw) || this.isMp4(file.raw))) {
+  //       // console.log("格式错误");
+  //       fileList.pop();
+  //       this.$notify.error(this.$t("userInfo.wrongType"));
+  //       return false;
+  //     } else {
+  //       // 是图片或者视频
+  //       this.advLoading = true;
+  //       this.adv_fileList.push(file);
+  //       let rawFrom = new FormData();
+  //       rawFrom.append("m", file.raw);
+  //       if (this.isImage(file.raw)) {
+  //         // 是文件则调用文件接口
+  //         imgsUpload(rawFrom)
+  //           .then(res => {
+  //             this.advLoading = false;
+  //             if (res && res.code === "200") {
+  //               if (this.advFrom.img1 === null) {
+  //                 // 一号图片位置空缺
+  //                 this.advFrom.img1 = res.content;
+  //               } else {
+  //                 // 二号图片位置空缺
+  //                 this.advFrom.img2 = res.content;
+  //               }
+  //             } else {
+  //               // 返回失败 弹栈
+  //               this.$notify.error(this.$t("userInfo.upLoadFailed"));
+  //               this.adv_fileList.pop();
+  //               fileList.pop();
+  //             }
+  //           })
+  //           .catch(_ => {
+  //             // 异常 弹栈
+  //             this.advLoading = false;
+  //             fileList.pop();
+  //             this.adv_fileList.pop();
+  //             this.$notify.error(this.$t("userInfo.upLoadFailed"));
+  //           });
+  //       } else if (this.isMp4(file.raw)) {
+  //         // 是视频则调用视频接口
+  //         videoUpLoad(rawFrom).then(res => {
+  //           if (res && res.code === "200") {
+  //             this.advFrom.video = res.content;
+  //           } else {
+  //             this.$notify.error(this.$t("userInfo.upLoadFailed"));
+  //             this.adv_fileList.pop();
+  //             fileList.pop();
+  //           }
+  //         });
+  //       }
 
         
-      }
-    },
-    handleRemovea(file, fileList) {
-      let index = 0;
-      for (let item of this.adv_fileList) {
-        console.log(item.url);
-        if (item.url == file.url) {
-          this.adv_fileList.splice(index, 1);
-        }
-        index++;
-      }
-    },
-    handleAdvancedVerify() {
-      if (this.adv_fileList.length !== 3) {
-        this.$notify.error(this.$t("userInfo.verifyInfo"));
-        return false;
-      } else {
-        this.advLoading = true;
-        formData.append("img1", this.advFrom.img1);
-        formData.append("img2", this.advFrom.img2);
-        formData.append("video", this.advFrom.video);
-        submitAdvanceVerify(formData)
-          .then(response => {
-            this.advLoading = false;
-            if (response && response.code === "200") {
-              this.$notify.success(this.$t("userInfo.advSubmitSuc"));
-            } else {
-              this.$notify.error(this.$t("userInfo.advSubmitFailed"));
-            }
-          })
-          .catch(_ => {
-            this.$notify.error(this.$t("userInfo.advSubmitFailed"));
-            this.advLoading = false;
-          });
-      }
-      this.adv_verifyDialogVisible = false;
-    },
+  //     }
+  //   },
+  //   handleRemovea(file, fileList) {
+  //     let index = 0;
+  //     for (let item of this.adv_fileList) {
+  //       console.log(item.url);
+  //       if (item.url == file.url) {
+  //         this.adv_fileList.splice(index, 1);
+  //       }
+  //       index++;
+  //     }
+  //   },
+  //   handleAdvancedVerify() {
+  //     if (this.adv_fileList.length !== 3) {
+  //       this.$notify.error(this.$t("userInfo.verifyInfo"));
+  //       return false;
+  //     } else {
+  //       this.advLoading = true;
+  //       formData.append("img1", this.advFrom.img1);
+  //       formData.append("img2", this.advFrom.img2);
+  //       formData.append("video", this.advFrom.video);
+  //       submitAdvanceVerify(formData)
+  //         .then(response => {
+  //           this.advLoading = false;
+  //           if (response && response.code === "200") {
+  //             this.$notify.success(this.$t("userInfo.advSubmitSuc"));
+  //           } else {
+  //             this.$notify.error(this.$t("userInfo.advSubmitFailed"));
+  //           }
+  //         })
+  //         .catch(_ => {
+  //           this.$notify.error(this.$t("userInfo.advSubmitFailed"));
+  //           this.advLoading = false;
+  //         });
+  //     }
+  //     this.adv_verifyDialogVisible = false;
+  //   },
 
-    //===================高级认证end==================
+  //   //===================高级认证end==================
 
-    // ================== 支付方式添加begin========================
+  //   // ================== 支付方式添加begin========================
 
-    handleAddPayment() {
-      console.log("1");
-      let qrCodeUrl = "";
-      if (this.hasQrCode) {
-        // 判断是否需要qrcpde
-        let qrCodeFile = this.qrFile[0].raw;
-        // 检查文件后缀
-        if (!this.isImage(qrCodeFile)) {
-          this.$notify.error("请添加图片");
-          return false;
-        }
-        // 上传文件 拉回地址
-        console.log("2");
-        let fileForm = new FormData();
-        fileForm.append("paymentImg", qrCodeFile);
-        qrCodeUpLoad(fileForm)
-          .then(res => {
-            console.log("3");
+  //   handleAddPayment() {
+  //     console.log("1");
+  //     let qrCodeUrl = "";
+  //     if (this.hasQrCode) {
+  //       // 判断是否需要qrcpde
+  //       let qrCodeFile = this.qrFile[0].raw;
+  //       // 检查文件后缀
+  //       if (!this.isImage(qrCodeFile)) {
+  //         this.$notify.error("请添加图片");
+  //         return false;
+  //       }
+  //       // 上传文件 拉回地址
+  //       console.log("2");
+  //       let fileForm = new FormData();
+  //       fileForm.append("paymentImg", qrCodeFile);
+  //       qrCodeUpLoad(fileForm)
+  //         .then(res => {
+  //           console.log("3");
 
-            if (res && res.code === "200") {
-              qrCodeUrl = res.content;
-              // 拉回成功 添加到addform中
-              this.doAddPayment(qrCodeUrl);
-            } else {
-              // 文件上传失败
-              this.$notify.error(this.$t("userInfo.addFailed"));
-              return false;
-            }
-          })
-          .catch(_ => {
-            console.log("4");
-            this.$notify.error(this.$t("userInfo.addFailed"));
-            return false;
-          });
-      } else {
-        //  不需要qrcode直接上传
-        this.doAddPayment(qrCodeUrl);
-      }
-    },
-    doAddPayment(qrCodeUrl) {
-      const formData = new FormData();
-      formData.append("id", this.addPaymenForm.id);
-      formData.append("pram1", this.addPaymenForm.pram1);
-      formData.append("pram2", this.addPaymenForm.pram2);
-      formData.append("pram3", this.addPaymenForm.pram3);
-      formData.append("pram4", this.addPaymenForm.pram4);
-      if (this.hasQrCode) {
-        if (qrCodeUrl === "") {
-          return false;
-        }
-        formData.append("qrcode", qrCodeUrl);
-      }
-      addPay(formData)
-        .then(response => {
-          if (response && response.code === "200") {
-            this.$notify.success(this.$t("userInfo.addSuccess"));
-          } else {
-            this.$notify.success(this.$t("userInfo.addFailed"));
-          }
-          this.AddPaymentdialogVisible = false;
-          this.$store.dispatch("GetUserPayway");
-        })
-        .catch(_ => {
-          this.$notify.error(this.$t("shitHappens"));
-        });
-    },
-    handleChange(file) {
-      this.qrFile.push(file);
-      // this.addPaymenForm.qrcode = file.raw;
-      document
-        .getElementsByClassName("el-upload--picture-card")[0]
-        .classList.add("noo");
-    },
-    handleRemove(file, fileList) {
-      document
-        .getElementsByClassName("el-upload--picture-card")[0]
-        .classList.remove("noo");
-      this.qrFile = [];
-      // this.addPaymenForm.qrcode = ''
-    },
-    // ================== 支付方式添加end========================
-    handleClose(done) {
-      this.$confirm(this.$t("confirm"))
-        .then(_ => {
-          done();
-        })
-        .catch(_ => {});
-    }
-  },
+  //           if (res && res.code === "200") {
+  //             qrCodeUrl = res.content;
+  //             // 拉回成功 添加到addform中
+  //             this.doAddPayment(qrCodeUrl);
+  //           } else {
+  //             // 文件上传失败
+  //             this.$notify.error(this.$t("userInfo.addFailed"));
+  //             return false;
+  //           }
+  //         })
+  //         .catch(_ => {
+  //           console.log("4");
+  //           this.$notify.error(this.$t("userInfo.addFailed"));
+  //           return false;
+  //         });
+  //     } else {
+  //       //  不需要qrcode直接上传
+  //       this.doAddPayment(qrCodeUrl);
+  //     }
+  //   },
+  //   doAddPayment(qrCodeUrl) {
+  //     const formData = new FormData();
+  //     formData.append("id", this.addPaymenForm.id);
+  //     formData.append("pram1", this.addPaymenForm.pram1);
+  //     formData.append("pram2", this.addPaymenForm.pram2);
+  //     formData.append("pram3", this.addPaymenForm.pram3);
+  //     formData.append("pram4", this.addPaymenForm.pram4);
+  //     if (this.hasQrCode) {
+  //       if (qrCodeUrl === "") {
+  //         return false;
+  //       }
+  //       formData.append("qrcode", qrCodeUrl);
+  //     }
+  //     addPay(formData)
+  //       .then(response => {
+  //         if (response && response.code === "200") {
+  //           this.$notify.success(this.$t("userInfo.addSuccess"));
+  //         } else {
+  //           this.$notify.success(this.$t("userInfo.addFailed"));
+  //         }
+  //         this.AddPaymentdialogVisible = false;
+  //         this.$store.dispatch("GetUserPayway");
+  //       })
+  //       .catch(_ => {
+  //         this.$notify.error(this.$t("shitHappens"));
+  //       });
+  //   },
+  //   handleChange(file) {
+  //     this.qrFile.push(file);
+  //     // this.addPaymenForm.qrcode = file.raw;
+  //     document
+  //       .getElementsByClassName("el-upload--picture-card")[0]
+  //       .classList.add("noo");
+  //   },
+  //   handleRemove(file, fileList) {
+  //     document
+  //       .getElementsByClassName("el-upload--picture-card")[0]
+  //       .classList.remove("noo");
+  //     this.qrFile = [];
+  //     // this.addPaymenForm.qrcode = ''
+  //   },
+  //   // ================== 支付方式添加end========================
+  //   handleClose(done) {
+  //     this.$confirm(this.$t("confirm"))
+  //       .then(_ => {
+  //         done();
+  //       })
+  //       .catch(_ => {});
+  //   }
+  // },
 
-  watch: {
-    addPaymenForm: {
-      handler(val, oldval) {
-        for (const item of this.$store.state.Common.supportPayway) {
-          if (val.id === item.id) {
-            this.currentPayway.pram1 = item.pram1;
-            this.currentPayway.pram2 = item.pram2;
-            this.currentPayway.pram3 = item.pram3;
-            this.currentPayway.pram4 = item.pram4;
-            if (item.qrcode === "1") {
-              this.hasQrCode = true;
-            } else {
-              this.hasQrCode = false;
-            }
-          }
-        }
-      },
-      deep: true
-    },
-    getID(newValue, oldval) {
-      (this.addPaymenForm.pram1 = null),
-        (this.addPaymenForm.pram2 = null),
-        (this.addPaymenForm.pram3 = null),
-        (this.addPaymenForm.pram4 = null),
-        (this.qrFile = []);
-    }
-  }
+  // watch: {
+  //   addPaymenForm: {
+  //     handler(val, oldval) {
+  //       for (const item of this.$store.state.Common.supportPayway) {
+  //         if (val.id === item.id) {
+  //           this.currentPayway.pram1 = item.pram1;
+  //           this.currentPayway.pram2 = item.pram2;
+  //           this.currentPayway.pram3 = item.pram3;
+  //           this.currentPayway.pram4 = item.pram4;
+  //           if (item.qrcode === "1") {
+  //             this.hasQrCode = true;
+  //           } else {
+  //             this.hasQrCode = false;
+  //           }
+  //         }
+  //       }
+  //     },
+  //     deep: true
+  //   },
+  //   getID(newValue, oldval) {
+  //     (this.addPaymenForm.pram1 = null),
+  //       (this.addPaymenForm.pram2 = null),
+  //       (this.addPaymenForm.pram3 = null),
+  //       (this.addPaymenForm.pram4 = null),
+  //       (this.qrFile = []);
+  //   }
+  // }
 };
 </script>
 

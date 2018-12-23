@@ -12,8 +12,6 @@ module.exports = {
   delete: '删除',                         //
   deleteSuc: '删除成功',                    //
   deleteFailde: '删除失败',                   //
-
-
   price: '单价',
   placeOrder: '下单',
   loginNeeded: '请先登录',
@@ -303,6 +301,7 @@ module.exports = {
     submitNow: '立即发布',
     submitSuccess: '发布成功',
     submitFailed: '发布失败',
+    expireTip1: '买方付款时限为:',      //
   },
   withDraw: {
     title: '提币地址管理',
@@ -373,6 +372,11 @@ module.exports = {
     coinTyp: '币种',
     orderList: '订单列表',
     orderConfirm: '订单确认',
+    orderMax: '最大下单金额为',
+    orderMin: '最小下单金额为',
+    merchantMsg: '商家的备注',
+    loginTip: '您必须先登录才能进行法币交易',
+    insufficientBalance: '该币种币种余额不足',
     passTitle: '订单放行'       // 以上
   },
   userInfo: {
@@ -384,7 +388,7 @@ module.exports = {
     monthDeal: '30日成单',
     avgPassTime: '平均放行时间',
     times: '(次)',
-    min: '(分钟)',
+    min: '分钟',
     finishRate: '完成率',
     tip1: '本账号于',
     tip1_1: '注册',
@@ -420,6 +424,7 @@ module.exports = {
     confirmUnbind: '确定解绑邮箱？',
     unbindEmail: '解绑邮箱',
     emailSent: '邮件已发送，请注意查收',        // 以下
+    copySuccess: '复制成功',
     googleInfo1: '谷歌验证器是一款动态口令工具，工作原理类似短信动态验证。绑定后每30s生成一个动态验证码，验证码可用于登录、提现、修改安全设置等操作的安全验证。',
     info2: '下载谷歌验证器APP',
     info3: 'iOS用户登录App Store搜索“Authenticator”下载。',
@@ -445,7 +450,8 @@ module.exports = {
     advSubmitSuc: '高级认证已提交',
     advSubmitFailed: '高级认证提交失败',
     upLoadFailed: '文件上传失败.请检查您的网络环境',
-    wrongType: '仅支持图片和视频类型'
+    wrongType: '仅支持图片和视频类型',
+    paywayStatusChangeSucc: '支付状态更改成功',
   },
   nofound: {                  // 以下
     t1: '您访问的页面不存在',

@@ -38,7 +38,7 @@
       >
         <template slot="prepend">{{ cuntryCode }}</template>
 
-        <template slot="suffix">
+        <template slot="append">
           <el-button
             :class="buttonColor"
             :disabled="timeRest === 60? false:true"
@@ -286,10 +286,10 @@ export default {
     background: transparent;
     border: none;
     border-radius: 0%; // color: #7a98f7;
-    ::before {
-      content: "|";
-      margin-right: 30px; // color: #1e2235;
-    }
+    // ::before {
+    //   content: "|";
+    //   margin-right: 30px; // color: #1e2235;
+    // }
   }
   .el-select {
     width: 100%;

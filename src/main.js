@@ -6,7 +6,7 @@ import locale from 'element-ui/lib/locale/lang/en'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'element-ui/lib/theme-chalk/display.css'
 import '@/style/index.scss'
-import '@/views/icon'
+// import '@/views/icon'
 // import echarts from 'echarts'
 
 import Vue from 'vue'

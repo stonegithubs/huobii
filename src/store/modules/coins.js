@@ -233,32 +233,7 @@ const coinData = {
       }
       return res
     },
-    // getSymbolData: (state) => (symbolName) => {
-    //   let res = []
-    //   for (let item of state.symbols) {
-    //     if (item['quote-currency'] === symbolName) {
-    //       let target = item['symbol']
-    //       for (let symbol of state.symbolList) {
-    //         if (symbol['symbol'] === target) {
-    //           symbol['amount-precision'] = item['amount-precision']
-    //           symbol['price-precision'] = item['price-precision']
-    //           symbol['quote-currency'] = item['quote-currency']
-    //           symbol['base-currency'] = item['base-currency']
-    //           symbol['symbol-partition'] = item['symbol-partition']
-    //           symbol['symbolName'] = item['base-currency'] + '/' + item['quote-currency']
-    //           for(let fuck of state.rateList){
-    //             let mmp = item['quote-currency']+'_'+item['base-currency']
-    //             if(mmp = fuck.symbol){
-    //               symbol.rate = mmp.changePercentage
-    //               res.push(symbol)
-    //             }
-    //           }
-    //         }
-    //       }
-    //     }
-    //   }
-    //   return res;
-    // },
+   
     getSupportCoin: (state) => {
       return state.supportedCoin
     },

@@ -1,6 +1,6 @@
-import { loginByUsername, registerByPhone, logout, fastLogin } from '../../api/login'
+import { loginByUsername, registerByPhone, fastLogin } from '../../api/login'
 import { getVerifyInfo, getUserInfo, getPayway } from '../../api/user'
-import Vue from 'vue'
+import router from 'vue-router'
 const user = {
   state: {
     userInfo: null || JSON.parse(sessionStorage.getItem('userInfo')),
@@ -108,7 +108,7 @@ const user = {
         commit('SET_TOKEN', null)
         commit('SET_VERIFYINFO', null)
         sessionStorage.clear()
-        Vue.$router.push({ name: 'login' })
+        router.push({ name: 'login' })
       })
     },
 

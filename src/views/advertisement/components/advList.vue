@@ -42,7 +42,11 @@
           </el-table-column>
           <el-table-column width="260px" prop="address" :label="$t('exchange.main.operation')">
             <template slot-scope="scope">
-              <el-button @click="checkDetail(scope.row.id)" type="primary" size="mini">{{$t('fb.checkTradeDetail')}}</el-button>
+              <el-button
+                @click="checkDetail(scope.row.id)"
+                type="primary"
+                size="mini"
+              >{{$t('fb.checkTradeDetail')}}</el-button>
               <el-button
                 v-if="scope.row.status !== '3'"
                 @click="repeal(scope.row)"
@@ -53,15 +57,23 @@
         </el-table>
       </div>
     </div>
-    <el-dialog :title="$t('fb.orderList')" width="1000px" :visible.sync="ordersVisible">
+    <el-dialog :title="$t('fb.orderList')" width="1100px" :visible.sync="ordersVisible">
       <el-table hight="400" :data="detailData" class="inner-table">
+         <el-table-column width="200px" :label="$t('order.orderNo')">
+
+        <template slot-scope="scope">
+           <router-link :to="{ name: 'orderDetail', params: { id: scope.row.orderId, publish:'1' }}">
+              <span class="order-no">{{ scope.row.orderId }}</span>
+           </router-link>
+            </template>
+        </el-table-column>
         <el-table-column :label="$t('fb.direction')" width="60px">
           <template slot-scope="scope">{{scope.row.direction === '0'? $t('sell'):$t('buy')}}</template>
         </el-table-column>
         <el-table-column :label="$t('fb.tradeTotal')" prop width="120px">
           <template
             slot-scope="scope"
-          >{{scope.row.dealPrice}}{{getCashNameById(scope.row.coinId.split("_")[1])}}</template>
+          >{{scope.row.surplus}}{{getCashNameById(scope.row.coinId.split("_")[1])}}</template>
         </el-table-column>
         <el-table-column :label="$t('exchange.main.status')" prop="dealPrice" width="100px">
           <template slot-scope="scope">{{ getState(scope.row.status)}}</template>
@@ -71,7 +83,9 @@
           <template slot-scope="scope">{{ parseTime(scope.row.updateDate)}}</template>
         </el-table-column>
         <el-table-column :label="$t('fb.tradeTarget')" prop="direction">
-          <template slot-scope="scope">{{ scope.row.user.name}}</template>
+          <template slot-scope="scope">
+            <router-link :to="{ name: 'trader', params: {id: scope.row.userId}}">{{ scope.row.user.name}}</router-link>
+          </template>
         </el-table-column>
         <el-table-column :label="$t('fb.contant')" prop="direction">
           <template slot-scope="scope">{{ scope.row.user.mobile}}</template>
@@ -142,6 +156,7 @@
         :current-page.sync="page"
         class
         background
+        @current-change="pageChange"
         layout="prev, pager, next"
       />
     </div>
@@ -351,12 +366,12 @@ export default {
         name: "orderDetail",
         params: { id: order.orderId, publish: "1" }
       });
-      if (order.direction == "0") {
-        // this.confirm();
-      } else {
-        this.currentOrder = order;
-        sendUserCode(this);
-      }
+      // if (order.direction == "0") {
+      //   // this.confirm();
+      // } else {
+      //   this.currentOrder = order;
+      //   sendUserCode(this);
+      // }
     },
     confirm() {
       this.$router.push({
@@ -413,20 +428,9 @@ export default {
           done();
         })
         .catch(_ => {});
-    }
-  },
-  computed: {
-    ...mapGetters([
-      "getCoinNameByIDUp",
-      "getCashNameById",
-      "getSupportCoin",
-      "getSupportCash"
-    ])
-  },
-  watch: {
-    page(page) {
+    },
+    pageChange(page) {
       let s = this.chooseForm;
-      this.isLoading = true;
       fbOrders(
         page,
         10,
@@ -452,19 +456,16 @@ export default {
           this.isLoading = false;
         });
     }
-    // direction() {
-    //   this.init();
-    // },
-    // coinId() {
-    //   this.init();
-    // },
-    // cashId() {
-    //   this.init();
-    // },
-    // state() {
-    //   this.init();
-    // }
-  }
+  },
+  computed: {
+    ...mapGetters([
+      "getCoinNameByIDUp",
+      "getCashNameById",
+      "getSupportCoin",
+      "getSupportCash"
+    ])
+  },
+  watch: {}
 };
 </script>
 
@@ -473,10 +474,10 @@ export default {
   background-color: #fff;
   min-height: 800px;
   padding: 50px 0;
-  .el-table__expanded-cell[class*="cell"] {
-    // padding: 10px 0;
-  }
-
+  a:hover {
+          color: #357ce1;
+          opacity: 0.8;
+        }
   .adv-group {
     display: flex;
     .el-button {
@@ -489,7 +490,7 @@ export default {
     text-align: center;
   }
   .adv-inner {
-    width: 1200px;
+    width: 1231px;
     margin: auto;
     .adv-title {
       font-size: 28px;

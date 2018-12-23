@@ -84,9 +84,9 @@
             <i class="el-icon-arrow-down el-icon--right"/>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item command="th">ไทย</el-dropdown-item>
-            <el-dropdown-item command="en">English</el-dropdown-item>
-            <el-dropdown-item command="zh">简体中文</el-dropdown-item>
+            <el-dropdown-item command="th_TH">ไทย</el-dropdown-item>
+            <el-dropdown-item command="en_US">English</el-dropdown-item>
+            <el-dropdown-item command="zh_CN">简体中文</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -102,7 +102,11 @@ export default {
     };
   },
   created() {
-    // let locale = localStorage.getItem('locale')
+    let locale = localStorage.getItem('locale')
+    console.log(locale)
+    if(locale === null){
+      localStorage.setItem('locale','th_TH')
+    }
     // if(locale){
     // document.title = this.$t("siteName");
     // }
@@ -119,12 +123,13 @@ export default {
     logoutHandler() {
       this.$store
         .dispatch("LogOut")
-        .then(_ => {
-          this.$message.success("logout success");
-        })
-        .catch(err => {
-          // this.$message.error(err);
-        });
+        this.$router.push({ name: 'login'})
+        // .then(_ => {
+        //   this.$message.success("logout success");
+        // })
+        // .catch(err => {
+        //   // this.$message.error(err);
+        // });
     },
     changeLanguage(command) {
       localStorage.setItem("locale", command);
@@ -136,12 +141,12 @@ export default {
   },
   beforeMount() {
     let locale = localStorage.getItem("locale");
-    if (locale === "zh") {
-      this.$i18n.locale = "zh";
-    } else if (locale === "en") {
-      this.$i18n.locale = "en";
+    if (locale === "zh_CN") {
+      this.$i18n.locale = "zh_CN";
+    } else if (locale === "en_US") {
+      this.$i18n.locale = "en_US";
     } else {
-      this.$i18n.locale = "th";
+      this.$i18n.locale = "th_TH";
     }
     document.title = this.$t("siteName");
   }

@@ -13,13 +13,13 @@
     <el-table :class="animateClass" :data="merchantList" style="width: 100%">
       <el-table-column :label="$t('fb.merchant')" width="180">
         <template slot-scope="scope">
-          <div :class="getAvatarColor(scope.row.id)" class="avatar-container">
+          <div :class="getAvatarColor(scope.row.userId)" class="avatar-container">
             <em
               class="name"
             >{{ scope.row.user.name.slice(0,1) === undefined? '':scope.row.user.name.slice(0,1).toUpperCase() }}</em>
           </div>
           <div>
-            <router-link :to="{ name: 'trader', params: {id: scope.row.id}}">
+            <router-link :to="{ name: 'trader', params: {id: scope.row.userId}}">
               <div class="user-info" style="margin-left: 10px">
                 {{ scope.row.user.name }}
                 <!-- ({{scope.row.order_msg.finish}} | {{scope.row.order_msg.finish_rate}}) -->
@@ -169,14 +169,14 @@
 import { change_nickname } from "@/api/user";
 import { getAvatarColor, sendUserCode } from "../../../utils/index";
 import fbChoice from "../../../components/fbChoice";
-import paymentIcon from "./paymentIcon";
+// import paymentIcon from "./paymentIcon";
 import { fbList, fbTrade } from "../../../api/coin_trade";
 // import { sendCaptcha1, getCaptcha } from '../../../api/user'
 import { mapGetters } from "vuex";
 export default {
   name: "TradeContent",
   components: {
-    paymentIcon,
+    // paymentIcon,
     fbChoice
   },
   data() {
@@ -184,9 +184,6 @@ export default {
       animateClass: 'animated bounce',
       buyLoading: false,
       tradePanelVisible: false,
-      // alipay: require('../../../assets/svg/alipay.svg'),
-      // wechat: require('../../../assets/svg/weChat.svg'),
-      // bankCard: require('../../../assets/svg/ic_bankcard.svg'),
       merchantList: [],
       currentOrder: {},
       currentCoin: "usdt",

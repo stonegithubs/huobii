@@ -28,19 +28,13 @@
           ref="tradeFrom"
           :model="tradeForm"
         >
-          <el-form-item
-            :label="$t('order.direction')"
-            prop="direction"
-          >
+          <el-form-item :label="$t('order.direction')" prop="direction">
             <el-radio-group v-model="tradeForm.direction">
               <el-radio label="0">{{$t('order.buyOnline')}}{{getCoinNameByIDUp(tradeForm.coinId)}}</el-radio>
               <el-radio label="1">{{$t('order.sellOnline')}}{{getCoinNameByIDUp(tradeForm.coinId)}}</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item
-            :label="$t('order.coinType')"
-            prop="cashId"
-          >
+          <el-form-item :label="$t('order.coinType')" prop="cashId">
             <el-select
               style="width: 400px;"
               v-model="tradeForm.cashId"
@@ -60,34 +54,24 @@
             <!-- { type: 'number', message: $t('order.numberTip'),trigger: 'blur'} -->
             <el-input v-model="tradeForm.price" style="width: 400px;"></el-input>
           </el-form-item>
-          <el-form-item
-            prop="min"
-            :label="$t('order.min')"
-          >
+          <el-form-item prop="min" :label="$t('order.min')">
             <el-input v-model="tradeForm.min" style="width: 400px;"></el-input>
           </el-form-item>
-          <el-form-item
-            prop="max"
-            :label="$t('order.max')"
-          >
+          <el-form-item prop="max" :label="$t('order.max')">
             <el-input v-model="tradeForm.max" style="width: 400px;"></el-input>
           </el-form-item>
-          <el-form-item
-            prop="expire"
-            :label="$t('order.expire')"
-          >
-            <el-input v-model="tradeForm.expire" style="width: 400px;"></el-input>
+          <el-form-item prop="expire" :label="$t('order.expire')">
+            <el-select v-model="tradeForm.expire" style="width: 400px;" :placeholder="$t('order.expireTip')">
+              <el-option label="15min" value="15"></el-option>
+              <el-option label="30min" value="30"></el-option>
+              <el-option label="45min" value="45"></el-option>
+              <el-option label="60min" value="60"></el-option>
+            </el-select>
           </el-form-item>
-          <el-form-item
-            prop="amount"
-            :label="$t('order.amount')"
-          >
+          <el-form-item prop="amount" :label="$t('order.amount')" >
             <el-input v-model="tradeForm.amount" style="width: 400px;"></el-input>
           </el-form-item>
-          <el-form-item
-            prop="payways"
-            :label="$t('order.payways')"
-          >
+          <el-form-item prop="payways" :label="$t('order.payways')">
             <el-checkbox-group v-model="tradeForm.payways" style="width: 400px;">
               <el-checkbox
                 v-for="payway in getPayway"
@@ -97,10 +81,7 @@
               >{{payway.payName}}</el-checkbox>
             </el-checkbox-group>
           </el-form-item>
-          <el-form-item
-            prop="message"
-            :label="$t('order.message')"
-          >
+          <el-form-item prop="message" :label="$t('order.message')">
             <el-input type="textarea" v-model="tradeForm.message" style="width: 400px;"></el-input>
           </el-form-item>
           <el-form-item>
@@ -125,91 +106,93 @@ export default {
   data() {
     // 价格验证
     const priceValidate = (rule, value, callback) => {
-      value = value.trim()
+      value = value.trim();
       if (!value) {
-        callback(new Error(this.$t('order.priceTip')));
+        callback(new Error(this.$t("order.priceTip")));
         return;
       }
       value = Number(value);
       if (typeof value === "number" && !isNaN(value)) {
         if (value < 0) {
-          callback(new Error(this.$t('order.priceType')));
+          callback(new Error(this.$t("order.priceType")));
         } else {
           callback();
         }
       } else {
-        callback(new Error(this.$t('order.wrongType')));
+        callback(new Error(this.$t("order.wrongType")));
       }
     };
-            // <!-- :rules="[{ required: true, message: $t('order.minTip'), trigger: 'blur' }]" -->
- const minValidate = (rule, value, callback) => {
-      value = value.trim()
+    // <!-- :rules="[{ required: true, message: $t('order.minTip'), trigger: 'blur' }]" -->
+    const minValidate = (rule, value, callback) => {
+      value = value.trim();
       if (!value) {
-        callback(new Error(this.$t('order.minTip')));
+        callback(new Error(this.$t("order.minTip")));
         return;
       }
       value = Number(value);
+      // console.log(value)
       if (typeof value === "number" && !isNaN(value)) {
         if (value < 0) {
-          callback(new Error(this.$t('order.priceType')));
-        } if(value> this.tradeForm.max){
-          callback(new Error(this.$t('order.minTip1')));
-        }else {
+          callback(new Error(this.$t("order.priceType")));
+        }
+        // if (value > this.tradeForm.max) {
+        //   callback(new Error(this.$t("order.minTip1")));
+        else {
           callback();
         }
       } else {
-        callback(new Error(this.$t('order.wrongType')));
+        callback(new Error(this.$t("order.wrongType")));
       }
     };
     const maxValidate = (rule, value, callback) => {
-      value = value.trim()
+      value = value.trim();
       if (!value) {
-        callback(new Error(this.$t('order.maxTip')));
+        callback(new Error(this.$t("order.maxTip")));
         return;
       }
       value = Number(value);
       if (typeof value === "number" && !isNaN(value)) {
         if (value <= this.tradeForm.min) {
-          callback(new Error(this.$t('order.maxTip1')));
+          callback(new Error(this.$t("order.maxTip1")));
         } else {
           callback();
         }
       } else {
-        callback(new Error(this.$t('order.wrongType')));
+        callback(new Error(this.$t("order.wrongType")));
       }
     };
     const expireValidate = (rule, value, callback) => {
-      value = value.trim()
+      value = value.trim();
       if (!value) {
-        callback(new Error(this.$t('order.expireTip')));
+        callback(new Error(this.$t("order.expireTip")));
         return;
       }
       value = Number(value);
       if (typeof value === "number" && !isNaN(value)) {
         if (value <= 0) {
-          callback(new Error(this.$t('order.timeTip1')));
+          callback(new Error(this.$t("order.timeTip1")));
         } else {
           callback();
         }
       } else {
-        callback(new Error(this.$t('order.wrongType')));
+        callback(new Error(this.$t("order.wrongType")));
       }
     };
     const amountValidate = (rule, value, callback) => {
-      value = value.trim()
+      value = value.trim();
       if (!value) {
-        callback(new Error(this.$t('order.amountTip')));
+        callback(new Error(this.$t("order.amountTip")));
         return;
       }
       value = Number(value);
       if (typeof value === "number" && !isNaN(value)) {
         if (value <= 0) {
-          callback(new Error(this.$t('order.amountTip1')));
+          callback(new Error(this.$t("order.amountTip1")));
         } else {
           callback();
         }
       } else {
-        callback(new Error(this.$t('order.wrongType')));
+        callback(new Error(this.$t("order.wrongType")));
       }
     };
     return {
@@ -228,15 +211,63 @@ export default {
         type: 0
       },
       advRule: {
-        direction: [{ required: true, message:this. $t('order.directionTip'), trigger: 'blur' }],
-        cashId:[{ required: true, message: this.$t('order.coinTip'), trigger: 'blur' }],
-        price: [{ validator: priceValidate, trigger: "blur" },{ required: true, message: this.$t('exchange.main.priceTip'), trigger: 'blur' }],
-        min: [{ validator: minValidate, trigger: "blur" },{ required: true, message: this.$t('order.minTip'), trigger: 'blur' }],
-        max: [{ validator: maxValidate, trigger: "blur" },{ required: true, message: this.$t('order.maxTip'), trigger: 'blur' }],
-        expire: [{ validator: expireValidate, trigger: "blur" },{ required: true, message: this.$t('order.expireTip'), trigger: 'blur' }],
-        amount: [{ validator: amountValidate, trigger: "blur" },{ required: true, message: this.$t('order.amountTip'), trigger: 'blur' }],
-        payways: [{ required: true, message: this.$t('order.paywaysTip'), trigger: 'blur' }],
-        message: [{ required: true, message: this.$t('order.messageTip'), trigger: 'blur' }],
+        direction: [
+          {
+            required: true,
+            message: this.$t("order.directionTip"),
+            trigger: "blur"
+          }
+        ],
+        cashId: [
+          { required: true, message: this.$t("order.coinTip"), trigger: "blur" }
+        ],
+        price: [
+          { validator: priceValidate, trigger: "blur" },
+          {
+            required: true,
+            message: this.$t("exchange.main.priceTip"),
+            trigger: "blur"
+          }
+        ],
+        min: [
+          { validator: minValidate, trigger: ["blur","change"] },
+          { required: true, message: this.$t("order.minTip"), trigger: "blur" },
+          // { type: 'num'}
+        ],
+        max: [
+          { validator: maxValidate, trigger: ["blur", "change"] },
+          { required: true, message: this.$t("order.maxTip"), trigger: "blur" }
+        ],
+        expire: [
+          { validator: expireValidate, trigger: "blur" },
+          {
+            required: true,
+            message: this.$t("order.expireTip"),
+            trigger: "blur"
+          }
+        ],
+        amount: [
+          { validator: amountValidate, trigger: "blur" },
+          {
+            required: true,
+            message: this.$t("order.amountTip"),
+            trigger: "blur"
+          }
+        ],
+        payways: [
+          {
+            required: true,
+            message: this.$t("order.paywaysTip"),
+            trigger: "blur"
+          }
+        ],
+        message: [
+          {
+            required: true,
+            message: this.$t("order.messageTip"),
+            trigger: "blur"
+          }
+        ]
       }
     };
   },

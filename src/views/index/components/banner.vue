@@ -4,7 +4,7 @@
     <el-carousel trigger="click" height="390px">
       <el-carousel-item v-for="item in getterBanner" :key="item.id">
         <a :href="item.link">
-          <img :style="{background: 'url('+ item.image +') center  no-repeat'}" style="background-size:cover">
+          <img :style="{background: 'url('+item.image +') center  no-repeat'}" style="background-size:cover">
         </a>
       </el-carousel-item>
     </el-carousel>
@@ -26,6 +26,7 @@ export default {
   data() {
     return {
       bannerList:  [],
+      // baseURL: process.env.BASE_API.replace('3/','3')
     }
   },
   created(){

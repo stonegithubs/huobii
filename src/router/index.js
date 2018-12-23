@@ -96,18 +96,18 @@ export const constantRouterMap = [
   //     }
   //   ]
   // },
-  {
-    path: '/coin_coin/margin',
-    component: () => import('@/views/layout/layout'),
-    children: [
-      {
-        path: '',
-        name: 'ccMargin',
-        component: () => import('@/views/ccMargin/index')
-      }
-    ]
+  // {
+  //   path: '/coin_coin/margin',
+  //   component: () => import('@/views/layout/layout'),
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'ccMargin',
+  //       component: () => import('@/views/ccMargin/index')
+  //     }
+  //   ]
 
-  },
+  // },
   {
     path: '/trade',
     component: () => import('@/views/layout/layout'),

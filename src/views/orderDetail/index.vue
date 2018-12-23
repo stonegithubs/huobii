@@ -315,23 +315,24 @@ export default {
   },
   methods: {
     findCurrentTrade(order) {
-      if (this.publisher) {
-        //是接单人
-        this.userName = this.orderInfo.user.name;
-      } else {
-        //广告发布者
-        this.userName = this.advInfo.user.name;
-      }
-      // 找到订单
+      // console.log(order)
       for (let tradeItem of order.trades) {
-        // console.log(tradeItem);
-
         if (tradeItem.id === order.processId) {
-          console.log("找到咧");
           this.orderInfo = tradeItem; // 初始化页面交易
-          return; // 找到第一个就返回 (默认是第一个排序)
+          // return; // 找到第一个就返回 (默认是第一个排序)
         }
       }
+        if (this.publisher) {
+          //广告发布者
+          console.log('1',order)
+  
+          this.userName = this.orderInfo.user.name;
+        } else {
+          //是接单人
+          console.log(order)
+          this.userName = order.user.name;
+        }
+      
     },
     getPay(id) {
       fbGetPayment(id).then(res => {

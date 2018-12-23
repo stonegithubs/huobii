@@ -16,7 +16,12 @@ service.interceptors.request.use(
     // Do something before request is sent
     if (sessionStorage.Authorization) {
       config.headers = {
-        'Authorization': 'Bearer ' + sessionStorage.Authorization
+        'Authorization': 'Bearer ' + sessionStorage.Authorization,
+        'locale': localStorage.getItem('locale')
+      }
+    } else {
+      config.headers = {
+        'locale': localStorage.getItem('locale')
       }
     }
 

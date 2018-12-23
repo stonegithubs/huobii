@@ -93,8 +93,8 @@ export default {
       ],
       
       newChoose: {
-        direction: "1",
-        coinId: "4",
+        direction: "0",
+        coinId: "2",
         cashId: "3",
         payments: "all",
       },
